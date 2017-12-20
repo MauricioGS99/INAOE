@@ -1,0 +1,240 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, mexico]{babel}
+\usepackage{listings}
+\usepackage{breakcites}
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{amssymb,amsthm,amsmath,latexsym}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{natbib}
+%\bibliographystyle{stylename}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+\theoremstyle{plain}
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}[teo]{Proposición}
+\newtheorem{defi}[teo]{Definición}
+\newtheorem{obs}[teo]{Observación}
+\newtheorem{lem}[teo]{Lema}
+\newtheorem{cor}[teo]{Corolario}
+\usepackage[pdftex]{color,graphicx}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\title{Survey}
+\author{Mauricio Gonzalez Soto}
+\begin{document}
+\nocite{*}
+\maketitle
+\section{Extracción de relaciones causales a partir de texto}
+\subsection{Extracción basada en patrones gramaticales}
+\cite{khoo2000extracting} desarrollan un método que permite identificar y extrar relaciones causa-efecto que se encuentra expresada de manera explícita en \textit{abstracts} de artículos médicos. Los autores deciden utilizar el dominio médico pues al ser importantes las relaciones causales es más probable que estas aparezcan explícitamente. Los autores primero identifican los \textit{marcadores lingüísticos} y con esto construyen un conjunto de \textit{patrones causales}. Además, cada oración es pasada por un \textit{parse tree} el cual genera una representación de la estructura sintáctica de la oración.\\
+\\
+Como ejemplo, consideremos la oración \textit{“Paclitaxel was well tolerated and resulted in a significant clinical response in this patient”}. Después de la creación del árbol sintáctico y del patrón gramatical, se obtiene que la causa presente en la oración es \textit{paclitaxel} y el efecto es \textit{a significant clinical response in this patient}.\\
+\\
+Analizando 200 abstracts que provienen de 4 áreas médicas (depresión, esquizofrenía, enfermedades cardiacas y SIDA), construyen los patrones causales. El proceso de extracción de información consiste en hacer un \textit{match} entre los patrones causales y el arbol sintáctico. Al aplicar los patrones causales obtenidos a un nuevo conjunto de abstracts, obtienen un 51 por ciento de accuracy al extraer causas y un 58 por ciento de accuracy al extraer efectos.\\
+\\
+\cite{girju2002text} presentan un método semi-automático para la detección de patrones causales en texto, es semi-automático pues los patrones son descubiertos de manera automática, pero la validación no lo es. El algoritmo de detección de patrones léxico-sintácticos que  se refieren a causalidad consiste en dos partes. La primera parte descubre patrones léxico sintácticos que pueden expresar relaciones causales, y la segunda valida estos patrones según restricciones semánticas. Se enfocan en encontrar patrones de la forma (frase verbo causal frase) donde el verbo es un verbo causal simple en los cuales el verbo se refiere únicamente a la causa; por ejemplo, \textit{Temblores generan tsunamis}. Como las frases obtenidas pueden ser muy largas, pueden aportar información no deseada. Para resolver esto \cite{girju2003automatic} utiliza WordNet para reducir el tamaño de las frases obtenidas.\\
+\\
+\cite{sanchez2004acquiring} desarrollan un sistema para la adquisición de conocimiento causal a partir de texto. El sistema propuesto identifica oraciones que especifican de manera explícita relaciones causales y extrae de ellas los patrones causales. El sistema incorpora información gramatical tal como conectores, conjunciones, disjunciones y negaciones y codifican todo esto en redes bayesianas.\\
+\\
+Para la detección de patrones causales, los autores se enfocan en trabajar con oraciones en las cuales ambos \textit{eventos} aparezcan como frases (noun phrases, ¿traducción?). Un ejemplo de patrones causales identificados por el sistema es \textit{“Anemia are caused by excessive hemolysis”}.
+\\
+Para la construcción de las redes, se toma como input un texto \textit{tokenizado}, etiquetado con \textit{part-of-speech tagging} y \textit{parsed} para encontrar expresiones verbales. Posteriormente, el sistema estima las probabilidades condicionales de los efectos dadas las causas mediante el conteo de frecuencias de eventos similares.\\
+\\
+Para la evaluación, hicieron una evaluación subjetiva que consistió en comparar la estructura de la red generada por el sistema y la estructura creada manualmente al observar los patrones causales en el texto. Se analizaron 7 textos y en general se encontró un empate entre las redes con una precisión de 60 por ciento, pero sin ningún valor de Recall, por lo que no es fácil interpretar sus resultados. Según \cite{bojduj2009extraction}, una de las razones por las cuales se ubtuvo baja precisión es que basar los nodos en las frecuencias no es una buena idea, pues la cantidad de texto disponible en general es tan grande que estas frecuencias no pueden ser representativas.\\
+\\
+\cite{bojduj2009extraction} menciona que muchos de estos métodos están más enfocados en cómo extraer las relaciones que en cómo usarlas. Es importante no sólo poder concluir que dos términos están relacionados causamente, sino cómo.
+\subsection{Extracción basada en patrones de co-ocurrencias}
+En vez de utilizar patrones gramaticales, \cite{saito2007extraction} y \cite{perrin2008global} analizan la co-ocurrencia de términos estadísticos para construir redes a partir de texto. Ellos definen un “statistical term” como \textit{“Statistical terms are expression of the measurements of statistics to watch the movements of phenomena; birth rates, public approval rating of the Cabinet and so on.”}; es decir, un término que sea importante a un sistema. El enfoque de su trabajo es construir redes causales entre los statistical terms. Lo que hacen es primero extraer relaciones de co-ocurrencia entre términos estadísticos y posteriormente extraer relaciones causales entre ellos. Los autores se enfocan en texto japonés, el cual cumple que tiene ciertos patrones en los sufijos utilizados, y estos patrones son utilizados al extraer los términos estadísticos. Luegom estos términos son clasificados según su nivel de abstracción. Posteriormente, construyen una red de términos estadísticos al considerar a dos de ellos co-ocurrentes si aparecen juntos en un párrafo. Se remueven los términos que son co-ocurrentes con muchos otros términos.\\
+\\
+Los autores evaluan de manera separada cada una de las etapas: extracción de términos, clasificación de términos, la construcción de redes y la clasificación de redes.
+\\
+La mayor desventaja de esto es que la dirección de la relación causal no puede ser inferida de la co-ocurrencia.\\
+\\
+Por otro lado, \cite{sakai2008cause} extrajeron términos de artículos financieros (en japonés) y luego considerarón que estos términos afectaban el desempeño de los negocios basados en co-ocurrencias con expresiones clave como “es bueno”. Su definición de causalidad depende de las expresiones clave.
+\subsection{Modelos Gráficos para extracción de relaciones}
+A partir de un artículo que trata específicamente sobre una entidad claramente indentificable (la biografía de Benito Juarez por ejemplo) \cite{yu2010jointly} intentan identificar entidades y descubrir relaciones semánticas entre ellas. Resulta evidente que en el documento aparecerán otras entidades, pero se hace el supuesto de que no están relacionadas entre sí. En este trabajo, todas las clases entidades están pre-definidas así como las relaciones; esto es, se sabe que en el documento aparecerán años, lugares, países y que una entidad de tipo persona habrá nacido en un país en cierto año. Para formular el problema, se tiene $\mathbf{x} = \{ x_1,...,x_N \}$ una sucesión observada de \textit{tokens}. Denotamos como $s_p$ la entidad principal. Sea $ \mathbf{s}=\{ s_1,...,s_L\}$ una segmentación en la cual cada $s_i$ es una tripleta $\{ \alpha_i, \beta_i,y_i \}$ con $\alpha_i$ es una posición inicial, $\beta_i$ posición final y $y_i$ una etiqueta asignada.\\
+\\
+Sea $r_{pn}$ la asignación de relaciones entre la principal $s_p$ y un candidato a entidad secundaria $s_n$ y sea $\mathbf{r}$ el conjunto de asignación de relaciones para la $\mathbf{x}$. Dada una observación $\mathbf{x}$, queremos encontrar $\mathbf{y}^\ast$ tal que
+\[ \mathbf{y}^\ast = \textrm{ arg max }_y p(\mathbf{y}| \mathbf{x})\]
+donde $\mathbf{y}=\{ \mathbf{r},\mathbf{s} \}$.\\
+\\
+Se define una distribución condicional conjunta para $\mathbf{s},\mathbf{x},\mathbf{r}$ en un modelo grafico no dirigido $\mathcal{G}$ tal que se pueden dividir los factores de $\mathcal{G}$ en tres grupos: $\phi^S$, $\phi^R$, $\phi^\nabla$, que son el potencial de segmentación, el potencial de relaciones, y el potencial conjunto de segmentación-relación. \\
+\\
+Por el Teorema de Hammersley-Clifford, la condicional conjunta $P(\mathbf{y} | \mathbf{x})$ se factoriza como
+\[ P(\mathbf{y} | \mathbf{x}) = \frac{1}{Z(\mathbf{x})} \prod_{C_S} \phi^S (i,\mathbf{s},\mathbf{x}) \prod_{C_R}\phi^R(r_{pm},r_{pn},\mathbf{r}) \prod_{C_\nabla} \phi^\nabla(s_p,s_j,\mathbf{r}) \]
+Se hace el supuesto de que las funciones potencial se factorizan según un conjunto de atributos y un conjunto de pesos correspondientes.\\
+\\
+Incorporando estos features, tenemos que 
+\[P(\mathbf{y} | \mathbf{x}) = \frac{1}{Z(\mathbf{x})} \exp \left( \sum_{i=1}^{|s|} \sum_{k=1}^K \lambda_k g_k(i,s,x) + \sum_{m,n}^M \sum_{w=1}^W \mu_w q_w (r_{pm},r_{pn},r) + \sum_{j=1}^L \sum_{t=1}^T  \nu_t h_t(s_p,s_j,r) \right) \]
+\\
+Dada una muestra $\mathcal{D}= (\mathbf{x}_i, \mathbf{y}_i)_{i=1}^N$ queremos estimar los parámetros $(\lambda_k,\mu_w,\nu_t)$.\\
+\\
+La log-verosimilitud regularizada es
+\[ \mathcal{L} = \log [\Phi(r,s,x)] - \log [Z(x)] - \sum_{k=1}^K \frac{\lambda_k^2}{2 \sigma_\lambda^2} - \sum_{w=1}^W \frac{\mu_w^2}{2 \sigma_w^2} - \sum_{t=1}^T \frac{\nu_t^2}{2 \sigma_\nu^2} \]
+Donde,
+\[ \Phi(r,s,x) = \exp (\sum_{i=1}^{|s|} \sum_{k=1}^K \lambda_k g_k(i,s,x) + \sum_{m,n}^M \sum_{w=1}^W \mu_w q_w (r_{pm},r_{pn},r) + \sum_{j=1}^L \sum_{t=1}^T  \nu_t h_t(s_p,s_j,r)) \]
+Tenemos que $\mathcal{L}$ es concava por lo que es fácil maximizarla.\\
+\\
+Para calcular la Asignacion Más Probable, hayue encontrar
+\[ \mathbf{y}^\ast = \textrm{ arg max }_y p(\mathbf{y}| \mathbf{x})\]
+La cual no se puede resolver de manera exacta, se necesitan métodos aproximados. El algoritmo que se propone en el artículo se llama Collective Iterative Classification y la idea detrás de este es decodificar las variables ocultas objetivo basados en asignar etiquetas a las variables muestreadas. Esto se hace mediante un proceso iterativo de dos pasos; primero, en una etapa de bootstrapping se predice una etiqueta inicial para una $x_i$ dado el modelo ya entrenado. Luego, en la segunda etapa, conocida como clasificación iterativa, se re-estima la asignación a $x_i$ varias veces, tomándolas a partir de la asignación inicial.\\
+\\
+Los autores prueban su algoritmo con datos provenientes de Wikipedia: sus datos consisten en 441 páginas de Wikipedia. De estos datos, fueron etiquetados a mano 7740 entidades en 8 categorías. Además, se extrajeron 4700 relaciones de las cuales las más frecuentes fueron trabajo, visió, nació, miembro de, nació en día.\\
+\\
+El modelo superó los existentes tomando como medida de calidad la medida F. 
+\section{Métodos Estadísticos Para Extracción de Relaciones Causales}
+\subsection{Statistical Relational Learning}
+En el contexto de inferencia causal, se estudian las interacciones entre variables que puedan causar efectos en la otra. Para esto, es necesario identificar los objetos y las relaciones entre ellos. Para esto, el área de Statistical Relational Learning ofrece una serie de métodos que modelan dependencias entre entidades relacionales. En esta sección veremos distintas técnicas existentes en esta área y sus aplicaciones a inferencia causal.\\
+\\
+Un dominio de interés consiste en objetos (entidades), sus atributos, y las relaciones entre sí de los objetos. El modelo DAPER de \cite{heckerman2004probabilistic} consiste en clases de entidades, clases de relaciones, clases de atributos y clases arco.
+\subsubsection{Aplicación de Campos Aleatorios Condicionales a Extraccion de informacion}
+\cite{ramani2005consolidating} analizaron 753,459 abstracts de journals médicos, de los cuales extrajeron 6580 interacciones entre 3,737 proteínas. Para ello, utilizaron un algoritmo de tres etapas: la primera etapa, consiste en identificar nombres de proteínas mediante un clasificador basado en Conditional Random Fields; la segunda, identificar interacciones a través de co-ocurrencias; posteriormente, filtrar estas interacciones con un clasificador Bayesiano para obtener interacciones válidas. Con esto, se obtiene una red que consiste en 31609 interacciones entre 7748 proteínas\\
+\\
+Para la etapa de identificación de nombres, se utilizó un Conditional Random field, cuyo desempeño fue evaluado en un conjunto de 200 abstracts médicos etiquetados y en 750 abstracts etiquetados a mano. Para extraer los nombres de proteínas, se utilizó este clasificador en el conjunto de 753,459 abstracts de Medline que contuvieran la palabra “human”.\\
+\\
+Para obtener las interacciones, se midió la co-citación entre los nombres de proteínas y luego se enriquecieron estos pares con interacciones físicas (reales) entre proteínas utilizando un filtro Bayesiano. Primero, se contó el número de veces que en un abstract aparece un par de proteínas, y con eso se calculó la probabilidad de co-citación. Con esto se obtienen 15,000 interacciones, pero se pueden dar co-citaciones por otras razones además de las relaciones reales, se aplicó un filtro bayesiano que mide la verosimilitud de los abstracts que citan un par de proteínas para discutir sus interacciones reales. El clasificador asigna un \textit{score} a cada uno de los abstracts que citan esas proteínas. Utilizando un umbral de score, se obtienen 6,580 interacciones entre 3,737 proteínas.\\
+\\
+Al combinar estas interacciones con otras 26,280 interacciones provenientes de otras fuentes, se obtiene el total mencionado.\\
+\\
+Por otro lado, \cite{culotta2006integrating} plantean el problema de extracción de relaciones como un problema de etiquetado de secuencias, algo similar a lo realizado por \cite{yu2010jointly}.   \cite{culotta2006integrating} definen un modelo de la forma
+\[ P_{\Lambda} ( y | x ) =\frac{1}{Z} \prod_{c \in C} \varphi_c ( y_c , x_c, \Lambda ),\]
+donde las $\varphi$ son potenciales parametrizados por $\Lambda$.\\
+\\
+Los autores tomaron 1,127 párrafos de 271 artículos biográficos de Wikipedia y etiquetaron 4,701 instancias de relaciones. Para identificar a las entidades importantes dentro de un artículo, utilizaron el hecho de que estas suelen tener un \textit{hyperlink}
+\subsubsection{Aplicación de RMN's a Extraccion de informacion}
+\cite{bunescu2007statistical} utilizan Relational Markov Networks para mejorar el desempeño de los CRF's en el problema de identificar nombres de proteínas en abstracts de journals médicos. \\
+\\
+La técnica que se propone es que dada una colección de documentos $D$, asociemos a dada documento $d \in D$ un conjunto de entidades $d.E$. Cada entidad$e \in d.E$ queda caracterizada por un conjunto de atributos booleanos $e.F$. A cada documento se le asocia un grafo de factores, el cual es un grafo bipartita que contiene dos tipos de nodos: nodos variables, que corresponden a las etiquetas de todas las entidades candidato en el documento y nodos potenciales, que modelan las correlaciones entre dos o más atributos. Para cada correlación posible,  un nodo potencial es crreado tal que está ligado a todos los nodos variables involucrados.\\
+\\
+Prueban su algoritmo en dos conjuntos de datos previamente etiquetados a mano. El primer conjunto consiste en 200 abstracts y el segundo en 225. Ambos conjuntos de datos fueron previamente etiquetados a mano, además de etiquetados para POS. En ambos conjuntos de datos, existe una mejora ligera respecto a los CRF's en términos de la medida F.
+
+\subsubsection{Aprendizaje de Modelos Causales a partir de Datos Relacionales}
+\cite{maier2013reasoning} definen la \textit{abstract ground graph} (AGG) y se desarrolla la noción de d-separación relacional. A partir de estas nociones teóricas, \cite{maier2013sound} extienden el algoritmo PC, el cual identifica todas las posibles orientaciones de dependencias causales, a datos relacionales. Utilizando la d-separación relacional, introducen restricciones que orienta dependencias bivariadas hasta en un 72$\%$ más. Se prueba teóricamente que con esta nueva regla, además de extensiones a datos relacionales del algoritmo PC, se obtiene un método \textit{sound and complete} para la extracción de relaciones causales. Este algoritmo nuevo se llama RCD (relational causal discovery).\\
+\\
+\cite{lee2016learning} notan que la demostración de \cite{maier2013reasoning} requiere que la AGG sea un DAG quie represente exactamente todas las flechas que aaparecerían en todas las posibles ground graphs, y en un trabajo anterior (\cite{lee2015lifted}) habían notado que existen casos en los cuales la d-separación de la AGG no captura las independencias condicionales que se cumplen en el modelo relacional causal. En su artículo, proponen un algoritmo basado en condiciones más débiles llamado RCD-light.
+
+\subsection{Inferencia Bayesiana No Paramétrica}
+La rama no-paramétrica de la inferencia bayesiana puede considerarse como una extensión a espacios infinito-dimensionales de la inferencia bayesiana clásica. Esto permite tener modelos que permiten capturar una complejidad mucho mayor en los datos. El objeto principal de la inferencia bayesiana no paramétrica es el Proceso Dirichlet, que es una extensión a espacios infinito-dimensionales de la distribución Dirichlet clásica.
+\subsubsection{Proceso Dirichlet}
+\begin{defi}
+Sea $H$ una medida finita definida sobre un espacio $\mathcal{X}$ y $\alpha \in \mathbb{R}$. Una medida aleatoria $G$ sobre $\mathcal{X}$ se dice que es un Proceso Dirichlet de parámetros $(\alpha,H)$ si para cada partición finita medible $\{ A_1 , ..., A_k \}$ de $\mathcal{X}$ se tiene que la distribución conjunta de $(G(A_1),...,G(A_k))$ es Dirichlet de parámetros $(\alpha H(A_1),...,\alpha H(B_k))$. A la medida $H$ se le conoce como medida base y a $\alpha$ se le conoce como parámetro de concentración. Se denota como
+\[ G \sim \textrm{ DP}(\alpha,H).\]
+\end{defi}
+Los parámetors $H$ y $\alpha$ juegan roles intuitivos en la definición. La medida base se puede entender, básicamente, como la \textit{media} del Proceso; es decir, para cada conjunto medible $A \subseteq \mathcal{X}$ se tiene que $\mathbb{E}[G(A)]=H(A)$. Por otro lado, el parámetro de concentración es un tipo de \textit{varianza inversa}, pues $V[G(A)]=H(A)(1-H(A))/(\alpha+1)$. Es decir, mientras más grande sea $\alpha$, entonces menor es la varianza y el DP tenderá a concentrarse más en torno a $H$.\\
+\subsubsection{Distribución Predictiva y urnas de Blackwell-McQueen}
+Consideremos $G \sim \textrm{ DP}(\alpha,H)$ y $\theta_1,... \sim G$. Como $\theta_{n+1} | G, \theta_1,...,\theta_n \sim G$, entonces para $A \subseteq \mathcal{X}$ tenemos que
+\begin{eqnarray*}
+P(\theta_{n+1} \in A | \theta_1,...,\theta_n ) &=& \mathbb{E}[G(A) | \theta_1,...,\theta_n]\\
+                                                                    &=& \frac{1}{\alpha + n} \left(\alpha H(A) + \sum_{i=1}^n \delta_{\theta_i}(A) \right)
+\end{eqnarray*}
+Por lo tanto, marginalizando $G$, vemos que la distribución posterior base dados $\theta_1,...,\theta_n$ es la distribución predictiva de $\theta_{n+1}$.
+\[ \theta_{n+1} | \theta_1,...,\theta_n \sim \frac{1}{\alpha + n} \left( \alpha H + \sum^n \delta_{\theta_i} \right) \]
+La secuencia de distribuciones predictivas para $\theta_1, \theta_2,...$ se conoce como el esquema de urnas de Blackwell-McQueen; la interpretación es la siguiente: cada valor en $\mathcal{X}$ es un color, y cada realización $\theta \sim G$ son pelotas y el valor obtenido es el color de la pelota. Además, tenemos una urna en la cual se han colocado las bolas observadas. Al principio, no existen bolas en la urna y muestreamos un color de $H$; es decir, $\theta_1 \sim H$, pintamos la bola con ese color y la echamos en la urna. Luego, en el paso $n+1$, tomaremos un nuevo color con probabilidad $\alpha / (\alpha + n)$ o tomaremos un nuevo color, la pintaremos así y la echaremos en la urna con probabilidad $n / (n+\alpha)$.
+\subsubsection{Proceso Dirichlet como Prior en problemas de Clustering}
+La propiedad de que $G \sim DP$ sea discreto ofrece aplicaciones de clusterización. Por el momento, supongamos que $H$ es suave. Entonces, como los valores de las realizaciones son repetidos, sean $\theta^\ast_1,...,\theta^\ast_m$ los valores únicos de las realizaciones $\theta_1,...,\theta_n$ y sea $n_k$ el número de repeticiones de $\theta^\ast_k$. Entonces, la distribución predictiva se puede escribir como
+\[ \theta_{n+1} | \theta_1,...,\theta_n \sim \frac{1}{\alpha + n} \left( \alpha H + \sum_{k=1}^m n_k \delta_{\theta^\ast_k} \right). \]
+Esto es, el valor de $\theta^\ast_k$ aparecerá en $\theta_{n+1}$ con una probabilidad proporcional al número de veces que ha aparecido. Entonces, mientras más grade sea $n_k$, mayor será la probabilidad de que se vuelva aun mayor. Notemos que los valores únicos de las realizaciones $\theta_1,...,\theta_n$ inducen una partición aleatoria del conjunto $[n]=\{1,...,n\}$ si pensamos el cluster $k$ como aquel que contiene las $\theta_i$ que toman el valor $\theta^\ast_k$, tenemos que clusters grandes crecen más rápido.\\
+\\
+Podemos invertir este proceso y empezar con una distribución sobre particiones.
+\subsubsection{Dirichlet Enhanced Relational Learning}
+\cite{xu2005dirichlet} aplican un modelo jerárquico Bayesiano no-paramétrico para la extracción de relaciones. La ventaja de usar un modelo jerárquico es que los parámetros pueden estar \textit{personalizados} para entidades. En este trabajo se aplica el modelo al contexto médico, en el cual se tienen como entidades hospitales, pacientes, diagnósticos y procedimientos. Se sabe que la existencia de un diagnóstico o un procedimiento es dependiente de las características de un paciente; por otro lado, las características de los hospitales se modelan como inciertas.\\
+\\
+Un modelo Bayesiano consiste en un parámetro $\theta$ y una asignación inicial de probabilidad sobre este, la cual refleja nuestra incertidumbre inicial. Supondremos que esta distribución inicial cuenta con hiperparámetros $h$, de modo que sea $P(\theta | h)$. La verosimilitud de los datos $P(D|\theta)$ refleja cómo son generados estos dado el parámetro. EN el caso en el cual se asume que los datos provienen de distintos grupos es natural pensar en asignar un parámetro por grupo, lo cual lleva a la definición de modelos jerárquicos, en los cuales el modelo tiene la siguiente fforma
+\[ P(h) \prod P(\theta_i | h )P(D_i | theta_i). \]
+Si se aplicara el modelo DAPER al contexto médico, se tiene que los parámetros e hiperparámetros que especifican distribuciones condicionales como atributos globales. Esto implica que las probabilidades de un procedimiento son idénticas para todos los pacientes con la misma dolencia inicial. Luego, los procedimientos son modelados de manera independiente de manera que procedimientos anteriores en una persona no afectlan la selección de uno nuevo. Estas son suposiciones no realistas.\\
+\\
+Para mejorar esta situación, se asume que la probabilidad de un procedimiento es una distribución multinomial con un prior Dirichlet. En particular, para cada paciente, se asume que un vector individual de parámetros $\theta_{s|pc,pa}$ especifica la probabilidad de un procedimiento para un paciente $pa$ con dolencia inicial $pc$. Este vector es generado por una distribución Dirichlet de parámetros $h_{pc}=\{ \tau_{pc},\alpha_{pc} \}$, la cual puede escribirse como
+\[ \textrm{Dir}(\theta_{\cdot | pc, pa} | \tau_{pc},\alpha_{pc}) = \frac{1}{C} \prod_{k=1}^K \theta^{\tau_{pc} \alpha_{k,pc} - 1}_{k,s | pc, pa}.  \]
+En un modelo jerárquico bayesiano cada paciente obtiene sus propias probabilidades de procedimiento y comparte con los demás un parámetro a priori.\\
+\\
+En más de un caso, se necesita asumir que la prior tiene una forma muy flexible, por lo que es necesario recurrir a priors no paramétricas.\\
+\\
+Podemos tomar la distribución a priori como una realización del Proceso Dirichlet; es decir, 
+\[ G_{pc} \sim \textrm{ DP }(G_0,\alpha_0) \]
+donde $G_0$ es la medida base y $\alpha_0$ el parámetro de concentración, el cual especifica nuestro nivel de certidumbre sobre la prior.\\
+\\
+Luego, el parámetro $\theta_{\cdot | pc, pa}$ es una realización de $G_{pc}$.\\
+\\
+Otra manera de escribir el Proceso Dirichlet es mediante su representación \textit{stick breaking} (\cite{teh2011dirichlet}) según la cual
+\[ G_{pc} = \sum \pi_{l,pc} \delta_{\theta^\ast_{l,pc}} \textrm{ ;  } \theta^\ast_{l,pc} \sim G_0  \]
+\[ \pi'_{l,pc} \sim \textrm{ Beta }(1,\alpha_0) \textrm{  ;  } \pi_{l,pc} = \pi'_{l,pc} \prod_{k=1}^{l-1} (1 - \pi'_{k,pc}).\]
+Notemos que aunque la distribución base pueda ser continua, el DP es siempre discreto (con probabilidad 1).\\
+\\
+Tradicionalmente, el aprendizaje en el contexto Bayesiano no paramétrico se lleva a cabo via muestreo de Gibbs, cuyas variaciones más comunes son la urna de Polya o el Proceso del Restaurante Chino (\cite{teh2011dirichlet}). En el artículo, se lleva a cabo un proceso más eficiente (\cite{Yu:2004:NHB:1008992.1009053}.)\\
+\\
+El objetivo es estimar $G_{pc}$ para cada posible $pc$ en la base de datos, utilizando la verosimilitud marginal:
+\[ \hat{G}_{pc} = \textrm{ argmax DP }(G | G_0, \alpha_0) \prod_{\{pa\}_{pc}} \int \textrm{ Multinomial }(\{pr\}_{pa}| \theta_{\cdot | pc,pa}) d\theta_{\cdot | pc,pa}  \]
+donde $\{pa\}_{pc}$ es el conjunto de pacientes tales que tienen la misma dolencia inicial y $\{pr\}_{pa}$ es el conjunto de procedimientos para el paciente $pa$. Resulta imposible calcular la verosimilitud, por lo que se realiza una aproximación de campo medio:
+\[ G_{pc} \approx \sum^{|{pa}_{pc}|} \pi_{pa,pc} \delta_{\theta^\ast_{\cdot | pa,pc}}. \]
+El proceso de aprendizaje se divide en dos etapas: 
+\begin{itemize}
+\item Calcular la ubicación de $ \theta^\ast_{\cdot | pa,pc}$
+\item Estimar los pesos $\pi_{pa,pc}$
+\end{itemize}
+Para el primer paso, se utiliza la aproximación MAP de $\theta_{\cdot | pa,pc}$ que es:
+\[ \theta^{MAP}_{\cdot | pa,pc} = \textrm{ arg max }P( \theta_{\cdot | pa,pc} | \{pr\}_{pa})\]
+Y se utiliza como prior la Dirichlet mencionada antes. \\
+\\
+Para el segundo paso, es necesario hacer la siguiente suposición:
+\[ \hat{P}( \theta_{\cdot | pa,pc} | \{pr\}_{pa}) \approx q_{pa}(\theta_{\cdot | pc,pa}) = \sum_{\{\tilde{pa}\}_{pc}} \xi_{\tilde{pa},pc,pa} \delta_{\theta^{MAP}_{\cdot | pc,pa}} \]
+donde $\xi_{\tilde{pa},pc,pa} \geq 0 $ son parámetros variacionales tales que $\sum_{pa} \xi_{\tilde{pa},pc,pa} = 1$.\\
+\\
+Como paso E se obtiene que:
+\[  \xi^t_{\tilde{pa},pc,pa} = \frac{P(\{pr\}_{\tilde{pa}} | \delta_{\theta^{MAP}_{\cdot | pc,pa}}) \hat{G}^{(t)}_{pc}(\delta_{\theta^{MAP}_{\cdot | pc,pa}}))}{\sum_{\tilde{pa}}P(\{pr\}_{\tilde{pa}} | \delta_{\theta^{MAP}_{\cdot | pc,pa}})\hat{G}^{(t)}_{pc}(\theta^{MAP}_{\cdot | pc,pa}))}. \]
+Y el paso M queda como
+\[ \hat{G}^{(t+1)}_{pc}(\theta_{\cdot,pc,pa}) = \frac{\alpha_0 G_0(\theta_{\cdot,pc,pa}) + \sum_{\{pa\}_{pc}} \xi_{pc,pa} \delta_{\theta^{MAP}_{\cdot | pc,pa}}}{\alpha_0 + |\{pa\}_{pc}|} \]
+
+\subsubsection{Learning Systems of Concepts with an Infinite Relational Model}
+Suponiendo que tenemos una o más relaciones que involucran uno o más tipos, \cite{kemp2006learning} definen el Infinite Relational Model, el cual busca partir cada tipo (type) en clusters, de manera que una buena partición permita que relaciones entre entidades se puedan predecir a partir de la asignación de clusters. Por ejemplo, si tenemos $m$ relaciones que involucran $n$ tipos, denotamos $R^i$ la $i$-ésima relación, $T^j$ la $j$-ésima relación y $z^j$ un vector de asignación de clusters. Lo que se busca es inferir la asignación de clusters, y ultimadamente la posterior $P(z^1,...,z^n | R^1, ... , R^m)$. Para especificar esta distribución, se define un modelo generativo para las relaciones y la asignación de clusters
+\[ P(R^1,...,R^m, z^1,...,z^n) = \prod_{i=1}^m P(R^i | z^1 , ... , z^n) \prod_{j=1}^n P(z^j). \]
+Estamos asumiendo que las relaciones son condicionalmente independientes dada la asignación de clusterss, y que la asignación de clusters es independiente entre tipos. Para que el IRM sea capaz de descubrir el número de clusters en el tipo $T$, se utiliza un prior que asigna probabilidad a todas las posibles particiones de $T$. Un prior razonable debería descubrir sólo tantos clusters como sugeridos por los datos. A partir de trabajos previos en Bayesiana No paramétrica (\cite{rasmussen2000infinite}) utiliza una distribución sobre particiones inducida por un CRP  (Chinese Restaurant Process, \cite{teh2011dirichlet}).\\
+\\
+La intuición detrás de este proceso, según describe \cite{teh2011dirichlet} es que en un restaurante chino hay un número infinito de mesas, cada una de las cuales puede sentar un número infinito de clientes. El primer cliente entra y se sienta en la primera mesa, el segundo cliente entra y decide si sentarse en la primera mesa o en otra; en general, el $n$-ésimo cliente se sienta en una mesa ocupada con una probabilidad proporcional al número de clientes sentados ahí.\\
+\\
+Entonces, la manera de constuir clusters utilizando el CRP es partir de un cluster con un solo objeto, e ir añadiendo objetos de modo que la probabilidad de caer en cierto cluster sea proporcional a los elementos en él. De esta manera, la distribución de clusters para el objeto $i$, dada la asignaclión de los objetos $1,...,i-1$ es:
+\[
+  P(z_i = a | z_1, ... , z_{i-1}) =
+  \begin{cases}
+                                   \frac{n_a}{i-1+\gamma} & \text{if $n_a > 0$} \\
+                                   \frac{\gamma}{i-1+\gamma} & \text{$a$ es un nuevo cluster} 
+  \end{cases}
+\]
+Donde $n_a$ es el número de objetos asignado al cluster $a$ y $\gamma$ es un parámetro. La distribución en $z$ inducida por el CRP es intercambiable; es decir, no importa el orden en que los objetos llegan a los clusters. Como nuevos objetos siempre pueden ser asignados, el IRM efectivamente tiene acceso a un número infinito de clusters, de ahí el nombre del Infinite Relational Model.\\
+\\
+Para generar Relaciones a partir de las asignaciones de clusters se asume que las relaciones son binarias, pero se puede extender a datos continuos y frecuencias. Como ejemplo, veremos primero el caso con un solo tipo $T$ y una relación $R: T \times T \to \{0,1 \}$. $T$ puede ser, por ejemplo, un conjunto de personas y $R$ una relación de amistad. El modelo generativo para este problema es
+\begin{eqnarray*}
+z | \gamma &\sim& CRP(\gamma)\\
+\eta(a,b) | \beta &\sim& Beta(\beta,\beta)\\
+R(i,j) | z, \eta &\sim& Bernoulli(\eta(z_i,z_j))
+\end{eqnarray*}
+Esto es, estamos suponiendo que la relación $R$ está generada a partir de dos estructuras latentes: una partición $z$ y una matriz de parámetros $\eta$. La entrada $R(i,j)$ se genera al lanzar una moneda con sesgo $\eta(z_i,z_j)$ donde $z_i,z_j$ son las asignaciones de cluster de las entidades $i$,$j$. El parámetro $\eta(a,b)$ especifica la probabilidad de que exista un link entre las entidades $i \in a$, $j \in b$. El IRM invierte ese modelo para descubrir la $z$ y la $\eta$ que mejor explican $R$.\\
+\\
+Estamos asumiendo que la tendencia de una entidad a participar en relaciones está dada por su asignación de cluster.\\
+\\
+Para hacer inferencia, notamos que en el ejemplo anterior se utilizó una prior conjugada, es sencillo calcular $P(R|z)$
+\[ P(R|z)= \prod_{a,b} \frac{Beta(m(a,b) + \beta, \bar{m}(a,b)+\beta}{Beta(\beta,\beta)} \]
+donde $m(a,b)$ es el número de pares $(i,j)$ tales que $i \in a$, $j \in b$ y $R(i,j)=1$ mientras que $\bar{m}(a,b)$ son las parejas donde $R(i,j)=0.$\\
+\\
+Para muestrear de la posterior $P(z | R ) \propto P(R|z)P(z)$ se pueden utilizar técnicas MCMC o al buscar la moda de la distribución.\\
+\\
+Para la evaluación del modelo, los autores generan datos sintéticos. Consideran conjuntos de datos de tres formas distintas; el primer sistema, $S1$, tiene sólo dos tipos $T1, T2$ y una sola relación $R:T1 \times T2 \to \{0,1 \}$. El sistema $S2$ consiste en 4 tipos y tres relaciones binarias mientras que $S3$ consiste de 3 tipos y una sola relación ternaria. Resulta que en este contexto, el modelo captura el número de clusters de manera precisa. \\
+\\
+Este método es excelente para clusterizar de manera no paramétrica un conjunto de datos relacionales, pero requiere identificar previamente las entidades y las relaciones. 
+\subsubsection{Learning Infinite Hidden Relational Models}
+\cite{xu2006learning} extienden la expresividad de los modelos relacionales al introducir para cada entidad una variable latente con un número infinito de estados que proviene de un Dirichlet Process Mixture. Debido a que el número de features de las cuales un atributo puede depender, resulta más conveniente  introducir para cada entidad una variable latente que es padre de los atributos de la entidad y de los atributos de las relaciones en las que participa la entidad; a esto se le conoce como hidden relationship model.\\
+\\
+Como cada entidad puede tener un distinto número de estados en sus variables latentes, es deseable que este número de estados latentes se determine de manera automática según los datos; esto es posible utilizando una mezcla de Proceso Dirichlet, que son modelos de mezcla con un número infinito de componentes de mezcla, pero que según los datos la complejidad se ajusta de manera automática. A la combinación de un hidden relational model con un DPm se le conoce como Infinite Hidden Relationship Model que generaliza el modelado jerárquico bayesiano noparamétrico al caso de modelos relacionales.\\
+\\
+Como aplicación, los autores evalúan su modelo en un conjunto de datos sobre películas y buscan predecir las preferencias de los usuarios. Para este conjuto de datos, las clases de entidades son Usuario y Película
+\subsection{Modelos Jerárquicos Bayesianos}
+Los Modelos Jerárquicos Bayesianos (HBM) son modelos probabilistas que están definidos por \textit{niveles}, en los cuales cada nivel representa un mayor grado de abstracción. Un ejemplo sencillo de esto puede ser un modelo de regresión de ingreso a nivel nacional en el cual existan parámetros por estado y por municipio.\\
+\\
+En el contexto causal, lo que está detrás de un HBM es que al aprender causalidad se incorpora conocimiento teórico previo y datos observables (\cite{griffiths2005structure}, \cite{griffiths2009theory}). Esto es, un HBM es una distribución de probabilidad entre supuestos teóricos, modelos causales y datos (\cite{hagmayer2013hierarchical}).\\
+\\
+\cite{lucas2010learning} proponen un framework que incorpora inferencia basada en covarianzas así como conocimiento adquirido. Se enfocan en aprender  \textit{forma funcional} de las relaciones causales. Las contribución principal del artículo es: se muestra que el problema de aprender la forma funcional de una relación causal puede ser formalizada utilizando modelos jerárquicos bayesianos; además, se muestran una serie de experimentos que ponen a prueba las predicciones cualitativas hechas por este modelo.\\
+\\
+\cite{hagmayer2013hierarchical} presentan un overview general sobre los modelos jerárquicos bayesianos en el contexto causal. En el artículo exponen las ventajas de utilizar estos modelos para realizar inferencia causal, así como sus limitaciones. Una limitación mencionada es que dependen considerablemente de conocimiento previo. Otra, que existe evidencia que la representación que las personas tienen de modeos causales no corresponde a modelos gráficos causales (redes bayesianas) pues existen experimentos en los cuales la propiedad Markoviana no se cumple. Finalmente, argumentan que los HBM's y las redes bayesianas no modelan los procesos cognitivos subyacentes al apredizaje causal, aunque existen evidencias de que las personas sí llevan a cabo un tipo de actualización Bayesiana
+\bibliographystyle{apalike}
+\bibliography{Bibliografia}
+\end{document}

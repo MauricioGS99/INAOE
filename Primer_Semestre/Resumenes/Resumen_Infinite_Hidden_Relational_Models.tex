@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, mexico]{babel}
+\usepackage{listings}
+\usepackage{breakcites}
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{amssymb,amsthm,amsmath,latexsym}
+\usepackage[margin=1.5cm]{geometry}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+\theoremstyle{plain}
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}[teo]{Proposición}
+\newtheorem{defi}[teo]{Definición}
+\newtheorem{obs}[teo]{Observación}
+\newtheorem{lem}[teo]{Lema}
+\newtheorem{cor}[teo]{Corolario}
+\usepackage[pdftex]{color,graphicx}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\title{Resumen: Learning Infinite Hidden Relational Models - Xu, Tresp, Kriegel}
+\author{Mauricio Gonzalez Soto}
+\begin{document}
+\nocite{*}
+\maketitle
+\section{Introduccion}
+La selección de modelos para la estructura en un sistema relacional es difícil debido al número exponencial de \textit{features} de las cuales un atributo puede depender. Es mejor introducir, para cada entidad, una variable latente que sólo sea padre de los otros atributos de la entidad y de los atributos de las relaciones. Como cada clase de entidades puede tener un distinto número de estados en sus variables lattentes, y este número varía según la información, preferimos que el modelo determine el número de estados latentes de manera automática; esto es posible utilizando modelos de mezcla con el proceso Dirichlet, los cuales se pueden interpretar como modelos de mezcla con un número infinito de componentes de mezcla, pero en los cuales el modelo, basado en los datos, reduce la complejidad a un número finito de componentes
+\bibliographystyle{apalike}
+\bibliography{Bibliografia}
+\end{document}
