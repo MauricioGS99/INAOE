@@ -205,6 +205,26 @@ Los modelos funcionales causales proveen una manera de estimar cómo cambiaría 
 \[ P_{X_j | Do(X_i = x_i} \neq P_{X_j | do(X_i = x')} \]
 \subsection{Contrafactuales en modelos funcionales}
 
+\section{Teoría de la Decisión}
+\subsection{von Neumann-Morgenstern}
+Según narra \cite{gilboa2009decision}, fue Daniel Bernoulli quién habló por primera vez de la maximización de la utildiad esperada; esto, al estudiar la \textit{paradoja de San Petersburgo}, la cual consiste en lo siguiente: un tomador de decisiones se enfrente a una serie de lanzamientos consecutivos de una moneda justa. Se considera un juego basado en los resultados de estas monedas, el cual terminará la primera vez que la moneda arroje una cara, y si esto ocurriera en el $n$-ésimo lanzamiento, el concursante recibirá $2^n$ pesos. La \textit{paradoja} consiste en que la mayoría de las personas, según registró Bernoulli, sólo está dispuesta a pagar una cantidad finita de dinero por entrar a este juego, cuyo valor esperado es infinito. La paradoja fue resuelta cuando Bernoulli se dio cuenta que las personas estaban maximizando el valor esperado de una \textit{función de utilidad}, pero no directamente el valor esperado del dinero. Resulta que si esta función es logarítmica, entonces la utilidad esperada es finita. \\
+\\
+El Teorema original de von Neumann y Morgenstern está formulado en términos de árboles de decisión y loterías compuestas. Más tarde \cite{jensen1967introduction} lo formuló de manera más compacta al suponer que las loterías compuestas son simplificadas de acuerdo a la fórmula de Bayes.\\
+\\
+Sea $X$ un conjunto de \textit{alternativas}, los objetos a elegir son loterías de soprte finito; de manera formal, definimos
+\[ L = \{ P:X \to [0,1] | \sum_{x \in X} P(x) = 1, \textrm{ $P$ tiene soporte finito} \}. \]
+Una mezcla de loterías se puede definir de la siguiente manera: se toma una probabilidad $\alpha$ y se define una lotería $l^\alpha = \alpha P + (1- \alpha) Q$.\\
+\\
+Consideremos una relación  $\succeq L \times L$. El Teorema de von Neumann-Morgenstern requiere de los siguientes axiomas:
+\begin{itemize}
+\item A1. Órden débil: $\succeq$ es completa y transitiva
+\item A2. Continuidad: Para toda $P,Q,R \in L$ tales que $P \succ Q \succ R$ existen $\alpha$ y $\beta$ tales que:
+\[  \alpha P + (1-\alpha) R \succ Q \succ \beta P + (1-\beta) R\]
+\item A3. Independencia: Para toda lotería $P,Q,R \in L$ y toda $\alpha \in (0,1)$ se tiene que $P \succeq Q$ si y sólo si $\alpha P + (1-\alpha) R \succeq \alpha Q  + (1-\alpha) R$.
+
+\end{itemize}
+\subsection{De Finnetti}
+\subsection{Savage}
 \section{Aprendizaje por Refuerzo}
 El Aprendizaje por Refuerzo (RL) (\cite{sutton1998reinforcement}) consiste en un \textit{framework} general en el cual un \textit{agente} aprende a llevar a cabo una tarea a través de interactuar con su entorno. Estas interacciones provocan cambios en el entorno, los cuales a su vez afectarán el comportamiento del agente. El comportamiento del agente está caracterizado en términos de acciones y las acciones tomadas por este afectan el \textit{estado} del ambiente. A su vez, el ambiente devuelve información al agente en términos de una recompensa o ganancia según el estado en el que se encuentre. El objetivo del agente es encontrar una serie de acciones que lo lleven a lograr su objetivo final. La función de recompensa codifica qué es lo que se desea que el agente aprenda, pues esta función devuelve un valor para cada estado y con esto el agente asignará un valor a cada estado según la ganancia a largo plazo que un este representa.\\
 \\
@@ -299,10 +319,10 @@ Para hacer la mejora de una política, se escoge de manera determinística la ac
 \[ \pi(s) = \textrm{arg max}_a Q(s,a).\]
 \item Para remover el supuesto de un número infinito de episodios, una opción es abandonar la idea de obtener completamente la función $Q^\pi_k$ en el paso de evaluación antes de proceder a la mejora, sino sólo mover un poco la función $Q$ actual hacia la verdadera.
 \item En cuanto al supuesto de visita a todas las parejas acción-estado la única alternativa a suponer que se visiten todas las parejas es hacer que el agente las seleccione y para esto existen dos familias de métodos:
-							\begin{itemize}
-									\item On-Policy: intentan evaluar mejorar la política que es actualmente utilizada para la toma de decisiones.
-									\item Off-Policy: Evaluan o mejoran una política distinta
-							\end{itemize}
+		\begin{itemize}
+				\item On-Policy: intentan evaluar mejorar la política que es actualmente utilizada para la toma de decisiones.
+				\item Off-Policy: Evaluan o mejoran una política distinta
+		\end{itemize}
 \end{itemize}
 \subsubsection{Diferencias Temporales}
 Los métodos TD son totalmente incrementales y tampoco requieren un modelo del ambiente, pero son mucho más complejos. Estos métodos son una combinación de métodos Monte-Carlo y de Programación Dinámica; estos métodos pueden aprender directamente de la experiencia y no necesitan un modelo del ambiente, pero también utilizan técnicas de \textit{bootstrapping} (estiman usando estimadores) por lo que no necesitan finalizar completamente un episodio para actualizar los valores.
@@ -313,17 +333,6 @@ Los métodos TD son totalmente incrementales y tampoco requieren un modelo del a
 \item Q-Learning: Es un método \textit{off-Policy}
 \item Métodos Actor-Critic
 \end{itemize}
-\section{Deep Reinforcement Learning}
-\subsection{Mejoras a los métodos básicos}
-	\begin{itemize}
-		\item Programación Dinámica con aproximación de funciones.
-		\item Cuando el espacio de estados es muy grande, no es factible utilizar una representación en una \textit{look up table}, por lo que es necesario utilizar otro tipo de aproximadores (\cite{busoniu2010reinforcement})
-	\end{itemize}
-\subsection{Deep Learning}
-	\begin{itemize}
-		\item Redes neuronales profundas como aproximadores generales.
-		\item Redes Convolucionales para poder tomar como input los pixeles de un juego directamente.
-	\end{itemize}
 \subsection{Value based Reinforcement Learning:}
 	\begin{itemize}
 	   \item Representar la función valor mediante una \textit{Q-network} con pesos $w$:
@@ -407,7 +416,7 @@ Llama la atención como estos autores utilizan maquinaria de lo más reciente (d
 \subsection{Conocimiento causal y toma de decisiones secuenciales: acciones como intervenciones}
 En cuanto al aprendizaje \textit{on-line} de modelos causales, encontramos en los trabajos de \cite{wellen2012learning} y de \cite{kummerfeld2013tracking} acercamientos tangenciales, o un punto de inicio, al aprendizaje de modelos causales al vuelo.\\
 \\
-Teorías de cómo las personas usan datos de covariación para aprender modelos gráfios causales pueden dividirse en enfoques racionales y heurísticos (según  \cite{wellen2012learning}). El enfoque racional modela el aprendizaje causal como inferencia racional, lo que incluye la inferencia Bayesiana. Estos modelos se mantienen en el nivel computacional y no intentan explicar el mecanismo cognitivo subyacente.\\
+Según \cite{wellen2012learning} es posible dividir las teorías de cómo las personas usan información estadística para aprender modelos causales en enfoques racionales y heurísticos. El enfoque primero modela el aprendizaje causal como inferencia racional, lo que incluye la inferencia Bayesiana; estos modelos se mantienen en el nivel computacional y no intentan explicar el mecanismo cognitivo subyacente.\\
 \\
 Por otro lado, el enfoque heurístico propone que las personas reaccionan a distintos estímulos que los hacen moficiar sus hipótesis causales de una manera no necesariamente racional. El modelo de efecto simple de \cite{waldmann2008causal} supone que las personas se enfocan en evaluar una sola relación causal a la vez. Es un modelo que aprende la magnitud de la relación causal. Si una variable supera cierto umbral, entonces la persona acepta esa relación causal y la incorpora a su bagaje de relaciones.\\
 \\
@@ -455,19 +464,34 @@ En cuanto a la formulación de un problema de decisión en sistemas causales, ya
 \item Exportar conocimiento causal obtenido para hacer inferencia causal.
 \end{itemize}
 \subsection{Propuesta metodológica}
-Dado el contexto proporcionado en las secciones anteriores, la propuesta consiste en incorporar un modelo de aprendizaje causal dentro a un problema de toma de decisiones. En el contexto de aprendizaje por refuerzo, tendremos un agente que, al tener como objetivo aprender una tarea mediante interacciones secuenciales, aprenda con cada paso un poco sobre la \textit{estructura causal} de su entorno. Cada decisión que el agente toma (o acción que lleva a cabo) puede verse como una intervención en el ambiente y que proporciona información sobre la estructura causal de este. Esta información obtenida, será utilizada para mejorar las decisiones que toma y para aprender otros aspectos estructurales (causales) sobre su ambiente. La intuición detrás de esto es que al aprender mediante una toma de decisiones repetida, decisiones que intervienen directamente sobre el entorno, se aprenden también relaciones causales; por ejemplo, al aprender a conducir se aprende implícitamente que ciertos movimientos del volante \textit{causan} ciertos cambios en el estado del automovil (\cite{danks2014unifying}). Otro ejemplo es en el contexto de videojuegos, en el cual al tomar ciertas decisiones se conoce el impacto que estas provocan en el estado del juego, conocimiento que a su vez es utilizado para tomar mejores decisiones en un futuro y que maximicen las recompensas u objetivos a largo plazo. No sólo hay intuición detrás de esto, pues se sabe que los seres humanos utilizan el conocimiento causal que la experiencia les provee para realizar predicciones para intervenciones en el mundo no realizadas aun (\cite{meder2008inferring}, \cite{hagmayer2009decision})\\
-%\\
-%De manera formal, consideremos un fenómeno sobre el cual se quieran hacer inferencias causales y sobre el cual poseeemos un conjunto de datos. Supongamos que los datos tienen la forma $%(\mathbf{X},\mathbf{Y})$ donde $\mathbf{X}$ son un conjunto de atributos, así como acciones llevadas a cabo, y $\mathbf{Y}$ son los efectos observados. Entonces, es necesario %\textit{traducir} estos datos a la forma $(s \in \mathcal{S},a \in \mathcal{A},r \in \mathcal{R})$ de modo que las características, atributos, etc del problema original sean mapeados a estados, las acciones tomadas, a acciones en el mundo de RL, y las respuestas obtenidas, al reward y cambio de estado otorgado por el ambiente. Evidentemente esta no es una tarea trivial, pues es necesario también definir un \textit{task} adecuado para el agente que le permita interactuar con su entorno de manera tal que aprenda, o descubra, las relaciones causales sobre los datos originales. La definición del task a resolver implica definir una función recompensa; además, una transición entre estados es importante. Notemos que todos estos elementos deben ser definidos de manera que el agente interactue con su mundo de tal forma que lo que \textit{aprenda} nos sirva para identificar relaciones causales.\\
-%\\
-%Como ejemplo de lo anterior, podríamos tener un conjunto de datos de la forma $\mathbf{X} = (s,t)$ donde $s$ es enfermedad, $t$, tratamiento otorgado y $\mathbf{Y}=\{ \text{curado}, \text{ no curado} \}$. Definimos un agente de RL tal que los estados que recibe del ambiente son las características del paciente, la acción que toma es otorgar o no el medicamento, y la recompensa es $1$ si el paciente se mejoró. La tarea que este agente tiene que lograr es maximizar el número de pacientes curados; notemos que la tarea del agente, o el agente mismo, no tienen por qué tener interpretación en términos del problema original; es decir, no tiene por qué existir una interpretación del agente en términos de un médico, un paciente, etc. Una vez que el agente aprenda a resolver esta tarea, utilizaremos lo aprendido por él de la siguiente manera: si para un paciente del conjunto original de datos el agente propone el tratamiento, entonces es causal que el tratamiento mejoró al paciente.\\
+Dado el contexto proporcionado en las secciones anteriores, la propuesta consiste en diseñar un agente que incorpore un modelo causal dentro a un problema de toma de decisiones. Este agente buscará aprender un modelo causal de su entorno al mismo tiempo que aprende una \textit{política}. El agente aprenderá con cada paso un poco sobre la \textit{estructura causal} de su entorno.\\
+\\
+Cada decisión que el agente toma (acción que lleva a cabo) altera el estado del mundo. La información obtenida a partir de cada acción, será utilizada para actualizar el conocimiento causal que se tenga hasta el momento, esto con el fin mejorar las decisiones que toma y para aprender otros aspectos estructurales (causales) sobre su ambiente. La intuición detrás de esto es que al aprender mediante una toma de decisiones repetida, decisiones que intervienen directamente sobre el entorno, se aprenden también relaciones causales; por ejemplo, al aprender a conducir se aprende implícitamente que ciertos movimientos del volante \textit{causan} ciertos cambios en el estado del automovil (\cite{danks2014unifying}). Otro ejemplo es en el contexto de videojuegos, en el cual al tomar ciertas decisiones se conoce el impacto que estas provocan en el estado del juego, conocimiento que a su vez es utilizado para tomar mejores decisiones en un futuro y que maximicen las recompensas u objetivos a largo plazo. No sólo hay intuición detrás de esto, pues se sabe que los seres humanos utilizan el conocimiento causal que la experiencia les provee para realizar predicciones para intervenciones en el mundo no realizadas aun (\cite{meder2008inferring}, \cite{hagmayer2009decision})\\
 \\
 El trabajo de \cite{garnelo2016towards} nos muestra que efectivamente pueden aprenderse aspectos estructurales sobre el entorno mientras el agente aprende, incluso logrando así mejorar su desempeño. Además, muestra la importancia de tener una semántica que permita hablar de la estructura del entorno. Ellos utilizaron lógica de primer orden, pero un modelo gráfico sería más expresivo y adaptable.\\
 \\
-A su vez, el trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. \cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. Entonces, queda abierta la pregunta de qué pasaría con un agente que se enfrente a un problema de aprendizaje por refuerzo, queremos saber cómo este agente aprenderá paso a paso un modelo causal y lo utilizará para tomar mejores decisiones.\\
-\\
+A su vez, el trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. \cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. Entonces, queda abierta la pregunta de qué pasaría con un agente que se enfrente a un problema de aprendizaje por refuerzo, queremos saber cómo este agente aprenderá paso a paso un modelo causal y lo utilizará para tomar mejores decisiones.
 \begin{center}
 \includegraphics[scale=0.3]{/Users/MauricioGS1/INAOE/Primer_Semestre/Figures/diagrama.png}
 \end{center}
+\subsection{Pasos a seguir}
+\begin{itemize}
+\item ¿Por qué esto sería mejor que trabajo de Garnelo?
+\item Tengo un modelo causal \textit{verdadero}, ¿cómo lo incorporo en una política de RL? ¿cómo guío el descubrimiento de acciones? 
+\item Tengo una política aprendida, ¿cómo obtengo info causal?
+\item Exploración vs explotación causal: ¿cómo decido si seguir la info causal o tomar acciones exploratorias para descubrir relaciones causales? 
+\item ¿Un dominio de interés? 
+\end{itemize}
+\subsection{Caso de un MDP finito}
+En el caso de un MDP finito completamente especificado; es decir, en el cual conocemos las probabilidades de transición y las recompensas. Un modelo causal sobre este dominio opera sobre las acciones, pues son estas las que \textbf{\textit{suponemos}} que \textit{causan} algo; esto es, 
+\[ a \xrightarrow[]{\text{causa}} \textrm{estado del mundo}. \]
+Entonces, en un modelo gráfico causal necesitaremos tener \textit{nodos de estado}, así como \textit{nodos de acciones} (\textit{causal decision graphs}).\\
+\\
+Es claro que los estados del mundo afectarán la siguiente decisión, pero no causan nada por sí mismos; en todo caso, el estado afeca la decisión pero sólo a través de la política (el valor del estado).\\
+\\
+El objetivo, ahora, es aprender una política que incorpore conocimiento causal, el cual a su vez fue aprendido mediante interacción.\\
+\\
+¿El valor de un estado debe cambiar en el caso causal? Para que el valor de un estado se vea afectado por lo que pueda causar el agente a partir de ese estado se necesita algún tipo de función de utilidad, ¿no? No lo sé...
 \newpage
 \bibliographystyle{apalike}
 \bibliography{Bibliografia}
