@@ -1,0 +1,96 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, mexico]{babel}
+\usepackage{listings}
+\usepackage{breakcites}
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{amssymb,amsthm,amsmath,latexsym}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{natbib}
+%\bibliographystyle{stylename}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+\theoremstyle{plain}
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}[teo]{Proposición}
+\newtheorem{defi}[teo]{Definición}
+\newtheorem{obs}[teo]{Observación}
+\newtheorem{lem}[teo]{Lema}
+\newtheorem{cor}[teo]{Corolario}
+\usepackage[pdftex]{color,graphicx}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\title{State of The Art Circles}
+\author{Mauricio Gonzalez Soto}
+\begin{document}
+%\nocite{*}
+\maketitle
+\section{Outer Circle}
+\begin{itemize}
+\item (\cite{suppes1970probabilistic})
+\item \cite{holland1986statistics}
+\item \cite{sutton1998reinforcement}
+\item Causal decision theory (\cite{joyce1999foundations}): Making decisions using causal knowledge; i.e. I know that $A$ \textit{causes} $B$, so it can be predicted what will happen if $A$ is chosen, or not, over other options. 
+\item (\cite{spirtes2000causation})
+\item cite{pearl2009causality},
+\item Causal graphical models ( \cite{koller2009probabilistic}): Causal semantics over probabilistic graphical models.
+\item Decision Theory Under Uncertainty (\cite{gilboa2009decision}).
+\item \cite{pearl2014probabilistic}
+\item  \cite{danks2014unifying}
+\item \cite{gershman2015reinforcement}
+\end{itemize}
+\section{Middle Circle}
+\begin{itemize}
+\item \cite{baxter2001infinite}
+\item \cite{boyan2002technical}
+\item Decision problems and causal models: \cite{dawid2002influence} show how causal Bayesian Nets can be augmented with decision nodes as to model decision problems that use causal information.
+\item \cite{konda2003onactor}
+\item \cite{richter2007natural}
+\item \cite{hagmayer2009decision}
+\item \cite{meder2009role}
+\item \cite{meder2010observing}
+\item On-line learning in causal models(\cite{wellen2012learning})):  Causal learning in an on-line setting has been framed in terms of causal graphical models, where in a causal graphical model edges are added or removed in a prediction-error loop.
+\item \cite{grondman2012survey}
+\item Policy Gradients  \cite{DBLP:journals/corr/MnihBMGLHSK16}
+\item \cite{lopez2015towards}
+\item \cite{NIPS2016_6234}
+\item \cite{NIPS2016_6266}
+\item \cite{NIPS2016_6059}
+\item \cite{NIPS2016_6233}
+\item \cite{NIPS2016_6042}
+\item \cite{DBLP:journals/corr/SchulmanMLJA15}
+\item \cite{goudet2017learning}
+\item \cite{firoiu2017beating}
+\item \cite{leibo2017multi}
+\item \cite{amarjyoti2017deep}
+\item \cite{NIPS2017_7019}
+\item \cite{NIPS2017_7084}
+\item \cite{NIPS2017_7134}
+\item \cite{NIPS2017_6954}
+\item \cite{NIPS2017_7134}
+\item \cite{NIPS2017_6950}
+\item \cite{NIPS2017_7007}
+\item \cite{NIPS2017_6874}
+\item \cite{NIPS2017_7123}
+\item \cite{NIPS2017_7017}
+\item \cite{NIPS2017_7223}
+\item \cite{NIPS2017_6875}
+\item \cite{DBLP:journals/corr/HuangT17}
+\item \cite{guo2014deep}
+\item \cite{DBLP:journals/corr/LevineFDA15}
+\item \cite{DBLP:journals/corr/GuLSL16}
+\item \cite{DBLP:journals/corr/ArulkumaranDSB16}
+\item \cite{DBLP:journals/corr/ZahavyBM16}
+\item \cite{DBLP:journals/corr/ChenDHSSA16}
+
+\end{itemize}
+\section{Inner Circle}
+\begin{itemize}
+\item Causal learning through sequential decision making (\cite{hagmayer2013repeated}).
+\item \cite{NIPS2016_6195}
+\item \cite{garnelo2016towards}
+\end{itemize}
+\newpage
+\bibliographystyle{apalike}
+\bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
+\end{document}
