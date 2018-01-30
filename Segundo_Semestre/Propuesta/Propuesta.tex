@@ -221,10 +221,32 @@ Consideremos una relación  $\succeq L \times L$. El Teorema de von Neumann-Morg
 \item A2. Continuidad: Para toda $P,Q,R \in L$ tales que $P \succ Q \succ R$ existen $\alpha$ y $\beta$ tales que:
 \[  \alpha P + (1-\alpha) R \succ Q \succ \beta P + (1-\beta) R\]
 \item A3. Independencia: Para toda lotería $P,Q,R \in L$ y toda $\alpha \in (0,1)$ se tiene que $P \succeq Q$ si y sólo si $\alpha P + (1-\alpha) R \succeq \alpha Q  + (1-\alpha) R$.
-
 \end{itemize}
+\begin{teo}
+Una relación $\succeq L \times L$ satisface los axiomas A1 - A3 si y sólo sí existe una función $u: X \to \mathbb{R}$ tal que para toda $P,Q \in L$ se tiene que $P \succeq Q$ si y sólo si 
+\[ \sum_{x \in X} P(x) u(x) \geq \sum_{x \in X} Q(x) u(x).  \]
+\end{teo}
+Este Teorema dice que para un tomador de decisiones racional (es decir, que se comporta según los axiomas) existe una función de utilidad tal que las preferencias del tomador de decisiones son equivalentes a maximizar una utilidad esperada.
 \subsection{De Finnetti}
+¿Cuál es la definición de probabilidad subjetiva? \cite{gilboa2009decision} sugiere que para saber qué son debemos explorar cómo se usan estas, y una posible manera de uso es al maximizar una utilidad esperara y esto es lo que hace el Teorema de DeFinnetti.\\
+\\
+De Finetti consideró apuestas sobre \textit{estados del mundo}. Consideremos que existen $1,...,n$ estados en el mundo. Una apuesta es una función que toma valores en el espacio de estados y los mapea a valores monetarios; es decir, una apuesta $x$ es un vector de $n$ elementos en donde $x_i$ es la ganancia en el caso de que la apuesta resulte en el estado $i$ como el ganador. Consideramos una relación $\succeq \subseteq X \times X$. Y consideremos los siguientes axiomas:
+\begin{itemize}
+\item A1. Órden débil: $\succeq$ es completa y transitiva.
+\item A2. Continuidad: Para cada $x \in X$, los conjuntos $\{ y | x \succ y \}$ y $\{ y | y \succ x \}$ son abiertos.
+\item A3. Aditividad: Para toda $x,y,z \in X$, $x \succeq y$ si y sólo si $x+z \succeq y+z$.
+\item A4 Monotonicidad: Para toda $x,y \in X$, si se cumple que $x_i \geq y_i$ entonces se tiene que $x \succeq y$.
+\item A5 No-trivialidad: Existen $x,y \in X$ tales que $x \succ y$.
+\end{itemize}
+Notemos que el axioma A3 sólo aplica bajo un esquema de neutralidad al riesgo.
+\begin{teo}
+La relación $\succeq \subseteq X \times X$ satisface A1-A5 si y sólo si existe un vector de probabilidad $p$ de tamaño $n$ tal que para toda $x,y \in X$ se cumple que
+\[ x \succeq y \textrm { si y sólo si } px \geq py. \]
+\end{teo}
+Entonces, la definición de probabilidad subjetiva sería aquella probabilidad utilizada por un tomador de decisiones para escoger una acción mediante el criterio de utilidad esperado.
 \subsection{Savage}
+El Teorema de von Neumann-Morgenstern indica cómo obtener una función de utilidad si las probabilidades están bien definidas; el Teorema de De Finnetti dice cómo obtener probabilidades si conocemos las utiidades de un tomador de decisiones. El Teorema de Savage obtiene al mismo tiempo probabilidades y utlidades. Su modelo asume sólo estados del mundo y sus resultados. Por lo tanto, los axiomas propuestos por Savage son bastante más abstractos y menos interpretables, pero se obtiene la ventaja de que sus axiomas son equivalentes a la existencia de una función de utilidad y de una medida de probabilidad (subjetiva) tales que las decisiones se llevan a cabo al maximizar utilidad esperada respecto a esta función de utilidad y esta medida de probabilidad.\\
+\subsubsection{Estados, resultados y acciones}
 \section{Aprendizaje por Refuerzo}
 El Aprendizaje por Refuerzo (RL) (\cite{sutton1998reinforcement}) consiste en un \textit{framework} general en el cual un \textit{agente} aprende a llevar a cabo una tarea a través de interactuar con su entorno. Estas interacciones provocan cambios en el entorno, los cuales a su vez afectarán el comportamiento del agente. El comportamiento del agente está caracterizado en términos de acciones y las acciones tomadas por este afectan el \textit{estado} del ambiente. A su vez, el ambiente devuelve información al agente en términos de una recompensa o ganancia según el estado en el que se encuentre. El objetivo del agente es encontrar una serie de acciones que lo lleven a lograr su objetivo final. La función de recompensa codifica qué es lo que se desea que el agente aprenda, pues esta función devuelve un valor para cada estado y con esto el agente asignará un valor a cada estado según la ganancia a largo plazo que un este representa.\\
 \\
