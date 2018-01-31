@@ -1,0 +1,2 @@
+Tarea: 
+investigar diferencia entre metodología, proceso, algoritmo, modelo, método, mecanismo, framework
