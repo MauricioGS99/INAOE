@@ -30,6 +30,8 @@
 \section{Introducción}
 El problema que estamos tratando de atacar consiste en descubrir relaciones causales que se encuentren presentes en diversos fenómenos. El enfoque que se propone es descubrir estas relaciones mediante \textit{interacción} con el entorno. En el contexto de inferencia causal, los datos que, usualmente, se tienen provienen de fuentes ruidosas por lo que la probabilidad será el lenguaje adecuado para razonar sobre estos datos.\\
 \\
+\cite{lake2017building} argumentan que los sistemas inteligentes actuales, a pesar de sus impresionantes logros, aun están lejos de alcanzar una verdadera inteligencia; uno de los requisitos para esto es que puedan construir modelos causales que sean interpretables, y no sólo reconocer patrones estadísticos. 
+\\
 La primera parte de este resumen consiste en el estudio clásico de relaciones causales, el cual depende fuertemente de Redes Bayesianas, las cualesson objetos matemáticos utilizados para representar distribuciones de probabilidad de manera eficiente; además, permiten incorporar conocimiento inicial sobre las variables aleatorias representadas en la red. Debido a que estas redes son de fácil interpretación, es natural definir modelos causales en términos de estas, pues fácilmente nodos y aristas pueden traducirse en términos de objetos y causas.\\
 \\
 Después, veremos que existe un área del aprendizaje de máquina llamado Aprendizaje por Refuerzo, que es un marco teórico para el aprendizaje automático en el cual un \textit{agente} aprende a realizar una tarea a través de experiencia y de interacción con su entorno.\\
@@ -150,6 +152,9 @@ como una red neuronal generativa global, en la cual cada función $f_i$ es model
 Encontrar un modelo causal de este tipo requiere llevar a cabo dos tareas: estimar la estructura (el grafo) de los padres de cada variable, y las redes neuronales $f$
 \subsection{Correlación y causalidad}
 Dos variables aleatorias $X$,$Y$ pueden estar correlacionadas en distintos casos; por ejemplo, si $X$ causa $Y$, o si tanto $X$ como $Y$ son causadas por otra variable desconocida $V$. Si e conoce la existencia de $V$ y además podemos observarla. 
+
+\section{Modelos Gráficos Probabilistas}
+
 \section{Modelos gráficos causales}
 Sabemos que en una red bayesiana los arcos, aunque dirigidos, no necesariamente tienen una interpretación directa, lo único que importa es que el grafo capture adecuadamente las relaciones de dependencia entre variables aleatorias. Nos gustaría que fuera el caso que $X \to Y$ significara $X$ \textit{causa} Y. Resulta que existe una familia de modelos causales en los cuales se \textit{interviene} en el mundo. La idea clave es utilizar \textit{intervenciones ideales}, las cuales se denotan $do(Z=z)$ que significa forzar a la variable aleatoria $Z$ a tomar el valor $z$, denotado de manera simple como $do(z)$. Esta operación corresponde al caso en que un agente directamente modificó el estado del mundo y no sólo observó los valores de este de manera pasiva; por esta razón es muy importante tener en mente que es distinto $P(Y | do(z), X=x)$ que $P(Y | Z=z, X=x)$. Las preguntas causales de interés son planteadas de la forma $P(X | do(z))$ y son llamadas \textit{quries intervencionales}. Este tipo de intervenciones surgen de manera natural en muchos problemas; por ejemplo, “si el paciente recibe este tratamiento, cuál es la probabilidad de sobrevivir la enfermedad” puede ser planteada como $P(sobreivir | do(tratamiento))$.\\
 \\
@@ -349,41 +354,52 @@ Para hacer la mejora de una política, se escoge de manera determinística la ac
 \subsubsection{Diferencias Temporales}
 Los métodos TD son totalmente incrementales y tampoco requieren un modelo del ambiente, pero son mucho más complejos. Estos métodos son una combinación de métodos Monte-Carlo y de Programación Dinámica; estos métodos pueden aprender directamente de la experiencia y no necesitan un modelo del ambiente, pero también utilizan técnicas de \textit{bootstrapping} (estiman usando estimadores) por lo que no necesitan finalizar completamente un episodio para actualizar los valores.
 \begin{itemize}
-\item Evaluación de política en Diferencias Temporales
-\item TD(0)
-\item SARSA: Es un método \textit{on-policy}
-\item Q-Learning: Es un método \textit{off-Policy}
-\item Métodos Actor-Critic
+\item Evaluación de política en Diferencias Temporales.
+\item TD(0).
+\item SARSA: Es un método \textit{on-policy}.
+\item Q-Learning: Es un método \textit{off-Policy}.
+\item Métodos Actor-Critic.
 \end{itemize}
-\subsection{Value based Reinforcement Learning:}
+\subsection{Value based Reinforcement Learning: Deep Q-Networks}
 	\begin{itemize}
-	   \item Representar la función valor mediante una \textit{Q-network} con pesos $w$:
-	   \[Q(s,a,w) \approx Q^\ast(s,a) \]
+	\item Los sorprendentes avances de Deep Learning en visión computacional llevaron de manera natural a plantear la pregunta de cómo utilizar estas nuevas técnicas para el aprendizaje por refuerzo. 
+	\item Las aplicaciones estándar de DL requerían grandes volúmenes de datos etiquetados, además de tener muestras independientes, pero en Reinforcement learning esto es un problema pues las secuencias de estados suelen estar altamente correlacionados.
+	\item \cite{mnih2013playing} proponen una “Deep Q-Network”, que consiste en una implementación de Q-learning con aproximación de funciones (\cite{sutton1998reinforcement}) en donde el aproximador es una red neuronal convolucional.
+	  \item Utilizando esta técnica fue como \cite{mnih2013playing} lograron que un agente aprendiera siete juegos de Atari 2600 utilizando como input únicamente la pantalla del juego. 
+	  \item Estimar la función $Q$ de manera iterativa es muy costoso, pues además de requerir un modelo completo del sistema cada secuencia de estados se utiliza por separado para las estimaciones.
+	  \item Por esto, es mejor utilizar alguna función aproximadora para poder generalizar. 
+	   \item En este caso, se pretende aproximar la función valor mediante una red neuronal con pesos $\theta$:
+	   \[Q(s,a,\theta) \approx Q^\ast(s,a). \]
+	   \item Esta red se entrena al minimizar una sucesión de funciones $L_i$ que está dada por:
+	   \[ L_i (\theta_i) = \mathbb{E}[(y_i - Q(s,a;\theta)^2], \textrm{ donde  }y_i = \mathbb{E}[r + \gamma \max_{a'} Q(s',a';\theta) | s,a]. \]
+	   \item Notemos que los objetivos $y_i$ dependen de los pesos de la red neuronal. 
+	   \item El gradiente de $L_i (\theta_i)$ está dado por:
+	   \[ \nabla_{\theta_i} L_i (\theta_i) = \mathbb{E}[(r + \gamma \max_{a'} Q(s',a';\theta_{i-1}) - Q(s,a;\theta_i)) \nabla_{\theta_i} Q(s,a;\theta_i).] \]
+	   \item Para optimizar la función $L$ se utiliza gradiente estocástico.
+	   \item Notemos que este es un método \textit{model-free} y \textit{off-policy}.
+	   \item Notemos que las secuencias consecutivas de estados y acciones están fuertemente correlacionadas, por lo que el aprendizaje podría ser ineficiente.
+	   \item Además, al aprender \textit{on-policy}, los parámetros actuales determinan los siguientes estados sobre los cuales se entrenará, por lo que pueden surgir loops que afecten la convergencia del aprendizaje. 
+	   \item Para resolver estos problemas se utiliza Experience Replay (\cite{Lin1992}). Esta técnica consiste en guardar las experiencias del agente para cada tiempo $t$; esto es 
+	   \[ e_t = (s_t, a_t, r_t, s_{t+1}). \]
+	   \item Cada $e_t$ se almacena en un conjunto $\mathcal{D} = e_1 , ... , e_N$.
+	   \item En un loop interno del algoritmo, se tomarán aleatoriamente muestras de experiencia las cuales serán utilizadas para la actualización de pesos. 
 	   \item Q-learning:
-        \begin{itemize}	  
-        	\item  Sabemos que los valores óptimos deben satisfacer la ecuación de Bellman:
-        	\[ Q^\ast(s,a)=\mathbb{E}_{s'}[r + \gamma \max_{a'} Q^\ast(s',a')|s,a]. \]
-        	\item Tratamos el término $r + \gamma \max_{a'} Q^\ast(s',a',w)$ como el objetivo.
-        	\item Minimizar error cuadrático medio mediante Gradiente Estocástico:
-        	\[ I = (r + \gamma \max_{a'} Q^\ast(s',a',w) - Q(s,a,w))^2. \]
-        	\item Converge a $Q^\ast$ utilizando una representación tabular.
-        	\item Diverge al utilizar redes neuronales debido a la alta correlación entre muestras y la no-estacionareidad del objetivo.
-        	\item Lo resolvemos con Experience Replay (\cite{Lin1992}),  el cual consiste en guardar todas las experiencias de modo que al entrenar la red tomar sólo mini-batches aleatorios  en vez de utilizar la transición más reciente.
-	    \end{itemize}
-	\item Aplicaciones de DQN.
+	   \item Aplicaciones de DQN.
 		\begin{itemize}
 			\item \cite{mnih2013playing}. Paper en el que muestran cómo una computadora aprende a jugar Atari 2600 a través de sólo observar los pixeles del juego y obteniendo una 																		recompensa conforme el score aumentaba. Utilizando la misma arquitectura, se pudieron aprender 7 juegos
 			\item \cite{mnih2015human}. En este paper, aumentaron a 49 juegos aprendidos. Utilizan una Deep Q-Network, que consiste en aproximar la función Q mediante una red 																			neuronal que toma como input los estados (las pantallas del juego) y devuelve como output el valor Q para cada posible acción. En este caso, 																			utilizaron una red convolucional con 3 capas de convolución y 2 capas totalmente conectadas.
 	  \end{itemize}
-\item Mejoras posteriores a DQN
+	      	 \end{itemize}  	
+\subsection{Mejoras posteriores a DQN}
    	   \begin{itemize}
    	   		\item Double DQN.
    	   		\item Prioritized Replay.
    	   		\item Duelling Networks.
    	   \end{itemize}
-    	 \end{itemize}  	   
-\subsection{Policy Based DRL}
-Resulta que Deep Q-Learning no es un gran algoritmo, y en su lugar, \cite{DBLP:journals/corr/MnihBMGLHSK16} proponen utilizar directamente Policy-Gradients.
+\subsection{Método Asíncronos}  
+\subsection{Policy Based DRL: Policy Gradients}
+Resulta que Deep Q-Learning no es un gran algoritmo, incluso los autores del paper original (\cite{DBLP:journals/corr/MnihBMGLHSK16}) mencionan sus desventajas. 
+Otra idea es atacar directamente la política.
 La idea es representar una policy mediante una red neuronal profunda con pesos $\textbf{u}$.
 \[ a = \pi (a|s,u) \textrm{ o } a = \pi (s,u). \]
 En este contexto, definimos una función objetivo $L(\textbf{u})$ como:
@@ -474,37 +490,52 @@ Como consecuencia de sus estudios, se obtiene que los métodos basados en los ni
 En cuanto a la formulación de un problema de decisión en sistemas causales, ya desde \cite{dawid2002influence} tenemos una idea de cómo aumentar redes bayesianas con nodos de decisión y variables de estrategia para el modelado causal en problemas de decisión.\\
 \\
 \cite{hagmayer2009decision} plantean que cada decisión tomada por un agente es una intervención directa con el fin de predecir las consecuencias de esta. 
-\section{Propuesta}
+
+\subsection{Experimentos secuenciales: Causal Bandits}
+
+\section{Mi Propuesta}
 \subsection{Pregunta de Investigación}
 ¿Los métodos de aprendizaje por refuerzo pueden aprender un modelo causal del ambiente? Más allá de producir un mapeo estado-acción, queremos obtener un modelo causal del entorno.
 \subsection{Problema}
 \subsection{Objetivos}
 \begin{itemize}
-\item Aprendizaje causal en línea a partir de acciones y recompensas obtenidas por un agente.
-\item Evaluación del modelo causal.
+\item Plantear un modelo causal dado un ambiente.
+\item Aprendizaje estructural del modelo causal.
+\item Evaluación del modelo causa (queries significativas)l.
 \item Incorporar el conocimiento causal a la toma de decisiones en un loop de mejora continua.
 \item Exportar conocimiento causal obtenido para hacer inferencia causal.
 \end{itemize}
-\subsection{Propuesta metodológica}
-Dado el contexto proporcionado en las secciones anteriores, la propuesta consiste en diseñar un agente que incorpore un modelo causal dentro a un problema de toma de decisiones. Este agente buscará aprender un modelo causal de su entorno al mismo tiempo que aprende una \textit{política}. El agente aprenderá con cada paso un poco sobre la \textit{estructura causal} de su entorno.\\
+\subsection{Motivación}
+Tomando en cuenta el contenido de la secciones anteriores, surge la pregunta de si es posible diseñar un agente que aprenda a realizar una tarea por medio de interacción con su entorno y mediante el uso de información causal recolectada a través de esa interacción
+Este agente buscará aprender un modelo causal de su entorno al mismo tiempo que aprende una \textit{política}. Con cada acción que toma, el agente aprenderá  un poco sobre la \textit{estructura causal} de su entorno y utilizará este conocimiento para la futura toma de decisiones.\\
 \\
 Cada decisión que el agente toma (acción que lleva a cabo) altera el estado del mundo. La información obtenida a partir de cada acción, será utilizada para actualizar el conocimiento causal que se tenga hasta el momento, esto con el fin mejorar las decisiones que toma y para aprender otros aspectos estructurales (causales) sobre su ambiente. La intuición detrás de esto es que al aprender mediante una toma de decisiones repetida, decisiones que intervienen directamente sobre el entorno, se aprenden también relaciones causales; por ejemplo, al aprender a conducir se aprende implícitamente que ciertos movimientos del volante \textit{causan} ciertos cambios en el estado del automovil (\cite{danks2014unifying}). Otro ejemplo es en el contexto de videojuegos, en el cual al tomar ciertas decisiones se conoce el impacto que estas provocan en el estado del juego, conocimiento que a su vez es utilizado para tomar mejores decisiones en un futuro y que maximicen las recompensas u objetivos a largo plazo. No sólo hay intuición detrás de esto, pues se sabe que los seres humanos utilizan el conocimiento causal que la experiencia les provee para realizar predicciones para intervenciones en el mundo no realizadas aun (\cite{meder2008inferring}, \cite{hagmayer2009decision})\\
 \\
-El trabajo de \cite{garnelo2016towards} nos muestra que efectivamente pueden aprenderse aspectos estructurales sobre el entorno mientras el agente aprende, incluso logrando así mejorar su desempeño. Además, muestra la importancia de tener una semántica que permita hablar de la estructura del entorno. Ellos utilizaron lógica de primer orden, pero un modelo gráfico sería más expresivo y adaptable.\\
+El trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. \\
 \\
-A su vez, el trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. \cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. Entonces, queda abierta la pregunta de qué pasaría con un agente que se enfrente a un problema de aprendizaje por refuerzo, queremos saber cómo este agente aprenderá paso a paso un modelo causal y lo utilizará para tomar mejores decisiones.
+\cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. \\
+\\
+El trabajo de \cite{garnelo2016towards} nos muestra que efectivamente pueden aprenderse aspectos estructurales sobre el entorno mientras el agente aprende, incluso logrando así mejorar su desempeño. Además, muestra la importancia de tener una semántica que permita hablar de la estructura del entorno. Ellos utilizaron lógica de primer orden, pues están más interesados en hacer razonamientos \textit{de alto nivel} sobre el entorno, que involocura más que las relaciones causales, y por esto ellos se comprometen con lógica de primer orden, que al restringirnos al caso causal se queda corta pues los modelos gráficos probabilistas son más expresivos, además de modulares y montónicos.\\
+\\
+\cite{lattimoreNIPS2016} explora la pregunta de cómo escoger \textit{la mejor intervención} dado un modelo causal a través de una serie de intervenciones y observaciones secuenciales; por ejemplo, en el caso en el que un granjero quiera maximizar sus cosechas, y sabe que ese rendimiento está afectado por el uso de fertilizante, la humedad y la exposición al sol, pero sólo tiene los recursos para llevar a cabo sólo una de estas modificaciones en cada temporada. El algoritmo de Lattimore le dirá, después de $T$ observaciones, cuál es la mejor intervención a llevar a cabo con el fin de maximizar esa cantidad. Este podría ser un primer paso hacia responder la pregunta \textit{¿dado un modelo causal, qué acción tomar?}
+\\
+\cite{ortega2014generalized} exploran un esquema de muestreo llamado Muestreo de Thompson, en el cual un agente muestrea una de entre varias acciones de acuerdo a la probabilidad subjetiva que tenga el agente de que esta sea la mejor acción. Los autores conjeturan que esto pueden utilizarse para hacer inducción causal sobre una serie de acciones establecidad (política conocida).
+\subsection{La propuesta}
+Diseñar un agente que tenga como objetivo aprender a llevar a cabo una tarea. El aprendizaje se dará por interacción con el ambiente y además contará con un modelo causal que vaya aprendiendo paso a paso y del cual se apoyará para  tomar mejores decisiones.
 \begin{center}
 \includegraphics[scale=0.3]{/Users/MauricioGS1/INAOE/Primer_Semestre/Figures/diagrama.png}
 \end{center}
 \subsection{Pasos a seguir}
 \begin{itemize}
 \item ¿Por qué esto sería mejor que trabajo de Garnelo?
-\item Tengo un modelo causal \textit{verdadero}, ¿cómo lo incorporo en una política de RL? ¿cómo guío el descubrimiento de acciones? 
-\item Tengo una política aprendida, ¿cómo obtengo info causal?
+\item Tengo un modelo causal \textit{verdadero}, ¿cómo lo incorporo en una política de RL? ¿cómo guío el descubrimiento de acciones? Aquí ayuda el artículo de \cite{lattimoreNIPS2016}
+\item Tengo una política aprendida, ¿cómo descubro estructura causal? Aquí puede ayudar el artículo de \cite{ortega2014generalized}
+\item ¿Qué aprendo primero?
+\item ¿Cómo le doy más peso a la información explicativa que a la información reactiva?
 \item Exploración vs explotación causal: ¿cómo decido si seguir la info causal o tomar acciones exploratorias para descubrir relaciones causales? 
 \item ¿Un dominio de interés? 
 \end{itemize}
-\subsection{Caso de un MDP finito}
+\subsection{Ejemplo: Caso de un MDP finito}
 En el caso de un MDP finito completamente especificado; es decir, en el cual conocemos las probabilidades de transición y las recompensas. Un modelo causal sobre este dominio opera sobre las acciones, pues son estas las que \textbf{\textit{suponemos}} que \textit{causan} algo; esto es, 
 \[ a \xrightarrow[]{\text{causa}} \textrm{estado del mundo}. \]
 Entonces, en un modelo gráfico causal necesitaremos tener \textit{nodos de estado}, así como \textit{nodos de acciones} (\textit{causal decision graphs}).\\
@@ -517,4 +548,8 @@ El objetivo, ahora, es aprender una política que incorpore conocimiento causal,
 \newpage
 \bibliographystyle{apalike}
 \bibliography{Bibliografia}
+\appendix
+\section{Teoría de Probabilidad}
+\section{Estadística Bayesiana}
+
 \end{document}
