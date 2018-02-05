@@ -311,26 +311,27 @@ Formalmente:
 \[ Q^\ast(s,a)=\mathbb{E}_{s'} [r + \gamma \max_{a'} Q^\ast(s',a')|s,a] \]
 \subsection{Métodos básicos de solución: Model-based}
 \subsubsection{Programación Dinámica}
-Los métodos de programación dinámica tienen muy buen fundamento teórico, pero requieren una especificación completa del ambiente.
-				\begin{itemize}
-					\item Evaluación de una política: Teniendo una política cualquiera $\pi$, ¿cómo obtener la función $V^\pi$?\\
-					         Sabemos que la función $V^\pi$ debe satisfacer la ecuación de Bellman:
-					         \[ V^\pi (s) = \mathbb{E}[r + \gamma V^\pi (s') | s_t = s]. \]
-					          Pero esto nos deja con el mismo problema, pues tenemos de ambos lados una función desconocida. Para problemas de decisión finitos, este es un sistema de ecuaciones con tantas ecuaciones como estados, lo cual puede ser costoso de resolver. Consideramos entonces un método iterativo: 
-					         \[ V_{k+1} (s) = \pi(s) \sum_{s'} \mathcal{P}_{s,s'}^a [ \mathcal{R}_{s,s'}^a + \gamma V_k(s')], \]
-					         donde, $\mathcal{P}_{s,s'}^a$  es la probabilidad de pasar al estado $s'$ desde $s$ tomando la acción $a$. Y $\mathcal{R}_{s,s'}^a$ es el valor esperado de la siguiente recompensa al pasar de $s$ a $s'$ tomando la acción $a$.
-					\item Mejora de una política: Dada una política $\pi$ y estando en un estado $s$ nos preguntamos qué pasaría si en vez de escoger la acción $\pi(s)$ escogieramos cualquier otra acción $a$. La consecuencia de hacer esto estaría dada por $Q^{\pi}(s,a)$. Entonces, la clave es comparar esto con $V^{\pi}$. De ser mayor que la función valor en ese estado, entonces estaríamos encontrando una mejor política, una que determina $\pi'(s)=a$ en vez de $\pi(s)$. Este es un caso particular de un resultado conocido como \textit{Teorema de Mejora de Polítca} que dice que si $\pi$ y $\pi'$ son dos políticas tales que $Q^{\pi} (s, \pi'(s)) \geq V^{\pi}(s)$ entonces $\pi'$ es mejor que $\pi$; esto es, $V^{\pi'} (s) \geq V^{\pi}(s)$ para todo estado $s$.
-					 Entonces, resulta natural querer buscar estas mejoras para dos los estados posibles y todas las acciones posibles y obtener aquellos que maximicen la función $Q$; es decir, queremos construir una nueva política $\pi'$ como:
-					\[ \pi'(s)= \textrm{ arg} \max_a Q^\pi (s,a). \]
-					Para proceso de decisión finitos, siempre encontramos una mejor política, a no ser que ya estemos en el óptimo.
-					\item Iteración de políticas: Una vez que una policy $\pi' $ ha sido obtenida de mejorar $\pi$ utilizando $V^\pi$, podemos construir $V^{\pi'}$ y repetir nuevamente el proceso:
-					\[ \pi_0 \xrightarrow{E} V^{\pi_0} \xrightarrow{I} \pi_1 \xrightarrow{E} V^{\pi_1} \xrightarrow{E} \pi_2 \xrightarrow{E} \cdots \xrightarrow{I} \pi^\ast \xrightarrow{E} V^\ast  \]
-					pues cada política está garantizado que es mejor que la anterior.
-					\item Iteración de valor: El método anterior puede ser muy tardado pues la convergencia, aunque garantizada teóricamente, sólo se da en el límite. Podemos truncar la etapa de policy evaluation.
-					\[ V_{k+1}(s) = \max_a \mathbb{E}[r + \gamma V_k(s')|s_t=s,a_t=a]. \]
-					\item Iteración de política generalizada (GPI): Notar que la iteración de políticas consiste en dos procesos que interactuan entre sí, pero de manera que cada proceso se hace de manera completa antes de comenzar el otro lleva a preguntarse si esto puede hacerse de manera más eficiente. Se conoce como iteración de políticas generalizada (GPI) a la idea general de que los procesos de evaluación y mejora de política interactuen entre sí.
-					\item Limitaciones: Los métodos de programación dinámica suponen que se cuenta con un modelo completo del sistema, lo cual es prácticamente imposible en la práctica, además de ser muy costosos en términos computacionales. Estos métodos sufren de la llamada \textit{maldición de la dimensionalidad}, pues el número de estados crece exponencialmente con el número de variables
-				\end{itemize}
+Los métodos de programación dinámica tienen muy buen fundamento teórico, pero requieren una especificación completa del ambiente. La idea fundamental en programación dinámica es poder asignar a cada estado del sistema un valor numérico que represente el retorno esperado, a largo plazo, de ese estado; es decir, estamos valorando cada estado según lo que esperemos obtener de él a muy largo plazo. \\
+\\
+Recordemos que una política $\pi$ especifica una manera de actuar en cada estado; es decir, a cada estado del sistema le asocia una acción. Si ya conocemos una política cualquiera, la pregunta natural es ¿cómo obtener la función $V^\pi$?\\
+\\
+Sabemos que la función $V^\pi$ debe satisfacer la ecuación de Bellman:
+\[ V^\pi (s) = \mathbb{E}[r + \gamma V^\pi (s') | s_t = s]. \]
+Pero esto nos deja con el mismo problema, pues tenemos de ambos lados una función desconocida. Para problemas de decisión finitos, este es un sistema de ecuaciones con tantas ecuaciones como estados, lo cual puede ser costoso de resolver. Consideramos entonces un método iterativo: 
+ \[ V_{k+1} (s) = \pi(s) \sum_{s'} \mathcal{P}_{s,s'}^a [ \mathcal{R}_{s,s'}^a + \gamma V_k(s')], \]
+donde, $\mathcal{P}_{s,s'}^a$  es la probabilidad de pasar al estado $s'$ desde $s$ tomando la acción $a$. Y $\mathcal{R}_{s,s'}^a$ es el valor esperado de la siguiente recompensa al pasar de $s$ a $s'$ tomando la acción $a$.\\
+\\
+Sabemos que además de la función $V$ tenemos a la función $Q$, la cual valora parejas estado-acción. Utilizando esta función, podemos preguntarnos qué pasaría si en vez de escoger la acción $a=\pi(s)$ escogieramos cualquier otra acción $a$. Claramente, onsecuencia de hacer esto estaría dada por $Q^{\pi}(s,a)$. Entonces, si esto resulta ser mayor que la función valor en ese estado, entonces estaríamos encontrando una mejor política, una que determina $\pi'(s)=a$ en vez de $\pi(s)$. Este es un caso particular de un resultado conocido como \textit{Teorema de Mejora de Polítca} que dice que si $\pi$ y $\pi'$ son dos políticas tales que $Q^{\pi} (s, \pi'(s)) \geq V^{\pi}(s)$ entonces $\pi'$ es mejor que $\pi$; esto es, $V^{\pi'} (s) \geq V^{\pi}(s)$ para todo estado $s$.\\
+\\
+Entonces, resulta natural querer buscar estas mejoras para dos los estados posibles y todas las acciones posibles y obtener aquellos que maximicen la función $Q$; es decir, queremos construir una nueva política $\pi'$ como:
+\[ \pi'(s)= \textrm{ arg} \max_a Q^\pi (s,a). \]
+Para proceso de decisión finitos, siempre encontramos una mejor política, a no ser que ya estemos en el óptimo.\\
+\\
+Una vez que una policy $\pi' $ ha sido obtenida de mejorar $\pi$ utilizando $V^\pi$, podemos construir $V^{\pi'}$ y repetir nuevamente el proceso:
+\[ \pi_0 \xrightarrow{E} V^{\pi_0} \xrightarrow{I} \pi_1 \xrightarrow{E} V^{\pi_1} \xrightarrow{E} \pi_2 \xrightarrow{E} \cdots \xrightarrow{I} \pi^\ast \xrightarrow{E} V^\ast  \]
+pues cada política está garantizado que es mejor que la anterior. El método anterior puede ser muy tardado pues la convergencia, aunque garantizada teóricamente, sólo se da en el límite. Una opción es truncar la etapa de policy evaluación y hacer
+\[ V_{k+1}(s) = \max_a \mathbb{E}[r + \gamma V_k(s')|s_t=s,a_t=a]. \]
+Los métodos de programación dinámica suponen que se cuenta con un modelo completo del sistema, lo cual es prácticamente imposible en la práctica, además de ser muy costosos en términos computacionales. Estos métodos sufren de la llamada \textit{maldición de la dimensionalidad}, pues el número de estados crece exponencialmente con el número de variables
 \subsection{Métodos básicos de solución: Model-free}
 Métodos que no necesitan un modelo completo del sistema, sólo necesitan experiencia. Encontramos los métodos Monte Carlo que simulan las transiciones y los estados, y los métodos de diferencias temporales, que van actualizando iterativamente el valor de los estados observados, el más famoso de estos es el TD($\lambda$).
 \subsubsection{Métodos Monte-Carlo} 
