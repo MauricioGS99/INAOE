@@ -1,0 +1,97 @@
+---
+title: "Presentation"
+author: "Mauricio Gonzalez"
+date: "5/2/2018"
+output: ioslides_presentation
+bibliography: /Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib
+---
+
+# Introduction
+## Intuition
+- While playing a videogame or learning how to drive, human beings are forced to *make decisions* and to *actively intervene* in the world.
+- This active *decision-making* process modifies the state of the world, which allows us to learn about *causal relations* that hold in our environment
+- We ask ourselves how an *intelligent agent* can acquire and *use causal knowledge* while engaging with its environment to achieve some task.
+
+# State of the Art
+## Main groups and people
+* Causality
+    + Carnegie Mellon (Spirtes)
+    + UC Los Angeles (Pearl)
+    + MIT (Joshua Tenenbaum)
+* Reinforcement Learning
+    + Google DeepMind (David Silver, Alex Graves, V. Mnih, Shanahan, Garnelo)
+    + Oxford (Nando De Freitas, Shimon Whiteson)
+    + Cambridge (Ghahramani)
+    + Alberta University (Richard Sutton, Csaba Szepesvári)
+    + UC Berkeley (Pieter Abbeel)
+    + Carnegie Mellon ()
+    + Imperial College (Murray Shanahan, Marta Garnelo)
+    + University College London
+    
+----
+
+* Cognitive Science
+    + Carnegie Mellon (David Danks)
+    + MIT (Josh Tenenbaum)
+    + UC Berkeley (Tom Griffiths)
+    + Edinburgh University (Andy Clark)
+    + Göttingen Institut für Psychologie (York Hagmayer)
+    + Max Planck Institute for Human Development (Bjorn Meder)
+
+## Outer Circle
+
+Reference                  | Summary                                |
+------------------------   |------------------------                |
+[holland1986statistics]    | |
+[@pearl1988probabilistic]  | Book on Networks for probabilistic reasoning|
+[@spirtes2000causation]    | Classic General book on Causality      |
+[@joyce1999foundations]    | Decision Theory and causal information |
+[@pearl2009causality]      | Book on Causality and Graphical models |
+[@koller2009probabilistic] | Book on Probabilistic Graphical Models |
+
+
+----
+
+Reference                    | Summary                                    |
+-----------------------------|--------------------------------------------|
+[@sutton1998reinforcement]   | Classic textbook on Reinforcement Learning |
+[@van2012reinforcement]      | General review                             |
+[@gershman2015reinforcement] | Reinforcement Learning in the Brain        |
+[@li2017deep]                | Overview of Deep Reinforcement Learning    |
+
+----
+
+Reference            | Summary                                                                      |
+---------------------|------------------------------------------------------------------------------|
+[@krynski2007role]   |
+[@danks2014unifying] | Cognitive functions can be modelled as operations on graphical models        |
+[@lake2017building]  | Conditions for machines to be considered intelligent: Causal learning is one |
+
+## Middle Circle
+Reference | Summary |
+----------|---------|
+[@dawid2002influence] | |
+[@hagmayer2009decision] | |
+[@meder2009role] | |
+[@meder2010observing] | |
+[@kemp2010learning] | |
+[@wellen2012learning] | |
+[@mnih2013playing] | Introducing Deep Q-Network |
+[@silver2014deterministic] | |
+[@mnih2015human] | |
+[@DBLP:journals/corr/MnihBMGLHSK16]
+[@o2016pgq] | |
+
+
+## Inner Circle
+
+Reference | Summary |
+----------|---------|
+[@eberhardt2008causal] ||
+[@eberhardt2012number] ||
+[@hauser2012two] ||
+[@hagmayer2013repeated] ||
+[@ortega2014generalized] ||
+[@alon2015online] ||
+[@lattimoreNIPS2016] ||
+[@garnelo2016towards] ||
