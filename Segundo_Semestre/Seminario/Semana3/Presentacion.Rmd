@@ -2,7 +2,9 @@
 title: "Presentation"
 author: "Mauricio Gonzalez"
 date: "5/2/2018"
-output: ioslides_presentation
+output:
+  ioslides_presentation: default
+  slidy_presentation: default
 bibliography: /Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib
 ---
 
@@ -12,21 +14,52 @@ bibliography: /Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.b
 - This active *decision-making* process modifies the state of the world, which allows us to learn about *causal relations* that hold in our environment
 - We ask ourselves how an *intelligent agent* can acquire and *use causal knowledge* while engaging with its environment to achieve some task.
 
+## Fields involved
+- Learning by interaction.
+- Sequential Decision Making.
+- Causal learning.
+
+# Research Problem
+## Statement
+- Acquiring causal kwnoledge via interaction with the environment and using this knowledge to guide a decision-making process.
+
+## Relevance
+- Current RL methods are purely reactive.
+- A lot of training time is required.
+- Do not allow high-level reasoning.
+
+## Feasibility
+- We know how to learn by interaction (from Reinforcement Learning)
+- We know that causal learning can be acquired in human beings through sequential decision making (from Computational Psychology).
+- We know that *best action* can be selected from causal data (from sequential experimental design).
+
+----
+
+- Therefore, the elements exist and can be knitted together, although it will not be an easy task. 
+- The elements may exist, and although core ideas are shared in the fine details are far away between them.
+- The Devil is in the details.
+
 # State of the Art
 ## Main groups and people
 * Causality
     + Carnegie Mellon (Spirtes)
     + UC Los Angeles (Pearl)
     + MIT (Joshua Tenenbaum)
+    + Max Planck Institute for Intelligent Systems (Schölkopf)
+    + University of Copenhagen  (Jonas Peters)
+    + Edinburgh (Albrecht, Subramanian Ramamoorthy)
+    
+----
+
 * Reinforcement Learning
     + Google DeepMind (David Silver, Alex Graves, V. Mnih, Shanahan, Garnelo)
     + Oxford (Nando De Freitas, Shimon Whiteson)
     + Cambridge (Ghahramani)
     + Alberta University (Richard Sutton, Csaba Szepesvári)
     + UC Berkeley (Pieter Abbeel)
-    + Carnegie Mellon ()
+    + Carnegie Mellon (Salakhutdinov)
     + Imperial College (Murray Shanahan, Marta Garnelo)
-    + University College London
+    + University College London (Peter Dayan, Watkins, Dawid)
     
 ----
 
@@ -39,22 +72,25 @@ bibliography: /Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.b
     + Max Planck Institute for Human Development (Bjorn Meder)
 
 ## Outer Circle
-
 Reference                  | Summary                                |
 ------------------------   |------------------------                |
-[holland1986statistics]    | |
+[@holland1986statistics]   | General review of different views on Causality |
 [@pearl1988probabilistic]  | Book on Networks for probabilistic reasoning|
+[@heckerman1995decision] ||
 [@spirtes2000causation]    | Classic General book on Causality      |
 [@joyce1999foundations]    | Decision Theory and causal information |
 [@pearl2009causality]      | Book on Causality and Graphical models |
 [@koller2009probabilistic] | Book on Probabilistic Graphical Models |
-
+[@lopez2015towards]        | Discriminative data-driven framework for distinguishing direction of causality |
+[@goudet2017learning]      | Learning to generate data with neural networks |
 
 ----
 
 Reference                    | Summary                                    |
 -----------------------------|--------------------------------------------|
+[@watkins1992q]              | Q-learning algorithm                       |
 [@sutton1998reinforcement]   | Classic textbook on Reinforcement Learning |
+[@szepesvari2010algorithms]  | State of the Art Algorithms                | 
 [@van2012reinforcement]      | General review                             |
 [@gershman2015reinforcement] | Reinforcement Learning in the Brain        |
 [@li2017deep]                | Overview of Deep Reinforcement Learning    |
@@ -63,35 +99,58 @@ Reference                    | Summary                                    |
 
 Reference            | Summary                                                                      |
 ---------------------|------------------------------------------------------------------------------|
-[@krynski2007role]   |
+[@krynski2007role]   | 
 [@danks2014unifying] | Cognitive functions can be modelled as operations on graphical models        |
 [@lake2017building]  | Conditions for machines to be considered intelligent: Causal learning is one |
 
 ## Middle Circle
 Reference | Summary |
 ----------|---------|
-[@dawid2002influence] | |
+[@dawid2002influence] | Influence Diagrams|
+[@eberhardt2008causal] ||
 [@hagmayer2009decision] | |
 [@meder2009role] | |
 [@meder2010observing] | |
 [@kemp2010learning] | |
-[@wellen2012learning] | |
-[@mnih2013playing] | Introducing Deep Q-Network |
-[@silver2014deterministic] | |
-[@mnih2015human] | |
-[@DBLP:journals/corr/MnihBMGLHSK16]
-[@o2016pgq] | |
+[@wellen2012learning] | learning causal structure in local maner via precition-error loop |
+[@eberhardt2012number] ||
 
-
-## Inner Circle
+----
 
 Reference | Summary |
 ----------|---------|
-[@eberhardt2008causal] ||
-[@eberhardt2012number] ||
+[@mnih2013playing] | Introducing Deep Q-Network |
+[@silver2014deterministic] | Deterministic Policy Gradients |
+[@mnih2015human] |  Nature report on Deep Q-Networks |
+[@DBLP:journals/corr/SchulmanLMJA15] | Trust Region Policy Optimization |
+[@DBLP:journals/corr/MnihBMGLHSK16] | Asynchronous Methods for Deep Reinforcement Learning |
+[@van2016deep] ||
+[@lakkarajuNIPS2016] ||
+[@toulisNIPS2016] ||
+[@kulkarniNIPS2016] | Hierarchical Deep Reinforcement Learning |
+[@foersterNIPS2016] | Learning to Communicate with Deep Multi-Agent Reinforcement Learning |
+[@lanctot2017] | Game-Theoretic Approach to Multiagent Reinforcement Learning  |
+[@goudet2017learning] | Functional Causal Models with Generative Neural Networks |
+[@rahmanian2017] | Online Dynamic Programming  |
+[@louizos2017] |Causal Effect Inference with Deep Latent-Variable Models  |
+[@christiano2017] |Deep Reinforcement Learning from Human Preferences|
+[@o2016pgq] | Combining policy gradient and q-learning |
+[@kirsch2017mdp | Environments |
+[@zhang2017deeper] ||
+
+## Inner Circle
+Reference | Summary |
+----------|---------|
 [@hauser2012two] ||
-[@hagmayer2013repeated] ||
-[@ortega2014generalized] ||
-[@alon2015online] ||
-[@lattimoreNIPS2016] ||
-[@garnelo2016towards] ||
+[@hagmayer2013repeated] | How repeated decision making is guided by causal beliefs. |
+[@ortega2014generalized] | Thompson sampling to solve sequential adaptive control when policy is known. |
+[@alon2015online] | When feedback is specified by graph, the graph structure controls the difficulty of learning. |
+[@bramley2015staying] ||
+[@lattimoreNIPS2016] | Causal Bandits: Given a causal model, choose best intervention. |
+[@albrecht2016exploiting] ||
+[@garnelo2016towards] | Reinforcement Learning framework that builds symbolic representation of environment. |
+[@innes2018reasoning] | An agent which, starting unaware of factors on which an optimal policy depends, learns optimal behaviour for single-stage decision problems via direct experience and advice from a domain expert.| 
+[@pearl2018theoretical] ||
+
+## End
+- Thnks.
