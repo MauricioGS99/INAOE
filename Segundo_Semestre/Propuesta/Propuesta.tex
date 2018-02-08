@@ -362,43 +362,44 @@ Los métodos TD son totalmente incrementales y tampoco requieren un modelo del a
 \item Métodos Actor-Critic.
 \end{itemize}
 \subsection{Value based Reinforcement Learning: Deep Q-Networks}
-	\begin{itemize}
-	\item Los sorprendentes avances de Deep Learning en visión computacional llevaron de manera natural a plantear la pregunta de cómo utilizar estas nuevas técnicas para el aprendizaje por refuerzo. 
-	\item Las aplicaciones estándar de DL requerían grandes volúmenes de datos etiquetados, además de tener muestras independientes, pero en Reinforcement learning esto es un problema pues las secuencias de estados suelen estar altamente correlacionados.
-	\item \cite{mnih2013playing} proponen una “Deep Q-Network”, que consiste en una implementación de Q-learning con aproximación de funciones (\cite{sutton1998reinforcement}) en donde el aproximador es una red neuronal convolucional.
-	  \item Utilizando esta técnica fue como \cite{mnih2013playing} lograron que un agente aprendiera siete juegos de Atari 2600 utilizando como input únicamente la pantalla del juego. 
-	  \item Estimar la función $Q$ de manera iterativa es muy costoso, pues además de requerir un modelo completo del sistema cada secuencia de estados se utiliza por separado para las estimaciones.
-	  \item Por esto, es mejor utilizar alguna función aproximadora para poder generalizar. 
-	   \item En este caso, se pretende aproximar la función valor mediante una red neuronal con pesos $\theta$:
+Los sorprendentes avances de Deep Learning en visión computacional llevaron de manera natural a plantear la pregunta de cómo utilizar estas nuevas técnicas para el aprendizaje por refuerzo. 
+Las aplicaciones estándar de DL requerían grandes volúmenes de datos etiquetados, además de tener muestras independientes, pero en Reinforcement learning esto es un problema pues las secuencias de estados suelen estar altamente correlacionados.\\
+\cite{mnih2013playing} introducen “Deep Q-Network”, que consiste en una implementación de Q-learning con aproximación de funciones (\cite{sutton1998reinforcement}) en donde el aproximador es una red neuronal convolucional. Utilizando esta técnica fue como \cite{mnih2013playing} lograron que un agente aprendiera siete juegos de Atari 2600 utilizando como input únicamente la pantalla del juego. \\
+\\
+Estimar la función $Q$ de manera iterativa es muy costoso, pues además de requerir un modelo completo del sistema cada secuencia de estados se utiliza por separado para las estimaciones.
+Por esto, es mejor utilizar alguna función aproximadora para poder generalizar. En este caso, se pretende aproximar la función valor mediante una red neuronal con pesos $\theta$:
 	   \[Q(s,a,\theta) \approx Q^\ast(s,a). \]
-	   \item Esta red se entrena al minimizar una sucesión de funciones $L_i$ que está dada por:
+Esta red se entrena al minimizar una sucesión de funciones $L_i$ que está dada por:
 	   \[ L_i (\theta_i) = \mathbb{E}[(y_i - Q(s,a;\theta)^2], \textrm{ donde  }y_i = \mathbb{E}[r + \gamma \max_{a'} Q(s',a';\theta) | s,a]. \]
-	   \item Notemos que los objetivos $y_i$ dependen de los pesos de la red neuronal. 
-	   \item El gradiente de $L_i (\theta_i)$ está dado por:
+Notemos que los objetivos $y_i$ dependen de los pesos de la red neuronal. El gradiente de $L_i (\theta_i)$ está dado por:
 	   \[ \nabla_{\theta_i} L_i (\theta_i) = \mathbb{E}[(r + \gamma \max_{a'} Q(s',a';\theta_{i-1}) - Q(s,a;\theta_i)) \nabla_{\theta_i} Q(s,a;\theta_i).] \]
-	   \item Para optimizar la función $L$ se utiliza gradiente estocástico.
-	   \item Notemos que este es un método \textit{model-free} y \textit{off-policy}.
-	   \item Notemos que las secuencias consecutivas de estados y acciones están fuertemente correlacionadas, por lo que el aprendizaje podría ser ineficiente.
-	   \item Además, al aprender \textit{on-policy}, los parámetros actuales determinan los siguientes estados sobre los cuales se entrenará, por lo que pueden surgir loops que afecten la convergencia del aprendizaje. 
-	   \item Para resolver estos problemas se utiliza Experience Replay (\cite{Lin1992}). Esta técnica consiste en guardar las experiencias del agente para cada tiempo $t$; esto es 
+Para optimizar la función $L$ se utiliza gradiente estocástico; este es un método \textit{model-free} y \textit{off-policy}.\\
+\subsubsection{Experience Replay}
+Notemos que las secuencias consecutivas de estados y acciones están fuertemente correlacionadas, por lo que el aprendizaje podría ser ineficiente. Además, al aprender \textit{on-policy}, los parámetros actuales determinan los siguientes estados sobre los cuales se entrenará, por lo que pueden surgir loops que afecten la convergencia del aprendizaje. 
+Para resolver estos problemas se utiliza una técnica conocida como Experience Replay (\cite{Lin1992}); esta técnica consiste en guardar las experiencias del agente para cada tiempo $t$; esto es 
 	   \[ e_t = (s_t, a_t, r_t, s_{t+1}). \]
-	   \item Cada $e_t$ se almacena en un conjunto $\mathcal{D} = e_1 , ... , e_N$.
-	   \item En un loop interno del algoritmo, se tomarán aleatoriamente muestras de experiencia las cuales serán utilizadas para la actualización de pesos. 
-	   \item Q-learning:
-	   \item Aplicaciones de DQN.
+Cada $e_t$ se almacena en un conjunto $\mathcal{D} = e_1 , ... , e_N$ y en un loop interno del algoritmo, se tomarán aleatoriamente muestras de experiencia las cuales serán utilizadas para la actualización de pesos. 
+\subsubsection{Algoritmo completo}
+Deep Q-learning con Experience Replay:
+\subsubsection{Aplicaciones de DQN}
 		\begin{itemize}
 			\item \cite{mnih2013playing}. Paper en el que muestran cómo una computadora aprende a jugar Atari 2600 a través de sólo observar los pixeles del juego y obteniendo una 																		recompensa conforme el score aumentaba. Utilizando la misma arquitectura, se pudieron aprender 7 juegos
 			\item \cite{mnih2015human}. En este paper, aumentaron a 49 juegos aprendidos. Utilizan una Deep Q-Network, que consiste en aproximar la función Q mediante una red 																			neuronal que toma como input los estados (las pantallas del juego) y devuelve como output el valor Q para cada posible acción. En este caso, 																			utilizaron una red convolucional con 3 capas de convolución y 2 capas totalmente conectadas.
-	  \end{itemize}
-	      	 \end{itemize}  	
+	     \end{itemize}
 \subsection{Mejoras posteriores a DQN}
-   	   \begin{itemize}
-   	   		\item Double DQN.
-   	   		\item Prioritized Replay.
-   	   		\item Duelling Networks.
-   	   \end{itemize}
+\subsubsection{Double DQN}
+\cite{hasselt2010double}, \cite{van2016deep} propuso una “Double Deep Q-Network”. Recordemos que en DeepQ-learning las actualizaciones que se hacen son:
+\[ \theta_{t+1} = \theta_t + \alpha (r_{t+1} + \gamma \max_{a} Q(s_{t+1},a;\theta_t)) \nabla_\theta Q(s_t,a_t;\theta_t). \]
+Por lo tanto, es más probable escoger acciones que tienen un alto valor, lo que resulta en valores demasiado optimistas. Lo que se propone en \cite{van2016deep} es evaluar la política greedy utilizando la red on-line, pero utilizar la red objetivo para estimar el valor. Debe hacerse el siguiente cambio en la actualización:
+\[ r_{t+1}  + \gamma  Q (s_{t+1}, \textrm_{ arg max}_a Q(s_{t+1},a_t,\theta_t); \theta^{-}\]
+donde $\theta$ es el parámetro de la red on-line y $\theta^{-}$ el parámetro de la red objetivo
+\subsubsection{Prioritized Replay}
+
+\subsubsection{Duelling Networks}
 \subsection{Método Asíncronos}  
-\subsection{Policy Based DRL: Policy Gradients}
+\subsection{Policy Based DRL}
+\subsubsection{Actor-Critic}
+\subsubsection{Policy Gradients}
 Resulta que Deep Q-Learning no es un gran algoritmo, incluso los autores del paper original (\cite{DBLP:journals/corr/MnihBMGLHSK16}) mencionan sus desventajas. 
 Otra idea es atacar directamente la política.
 La idea es representar una policy mediante una red neuronal profunda con pesos $\textbf{u}$.
@@ -415,9 +416,8 @@ Los métodos \textit{critic-only}, donde \textit{critic} se utiliza como sinóni
 Los métodos \textit{actor-critic}, combinan las vetajas de ambos mundos. Mientras que las familias parametrizadas tienen la ventaja de utilizar acciones continuas, los métodos critic-only proveen de conocimiento de baja varianza sobre el desempeño; es decir, la estimación del retorno esperado del crític-only permite al actor-only actualizar los gradientes con información de menor varianza, lo cual acelera todo el proceso. La menor varianza es intercambiada por un mayor sesgo al inicio del aprendizaje (\cite{berenji2003convergent}). \\
 \\
 Los métodos de Policy Gradients optimizan directamente la recompensa acumulada y pueden utilizarse junto con aproximadores no-lineales como las redes neuronales. Este método presenta dos grandes retos: el número de muestras de entrenamiento requeridos y la dificultad de obtener mejoras estables debido a la no-estacionariedad de los datos.  \cite{DBLP:journals/corr/SchulmanMLJA15} atacan el primer problema se puede atacar utilizando value functions para reducir la varianza de los estimados. El segundo problema se ataca utilizando un método de región de confianza tanto para la política como para la value function, los cuales están representados por redes neuronales.\\
-\\
+\subsubsection{Trust Region Policy Optimization}
  \cite{DBLP:journals/corr/SchulmanLMJA15} Proponen “Trust Region Policy Optimization”, Procedimiento iterativo para optimizar políticas con mejora monótona garantizada. Es un algoritmo similar a Policy Gradients y resulta útil para optimizar políticas con redes neuronales. Buen performance en juegos de Atari que utilizan la pantalla como input.
-
 \section{Reinforcement Learning y Causalidad}
 Aprendemos causalidad mediante intervenciones, interacciones, etc. Reinforcement Learning es aprender a realizar tareas mediante interacción. ¿Habrá algo en medio?
 \subsection{Conocimiento causal y observabilidad parcial}
@@ -507,20 +507,17 @@ En cuanto a la formulación de un problema de decisión en sistemas causales, ya
 \item Exportar conocimiento causal obtenido para hacer inferencia causal.
 \end{itemize}
 \subsection{Motivación}
-Tomando en cuenta el contenido de la secciones anteriores, surge la pregunta de si es posible diseñar un agente que aprenda a realizar una tarea por medio de interacción con su entorno y mediante el uso de información causal recolectada a través de esa interacción
-Este agente buscará aprender un modelo causal de su entorno al mismo tiempo que aprende una \textit{política}. Con cada acción que toma, el agente aprenderá  un poco sobre la \textit{estructura causal} de su entorno y utilizará este conocimiento para la futura toma de decisiones.\\
+Tomando el cuenta los trabajos mencionados en la sección anterior, surge la pregunta de si es posible diseñar un agente que aprenda a realizar una tarea por medio de interacción con su entorno y mediante el uso de información causal recolectada a través de esa interacción. Este agente buscará aprender un modelo causal de su entorno al mismo tiempo que aprende una \textit{política}. Con cada acción que toma, el agente aprenderá  un poco sobre la \textit{estructura causal} de su entorno y utilizará este conocimiento para la futura toma de decisiones.\\
 \\
 Cada decisión que el agente toma (acción que lleva a cabo) altera el estado del mundo. La información obtenida a partir de cada acción, será utilizada para actualizar el conocimiento causal que se tenga hasta el momento, esto con el fin mejorar las decisiones que toma y para aprender otros aspectos estructurales (causales) sobre su ambiente. La intuición detrás de esto es que al aprender mediante una toma de decisiones repetida, decisiones que intervienen directamente sobre el entorno, se aprenden también relaciones causales; por ejemplo, al aprender a conducir se aprende implícitamente que ciertos movimientos del volante \textit{causan} ciertos cambios en el estado del automovil (\cite{danks2014unifying}). Otro ejemplo es en el contexto de videojuegos, en el cual al tomar ciertas decisiones se conoce el impacto que estas provocan en el estado del juego, conocimiento que a su vez es utilizado para tomar mejores decisiones en un futuro y que maximicen las recompensas u objetivos a largo plazo. No sólo hay intuición detrás de esto, pues se sabe que los seres humanos utilizan el conocimiento causal que la experiencia les provee para realizar predicciones para intervenciones en el mundo no realizadas aun (\cite{meder2008inferring}, \cite{hagmayer2009decision})\\
 \\
-El trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. \\
+El trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. De la misma manera, \cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. Por lo tanto, es interesante preguntar si un agente que busque maximizar una recompensa pueda aprender modelos causales mediante la interacción con su entorno.
 \\
-\cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. \\
+Un agente que interactua con su entorno con el fin de maximizar una recompensa efectivamente puede aprender aspectos estructurales sobre el entorno, como nos muestra \cite{garnelo2016towards}, quien además señala que el agente logra mejorar su desempeño. Además, muestran la importancia de tener una semántica que permita hablar de la estructura del entorno. Ellos utilizaron lógica de primer orden, pues están más interesados en hacer razonamientos \textit{de alto nivel} sobre el entorno, que involocura más que las relaciones causales, y por esto ellos se comprometen con lógica de primer orden, que al restringirnos al caso causal se queda corta pues los modelos gráficos probabilistas son más expresivos, además de modulares y montónicos.\\
 \\
-El trabajo de \cite{garnelo2016towards} nos muestra que efectivamente pueden aprenderse aspectos estructurales sobre el entorno mientras el agente aprende, incluso logrando así mejorar su desempeño. Además, muestra la importancia de tener una semántica que permita hablar de la estructura del entorno. Ellos utilizaron lógica de primer orden, pues están más interesados en hacer razonamientos \textit{de alto nivel} sobre el entorno, que involocura más que las relaciones causales, y por esto ellos se comprometen con lógica de primer orden, que al restringirnos al caso causal se queda corta pues los modelos gráficos probabilistas son más expresivos, además de modulares y montónicos.\\
+Mientras que \cite{garnelo2016towards} utiliza una representación lógica para escoger una acción, \cite{lattimoreNIPS2016} explora la pregunta de cómo escoger \textit{la mejor intervención} dado un modelo causal a través de una serie de intervenciones y observaciones secuenciales; por ejemplo, en el caso en el que un granjero quiera maximizar sus cosechas, y sabe que ese rendimiento está afectado por el uso de fertilizante, la humedad y la exposición al sol, pero sólo tiene los recursos para llevar a cabo sólo una de estas modificaciones en cada temporada. El algoritmo de Lattimore le dirá, después de $T$ observaciones, cuál es la mejor intervención a llevar a cabo con el fin de maximizar esa cantidad. Este podría ser un primer paso hacia responder la pregunta \textit{¿dado un modelo causal, qué acción tomar?}
 \\
-\cite{lattimoreNIPS2016} explora la pregunta de cómo escoger \textit{la mejor intervención} dado un modelo causal a través de una serie de intervenciones y observaciones secuenciales; por ejemplo, en el caso en el que un granjero quiera maximizar sus cosechas, y sabe que ese rendimiento está afectado por el uso de fertilizante, la humedad y la exposición al sol, pero sólo tiene los recursos para llevar a cabo sólo una de estas modificaciones en cada temporada. El algoritmo de Lattimore le dirá, después de $T$ observaciones, cuál es la mejor intervención a llevar a cabo con el fin de maximizar esa cantidad. Este podría ser un primer paso hacia responder la pregunta \textit{¿dado un modelo causal, qué acción tomar?}
-\\
-\cite{ortega2014generalized} exploran un esquema de muestreo llamado Muestreo de Thompson, en el cual un agente muestrea una de entre varias acciones de acuerdo a la probabilidad subjetiva que tenga el agente de que esta sea la mejor acción. Los autores conjeturan que esto pueden utilizarse para hacer inducción causal sobre una serie de acciones establecidad (política conocida).
+Por otro lado, en el caso inverso \cite{ortega2014generalized} exploran un esquema de muestreo llamado Muestreo de Thompson, en el cual un agente muestrea una de entre varias acciones de acuerdo a la probabilidad subjetiva que tenga el agente de que esta sea la mejor acción. Los autores conjeturan que esto pueden utilizarse para hacer inducción causal sobre una serie de acciones establecidad (política conocida).
 \subsection{La propuesta}
 Diseñar un agente que tenga como objetivo aprender a llevar a cabo una tarea. El aprendizaje se dará por interacción con el ambiente y además contará con un modelo causal que vaya aprendiendo paso a paso y del cual se apoyará para  tomar mejores decisiones.
 \begin{center}
