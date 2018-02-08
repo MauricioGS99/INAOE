@@ -23,45 +23,45 @@
 \title{Research Problem}
 \author{Mauricio Gonzalez Soto}
 \begin{document}
-%\nocite{*}
 \maketitle
+\tableofcontents
+%\nocite{*}
 \section{Introducción}
-El problema que estamos tratando de atacar consiste en descubrir relaciones causales que se encuentren presentes en diversos fenómenos. El enfoque que se propone es descubrir estas relaciones mediante \textit{interacción} con el entorno.\\
+Mientras jugamos un videojuego, o aprendemos a conducir, estamos obligados a tomar decisiones y a intervenir de manera activa en el mundo. Este proceso activo de toma de decisiones modifica el estado del mundo, lo cual nos permite aprender cómo nuestras acciones cambiaron el mundo y qué fue causado por estas. De esta manera, a través de la interacción con el entorno, podemos descubrir relaciones causales que luego serán utilizadas en posteriores decisiones.\\
+\\
+ Las intuiciones sobre aprendizaje causal por interacción provienen de estudios realizados en Psicología Computacional y Ciencias Cognitivas, de aquí se sabe que los seres humanos obtienen conocimiento causal al encontrarse en situaciones en las cuales deben tomar decisiones de manera secuencial para lograr un objetivo futuro. Se sabe también que el conocimiento causal adquirido puede ser utilizado para mejorar las futuras decisiones tomadas.\\
+\\
+Notando que los modelos causales tradicionales requieren de intervenciones y experimentación en el mundo, y que estas intervenciones son una forma de interacción y alteración del mundo, salta a la vista la relación entre Aprendizaje por Refuerzo y aprendizaje causal. Entonces, resulta natural preguntar cómo pueden aprenderse relaciones causales de manera interactiva de modo que el conocimiento causal adquirido permita a un agente tomar mejores decisiones.\\
 \\
 \cite{lake2017building} argumentan que los sistemas inteligentes actuales, a pesar de sus impresionantes logros, aun están lejos de alcanzar una verdadera inteligencia; uno de los requisitos para esto es que puedan construir modelos causales que sean interpretables, y no sólo reconocer patrones estadísticos.\\
 \\
- las intuiciones iniciales sobre aprendizaje causal por interacción provienen de estudios realizados en Psicología Computacional y Ciencias Cognitivas, de aquí se sabe que los seres humanos obtienen conocimiento causal al encontrarse en situaciones en las cuales deben tomar decisiones de manera secuencial para lograr un objetivo futuro. Se sabe también que el conocimiento causal adquirido puede ser utilizado para mejorar las futuras decisiones tomadas.\\
-\\
-Notando que los modelos causales tradicionales requieren de intervenciones y experimentación en el mundo, y que estas intervenciones son una forma de interacción y alteración del mundo, salta a la vista la relación entre Aprendizaje por Refuerzo y aprendizaje causal. Entonces, resulta natural preguntar cómo pueden aprenderse relaciones causales de manera interactiva de modo que el conocimiento causal adquirido permita a un agente tomar mejores decisiones. La pregunta se convierte entonces en cómo obtener e incorporar conocimiento causal en un problema de aprendizaje por refuerzo. Además, uno se pregunta si es posible utilizar este conocimiento causal obtenido al interactuar sobre el mundo para realizar otro tipo de inferencias causales en ciertos dominios de interés.
+La pregunta se convierte entonces en cómo obtener e incorporar conocimiento causal en un problema de aprendizaje por refuerzo. Además, uno se pregunta si es posible utilizar este conocimiento causal obtenido al interactuar sobre el mundo para realizar otro tipo de inferencias causales en ciertos dominios de interés.
 
 \section{Círculos del State of The Art}
 \subsection{Outer Circle}
 \begin{itemize}
-\item \cite{holland1986statistics} hace un recuento de varias definiciones de causalidad a lo largo de la historia, desde David Hume, a Patrick Suppes, Granger.
-\item \cite{sutton1998reinforcement}
-\item Causal decision theory (\cite{joyce1999foundations}): Toma de decisiones bajo incertidumbre utilizando información causal; es decir; sé que $A$ \textit{causa} $B$, entonces puedo predecir qué pasará si $A$ es escogido, u observado.
-\item (\cite{spirtes2000causation})
-\item \cite{pearl2009causality},
-\item Causal graphical models ( \cite{koller2009probabilistic}): Semántica causal sobre modelos gráficos probabilistas.
-\item Libro de Teoría de la Decisión bajo incertidumbre (\cite{gilboa2009decision}).
+\item \cite{holland1986statistics} hace un recuento de varias definiciones de causalidad a lo largo de la historia, desde Aristóteles, pasando por David Hume, a Patrick Suppes, Granger.
+\item \cite{sutton1998reinforcement} es el libro clásico en el cual se define como aprendizaje por refuerzo a cualquier técnica orientada a resolver problemas mediante la interacción con un entorno y utilizando \textit{feedback}.
+\item \cite{joyce1999foundations} estudia la toma de decisiones bajo incertidumbre utilizando información causal; es decir; sé que $A$ \textit{causa} $B$, entonces puedo predecir qué pasará si $A$ es escogido, u observado.
+\item \cite{spirtes2000causation} junto con \cite{pearl2009causality} estudian los modelos gráficos causales y exponen la definición de causalidad aquí utilizada.
+\item  El libro de \cite{koller2009probabilistic} tiene un capítulo sobre modelos gráficos causales, y explica que estos consisten en dotar de una semántica causal amodelos gráficos probabilistas.
+\item Libro de Teoría de la Decisión bajo incertidumbre \cite{gilboa2009decision}.
 \item \cite{pearl1988probabilistic}, Libro clásico sobre uso de grafos para representar distribuciones.
-\item \cite{van2012reinforcement}, Estado del arte de aprendizaje por refuerzo.
-\item  \cite{danks2014unifying} Representar modelos mentales como modelos gráficos probabilistas; en particular, el problema de inducción causal. 
+\item \cite{van2012reinforcement} presenta el e stado del arte de aprendizaje por refuerzo hasta esa fecha
+\item  \cite{danks2014unifying} explica cómo es posible representar procesos mentales como operaciones sobre gráficos probabilistas; en particular, el problema de inducción causal. 
 \item \cite{gershman2015reinforcement}. Aprendizaje por Refuerzo en el Cerebro.
 \item \cite{lopez2015towards}. Hacia una teoría de aprendizaje para relaciones causa-efecto.
 \item \cite{lake2017building}. Condiciones que, idealmente, deberían cumplir algoritmos para que se pueda decir que piensan \textit{como} los humanos,
 \end{itemize}
 \subsection{Middle Circle}
 \begin{itemize}
-\item: \cite{dawid2002influence} estudió problemas de decisión y modelos causales, y mostró cómo las redes bayesianas pueden ser \textit{aumentadas} con nodos de decisión que permitan utilizar información causal.
+\item \cite{dawid2002influence} estudió problemas de decisión y modelos causales, y mostró cómo las redes bayesianas pueden ser \textit{aumentadas} con nodos de decisión que permitan utilizar información causal.
 \item \cite{hagmayer2009decision} muestra que los humanos entendemos nuestras acciones en el mundo como \textit{intervenciones} sobre este. 
 \item On-line learning in causal models(\cite{wellen2012learning})):  Proponen un modelo de aprendizaje causal \textit{on-line} en el cual se añaden o borran arcos en un modelo causal según un ciclo de predicción-error.
 \item \cite{lopez2015towards}
 \item \cite{krynski2007role} Human reasoning under uncertainty naturally operates over causa mental models and statistical data supports correct Bayesian inference only when they can be incorporated into a causal model. 
-\item \cite{van2016deep}
-\item \cite{goudet2017learning}
-\item \cite{leibo2017multi}
-\item \cite{hernandez2017survey}
+\item \cite{goudet2017learning} aprendizaje de modelos gráficos a través de redes neuronales generativas.
+\item \cite{hernandez2017survey} estudia la no-estacionareidad de un entorno.
 \item \cite{li2017deep}. Overview general de Deep Reinforcement Learning
 
 \end{itemize}
@@ -70,12 +70,11 @@ Notando que los modelos causales tradicionales requieren de intervenciones y exp
 \item \cite{eberhardt2008causal} plantean el problema de \textit{descubrimiento causal} como un juego entre un científico vs la naturaleza en el cual la naturaleza intenta mantener ocultos sus secretos y el científico intenta descubrirlos mientras minimiza un costo. 
 \item \cite{hagmayer2013repeated} proponen explorar el uso de información causal en problemas de toma de decisiones secuenciales en seres humanos.
 \item \cite{ortega2014generalized} exploran el muestreo de Thompson para el descubrimiento de estructura causal en problemas de decisión para los cuales la política está especificada.
-\item \cite{bramley2015staying}
+\item \cite{bramley2015staying} presenta heurísticas para el aprendizaje causal en el caso de decisiones secuenciales.
 \item \cite{alon2015online} Estudian problemas de aprendizaje on-line en los cuales en cada ronda un jugador escoje una acción y recibe un \textit{loss} previamente especificado. Estudian las \textit{feedback graphs} que básicamente dicen si al ejecutar acción $i$ vemos el loss asociado a acción $j$ y estudian cómo la estructura de este grafo afecta el aprendizaje. Es principalmente un paper de estructura de grafos y el \textit{aprendizaje} se define en términos de Teoría de Juegos.
 \item \cite{lattimoreNIPS2016} buscan descubrir la mejor intervención, dado un modelo causal, para maximizar un retorno.
 \item \cite{garnelo2016towards} proponen un algoritmo de aprendizaje por refuerzo que construye una representación simbólica del ambiente, la cual es usada para escoger la siguiente acción.
-\item \cite{pearl2018theoretical}
-\item \cite{innes2018reasoning}. 
+\item \cite{innes2018reasoning} proponen un algoritmo para que un tomador de decisiones infiera posibilidades no vistas durante el entrenamiento así como las relaciones causales ente datos. 
 \end{itemize}
 
 \section{Motivación}
@@ -83,13 +82,13 @@ Tomando el cuenta los trabajos mencionados en la sección anterior, surge la pre
 \\
 Cada decisión que el agente toma (acción que lleva a cabo) altera el estado del mundo. La información obtenida a partir de cada acción, será utilizada para actualizar el conocimiento causal que se tenga hasta el momento, esto con el fin mejorar las decisiones que toma y para aprender otros aspectos estructurales (causales) sobre su ambiente. La intuición detrás de esto es que al aprender mediante una toma de decisiones repetida, decisiones que intervienen directamente sobre el entorno, se aprenden también relaciones causales; por ejemplo, al aprender a conducir se aprende implícitamente que ciertos movimientos del volante \textit{causan} ciertos cambios en el estado del automovil (\cite{danks2014unifying}). Otro ejemplo es en el contexto de videojuegos, en el cual al tomar ciertas decisiones se conoce el impacto que estas provocan en el estado del juego, conocimiento que a su vez es utilizado para tomar mejores decisiones en un futuro y que maximicen las recompensas u objetivos a largo plazo. No sólo hay intuición detrás de esto, pues se sabe que los seres humanos utilizan el conocimiento causal que la experiencia les provee para realizar predicciones para intervenciones en el mundo no realizadas aun (\cite{meder2008inferring}, \cite{hagmayer2009decision})\\
 \\
-Notemos que al hablar de modelos gráficos causales que se actualizan y adaptan a la luz de nueva evidencia estamos tocando terreno Bayesiano, pues tenemos creencias actuales sobre la estructura de un grafo, observaremos evidencia, y actualizaremos estas creencias. Existen trabajos de inferencia Bayesiana sobre datos estructurados como grafos (\cite{acar2007adaptive}), además de grafos probabilistas (\cite{pearl1988probabilistic}, \cite{koller2009probabilistic}, \cite{sucar2015probabilistic} ). \\
+Notemos que al hablar de modelos gráficos causales que se actualizan y adaptan a la luz de nueva evidencia estamos tocando terreno Bayesiano, pues tenemos creencias actuales sobre la estructura de un grafo, observaremos evidencia, y actualizaremos estas creencias. Existen trabajos de inferencia Bayesiana sobre datos estructurados como grafos (\cite{acar2007adaptive}), además de grafos probabilistas (\cite{pearl1988probabilistic}, \cite{koller2009probabilistic}, \cite{sucar2015probabilistic} ). Hacer inferencia bayesiana sobre grafos implicaría utilizar distribuciones de probabilidad sobre un espacio de grafos. Por eso, utilizar inferencia Bayesiana no-paramétrica (\cite{phadia2015prior}, \cite{muller2016bayesian}, \cite{ghosal2017fundamentals}) puede ser útil pues admite modelos de alta complejidad.\\
 \\
 El trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. De la misma manera, \cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. Por lo tanto, es interesante preguntar si un agente que busque maximizar una recompensa pueda aprender modelos causales mediante la interacción con su entorno.\\
 \\
 Un agente que interactua con su entorno con el fin de maximizar una recompensa efectivamente puede aprender aspectos estructurales sobre el entorno, como nos muestra \cite{garnelo2016towards}, quien además señala que el agente logra mejorar su desempeño. Además, muestran la importancia de tener una semántica que permita hablar de la estructura del entorno. Ellos utilizaron lógica de primer orden, pues están más interesados en hacer razonamientos \textit{de alto nivel} sobre el entorno, que involocura más que las relaciones causales, y por esto ellos se comprometen con lógica de primer orden, que al restringirnos al caso causal se queda corta pues los modelos gráficos probabilistas son más expresivos, además de modulares y montónicos.\\
 \\
-Mientras que \cite{garnelo2016towards} utiliza una representación lógica para escoger una acción, \cite{lattimoreNIPS2016} explora la pregunta de cómo escoger \textit{la mejor intervención} dado un modelo causal a través de una serie de intervenciones y observaciones secuenciales; por ejemplo, en el caso en el que un granjero quiera maximizar sus cosechas, y sabe que ese rendimiento está afectado por el uso de fertilizante, la humedad y la exposición al sol, pero sólo tiene los recursos para llevar a cabo sólo una de estas modificaciones en cada temporada. El algoritmo de Lattimore le dirá, después de $T$ observaciones, cuál es la mejor intervención a llevar a cabo con el fin de maximizar esa cantidad. Este podría ser un primer paso hacia responder la pregunta \textit{¿dado un modelo causal, qué acción tomar?}
+Mientras que \cite{garnelo2016towards} utiliza una representación lógica para escoger una acción, \cite{lattimoreNIPS2016} explora la pregunta de cómo escoger \textit{la mejor intervención} dado un modelo causal a través de una serie de intervenciones y observaciones secuenciales; por ejemplo, en el caso en el que un granjero quiera maximizar sus cosechas, y sabe que ese rendimiento está afectado por el uso de fertilizante, la humedad y la exposición al sol, pero sólo tiene los recursos para llevar a cabo sólo una de estas modificaciones en cada temporada. El algoritmo de Lattimore le dirá, después de $T$ observaciones, cuál es la mejor intervención a llevar a cabo con el fin de maximizar esa cantidad. Este podría ser un primer paso hacia responder la pregunta \textit{¿dado un modelo causal, qué acción tomar?}\\
 \\
 Por otro lado, en el caso inverso \cite{ortega2014generalized} exploran un esquema de muestreo llamado Muestreo de Thompson, en el cual un agente muestrea una de entre varias acciones de acuerdo a la probabilidad subjetiva que tenga el agente de que esta sea la mejor acción. Los autores conjeturan que esto pueden utilizarse para hacer inducción causal sobre una serie de acciones establecidad (política conocida).
 
@@ -103,12 +102,11 @@ Del trabajo desarrollado en el área de RL sabemos que es posible que un agente 
 \\
 Por otro lado, sabemos que los seres humanos adquieren conocimiento causal de su entorno en el caso de problemas de decisión secuenciales (\cite{hagmayer2009decision}, \cite{hagmayer2013repeated}).\\
 \\
-Además, gracias al trabajo de \cite{lattimoreNIPS2016} se sabe que es posible escoger acciones dado un modelo causal, mientras que el trabajo de \cite{wellen2012learning} muestra que un modelo causal puede ser aprendido \textit{on-line}; es decir, mediante interacción con el ambiente. 
+Además, gracias al trabajo de \cite{lattimoreNIPS2016} se sabe que es posible escoger acciones dado un modelo causal, mientras que el trabajo de \cite{wellen2012learning} muestra que un modelo causal puede ser aprendido \textit{on-line}; es decir, mediante interacción con el ambiente.\\
 \\
 Por lo tanto, los diversos elementos existen (en sus ideas de fondo) y pueden ser unidos, aunque no será una tarea trivial. 
-\section{Estado del arte}
-\subsection{Grupos principales}
-\subsubsection{Causalidad}
+\section{Grupos principales}
+\subsection{Causalidad}
 \begin{itemize}
 \item Carnegie Mellon (Spirtes)
 \item UC Los Angeles (Pearl)
@@ -117,7 +115,7 @@ Por lo tanto, los diversos elementos existen (en sus ideas de fondo) y pueden se
 \item University of Copenhagen  (Jonas Peters)
 \item Edinburgh (Albrecht, Subramanian Ramamoorthy)
 \end{itemize}
-\subsubsection{Reinforcement Learning}
+\subsection{Reinforcement Learning}
 \begin{itemize}
 \item Google DeepMind (David Silver, Alex Graves, V. Mnih, Murray Shanahan, Marta Garnelo)
 \item Oxford (Nando De Freitas, Shimon Whiteson)
@@ -129,7 +127,7 @@ Por lo tanto, los diversos elementos existen (en sus ideas de fondo) y pueden se
 \item University College London Gatsby Unit (Peter Dayan, Watkins, Dawid)
 \item Edinburgh (Craig Innes)
 \end{itemize}
-\subsubsection{Ciencias Cognitivas}
+\subsection{Ciencias Cognitivas}
 \begin{itemize}
 \item Carnegie Mellon (David Danks)
 \item MIT (Josh Tenenbaum)
@@ -137,7 +135,6 @@ Por lo tanto, los diversos elementos existen (en sus ideas de fondo) y pueden se
 \item Edinburgh University (Andy Clark)
 \item Göttingen Institut für Psychologie (York Hagmayer)
 \end{itemize}
-\newpage
 \bibliographystyle{apalike}
 \bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
 \end{document}
