@@ -37,8 +37,7 @@ Notando que los modelos causales tradicionales requieren de intervenciones y exp
 \section{Círculos del State of The Art}
 \subsection{Outer Circle}
 \begin{itemize}
-\item (\cite{suppes1970probabilistic})
-\item \cite{holland1986statistics}
+\item \cite{holland1986statistics} hace un recuento de varias definiciones de causalidad a lo largo de la historia, desde David Hume, a Patrick Suppes, Granger.
 \item \cite{sutton1998reinforcement}
 \item Causal decision theory (\cite{joyce1999foundations}): Toma de decisiones bajo incertidumbre utilizando información causal; es decir; sé que $A$ \textit{causa} $B$, entonces puedo predecir qué pasará si $A$ es escogido, u observado.
 \item (\cite{spirtes2000causation})
@@ -54,13 +53,9 @@ Notando que los modelos causales tradicionales requieren de intervenciones y exp
 \end{itemize}
 \subsection{Middle Circle}
 \begin{itemize}
-\item Decision problems and causal models: \cite{dawid2002influence} show how causal Bayesian Nets can be augmented with decision nodes as to model decision problems that use causal information.
-\item \cite{hagmayer2009decision}
-\item \cite{meder2009role}
-\item \cite{meder2010observing}
-\item \cite{kemp2010learning}
-\item On-line learning in causal models(\cite{wellen2012learning})):  Causal learning in an on-line setting has been framed in terms of causal graphical models, where in a causal graphical model edges are added or removed in a prediction-error loop.
-
+\item: \cite{dawid2002influence} estudió problemas de decisión y modelos causales, y mostró cómo las redes bayesianas pueden ser \textit{aumentadas} con nodos de decisión que permitan utilizar información causal.
+\item \cite{hagmayer2009decision} muestra que los humanos entendemos nuestras acciones en el mundo como \textit{intervenciones} sobre este. 
+\item On-line learning in causal models(\cite{wellen2012learning})):  Proponen un modelo de aprendizaje causal \textit{on-line} en el cual se añaden o borran arcos en un modelo causal según un ciclo de predicción-error.
 \item \cite{lopez2015towards}
 \item \cite{krynski2007role} Human reasoning under uncertainty naturally operates over causa mental models and statistical data supports correct Bayesian inference only when they can be incorporated into a causal model. 
 \item \cite{van2016deep}
@@ -72,18 +67,13 @@ Notando que los modelos causales tradicionales requieren de intervenciones y exp
 \end{itemize}
 \subsection{Inner Circle}
 \begin{itemize}
-\item \cite{eberhardt2008causal} plantea el problema de \textit{descubrimiento causal} como un juego entre un científico vs la naturaleza en el cual la naturaleza intenta mantener ocultos sus secretos y el científico intenta descubrirlos mientras minimiza un costo. 
-\item \cite{eberhardt2012number}
-\item \cite{hauser2012two}
-\item Causal learning through sequential decision making (\cite{hagmayer2013repeated}).
-\item \cite{ortega2014generalized} 
+\item \cite{eberhardt2008causal} plantean el problema de \textit{descubrimiento causal} como un juego entre un científico vs la naturaleza en el cual la naturaleza intenta mantener ocultos sus secretos y el científico intenta descubrirlos mientras minimiza un costo. 
+\item \cite{hagmayer2013repeated} proponen explorar el uso de información causal en problemas de toma de decisiones secuenciales en seres humanos.
+\item \cite{ortega2014generalized} exploran el muestreo de Thompson para el descubrimiento de estructura causal en problemas de decisión para los cuales la política está especificada.
 \item \cite{bramley2015staying}
 \item \cite{alon2015online} Estudian problemas de aprendizaje on-line en los cuales en cada ronda un jugador escoje una acción y recibe un \textit{loss} previamente especificado. Estudian las \textit{feedback graphs} que básicamente dicen si al ejecutar acción $i$ vemos el loss asociado a acción $j$ y estudian cómo la estructura de este grafo afecta el aprendizaje. Es principalmente un paper de estructura de grafos y el \textit{aprendizaje} se define en términos de Teoría de Juegos.
-\item \cite{lattimoreNIPS2016} Quieren descubrir la mejor intervención de modo que se minimice el \textit{regret} después de $T$ rondas.
-\item \cite{zhang2017deeper} Una vuelta a Experience Replay
-\item \cite{albrecht2017autonomous}
-\item \cite{albrecht2016exploiting}
-\item \cite{garnelo2016towards}
+\item \cite{lattimoreNIPS2016} buscan descubrir la mejor intervención, dado un modelo causal, para maximizar un retorno.
+\item \cite{garnelo2016towards} proponen un algoritmo de aprendizaje por refuerzo que construye una representación simbólica del ambiente, la cual es usada para escoger la siguiente acción.
 \item \cite{pearl2018theoretical}
 \item \cite{innes2018reasoning}. 
 \end{itemize}
@@ -93,7 +83,9 @@ Tomando el cuenta los trabajos mencionados en la sección anterior, surge la pre
 \\
 Cada decisión que el agente toma (acción que lleva a cabo) altera el estado del mundo. La información obtenida a partir de cada acción, será utilizada para actualizar el conocimiento causal que se tenga hasta el momento, esto con el fin mejorar las decisiones que toma y para aprender otros aspectos estructurales (causales) sobre su ambiente. La intuición detrás de esto es que al aprender mediante una toma de decisiones repetida, decisiones que intervienen directamente sobre el entorno, se aprenden también relaciones causales; por ejemplo, al aprender a conducir se aprende implícitamente que ciertos movimientos del volante \textit{causan} ciertos cambios en el estado del automovil (\cite{danks2014unifying}). Otro ejemplo es en el contexto de videojuegos, en el cual al tomar ciertas decisiones se conoce el impacto que estas provocan en el estado del juego, conocimiento que a su vez es utilizado para tomar mejores decisiones en un futuro y que maximicen las recompensas u objetivos a largo plazo. No sólo hay intuición detrás de esto, pues se sabe que los seres humanos utilizan el conocimiento causal que la experiencia les provee para realizar predicciones para intervenciones en el mundo no realizadas aun (\cite{meder2008inferring}, \cite{hagmayer2009decision})\\
 \\
-El trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. De la misma manera, \cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. Por lo tanto, es interesante preguntar si un agente que busque maximizar una recompensa pueda aprender modelos causales mediante la interacción con su entorno.
+Notemos que al hablar de modelos gráficos causales que se actualizan y adaptan a la luz de nueva evidencia estamos tocando terreno Bayesiano, pues tenemos creencias actuales sobre la estructura de un grafo, observaremos evidencia, y actualizaremos estas creencias. Existen trabajos de inferencia Bayesiana sobre datos estructurados como grafos (\cite{acar2007adaptive}), además de grafos probabilistas (\cite{pearl1988probabilistic}, \cite{koller2009probabilistic}, \cite{sucar2015probabilistic} ). \\
+\\
+El trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. De la misma manera, \cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. Por lo tanto, es interesante preguntar si un agente que busque maximizar una recompensa pueda aprender modelos causales mediante la interacción con su entorno.\\
 \\
 Un agente que interactua con su entorno con el fin de maximizar una recompensa efectivamente puede aprender aspectos estructurales sobre el entorno, como nos muestra \cite{garnelo2016towards}, quien además señala que el agente logra mejorar su desempeño. Además, muestran la importancia de tener una semántica que permita hablar de la estructura del entorno. Ellos utilizaron lógica de primer orden, pues están más interesados en hacer razonamientos \textit{de alto nivel} sobre el entorno, que involocura más que las relaciones causales, y por esto ellos se comprometen con lógica de primer orden, que al restringirnos al caso causal se queda corta pues los modelos gráficos probabilistas son más expresivos, además de modulares y montónicos.\\
 \\
@@ -111,7 +103,7 @@ Del trabajo desarrollado en el área de RL sabemos que es posible que un agente 
 \\
 Por otro lado, sabemos que los seres humanos adquieren conocimiento causal de su entorno en el caso de problemas de decisión secuenciales (\cite{hagmayer2009decision}, \cite{hagmayer2013repeated}).\\
 \\
-Además, gracias al trabajo de \cite{lattimoreNIPS2016} se sabe que es posible escoger acciones dado un modelo causal.\\
+Además, gracias al trabajo de \cite{lattimoreNIPS2016} se sabe que es posible escoger acciones dado un modelo causal, mientras que el trabajo de \cite{wellen2012learning} muestra que un modelo causal puede ser aprendido \textit{on-line}; es decir, mediante interacción con el ambiente. 
 \\
 Por lo tanto, los diversos elementos existen (en sus ideas de fondo) y pueden ser unidos, aunque no será una tarea trivial. 
 \section{Estado del arte}
