@@ -253,24 +253,29 @@ Entonces, la definición de probabilidad subjetiva sería aquella probabilidad u
 El Teorema de von Neumann-Morgenstern indica cómo obtener una función de utilidad si las probabilidades están bien definidas; el Teorema de De Finnetti dice cómo obtener probabilidades si conocemos las utiidades de un tomador de decisiones. El Teorema de Savage obtiene al mismo tiempo probabilidades y utlidades. Su modelo asume sólo estados del mundo y sus resultados. Por lo tanto, los axiomas propuestos por Savage son bastante más abstractos y menos interpretables, pero se obtiene la ventaja de que sus axiomas son equivalentes a la existencia de una función de utilidad y de una medida de probabilidad (subjetiva) tales que las decisiones se llevan a cabo al maximizar utilidad esperada respecto a esta función de utilidad y esta medida de probabilidad.\\
 \subsubsection{Estados, resultados y acciones}
 \section{Aprendizaje por Refuerzo}
-El Aprendizaje por Refuerzo (RL) (\cite{sutton1998reinforcement}) consiste en un \textit{framework} general en el cual un \textit{agente} aprende a llevar a cabo una tarea a través de interactuar con su entorno. Estas interacciones provocan cambios en el entorno, los cuales a su vez afectarán el comportamiento del agente. El comportamiento del agente está caracterizado en términos de acciones y las acciones tomadas por este afectan el \textit{estado} del ambiente. A su vez, el ambiente devuelve información al agente en términos de una recompensa o ganancia según el estado en el que se encuentre. El objetivo del agente es encontrar una serie de acciones que lo lleven a lograr su objetivo final. La función de recompensa codifica qué es lo que se desea que el agente aprenda, pues esta función devuelve un valor para cada estado y con esto el agente asignará un valor a cada estado según la ganancia a largo plazo que un este representa.\\
+\subsection{Definición}
+El Aprendizaje por Refuerzo (RL) (\cite{sutton1998reinforcement}) consiste en un \textit{framework} general en el cual un \textit{agente} aprende a llevar a cabo una tarea a través de la interacción con su entorno. Estas interacciones provocan cambios en el entorno, los cuales a su vez afectarán el comportamiento del agente. El comportamiento del agente está caracterizado en términos de acciones y las acciones tomadas por este afectan el \textit{estado} del ambiente. A su vez, el ambiente devuelve información al agente en términos de una recompensa o ganancia según el estado en el que se encuentre. El objetivo del agente es encontrar una serie de acciones que lo lleven a lograr su objetivo final. La función de recompensa codifica qué es lo que se desea que el agente aprenda, pues esta función devuelve un valor para cada estado y con esto el agente asignará un valor a cada estado según la ganancia a largo plazo que un este representa.\\
 \\
-La dinámica consiste en lo siguiente: en un tiempo $t$, el agente se encuentra en el estado $s_t$, toma una acción $a_t \in \mathcal{A}(s_t)$ de acuerdo a una \textit{policy}, o política, y llega a un nuevo estado $s_{t+1}$ según una probabilidad de transición $\mathcal{T}$ y recibe una recompensa $r_{t+1}$. El objetivo del agente es encontrar la política que maximice la recompensa.\\
+La diferencia fundamental entre el aprendizaje por refuerzo y el aprendizaje supervisado o no supervisado consiste en la existencia de una retroalimentación posiblemente retrasada y la consideración de horizontes de tiempo; un agente de RL busca maximizar ganancias \textit{a largo plazo}.\\
+\\
+La dinámica del agente y su entorno puede esquematizarse de la siguiente manera: en un momento $t$, el agente se encuentra en el estado $s_t$, toma una acción $a_t \in \mathcal{A}(s_t)$ de acuerdo a una \textit{policy}, o política, y llega a un nuevo estado $s_{t+1}$ según una probabilidad de transición $\mathcal{T}$ y recibe una recompensa $r_{t+1}$. El objetivo del agente es encontrar la política que maximice la recompensa a largo plazo.\\
 \\
 La regla general que se sigue para la definición del ambiente (\cite{sutton1998reinforcement}) es considerar que todo aquello que no pueda ser explícitamente alterado por el agente pertenece al ambiente. La frontera agente-ambiente tiene que ver con los límites de lo que el agente puede controlar, no sobre lo que puede \textit{conocer}.
 Veremos ahora con detalle las partes que conforman esta dinámica. 
-\subsubsection{Objetivos y Recompensas}
+\subsection{Objetivos y Recompensas}
 Debido a que el objetivo del agente es maximizar la recompensa en el largo plazo, la manera en la que logramos que aprenda una tarea en particular es diseñando una función recompensa adecuada. Por ejemplo, un agente que queremos que aprenda a jugar ajedrez debe ser premiado por ganar los juegos, no por lograr sub-objetivos como comer más piezas del oponente o tomar control del centro del tablero (\cite{sutton1998reinforcement}), pues podría suceder que el agente encuentre cómo lograr esto sin ganar el juego necesariamente. Es mediante la recompensa que le comunicamos al agente qué queremos de él, no cómo queremos que lo haga.
-\subsubsection{Definición de Cadenas de Markov}
+\subsection{Definición de Cadenas de Markov}
 Una Cadena de Markov discreta es un proceso estocástico en el cual el estado que toma el proceso sólo depende del estado en el tiempo anterior. Esto es, 
 \[P(X_{t+1} \in A | X_0=x_0, X_1=x_1 , ... , X_t=x_t) = P(X_{t+1} \in A | X_t = x_t).\]
 Estos procesos quedan caracterizados por sus probabilidades de transición $p^t_{ij}=P(X_{t+1}=j | X_{t}=i)$. Cuando estas probabilidades son iguales para toda $t$, entonces se dice que la cadena es homogénea, y por esta razón podemos almacenar las probabilidades de transición en una matriz $P$ tal que $P_{ij}=p_{ij}$.
-\subsubsection{Procesos de Decisión Markovianos con recompensa}
+\subsection{Procesos de Decisión Markovianos con recompensa}
 Consideremos una Cadena de Markov con una ligera modificación: al tiempo $t$, se toma una \textit{acción} $a_t$ que afecta el estado del proceso al tiempo $t+1$. En respuesta a la acción tomada, se recibe una recompensa $r_t = f(a_t)$ para alguna función $f$ desconocida, la cual puede ser aleatoria o determinista.
 Los procesos de decision Markovianos con recompensa (\cite{Puterman:1994:MDP:528623}) están definidos por un espacio de estados $\mathcal{S}$, un espacio de acciones posibles $\mathcal{A}$, una función de transición $f$ y la función recompensa $r$. La función transición puede ser estocástica o determinística. 
 
-\subsubsection{Función valor}
-Mientras la función recompensa provee la recompensa inmediata de estar en un estado, la función valor asigna una valoración \textit{a largo plazo} de un estado. Como las recompensas obtenidas a largo plazo dependen de las acciones que se sigan tomando, tenemos que definir la función valor en términos de una política. Una política es un mapeo $\pi : \mathcal{S} \times \mathcal{A} \to \pi(s,a)$. Es decir, la probabilidad de tomar la acción $a$ estando en el estado $s$. La mayoría de los algoritmos de aprendizaje por refuerzo intentan estimar de una u otra forma la función valor, por lo que la definición de esta es muy importante. Formalmente, para un proceso de decisión Markoviano, definimos la \textit{función valor} (value function en la literatura) para un estado $s$, y relativa a una política $\pi$, como el retorno esperado si se comienza en $s$ y a partir de ahí se sigue la política $\pi$
+\subsection{Políticas y Función valor}
+Mientras la función recompensa provee la recompensa inmediata de estar en un estado, la función valor asigna una valoración \textit{a largo plazo} de un estado. Debido a que las recompensas obtenidas a largo plazo dependen de toda una secuencia de acciones, tenemos que definir la función valor en términos de una política. Se había mencionado que una política era una manera de tomar acciones; formalmente, una política es un mapeo $\pi : \mathcal{S} \times \mathcal{A} \to \pi(s,a)$; esto es, la probabilidad de tomar la acción $a$ estando en el estado $s$.\\
+\\
+La mayoría de los algoritmos de aprendizaje por refuerzo intentan estimar de una u otra forma la función valor, por lo que la definición de esta es muy importante. Formalmente, para un proceso de decisión Markoviano, definimos la \textit{función valor} (value function en la literatura) para un estado $s$, y relativa a una política $\pi$, como el retorno esperado si se comienza en $s$ y a partir de ahí se sigue la política $\pi$
 \[ V^{\pi}(s) = \mathbb{E}_{\pi}\left[ R_t | s_t = s \right]. \]
 De manera similar, definimos la \textit{función acción-valor} $Q^{\pi}(s,a)$ es una valoración de tomar la acción $a$ estandoen el estado $s$, y después seguir la \textit{política} $\pi$
 \[ Q^\pi(s,a) = \mathbb{E}[R_t | s_t =s, a_t = a]. \]
@@ -289,7 +294,7 @@ También para la función $Q^{\pi}(s,a)$ se tiene una ecuación de Bellman:
 \[ Q^{\pi}(s,a)=\mathbb{E}_{s',a'}[r+ \gamma Q^{\pi}(s',a') | s',a']. \]
 Además, la función $V^\pi$ puede ser obtenida a partir de la función $Q^{\pi}(s,a)$ de la siguiente manera:
 \[ V^{\pi}(s)=Q^\pi(s,\pi(s)) \]
-\subsubsection{Soluciones y Optimalidad}
+\subsection{Soluciones y Optimalidad}
 Resolver un problema de aprendizaje por refuerzo consiste en (\cite{sutton1988learning}) encontrar una política que, a la larga, reciba una alta recompensa. Resulta que es posible definir un orden parcial entre políticas en términos de la función valor, pues $\pi \geq \pi'$ si $V^{\pi}(s) \geq V^{\pi'}(s)$ para todo estado $s$. Para procesos de decisión Markovianos finitos existe siempre una política mejor que las demas, a la cual llamaremos \textit{política óptima}. De hecho, pueden existir varias, pero todas ellas comparten la misma función valor, denotada como $V^\ast$. Si para una política $\pi^\ast$ se tiene que es mejor que todas las demás, entonces podemos describir su función valor como
 \[  V^{\pi^\ast} = \max_{\pi} V^{\pi}(s).\]
 Por supuesto, $V^\ast = V^{\pi^\ast}$
@@ -335,32 +340,34 @@ Los métodos de programación dinámica suponen que se cuenta con un modelo comp
 \subsection{Métodos básicos de solución: Model-free}
 Métodos que no necesitan un modelo completo del sistema, sólo necesitan experiencia. Encontramos los métodos Monte Carlo que simulan las transiciones y los estados, y los métodos de diferencias temporales, que van actualizando iterativamente el valor de los estados observados, el más famoso de estos es el TD($\lambda$).
 \subsubsection{Métodos Monte-Carlo} 
-Los métodos Monte-Carlo no requieren un modelo del ambiente y son conceptualmente sencillos, pero no son adecuados para hacer actualizaciones incrementales. Estos métodos requieren \textit{experiencia} en vez de un modelo completo; es decir, requieren secuencias de estados, acciones y recompensas, ya sean estos obtenidos de simulaciones o de interacción \textit{on-line} con el ambiente. Los métodos Monte-Carlo suponen que la experiencia proviene de eventos episódicos, es decir que terminan siempre de una u otra forma y es al final de estos episodios que se alteran las estimaciones de valor así como las políticas. En este sentido, los métodos Monte-Carlo son incrementales por episodio, pero no paso a paso dentro de cada episodio. A pesar de las diferencias operativas entre los métodos DP y los métodos monte-carlo, las ideas esenciales son las mismas, pues ambos métodos calculan las mismas funciones además de seguir el mismo camino hacia la optimalidad; es decir, evaluación, mejora y finalmente iteración general. La siguiente descripción de los métodos Monte-Carlo está basada en el clásico libro de \cite{sutton1998reinforcement}
-\begin{itemize}
-\item Evaluación Monte-Carlo: Como se mencionó antes, una manera de estimar el valor de un estado sería promediar las recompensas obtenidas al visitar un estado entre el número de visitas a este; por la ley de los grandes números este promedio debe converger al valor real. Dado un conjunto de episodios obtenidos de seguir una política $\pi$, denotamos como \textit{visita} cada vez que se llega a un estado $s$. El algoritmo \textit{every-visit} estima $V^\pi (s)$ como las recompensas promedio de todas las visitas al estado $s$ en todos los episodios; por otro lado, el algoritmo \textit{first-visit} promedia sólo lo obtenido al visitar por primera vez un estado en todos los episodios. Ambos métodos convergen a $V^\pi$.
-\item Notemos que al no tener un modelo del ambiente, es más útil estimar el valor de una acción más que el valor de un estado. Teniendo un modelo, los valores de los estados son suficientes para determinar una política, pues uno simplemente ve un paso hacia adelante y escoge la acción que tenga la mejor combinación de recompensa y de estado siguiente, pero sin un modelo disponible, uno debe estimar el valor de las acciones para con esto obtener una política. Entonces, es importante tener un método para estimar $Q^\ast$.
-\item Estimación de $Q^\pi(s,a)$: Los métodos son esencialmente los mismos que para estimar la función valor; es decir, promediando las recompensas obtenidas al visitar un estado y haber seleccionado cierta acción (todas las visitas) y análogamente para la primer visita. El problema que tienen estos métodos es que no todas las parejas acción-estado son visitadas, pues para obtener estimaciones válidas deberíamos tener parejas estado-acción para todas las acciones y no sólo las que se ven en los episodios. 
-\item Control Monte-Carlo: para una primera versión Monte-Carlo de iteración de políticas, supondremos que contamos con un número infinito de episodios y que se visitan todas las parejas estado-acción dentro de cada episodio. A diferencia de los métodos de DP y por las razones que ya se explicaron, el proceso de evaluación y mejora se hace respecto a la función $Q(s,a)$.
+Los métodos Monte-Carlo no requieren un modelo del ambiente y son conceptualmente sencillos, pero no son adecuados para hacer actualizaciones incrementales. Estos métodos requieren \textit{experiencia} en vez de un modelo completo; es decir, requieren secuencias de estados, acciones y recompensas, ya sean estos obtenidos de simulaciones o de interacción \textit{on-line} con el ambiente. Los métodos Monte-Carlo suponen que la experiencia proviene de eventos episódicos, es decir que terminan siempre de una u otra forma y es al final de estos episodios que se alteran las estimaciones de valor así como las políticas. En este sentido, los métodos Monte-Carlo son incrementales por episodio, pero no paso a paso dentro de cada episodio. A pesar de las diferencias operativas entre los métodos DP y los métodos monte-carlo, las ideas esenciales son las mismas, pues ambos métodos calculan las mismas funciones además de seguir el mismo camino hacia la optimalidad; es decir, evaluación, mejora y finalmente iteración general. La siguiente descripción de los métodos Monte-Carlo está basada en el clásico libro de \cite{sutton1998reinforcement}.\\
+\\
+Como se mencionó antes, una manera de estimar el valor de un estado sería promediar las recompensas obtenidas al visitar un estado entre el número de visitas a este; por la ley de los grandes números este promedio debe converger al valor real. Dado un conjunto de episodios obtenidos de seguir una política $\pi$, denotamos como \textit{visita} cada vez que se llega a un estado $s$. El algoritmo \textit{every-visit} estima $V^\pi (s)$ como las recompensas promedio de todas las visitas al estado $s$ en todos los episodios; por otro lado, el algoritmo \textit{first-visit} promedia sólo lo obtenido al visitar por primera vez un estado en todos los episodios. Ambos métodos convergen a $V^\pi$. Notemos que al no tener un modelo del ambiente, es más útil estimar el valor de una acción más que el valor de un estado. Teniendo un modelo, los valores de los estados son suficientes para determinar una política, pues uno simplemente ve un paso hacia adelante y escoge la acción que tenga la mejor combinación de recompensa y de estado siguiente, pero sin un modelo disponible, uno debe estimar el valor de las acciones para con esto obtener una política. Entonces, es importante tener un método para estimar $Q^\ast$.\\
+\\
+Los métodos son esencialmente los mismos que para estimar la función valor; es decir, promediando las recompensas obtenidas al visitar un estado y haber seleccionado cierta acción (todas las visitas) y análogamente para la primer visita. El problema que tienen estos métodos es que no todas las parejas acción-estado son visitadas, pues para obtener estimaciones válidas deberíamos tener parejas estado-acción para todas las acciones y no sólo las que se ven en los episodios.\\
+\\
+Para una primera versión Monte-Carlo de iteración de políticas, supondremos que contamos con un número infinito de episodios y que se visitan todas las parejas estado-acción dentro de cada episodio. A diferencia de los métodos de DP y por las razones que ya se explicaron, el proceso de evaluación y mejora se hace respecto a la función $Q(s,a)$.
 \[ \pi_0 \xrightarrow{E} Q^{\pi_0} \xrightarrow{I} \pi_1 \xrightarrow{E} Q^{\pi_1} \xrightarrow{E} \pi_2 \xrightarrow{E} \cdots \xrightarrow{I} \pi^\ast \xrightarrow{E} Q^\ast.  \]
 Bajo el supuesto de episodios infinitos y visita a todas las parejas estado-acción se tiene que los métodos Monte-Carlo encuentran $Q^{\pi_k}$ de manera exacta para $\pi_k$.\\
 Para hacer la mejora de una política, se escoge de manera determinística la acción $a$ en la cual se alcanza el máximo de la función $Q$; es decir,
 \[ \pi(s) = \textrm{arg max}_a Q(s,a).\]
-\item Para remover el supuesto de un número infinito de episodios, una opción es abandonar la idea de obtener completamente la función $Q^\pi_k$ en el paso de evaluación antes de proceder a la mejora, sino sólo mover un poco la función $Q$ actual hacia la verdadera.
-\item En cuanto al supuesto de visita a todas las parejas acción-estado la única alternativa a suponer que se visiten todas las parejas es hacer que el agente las seleccione y para esto existen dos familias de métodos:
+Podemos remover el supuesto de un número infinito de episodios, una opción es abandonar la idea de obtener completamente la función $Q^\pi_k$ en el paso de evaluación antes de proceder a la mejora, sino sólo mover un poco la función $Q$ actual hacia la verdadera. En cuanto al supuesto de visita a todas las parejas acción-estado la única alternativa a suponer que se visiten todas las parejas es hacer que el agente las seleccione y para esto existen dos familias de métodos:
 		\begin{itemize}
 				\item On-Policy: intentan evaluar mejorar la política que es actualmente utilizada para la toma de decisiones.
 				\item Off-Policy: Evaluan o mejoran una política distinta
 		\end{itemize}
-\end{itemize}
 \subsubsection{Diferencias Temporales}
-Los métodos TD son totalmente incrementales y tampoco requieren un modelo del ambiente, pero son mucho más complejos. Estos métodos son una combinación de métodos Monte-Carlo y de Programación Dinámica; estos métodos pueden aprender directamente de la experiencia y no necesitan un modelo del ambiente, pero también utilizan técnicas de \textit{bootstrapping} (estiman usando estimadores) por lo que no necesitan finalizar completamente un episodio para actualizar los valores.
-\begin{itemize}
-\item Evaluación de política en Diferencias Temporales.
-\item TD(0).
-\item SARSA: Es un método \textit{on-policy}.
-\item Q-Learning: Es un método \textit{off-Policy}.
-\item Métodos Actor-Critic.
-\end{itemize}
+Los métodos de Diferencias Temporales (TD por sus siglas en inglés)  son una idea novedosa, pues combinan ideas de los Métodos Monte Carlo y de los métodos de Programación Dinámica (\cite{sutton1998reinforcement}).\\
+\\
+Los métodos TD son totalmente incrementales y  norequieren un modelo del ambiente, pero son mucho más complejos; los métodos que veremos en esta sección también pueden aprender directamente de la experiencia y no necesitan un modelo del ambiente, pero a diferencia de los métodos Monte-Carlo, utilizan técnicas de \textit{bootstrapping} (estiman usando estimadores) por lo que no necesitan finalizar completamente un episodio para actualizar los valores.\\
+\\
+Tanto los métodos Monte-Carlo como los métodos TD utilizan experiencia para actualizar sus estimaciones del valor de un estado; dada una política $\pi$, los métodos de ambas clases actualizarán la estimación $V(s_t)$ según lo que pace después de visitar ese estado $s_t$, la diferencia está en que los métodos Monte-Carlo deben esperar al final de un episodio para poder hacer las actualizaciones según las recompensas, pues se utilizan los retornos promedio al visitar los estados como aproximaciones del valor de este. En el caso de los métodos TD, inmediatamente después de visitar cada estado, la actualización se hará utilizando la recompensa observada $r_{t+1}$ y la estimación de $V(s_{t+1})$. Esto da lugar al método más sencillo de todos los TD, el cual se conoce como $TD(0)$. El método $TD(0)$  lleva a cabo la siguiente actualización
+\[ V(s_t) \leftarrow V(s_t) + \alpha ( r_{t+1} + \gamma V(s_{t+1}) - V(s_t)). \]
+SARSA: Es un método \textit{on-policy}.
+\\
+Q-Learning: Es un método \textit{off-Policy}.
+\\
+Métodos Actor-Critic.
 \subsection{Value based Reinforcement Learning: Deep Q-Networks}
 Los sorprendentes avances de Deep Learning en visión computacional llevaron de manera natural a plantear la pregunta de cómo utilizar estas nuevas técnicas para el aprendizaje por refuerzo. 
 Las aplicaciones estándar de DL requerían grandes volúmenes de datos etiquetados, además de tener muestras independientes, pero en Reinforcement learning esto es un problema pues las secuencias de estados suelen estar altamente correlacionados.\\
@@ -391,7 +398,7 @@ Deep Q-learning con Experience Replay:
 \cite{hasselt2010double}, \cite{van2016deep} propuso una “Double Deep Q-Network”. Recordemos que en DeepQ-learning las actualizaciones que se hacen son:
 \[ \theta_{t+1} = \theta_t + \alpha (r_{t+1} + \gamma \max_{a} Q(s_{t+1},a;\theta_t)) \nabla_\theta Q(s_t,a_t;\theta_t). \]
 Por lo tanto, es más probable escoger acciones que tienen un alto valor, lo que resulta en valores demasiado optimistas. Lo que se propone en \cite{van2016deep} es evaluar la política greedy utilizando la red on-line, pero utilizar la red objetivo para estimar el valor. Debe hacerse el siguiente cambio en la actualización:
-\[ r_{t+1}  + \gamma  Q (s_{t+1}, \textrm_{ arg max}_a Q(s_{t+1},a_t,\theta_t); \theta^{-}\]
+%\[ r_{t+1}  + \gamma  Q (s_{t+1}, \textrm_{ arg max }_a Q(s_{t+1},a_t,\theta_t); \theta^{-} \]
 donde $\theta$ es el parámetro de la red on-line y $\theta^{-}$ el parámetro de la red objetivo
 \subsubsection{Prioritized Replay}
 
@@ -495,17 +502,6 @@ En cuanto a la formulación de un problema de decisión en sistemas causales, ya
 \subsection{Experimentos secuenciales: Causal Bandits}
 
 \section{Mi Propuesta}
-\subsection{Pregunta de Investigación}
-¿Los métodos de aprendizaje por refuerzo pueden aprender un modelo causal del ambiente? Más allá de producir un mapeo estado-acción, queremos obtener un modelo causal del entorno.
-\subsection{Problema}
-\subsection{Objetivos}
-\begin{itemize}
-\item Plantear un modelo causal dado un ambiente.
-\item Aprendizaje estructural del modelo causal.
-\item Evaluación del modelo causa (queries significativas)l.
-\item Incorporar el conocimiento causal a la toma de decisiones en un loop de mejora continua.
-\item Exportar conocimiento causal obtenido para hacer inferencia causal.
-\end{itemize}
 \subsection{Motivación}
 Tomando el cuenta los trabajos mencionados en la sección anterior, surge la pregunta de si es posible diseñar un agente que aprenda a realizar una tarea por medio de interacción con su entorno y mediante el uso de información causal recolectada a través de esa interacción. Este agente buscará aprender un modelo causal de su entorno al mismo tiempo que aprende una \textit{política}. Con cada acción que toma, el agente aprenderá  un poco sobre la \textit{estructura causal} de su entorno y utilizará este conocimiento para la futura toma de decisiones.\\
 \\
@@ -518,6 +514,18 @@ Un agente que interactua con su entorno con el fin de maximizar una recompensa e
 Mientras que \cite{garnelo2016towards} utiliza una representación lógica para escoger una acción, \cite{lattimoreNIPS2016} explora la pregunta de cómo escoger \textit{la mejor intervención} dado un modelo causal a través de una serie de intervenciones y observaciones secuenciales; por ejemplo, en el caso en el que un granjero quiera maximizar sus cosechas, y sabe que ese rendimiento está afectado por el uso de fertilizante, la humedad y la exposición al sol, pero sólo tiene los recursos para llevar a cabo sólo una de estas modificaciones en cada temporada. El algoritmo de Lattimore le dirá, después de $T$ observaciones, cuál es la mejor intervención a llevar a cabo con el fin de maximizar esa cantidad. Este podría ser un primer paso hacia responder la pregunta \textit{¿dado un modelo causal, qué acción tomar?}
 \\
 Por otro lado, en el caso inverso \cite{ortega2014generalized} exploran un esquema de muestreo llamado Muestreo de Thompson, en el cual un agente muestrea una de entre varias acciones de acuerdo a la probabilidad subjetiva que tenga el agente de que esta sea la mejor acción. Los autores conjeturan que esto pueden utilizarse para hacer inducción causal sobre una serie de acciones establecidad (política conocida).
+\subsection{Pregunta de Investigación}
+¿Los métodos de aprendizaje por refuerzo pueden aprender un modelo causal del ambiente? Más allá de producir un mapeo estado-acción, queremos obtener un modelo causal del entorno.
+\subsection{Problema}
+Adquirir y utilizar información causal para mejorar el desempeño de un agente que interactua con su entorno con el fin de maximizar una recompensa a largo plazo. 
+\subsection{Objetivos}
+\begin{itemize}
+\item Plantear un modelo causal dado un ambiente.
+\item Aprendizaje estructural del modelo causal.
+\item Evaluación del modelo causa (queries significativas)l.
+\item Incorporar el conocimiento causal a la toma de decisiones en un loop de mejora continua.
+\item Exportar conocimiento causal obtenido para hacer inferencia causal.
+\end{itemize}
 \subsection{La propuesta}
 Diseñar un agente que tenga como objetivo aprender a llevar a cabo una tarea. El aprendizaje se dará por interacción con el ambiente y además contará con un modelo causal que vaya aprendiendo paso a paso y del cual se apoyará para  tomar mejores decisiones.
 \begin{center}
@@ -541,6 +549,10 @@ Entonces, en un modelo gráfico causal necesitaremos tener \textit{nodos de esta
 Es claro que los estados del mundo afectarán la siguiente decisión, pero no causan nada por sí mismos; en todo caso, el estado afeca la decisión pero sólo a través de la política (el valor del estado).\\
 \\
 El objetivo, ahora, es aprender una política que incorpore conocimiento causal, el cual a su vez fue aprendido mediante interacción.\\
+\\
+Suponiendo que conocieramos el modelo causal, entonces este nos ayudará a escoger acciones. Ya no debería usar políticas $\varepsilon$-greedy para explorar el espacio, pues ya conozco relaciones útiles. El enfoque de \cite{lattimore2017nips} podría servir aquí.
+\\
+Por otro lado, cómo ir estimando la estructura causal del grafo? Parece ser que la estadística Bayesiana es una idea, pues en cada pasao tengo creencias sobre la estructura causal que voy a modificar a la luz de la evidencia, la evidencia está dada por los descubrimientos del agente y las creencias por la estructura actual del grafo.
 \\
 ¿El valor de un estado debe cambiar en el caso causal? Para que el valor de un estado se vea afectado por lo que pueda causar el agente a partir de ese estado se necesita algún tipo de función de utilidad, ¿no? No lo sé...
 \newpage
