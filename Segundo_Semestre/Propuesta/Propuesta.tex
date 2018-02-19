@@ -363,9 +363,11 @@ Los métodos TD son totalmente incrementales y  norequieren un modelo del ambien
 \\
 Tanto los métodos Monte-Carlo como los métodos TD utilizan experiencia para actualizar sus estimaciones del valor de un estado; dada una política $\pi$, los métodos de ambas clases actualizarán la estimación $V(s_t)$ según lo que pace después de visitar ese estado $s_t$, la diferencia está en que los métodos Monte-Carlo deben esperar al final de un episodio para poder hacer las actualizaciones según las recompensas, pues se utilizan los retornos promedio al visitar los estados como aproximaciones del valor de este. En el caso de los métodos TD, inmediatamente después de visitar cada estado, la actualización se hará utilizando la recompensa observada $r_{t+1}$ y la estimación de $V(s_{t+1})$. Esto da lugar al método más sencillo de todos los TD, el cual se conoce como $TD(0)$. El método $TD(0)$  lleva a cabo la siguiente actualización
 \[ V(s_t) \leftarrow V(s_t) + \alpha ( r_{t+1} + \gamma V(s_{t+1}) - V(s_t)). \]
-SARSA: Es un método \textit{on-policy}.
+Ahora, veremos un método \textit{on-policy} en el cual se consideran transiciones de parejas estado-acción a parejas estado-acción. La actualización de valor utilizará toda la información  de la transición; es decir, $(s_t,a_t,r_{t+1},s_{t+1},a_{t+1})$ y de aquí el nombre del método: SARSA. La actualización que lleva a cabo este método es
+\[ Q(s_t,a_t) \leftarrow Q(s_t,a_t) + \alpha (r_{t+1} + \gamma Q(s_{t+1},a_{t+1})-Q(s_t,a_r)) \]
 \\
-Q-Learning: Es un método \textit{off-Policy}.
+Por otro lado, tenemos el algoritmo Q-learning (\cite{watkins1992q}) que es \textit{off-policy} y sus actualizaciones las hace como si se hubiera escogido la acción greedy, aunque el agente no esté usando esa política
+\[ Q(s_t,a_t) \leftarrow Q(s_t,a_t)  + \alpha (r_{t+1} + \gamma \max_a Q(s_{t+1},a) - Q(s_t,a_t).  \]
 \\
 Métodos Actor-Critic.
 \subsection{Value based Reinforcement Learning: Deep Q-Networks}
@@ -442,7 +444,7 @@ Un primer acercamiento a este problema puede hacerse mediante técnicas de infer
 \\
 En líneas más avanzadas, \cite{courville2006bayesian} exploraron versiones que permiten que múltiples causas latentes estén activas.
 \subsection{Towards Deep Symbolic Reinforcement Learning}
-Deep Reinforcement learning consiste, básicamente, en utilizar una red profunda para aproximar la $Q$-function; por lo tanto, los métodos de DRL heredan los problemas del Deep Learning: se requiere un gran volumen de datos, son muy lentas en entrenarse y, según \cite{garnelo2016towards}, son esencialmente \textit{reactivos}, lo que significa que no utilizan procedimientos de alto nivel como planeación o razonamiento causal, además de que no son interpretables.\\
+Deep Reinforcement Learning (DRL) consiste, básicamente, en utilizar una red profunda para aproximar la $Q$-function; por lo tanto, los métodos de DRL heredan los problemas del Deep Learning: se requiere un gran volumen de datos, son muy lentas en entrenarse y, según \cite{garnelo2016towards}, son esencialmente \textit{reactivos}, lo que significa que no utilizan procedimientos de alto nivel como planeación o razonamiento causal, además de que no son interpretables.\\
 \\
 \cite{garnelo2016towards} proponen una arquitectura híbrida que, combina redes neuronales con inteligencia artificial simbólica. El modelo propuesto consiste en combinar una red neuronal que como entrada directamente lo que se recibe del ambiente y transforma estos datos crudos en una representación simbólica basada en lógica de primer orden; esta representación simbólica es posteriormente utilizada para escoger la acción a tomar.\\
 \\
@@ -500,10 +502,18 @@ En cuanto a la formulación de un problema de decisión en sistemas causales, ya
 \cite{hagmayer2009decision} plantean que cada decisión tomada por un agente es una intervención directa con el fin de predecir las consecuencias de esta. 
 
 \subsection{Experimentos secuenciales: Causal Bandits}
-
+\subsection{Toma de Decisiones Bajo Incertidumbre y Teoría de Juegos}
+Teoría de Juegos (\cite{von1944theory}, \cite{osborne1994course}, \cite{webb2007game}, \cite{gintis2014bounds})
+\subsubsection{Aprendizaje por refuerzo como toma de decisiones}
+\subsubsection{Juegos Bayesianos}
+\subsubsection{Información causal y juegos}
 \section{Mi Propuesta}
+\subsection{Pregunta de Investigación}
+¿Los métodos de aprendizaje por refuerzo pueden aprender un modelo causal del ambiente? Más allá de producir un mapeo estado-acción, queremos obtener un modelo causal del entorno.
+\subsection{Problema}
+Adquirir y utilizar información causal para mejorar el desempeño de un agente que interactua con su entorno con el fin de maximizar una recompensa a largo plazo. 
 \subsection{Motivación}
-Tomando el cuenta los trabajos mencionados en la sección anterior, surge la pregunta de si es posible diseñar un agente que aprenda a realizar una tarea por medio de interacción con su entorno y mediante el uso de información causal recolectada a través de esa interacción. Este agente buscará aprender un modelo causal de su entorno al mismo tiempo que aprende una \textit{política}. Con cada acción que toma, el agente aprenderá  un poco sobre la \textit{estructura causal} de su entorno y utilizará este conocimiento para la futura toma de decisiones.\\
+Tomando el cuenta los trabajos mencionados en las sección anterior, surge la pregunta de si es posible diseñar un agente que aprenda a realizar una tarea por medio de interacción con su entorno y mediante el uso de información causal recolectada a través de esa interacción. Este agente buscará aprender un modelo causal de su entorno al mismo tiempo que aprende una \textit{política}. Con cada acción que toma, el agente aprenderá  un poco sobre la \textit{estructura causal} de su entorno y utilizará este conocimiento para la futura toma de decisiones.\\
 \\
 Cada decisión que el agente toma (acción que lleva a cabo) altera el estado del mundo. La información obtenida a partir de cada acción, será utilizada para actualizar el conocimiento causal que se tenga hasta el momento, esto con el fin mejorar las decisiones que toma y para aprender otros aspectos estructurales (causales) sobre su ambiente. La intuición detrás de esto es que al aprender mediante una toma de decisiones repetida, decisiones que intervienen directamente sobre el entorno, se aprenden también relaciones causales; por ejemplo, al aprender a conducir se aprende implícitamente que ciertos movimientos del volante \textit{causan} ciertos cambios en el estado del automovil (\cite{danks2014unifying}). Otro ejemplo es en el contexto de videojuegos, en el cual al tomar ciertas decisiones se conoce el impacto que estas provocan en el estado del juego, conocimiento que a su vez es utilizado para tomar mejores decisiones en un futuro y que maximicen las recompensas u objetivos a largo plazo. No sólo hay intuición detrás de esto, pues se sabe que los seres humanos utilizan el conocimiento causal que la experiencia les provee para realizar predicciones para intervenciones en el mundo no realizadas aun (\cite{meder2008inferring}, \cite{hagmayer2009decision})\\
 \\
@@ -513,11 +523,17 @@ Un agente que interactua con su entorno con el fin de maximizar una recompensa e
 \\
 Mientras que \cite{garnelo2016towards} utiliza una representación lógica para escoger una acción, \cite{lattimoreNIPS2016} explora la pregunta de cómo escoger \textit{la mejor intervención} dado un modelo causal a través de una serie de intervenciones y observaciones secuenciales; por ejemplo, en el caso en el que un granjero quiera maximizar sus cosechas, y sabe que ese rendimiento está afectado por el uso de fertilizante, la humedad y la exposición al sol, pero sólo tiene los recursos para llevar a cabo sólo una de estas modificaciones en cada temporada. El algoritmo de Lattimore le dirá, después de $T$ observaciones, cuál es la mejor intervención a llevar a cabo con el fin de maximizar esa cantidad. Este podría ser un primer paso hacia responder la pregunta \textit{¿dado un modelo causal, qué acción tomar?}
 \\
-Por otro lado, en el caso inverso \cite{ortega2014generalized} exploran un esquema de muestreo llamado Muestreo de Thompson, en el cual un agente muestrea una de entre varias acciones de acuerdo a la probabilidad subjetiva que tenga el agente de que esta sea la mejor acción. Los autores conjeturan que esto pueden utilizarse para hacer inducción causal sobre una serie de acciones establecidad (política conocida).
-\subsection{Pregunta de Investigación}
-¿Los métodos de aprendizaje por refuerzo pueden aprender un modelo causal del ambiente? Más allá de producir un mapeo estado-acción, queremos obtener un modelo causal del entorno.
-\subsection{Problema}
-Adquirir y utilizar información causal para mejorar el desempeño de un agente que interactua con su entorno con el fin de maximizar una recompensa a largo plazo. 
+Por otro lado, en el caso inverso \cite{ortega2014generalized} exploran un esquema de muestreo llamado Muestreo de Thompson, en el cual un agente muestrea una de entre varias acciones de acuerdo a la probabilidad subjetiva que tenga el agente de que esta sea la mejor acción. Los autores conjeturan que esto pueden utilizarse para hacer inducción causal sobre una serie de acciones establecidad (política conocida).\\
+\\
+\cite{ho2016reinforcement}\\
+\subsection{Estado del arte}
+De manera más detallada, podemos ver que los diferentes enfoques que se han utilizado para la adquisición, y uso, de información causal en problemas de decisiones secuenciales pueden dividirse de la siguiente manera:
+\subsubsection{Métodos basados en actualización de grafos}
+\cite{heckerman2006bayesian}, \cite{wellen2012learning}, \cite{kummerfeld2013tracking}
+\subsubsection{Métodos basadps en representaciones del ambiente}
+\cite{ho2013knowledge}, \cite{ho2014rapid} \cite{garnelo2016towards}
+\subsubsection{Métodos basados en decisiones secuenciales}
+\cite{hagmayer2008causal}, \cite{hagmayer2013repeated}, \cite{alon2015online}, \cite{albrecht2016exploiting} \cite{lattimoreNIPS2016}, \cite{innes2018reasoning}
 \subsection{Objetivos}
 \begin{itemize}
 \item Plantear un modelo causal dado un ambiente.
