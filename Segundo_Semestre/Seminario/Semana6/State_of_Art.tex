@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, mexico]{babel}
+\usepackage{listings}
+\usepackage{breakcites}
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{amssymb,amsthm,amsmath,latexsym}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{natbib}
+%\bibliographystyle{stylename}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+\theoremstyle{plain}
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}[teo]{Proposición}
+\newtheorem{defi}[teo]{Definición}
+\newtheorem{obs}[teo]{Observación}
+\newtheorem{lem}[teo]{Lema}
+\newtheorem{cor}[teo]{Corolario}
+\usepackage[pdftex]{color,graphicx}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\title{State of The Art Circles}
+\author{Mauricio Gonzalez Soto}
+\begin{document}
+%\nocite{*}
+\maketitle
+\section{Trabajos previos}
+\subsection{Estado del arte}
+De manera más detallada, podemos ver que los diferentes enfoques que se han utilizado para la adquisición, y uso, de información causal en problemas de decisiones secuenciales pueden dividirse de la siguiente manera:
+\subsubsection{Métodos basados en actualización de grafos}
+\cite{heckerman2006bayesian}, \cite{wellen2012learning}, \cite{kummerfeld2013tracking}
+\subsubsection{Métodos basadps en representaciones del ambiente}
+\cite{ho2013knowledge}, \cite{ho2014rapid} \cite{garnelo2016towards}
+\subsubsection{Métodos basados en decisiones secuenciales}
+\cite{hagmayer2008causal}, \cite{hagmayer2013repeated}, \cite{alon2015online}, \cite{albrecht2016exploiting} \cite{lattimoreNIPS2016}, \cite{innes2018reasoning}
+\section{Limitaciones}
+\section{Motivación}
+Tomando el cuenta los trabajos mencionados, surge la pregunta de si es posible diseñar un agente que aprenda a realizar una tarea por medio de interacción con su entorno y mediante el uso de información causal recolectada a través de esa interacción. Este agente buscará aprender un modelo causal de su entorno al mismo tiempo que aprende una \textit{política}. Con cada acción que toma, el agente aprenderá  un poco sobre la \textit{estructura causal} de su entorno y utilizará este conocimiento para la futura toma de decisiones.\\
+\\
+Cada decisión que el agente toma (acción que lleva a cabo) altera el estado del mundo. La información obtenida a partir de cada acción, será utilizada para actualizar el conocimiento causal que se tenga hasta el momento, esto con el fin mejorar las decisiones que toma y para aprender otros aspectos estructurales (causales) sobre su ambiente. La intuición detrás de esto es que al aprender mediante una toma de decisiones repetida, decisiones que intervienen directamente sobre el entorno, se aprenden también relaciones causales; por ejemplo, al aprender a conducir se aprende implícitamente que ciertos movimientos del volante \textit{causan} ciertos cambios en el estado del automovil (\cite{danks2014unifying}). Otro ejemplo es en el contexto de videojuegos, en el cual al tomar ciertas decisiones se conoce el impacto que estas provocan en el estado del juego, conocimiento que a su vez es utilizado para tomar mejores decisiones en un futuro y que maximicen las recompensas u objetivos a largo plazo. No sólo hay intuición detrás de esto, pues se sabe que los seres humanos utilizan el conocimiento causal que la experiencia les provee para realizar predicciones para intervenciones en el mundo no realizadas aun (\cite{meder2008inferring}, \cite{hagmayer2009decision})\\
+\\
+El trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. De la misma manera, \cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. Por lo tanto, es interesante preguntar si un agente que busque maximizar una recompensa pueda aprender modelos causales mediante la interacción con su entorno.
+\\
+Un agente que interactua con su entorno con el fin de maximizar una recompensa efectivamente puede aprender aspectos estructurales sobre el entorno, como nos muestra \cite{garnelo2016towards}, quien además señala que el agente logra mejorar su desempeño. Además, muestran la importancia de tener una semántica que permita hablar de la estructura del entorno. Ellos utilizaron lógica de primer orden, pues están más interesados en hacer razonamientos \textit{de alto nivel} sobre el entorno, que involocura más que las relaciones causales, y por esto ellos se comprometen con lógica de primer orden, que al restringirnos al caso causal se queda corta pues los modelos gráficos probabilistas son más expresivos, además de modulares y montónicos.\\
+\\
+Mientras que \cite{garnelo2016towards} utiliza una representación lógica para escoger una acción, \cite{lattimoreNIPS2016} explora la pregunta de cómo escoger \textit{la mejor intervención} dado un modelo causal a través de una serie de intervenciones y observaciones secuenciales; por ejemplo, en el caso en el que un granjero quiera maximizar sus cosechas, y sabe que ese rendimiento está afectado por el uso de fertilizante, la humedad y la exposición al sol, pero sólo tiene los recursos para llevar a cabo sólo una de estas modificaciones en cada temporada. El algoritmo de Lattimore le dirá, después de $T$ observaciones, cuál es la mejor intervención a llevar a cabo con el fin de maximizar esa cantidad. Este podría ser un primer paso hacia responder la pregunta \textit{¿dado un modelo causal, qué acción tomar?}
+\\
+Por otro lado, en el caso inverso \cite{ortega2014generalized} exploran un esquema de muestreo llamado Muestreo de Thompson, en el cual un agente muestrea una de entre varias acciones de acuerdo a la probabilidad subjetiva que tenga el agente de que esta sea la mejor acción. Los autores conjeturan que esto pueden utilizarse para hacer inducción causal sobre una serie de acciones establecidad (política conocida).
+\bibliographystyle{apalike}
+\bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
+\end{document}
