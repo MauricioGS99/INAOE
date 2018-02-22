@@ -207,8 +207,9 @@ Todo modelo causal Markoviano induce una distribución $P(X_1,...,X_n)$ que sati
 Sabemos que dos DAG's que tienen el mismo esqueleto y las mismas v-estructuras son equivalentes, y a la clase de equivalencia le llamaremos CPDAG (\cite{goudet2017learning})
 \subsection{Intervenciones y efectos causales en modelos funcionales}
 Los modelos funcionales causales proveen una manera de estimar cómo cambiaría la distribución en respuesta a cambios externos. Lo que se hace en estos modelos es representar las intervenciones como alteraciones a un conjunto de funciones. El efecto total de la intervención se calcularía modificando las ecuaciones correspondientes y con este nuevo modelo calcular las nuevas probabilidades. Denotamos una intervención como $do(X=x)$. Se dice que una variable $X_i$ es causa directa de $X_j$ si
-\[ P_{X_j | Do(X_i = x_i} \neq P_{X_j | do(X_i = x')} \]
-\subsection{Contrafactuales en modelos funcionales}
+\[ P_{X_j | Do(X_i = x_i} \neq P_{X_j | do(X_i = x')}. \]
+
+\subsection{El enfoque Bayesiano}
 
 \section{Teoría de la Decisión}
 \subsection{von Neumann-Morgenstern}
@@ -243,18 +244,59 @@ De Finetti consideró apuestas sobre \textit{estados del mundo}. Consideremos qu
 \item A4 Monotonicidad: Para toda $x,y \in X$, si se cumple que $x_i \geq y_i$ entonces se tiene que $x \succeq y$.
 \item A5 No-trivialidad: Existen $x,y \in X$ tales que $x \succ y$.
 \end{itemize}
-Notemos que el axioma A3 sólo aplica bajo un esquema de neutralidad al riesgo.
+Notemos que el axioma A3 sólo aplica si el tomador de decisiones es neutral al riesgo (\cite{gilboa2009decision}).
 \begin{teo}
 La relación $\succeq \subseteq X \times X$ satisface A1-A5 si y sólo si existe un vector de probabilidad $p$ de tamaño $n$ tal que para toda $x,y \in X$ se cumple que
 \[ x \succeq y \textrm { si y sólo si } px \geq py. \]
 \end{teo}
 Entonces, la definición de probabilidad subjetiva sería aquella probabilidad utilizada por un tomador de decisiones para escoger una acción mediante el criterio de utilidad esperado.
 \subsection{Savage}
-El Teorema de von Neumann-Morgenstern indica cómo obtener una función de utilidad si las probabilidades están bien definidas; el Teorema de De Finnetti dice cómo obtener probabilidades si conocemos las utiidades de un tomador de decisiones. El Teorema de Savage obtiene al mismo tiempo probabilidades y utlidades. Su modelo asume sólo estados del mundo y sus resultados. Por lo tanto, los axiomas propuestos por Savage son bastante más abstractos y menos interpretables, pero se obtiene la ventaja de que sus axiomas son equivalentes a la existencia de una función de utilidad y de una medida de probabilidad (subjetiva) tales que las decisiones se llevan a cabo al maximizar utilidad esperada respecto a esta función de utilidad y esta medida de probabilidad.\\
-\subsubsection{Estados, resultados y acciones}
+El Teorema de von Neumann-Morgenstern indica cómo obtener una función de utilidad si las probabilidades están bien definidas; el Teorema de De Finnetti dice cómo obtener probabilidades si conocemos las utiidades de un tomador de decisiones. El Teorema de Savage obtiene al mismo tiempo probabilidades y utlidades. Su modelo asume sólo estados del mundo y sus resultados. Por lo tanto, los axiomas propuestos por Savage son bastante más abstractos y menos interpretables, pero se obtiene la ventaja de que sus axiomas son equivalentes a la existencia de una función de utilidad y de una medida de probabilidad (subjetiva) tales que las decisiones se llevan a cabo al maximizar utilidad esperada respecto a esta función de utilidad y esta medida de probabilidad.
+
+\subsection{Formalismo moderno}
+\subsubsection{Problema de Decisión}
+\begin{defi}
+Un problema de decisión es la situación en la cual un agente (llamado tomador de decisiones) se enfrenta a un conjunto de decisiiones $D$ de entre las cuales tiene que escoger una.
+\end{defi}
+Basado en \cite{Bernardo1985}, \cite{bernardo2000bayesian}, \cite{gilboa2009decision}, tenemos que los elementos que componen un problema de decisión son:
+\begin{itemize}
+\item Un espacio de medida $(\Omega, \mathcal{E})$
+\item Un conjunto $\{d_i, i \in I\}$ llamado conjunto de decisiones, también llamadas acciones u opciones.
+\item Para cada $d_i \in D$, una partición $E_i= \{E_{ij}, j \in J \}$ de $\mathcal{E}$ de \textit{eventos inciertos}.
+\item Correspondiente a cada $E_i$, un conjunto de consecuencias $C_i = \{ c_{ij}, j \in J \}$.
+\item Una relación de orden $\preceq$ sobre $D \times D$
+\end{itemize}
+Notemos que las particiones asociadas a cada decisión no tienen por qué ser iguales, pero siempre podemos construir
+\[ E = \cap_{i \in I} A_i \textrm{ donde } A_i \in E_i. \]
+De modo que en el futuro supondremos, sin perdida de generalidad, que es una misma partición para todas las decisiones, y por lo tanto un solo conjunto de consecuencias, por lo que la notación utilizada para representar cada posible decisión es la siguiente $d_i = \{ c_j | E_j, j \in J\}$ lo cual se interpreta como que al escoger $d_i$, ocurrirá uno de los eventos inciertos dentro de la partición $E$, digamos, $E_j$ y eso trae como consecuencia $c_j$. Además, notemos que el orden de los índices es irrelevante, pues la opción $\{ c_1 | E, c_2 | E^c \}$ es la misma que $\{ c_2 | E^c, c_1 | E \}$.
+\begin{defi}
+Diremos que un problema de decisión es sin incertidumbre si para cada $d_i \in D$ se tiene que $C_i = \{c_i\}$; es decir,  el conjunto de consecuencias posibles  asociadas a la decisión $d_i$ consta de un solo elemento.
+\end{defi}
+\begin{defi}
+Análogamente, un problema de decisión para el cual se tiene que para al menos un elemento $d_i \in D$ existe más de una posible consecuencia se dice que es un problema de decisión con incertidumbre.
+\end{defi}
+Como requerimiento técnico, necesitamos que todos los elementos del conjunto de consecuencias pertenezcan al conjunto de opciones; esto se logra identificando cada consecuencia como la opción $\{c|\Omega \}$. Siguiendo esta notación, podemos definir una relación de preferencias entre consecuencias a partir de la relación de preferencia entre opciones de la siguiente manera
+\[ c_1 \leq c_2 \Leftrightarrow \{ c_1 | \Omega \} \preceq \{ c_2 | \Omega \}.\]
+A través de un razonamiento análogo, odemos definir una noción de qué tan \textit{creíble} es un evento incierto para un tomador de decisiones a partir de sus preferencias sobre las acciones de la siguiente manera
+\begin{defi}
+Se dice que un evento más creible que otro como
+\[E \leq F \Leftrightarrow \textrm{ para todo } c_1 < c_2 \{ c_2 | E, c_1 | E^c \} \preceq \{ c_2 | F, c_1 | F^c \} \]
+\end{defi}
+Esto permite definir una relación de preferencia a la luz de la ocurrencia de algún evento incierto
+\begin{defi}
+Para cualquier evento $G$ distinto del vacío, definimos:
+\begin{itemize}
+\item $d_1 \leq_G d_2 \Leftrightarrow \textrm{ para toda opción } d \textrm{ se tiene que } \{d_1 | G, d | G^c \} \preceq \{ d_2 | G, d | G^c\}$
+\item $c_1 \leq_G c_2 \Leftrightarrow \{ c_1 | \Omega \} \leq_G \{ c_2 | \Omega \}$.
+\item $E \leq_G F \Leftrightarrow \textrm{ para } c_1 \leq_G c_2, \{ c_2 | E, c_1 | E^c \} \leq_G \{ c_2 | F, c_1 | F^c \} $
+\end{itemize}
+\end{defi}
+\subsubsection{Axiomas de coherencia}
+
+\subsection{Problemas de Decisión Secuenciales}
 \section{Aprendizaje por Refuerzo}
 \subsection{Definición}
-El Aprendizaje por Refuerzo (RL) (\cite{sutton1998reinforcement}) consiste en un \textit{framework} general en el cual un \textit{agente} aprende a llevar a cabo una tarea a través de la interacción con su entorno. Estas interacciones provocan cambios en el entorno, los cuales a su vez afectarán el comportamiento del agente. El comportamiento del agente está caracterizado en términos de acciones y las acciones tomadas por este afectan el \textit{estado} del ambiente. A su vez, el ambiente devuelve información al agente en términos de una recompensa o ganancia según el estado en el que se encuentre. El objetivo del agente es encontrar una serie de acciones que lo lleven a lograr su objetivo final. La función de recompensa codifica qué es lo que se desea que el agente aprenda, pues esta función devuelve un valor para cada estado y con esto el agente asignará un valor a cada estado según la ganancia a largo plazo que un este representa.\\
+El Aprendizaje por Refuerzo (RL) (\cite{sutton1998reinforcement}) consiste en un \textit{framework} general en el cual un \textit{agente} aprende a llevar a cabo una tarea a través de la interacción con su entorno. Estas interacciones, representadas como decisiones que el agente toma, provocan cambios en el entorno, los cuales a su vez afectarán el comportamiento del agente. El comportamiento del agente está caracterizado en términos de acciones y las acciones tomadas por este afectan el \textit{estado} del ambiente. A su vez, el ambiente devuelve información al agente en términos de una recompensa o ganancia según el estado en el que se encuentre. El objetivo del agente es encontrar una serie de acciones que lo lleven a lograr su objetivo final. La función de recompensa codifica qué es lo que se desea que el agente aprenda, pues esta función devuelve un valor para cada estado y con esto el agente asignará un valor a cada estado según la ganancia a largo plazo que un este representa.\\
 \\
 La diferencia fundamental entre el aprendizaje por refuerzo y el aprendizaje supervisado o no supervisado consiste en la existencia de una retroalimentación posiblemente retrasada y la consideración de horizontes de tiempo; un agente de RL busca maximizar ganancias \textit{a largo plazo}.\\
 \\
@@ -313,7 +355,8 @@ Q^\ast &=& r_{t+1} + \gamma \max_{a_{t+1}} r_{t+2} + \gamma^2 \max_{a_{t+2}} r_{
 &=& r_{t+1} + \gamma \max_{a_{t+1}} Q^{\ast} (s_{t+1},a_{t+1}).
 \end{eqnarray*}
 Formalmente:
-\[ Q^\ast(s,a)=\mathbb{E}_{s'} [r + \gamma \max_{a'} Q^\ast(s',a')|s,a] \]
+\[ Q^\ast(s,a)=\mathbb{E}_{s'} [r + \gamma \max_{a'} Q^\ast(s',a')|s,a]. \]
+\subsubsection{Relación con problemas de decisión bajo incertidumbre}
 \subsection{Métodos básicos de solución: Model-based}
 \subsubsection{Programación Dinámica}
 Los métodos de programación dinámica tienen muy buen fundamento teórico, pero requieren una especificación completa del ambiente. La idea fundamental en programación dinámica es poder asignar a cada estado del sistema un valor numérico que represente el retorno esperado, a largo plazo, de ese estado; es decir, estamos valorando cada estado según lo que esperemos obtener de él a muy largo plazo. \\
@@ -427,6 +470,8 @@ Los métodos \textit{actor-critic}, combinan las vetajas de ambos mundos. Mientr
 Los métodos de Policy Gradients optimizan directamente la recompensa acumulada y pueden utilizarse junto con aproximadores no-lineales como las redes neuronales. Este método presenta dos grandes retos: el número de muestras de entrenamiento requeridos y la dificultad de obtener mejoras estables debido a la no-estacionariedad de los datos.  \cite{DBLP:journals/corr/SchulmanMLJA15} atacan el primer problema se puede atacar utilizando value functions para reducir la varianza de los estimados. El segundo problema se ataca utilizando un método de región de confianza tanto para la política como para la value function, los cuales están representados por redes neuronales.\\
 \subsubsection{Trust Region Policy Optimization}
  \cite{DBLP:journals/corr/SchulmanLMJA15} Proponen “Trust Region Policy Optimization”, Procedimiento iterativo para optimizar políticas con mejora monótona garantizada. Es un algoritmo similar a Policy Gradients y resulta útil para optimizar políticas con redes neuronales. Buen performance en juegos de Atari que utilizan la pantalla como input.
+
+ 
 \section{Reinforcement Learning y Causalidad}
 Aprendemos causalidad mediante intervenciones, interacciones, etc. Reinforcement Learning es aprender a realizar tareas mediante interacción. ¿Habrá algo en medio?
 \subsection{Conocimiento causal y observabilidad parcial}
@@ -442,7 +487,8 @@ Desde un punto de vista de psicología, una manear de entender la inferencia de 
 \\
 Un primer acercamiento a este problema puede hacerse mediante técnicas de inferencia Bayesiana no paramétrica. Por ejemplo, tanto \cite{gershman2010learning} como \cite{gershman2012exploring} utilizan priors no paramétricas para hacer inferencia sobre causas latentes. Un modelo causal latente es una buena representación de la estructura causal verdadera bajo condicionamiento Pavloviano, pues es el experimentador quien es una causa latente.\\
 \\
-En líneas más avanzadas, \cite{courville2006bayesian} exploraron versiones que permiten que múltiples causas latentes estén activas.
+En líneas más avanzadas \cite{courville2006bayesian} exploraron versiones que permiten que múltiples causas latentes estén activas.
+
 \subsection{Towards Deep Symbolic Reinforcement Learning}
 Deep Reinforcement Learning (DRL) consiste, básicamente, en utilizar una red profunda para aproximar la $Q$-function; por lo tanto, los métodos de DRL heredan los problemas del Deep Learning: se requiere un gran volumen de datos, son muy lentas en entrenarse y, según \cite{garnelo2016towards}, son esencialmente \textit{reactivos}, lo que significa que no utilizan procedimientos de alto nivel como planeación o razonamiento causal, además de que no son interpretables.\\
 \\
@@ -526,6 +572,8 @@ Mientras que \cite{garnelo2016towards} utiliza una representación lógica para 
 Por otro lado, en el caso inverso \cite{ortega2014generalized} exploran un esquema de muestreo llamado Muestreo de Thompson, en el cual un agente muestrea una de entre varias acciones de acuerdo a la probabilidad subjetiva que tenga el agente de que esta sea la mejor acción. Los autores conjeturan que esto pueden utilizarse para hacer inducción causal sobre una serie de acciones establecidad (política conocida).\\
 \\
 \cite{ho2016reinforcement}\\
+\\
+\cite{ortega2015causal}
 \subsection{Estado del arte}
 De manera más detallada, podemos ver que los diferentes enfoques que se han utilizado para la adquisición, y uso, de información causal en problemas de decisiones secuenciales pueden dividirse de la siguiente manera:
 \subsubsection{Métodos basados en actualización de grafos}
