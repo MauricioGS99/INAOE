@@ -1,0 +1,23 @@
+---
+title: "State of the Art"
+author: "Mauricio Gonzalez"
+date: "28/2/2018"
+output:
+  beamer_presentation: default
+  ioslides_presentation: default
+  slidy_presentation: default
+bibliography: /Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib
+---
+
+# Introduction
+## Problem
+
+# State of The Art
+
+## Local updating
+
+## Environment representations
+
+## Sequential decision making
+
+## Bayesian games
