@@ -648,16 +648,25 @@ El problema que \cite{lattimoreNIPS2016} estudian consiste en utilizar modelos c
 
 \cite{innes2018reasoning} consideran un ejemplo similar al que se mencionó anteriormente, y consideran el caso en el cual aparezcan situaciones sobre las cuales no se sabe nada. Proponen un modelo que descubre y aprende a explotar situaciones no vistas antes, esto lo hacen mediante exploración con el mundo y mediante comunicación con un experto. Extienden resultados de \cite{bramley2015staying} y \cite{albrecht2016exploiting} quienes suponen que las conjunto de variables aleatorias no cambia durante el entrenamiento. Además, incluyen la posibilidad de aprender los pagos potenciales.
 \subsubsection{Juegos Bayesianos con información incompleta}
-
+Un ejemplo:\\
+Supongamos que un paciente que llega a un hospital puede tener un padecimiento $A$ con probabilidad $p$ o $B$ con probabilidad $q$. El médico de guardia tiene a su alcance tres tratamientos posibles: cirugía, fármaco o nada. En caso de no hacer nada, el paciente morirá con una probabilidad $p_{dn}=0.8$ y sobrevivirá con una probabilidad $1-p_d$. Sin importar la enfermedad, el paciente puede morir durante la cirugía con probabilidad $p_{dc}=0.5$. De la misma manera, el medicamento producirá una reacción alérgica mortal con probabilidad $p_{df}=0.2$\\
+\\
+Si el paciente tenía la enfermedad $A$, y no muere de una reacción alérgica al fármaco, entonces el fármaco le curará con una probabilidad de $p_{sf}=0.9$. Si el paciente tenía la enfermedad $B$, entonces el fármaco no le curará y morirá.\\
+\\
+Por otro lado, si el paciente sobrevive a la cirugía, ésta le curará con una probabilidad de $0.5$ si el paciente tenía la enfermedad $A$. Si el paciente tenía la enfermedad $B$, entonces ésta lo curará con probabilidad de $0.6$. \qed
+\\
+Entonces, en este ejemplo, tenemos que el juego consiste en el médico, y en la Naturaleza. Las acciones disponibles al médico son el fármaco, cirugía, o nada, mientras que las jugadas de la Naturaleza son \textit{volados} que determinarán si el paciente vive o no; el juego va así, primero la naturaleza hace su jugada, lo cual determina qué enfermedad tenía el paciente. Después, el médico decide qué hacer, y después la Naturaleza lanzará una moneda cargada que determinará si el paciente sobrevive. Notemos que, de manera latente, es un modelo causal el que determina que el fármaco no cura la enfermedad B, o que éste causa alergias, etc. 
+\\
+Sabemos que el médico fue a la escuela de medicina, de donde posee una gran cantidad de información (causal) a priori, pero puede que se esté enfrentando a una nueva enfermedad, es decir, no conoce realmente las probabilidades de muerte ni los casos en que el fármaco no actua. Lo que se desea es que a partir de este caso, o de varios más, pueda actualizar su conocimiento causal para la siguiente ocasión en la que deba enfrentarse a  un problema similar.
 
 
 \subsection{Objetivos}
 \begin{itemize}
-\item Plantear un modelo causal dado un ambiente.
-\item Aprendizaje estructural del modelo causal.
-\item Evaluación del modelo causa (queries significativas)l.
-\item Incorporar el conocimiento causal a la toma de decisiones en un loop de mejora continua.
-\item Exportar conocimiento causal obtenido para hacer inferencia causal.
+\item Estudiar la relación entre un problema de decisión secuencial y un juego vs la Naturaleza.
+\item Definición de creencias subjetivas sobre las relaciones causales de un ambiente.
+\item Definición de un lenguaje que permita incluir información causal en toma de decisiones: diagramas de influencia causales.
+\item Actualización de creencias sobre las relaciones causales a la luz de lo observado por el jugador.
+\item Evaluación del desempeño del jugador según el criterio de la máxima utilidad esperada
 \end{itemize}
 \subsection{La propuesta}
 Considerando un entorno incierto y dinámico en el cual existen relaciones causales subyacentes y un agente con acceso información limitada sobre este entorno, se propone que dicho agente descubra y utilice información causal con el fin de resolver una tarea
