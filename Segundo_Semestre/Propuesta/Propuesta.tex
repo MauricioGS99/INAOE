@@ -212,7 +212,8 @@ Los modelos funcionales causales proveen una manera de estimar cómo cambiaría 
 \subsection{El enfoque Bayesiano}
 
 \section{Teoría de la Decisión}
-\subsection{von Neumann-Morgenstern}
+\subsection{Un poco de historia}
+\subsubsection{von Neumann-Morgenstern}
 Según narra \cite{gilboa2009decision}, fue Daniel Bernoulli quién habló por primera vez de la maximización de la utildiad esperada; esto, al estudiar la \textit{paradoja de San Petersburgo}, la cual consiste en lo siguiente: un tomador de decisiones se enfrente a una serie de lanzamientos consecutivos de una moneda justa. Se considera un juego basado en los resultados de estas monedas, el cual terminará la primera vez que la moneda arroje una cara, y si esto ocurriera en el $n$-ésimo lanzamiento, el concursante recibirá $2^n$ pesos. La \textit{paradoja} consiste en que la mayoría de las personas, según registró Bernoulli, sólo está dispuesta a pagar una cantidad finita de dinero por entrar a este juego, cuyo valor esperado es infinito. La paradoja fue resuelta cuando Bernoulli se dio cuenta que las personas estaban maximizando el valor esperado de una \textit{función de utilidad}, pero no directamente el valor esperado del dinero. Resulta que si esta función es logarítmica, entonces la utilidad esperada es finita. \\
 \\
 El Teorema original de von Neumann y Morgenstern está formulado en términos de árboles de decisión y loterías compuestas. Más tarde \cite{jensen1967introduction} lo formuló de manera más compacta al suponer que las loterías compuestas son simplificadas de acuerdo a la fórmula de Bayes.\\
@@ -233,7 +234,7 @@ Una relación $\succeq L \times L$ satisface los axiomas A1 - A3 si y sólo sí 
 \[ \sum_{x \in X} P(x) u(x) \geq \sum_{x \in X} Q(x) u(x).  \]
 \end{teo}
 Este Teorema dice que para un tomador de decisiones racional (es decir, que se comporta según los axiomas) existe una función de utilidad tal que las preferencias del tomador de decisiones son equivalentes a maximizar una utilidad esperada.
-\subsection{De Finnetti}
+\subsubsection{De Finnetti}
 ¿Cuál es la definición de probabilidad subjetiva? \cite{gilboa2009decision} sugiere que para saber qué son debemos explorar cómo se usan estas, y una posible manera de uso es al maximizar una utilidad esperara y esto es lo que hace el Teorema de DeFinnetti.\\
 \\
 De Finetti consideró apuestas sobre \textit{estados del mundo}. Consideremos que existen $1,...,n$ estados en el mundo. Una apuesta es una función que toma valores en el espacio de estados y los mapea a valores monetarios; es decir, una apuesta $x$ es un vector de $n$ elementos en donde $x_i$ es la ganancia en el caso de que la apuesta resulte en el estado $i$ como el ganador. Consideramos una relación $\succeq \subseteq X \times X$. Y consideremos los siguientes axiomas:
@@ -250,7 +251,7 @@ La relación $\succeq \subseteq X \times X$ satisface A1-A5 si y sólo si existe
 \[ x \succeq y \textrm { si y sólo si } px \geq py. \]
 \end{teo}
 Entonces, la definición de probabilidad subjetiva sería aquella probabilidad utilizada por un tomador de decisiones para escoger una acción mediante el criterio de utilidad esperado.
-\subsection{Savage}
+\subsubsection{Savage}
 El Teorema de von Neumann-Morgenstern indica cómo obtener una función de utilidad si las probabilidades están bien definidas; el Teorema de De Finnetti dice cómo obtener probabilidades si conocemos las utiidades de un tomador de decisiones. El Teorema de Savage obtiene al mismo tiempo probabilidades y utlidades. Su modelo asume sólo estados del mundo y sus resultados. Por lo tanto, los axiomas propuestos por Savage son bastante más abstractos y menos interpretables, pero se obtiene la ventaja de que sus axiomas son equivalentes a la existencia de una función de utilidad y de una medida de probabilidad (subjetiva) tales que las decisiones se llevan a cabo al maximizar utilidad esperada respecto a esta función de utilidad y esta medida de probabilidad.
 
 \subsection{Formalismo moderno}
@@ -293,9 +294,34 @@ Para cualquier evento $G$ distinto del vacío, definimos:
 \end{defi}
 \subsubsection{Axiomas de coherencia}
 
-\subsection{Problemas de Decisión Secuenciales}
+\subsection{Decisiones Secuenciales y Teoría de Juegos}
+Teoría de Juegos (\cite{von1944theory}, \cite{osborne1994course}, \cite{webb2007game}, \cite{gintis2014bounds}) consiste en el estudio de las interacciones entre tomadores de decisiones en donde cada uno de los cuales busca un objetivo bien definido. \\
+\\
+Un juego está formador por (\cite{osborne1994course})
+
+\subsubsection{Juegos Bayesianos}
+Un juego Bayesiano consiste (\cite{osborne1994course}) en 
+\begin{itemize}
+\item Un conjunto finito de jugadores $N$.
+\item Un conjunto finito de estados $S$.
+\end{itemize}
+Para cada jugador $i \in N$
+\begin{itemize}
+\item Un conjunto $A(i)$ de las acciones disponibles al jugador $i$.
+\item Un conjunto finito $T(i)$ se señales observadas por el jugador $i$
+\item Una función de señales $\tau_i : \Omega \to T_i$ del jugador
+\item Una medida de probabilidad $p_i$ sobre los estados $S$ tal que asigna masa estrictamente mayor a cero a los estados que generan las 
+señales.
+\item Una relación de preferencias $\preceq$ sobre el conjunto de medidas de probabilidad que están definidas sobre $A \times S$
+\end{itemize}
+\subsubsection{Información causal y juegos}
+Notemos que los juegos Bayesianos permiten que cada jugador tenga creencias a priori sobre el estado de la naturaleza (toda la información relevante sobre los otros jugadores). Entonces, es natural pensar que esta información que tiene sea sobre las relaciones causales que se sostienen en el entorno del juego.\\
+\\
+Para hacer más explícita esta situación, consideremos que la Naturaleza es un jugador más el cual actúa según otros modelos. De esta manera, al suponer que existen relaciones causales que rigen el ambiente, estas relaciones causales guiarán los actos del jugador Naturaleza.\\
+
 \section{Diagramas de Influencia}
-\section{Juegos Bayesianos}
+
+
 \section{Aprendizaje por Refuerzo}
 \subsection{Definición}
 El Aprendizaje por Refuerzo (RL) (\cite{sutton1998reinforcement}) consiste en un \textit{framework} general en el cual un \textit{agente} aprende a llevar a cabo una tarea a través de la interacción con su entorno. Estas interacciones, representadas como decisiones que el agente toma, provocan cambios en el entorno, los cuales a su vez afectarán el comportamiento del agente. El comportamiento del agente está caracterizado en términos de acciones y las acciones tomadas por este afectan el \textit{estado} del ambiente. A su vez, el ambiente devuelve información al agente en términos de una recompensa o ganancia según el estado en el que se encuentre. El objetivo del agente es encontrar una serie de acciones que lo lleven a lograr su objetivo final. La función de recompensa codifica qué es lo que se desea que el agente aprenda, pues esta función devuelve un valor para cada estado y con esto el agente asignará un valor a cada estado según la ganancia a largo plazo que un este representa.\\
@@ -553,31 +579,6 @@ En cuanto a la formulación de un problema de decisión en sistemas causales, ya
 \subsection{Experimentos secuenciales: Causal Bandits}
 El problema que \cite{lattimoreNIPS2016} estudian consiste en utilizar modelos causales para aprender a escoger intervenciones en un entorno incierto; esto es, dado un modelo causal, se busca escoger la intervención que maximice cierta variable de recompensa sujeto a ciertas restricciones. Modelan el escoger intervenciones como \textit{brazos} de una máquina tragamonedas (conocidas como \textit{bandits} en la literatura. La influencia de estas intervenciones en la variable de pago se rige por un modelo causal conocido. Comentan que una generalización mucho más complicada sería en el caso en el que el modelo causal sea completa o parcialmente desconocido y miembro de una gran clase de modelos.
 
-\subsection{Toma de Decisiones Bajo Incertidumbre y Teoría de Juegos}
-Teoría de Juegos (\cite{von1944theory}, \cite{osborne1994course}, \cite{webb2007game}, \cite{gintis2014bounds}) consiste en el estudio de las interacciones entre tomadores de decisiones en donde cada uno de los cuales busca un objetivo bien definido. \\
-\\
-Un juego está formador por (\cite{osborne1994course})
-
-\subsubsection{Juegos Bayesianos}
-Un juego Bayesiano consiste (\cite{osborne1994course}) en 
-\begin{itemize}
-\item Un conjunto finito de jugadores $N$.
-\item Un conjunto finito de estados $S$.
-\end{itemize}
-Para cada jugador $i \in N$
-\begin{itemize}
-\item Un conjunto $A(i)$ de las acciones disponibles al jugador $i$.
-\item Un conjunto finito $T(i)$ se señales observadas por el jugador $i$
-\item Una función de señales $\tau_i : \Omega \to T_i$ del jugador
-\item Una medida de probabilidad $p_i$ sobre los estados $S$ tal que asigna masa estrictamente mayor a cero a los estados que generan las 
-señales.
-\item Una relación de preferencias $\preceq$ sobre el conjunto de medidas de probabilidad que están definidas sobre $A \times S$
-\end{itemize}
-\subsubsection{Información causal y juegos}
-Notemos que los juegos Bayesianos permiten que cada jugador tenga creencias a priori sobre el estado de la naturaleza (toda la información relevante sobre los otros jugadores). Entonces, es natural pensar que esta información que tiene sea sobre las relaciones causales que se sostienen en el entorno del juego.\\
-\\
-Para hacer más explícita esta situación, consideremos que la Naturaleza es un jugador más el cual actúa según otros modelos. De esta manera, al suponer que existen relaciones causales que rigen el ambiente, estas relaciones causales guiarán los actos del jugador Naturaleza.\\
-
 \section{Mi Propuesta}
 \subsection{Pregunta de Investigación}
 ¿Es posible aprender un modelo causal del ambiente en un proceso de toma de decisiones secuencial?
@@ -628,11 +629,11 @@ De manera más detallada, podemos ver que los diferentes enfoques que se han uti
 \cite{kummerfeld2013tracking}
 \cite{bramley2017formalizing}
 \subsubsection{Representaciones del ambiente}
-En una serie de trabajos (\cite{ho2013knowledge}, \cite{ho2014rapid}, \cite{ho2016ground}, \cite{ho2016principles}, \cite{ho2016cognitively}) que culminan en \cite{ho2016reinforcement}, los autores explican cómo un sistema podría construir una serie de reglas lógicas que codifiquen las relaciones causales encontradas. De esta manera, el agente consultará este conjunto de reglas para la futura toma de decisiones. Aunque las intuiciones son interesantes, no proponen un algoritmo sólido para llevar a cabo lo que plantean. \\
+En una serie de trabajos (\cite{ho2013knowledge}, \cite{ho2014rapid}, \cite{ho2016ground}, \cite{ho2016principles}, \cite{ho2016cognitively}) que culminan en \cite{ho2016reinforcement}, los autores explican cómo un sistema podría construir una serie de reglas lógicas que codifiquen las relaciones causales encontradas. En particular, en \cite{ho2016ground} muestran cómo es posible descubrir relaciones causales a partir de la observación de eventos que ocurren de manera sucesiva en el tiempo, como relámpagos y truenos o disparos y “dolor”. Su algoritmo es capaz de distinguir estas relaciones de otros factores externos. Es importante mencionar que para ellos basta descubrir causalidad \textit{efectiva}; es decir, relaciones causales que puedan utilizarse sin la necesidad de saber si eran verdaderas o no; es decir, que sirvan a la hora de resolver un problema. Posteriormente, en \cite{ho2016reinforcement} utilizan el método desarrollado en \cite{ho2014rapid} para construir \textit{scripts} que son reglas que, a partir de las relaciones causales, describen el resultado de tomar cierta acción. Finalmente, utilizan un proceso de encadenamiento hacia atrás para encontrar la mejor serie de acciones a seguir.  En resumen, un agente primero observará un \textit{stream} de eventos, con lo que construirá reglas locales, luego el agente consultará este conjunto de reglas para la futura toma de decisiones. Notemos que no es un procedimiento que se lleve a cabo de manera \textit{on-line}.
 \\
- Un agente que interactua con su entorno con el fin de maximizar una recompensa efectivamente puede aprender aspectos estructurales sobre el entorno, como nos muestran\cite{garnelo2016towards}, quienes construyen un prototipo muy sencillo en el cual un agente construye reglas lógicas a partir de interacciones con el ambiente, las cuales son utilizadas directamente para escoger la siguiente acción a tomar. Todo su diseño está orientado en aprender a jugar un sencillo juego a partir de los pixeles de la pantalla. Además, muestran la importancia de tener una semántica que permita hablar de la estructura del entorno. Ellos utilizaron lógica de primer orden, pues están más interesados en hacer razonamientos \textit{de alto nivel} sobre el entorno, que involocura más que las relaciones causales, y por esto ellos se comprometen con lógica de primer orden, que al restringirnos al caso causal se queda corta pues los modelos gráficos probabilistas son más expresivos, además de modulares y montónicos
+Como nos muestran\cite{garnelo2016towards} un agente que interactua con su entorno con el fin de maximizar una recompensa efectivamente puede aprender aspectos estructurales sobre el entorno de manera \textit{on-line}. Los autores construyen un prototipo muy sencillo en el cual un agente construye reglas lógicas a partir de interacciones con el ambiente, las cuales son utilizadas directamente para escoger la siguiente acción a tomar. Todo su diseño está orientado en aprender a jugar un sencillo juego a partir de los pixeles de la pantalla. Además, muestran la importancia de tener una semántica que permita hablar de la estructura del entorno. Ellos utilizaron lógica de primer orden, pues están más interesados en hacer razonamientos \textit{de alto nivel} sobre el entorno, que involocura más que las relaciones causales, y por esto ellos se comprometen con lógica de primer orden, que al restringirnos al caso causal se queda corta pues los modelos gráficos probabilistas son más expresivos, además de modulares y montónicos.
 \subsubsection{Decisiones secuenciales}
-El trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. De la misma manera, \cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones. Por lo tanto, es interesante preguntar si un agente que busque maximizar una recompensa pueda aprender modelos causales mediante la interacción con su entorno.
+El trabajo de \cite{wellen2012learning} muestra cómo un modelo gráfico causal podría ser aprendido en línea al tomar en cuenta las decisiones tomadas y las recompensas obtenidas por un tomador de decisiones. Por otro lado, los modelos de \cite{sloman2006causal}, \cite{meder2008inferring}, \cite{hagmayer2009decision} y \cite{hagmayer2013repeated} muestran que estas intuiciones no son erradas y que los seres humanos incorporamos y adquirimos conocimiento causal al enfrentarnos en problemas de toma de decisión simples, aunque aun no existen muchos estudios en los cuales los escenarios de decisión no sean hipotéticos sino que se intente maximizar una recompensa real a largo plazo. De la misma manera, \cite{hagmayer2013repeated} mencionan que faltan estudios en donde las personas tengan otro objetivo más allá de revelar directamente la estructura causal del entorno y en los cuales vean directamente las consecuencias de sus acciones.
 
 
 \cite{hagmayer2008causal}, 
@@ -678,13 +679,12 @@ Considerando un entorno incierto y dinámico en el cual existen relaciones causa
 \item Dado un sencillo problema de decisión bajo incertidumbre completamente especificado, plantear un juego y estudiarlo.
 \item Suponer un modelo causal, conocido, que controla las jugadas de la Naturaleza, ¿cómo rastrearlo?
 \item Dotar al jugador de creencias causales, ¿cómo especificarlas?
-\item Tengo un modelo causal \textit{verdadero}, ¿cómo lo incorporo en una política de RL? ¿cómo guío el descubrimiento de acciones? Aquí ayuda el artículo de \cite{lattimoreNIPS2016}
-\item Tengo una política aprendida, ¿cómo descubro estructura causal? Aquí puede ayudar el artículo de \cite{ortega2014generalized}
-\item ¿Qué aprendo primero?
-\item ¿Cómo le doy más peso a la información explicativa que a la información reactiva?
-\item Exploración vs explotación causal: ¿cómo decido si seguir la info causal o tomar acciones exploratorias para descubrir relaciones causales? 
-\item ¿Un dominio de interés? 
+\item ¿cómo actualizar creencias causales?
+\item Diseño de lenguaje para ello
+\item Evaluación
 \end{itemize}
+\subsection{Ejemplo}
+Aquí iría con más detalle el ejemplo del paciente pero haciendo énfasis en el paso a paso para lo causal
 \subsection{Ejemplo: Caso de un MDP finito}
 En el caso de un MDP finito completamente especificado; es decir, en el cual conocemos las probabilidades de transición y las recompensas. Un modelo causal sobre este dominio opera sobre las acciones, pues son estas las que \textbf{\textit{suponemos}} que \textit{causan} algo; esto es, 
 \[ a \xrightarrow[]{\text{causa}} \textrm{estado del mundo}. \]
