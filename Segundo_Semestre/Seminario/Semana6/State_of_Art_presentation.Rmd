@@ -3,7 +3,9 @@ title: "State of the Art"
 author: "Mauricio Gonzalez"
 date: "28/2/2018"
 output:
-  beamer_presentation: default
+  beamer_presentation:
+   includes:
+    in_header: header_pagenrs.tex
   ioslides_presentation: default
   slidy_presentation: default
 bibliography: /Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib
@@ -11,13 +13,85 @@ bibliography: /Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.b
 
 # Introduction
 ## Problem
+- Acquiring and using causal knowledge in a sequential decision-making process.
 
 # State of The Art
-
-## Local updating
-
 ## Environment representations
+- In a series of papers, Seng-Beng Ho explains how to build a series of rules that encode causal relations found by exploration.
+- In particular, in [@ho2016ground] they show how to discover (effective) causal relations in a stream of events where chronological order is important (e.g. lightning -> thunder)
+- In [@ho2016reinforcement] they use the results of [@ho2014rapid] to build “scripts” that encode the local causal relations in order to choose actions.
+- It is not an on-line procedure.
+
+----
+
+## Environment representations 2
+- On the other side, it is shown by [@garnelo2016towards] that an agent can build on-line representations of the environment.
+- They build a first-order logic representation which is then used to choose the next action.
+- Not mainly focused on causal learning, but can be realized upon this learned representation.
+- Small prototype designed ad-hoc.
+
+----
 
 ## Sequential decision making
+- A “bandit” is a slot machine in which you pull the lever and observe a reward.
+- Used to mode sequential decision making: choose an action, observe reward.
+- [@lattimoreNIPS2016] model how to choose inverventions in uncertain environment.
+- They model each possible intervention as arms of a bandit.
+- Fully specified causal model needed.
 
-## Bayesian games
+----
+
+## Sequential decision making 2
+- Thompson sampling: sample actions accordingly to (subjective) probability in action's optimality.
+- [@ortega2014generalized] proposes Thompson sampling for causal induction.
+- Agent samples parameter from beliefs, then chooses action as if parameter was true.
+- Intervention and Bayesian updating.
+- Not on-line
+
+----
+
+## Sequential decision making 2
+- [@innes2018reasoning] shows how to incorporate unseen possibilities via environment exploration and expert advise. 
+- Agent revises model of decision problem.
+- Single-stage decision making.
+- Extending results from [bramley2015staying] and [@albrecht2016exploiting] where set of variables was assumed to remain fixed.
+
+----
+
+## Bayesian Games and Belief updating
+- [@bjorndahl2016bayesian] difference between intended and actual strategies
+- [@mansour2015bayesian] & [mansour2016bayesian]: incentive-compatible exploration. When a “social planner” suggests actions.
+- [@larrouy2017mindreading] psychological (but rational) construction of beliefs.
+- [@amir2016endogenous] paying for extra information
+
+# Idea of evaluation
+## Max Expected Utility
+- For a fully specified decision problem under uncertainty and a preference relations that satisfies Savage's axioms there exists a formal criterion for acting: max expected utility.
+- If parameters are unknown, but agent has prior causal knowledge which will be updated in each round, the decisions used this learned model must be similar to MEU.
+- Bayesian games with incomplete information allow for this belief updating.
+
+----
+
+## Simple toy example
+- Patient come to a hospital and he can have eithe disease A or disease B.
+- Medic can choose between doing nothing (N), give some pill (p) or sugery (s).
+- If nothing is done, patient will die with probability 0.8.
+
+----
+
+- If medic choses surgery, patient can die, but if he survives and he had disease A, he will be cured with probability 0.5 or will not have any effect.
+- If he had disease B, surgery saves him with probability 0.6
+
+----
+
+- If pill is given, he can die of allergic reaction, but if he survives and had disease A the pill cures him with probability 0.9.
+- If he has disease B, pill has no effect.
+
+----
+
+- Now, suppose that this is a new disease, so the medic doesn't know exactly the probabilities.
+- But he has previous causal info, from med school (e.g. pills cure anything always).
+- He must update this info from experience in order to act as best as possible (bounded by MEU).
+- Forget about ethics, this is only a mental experiment.
+
+----
