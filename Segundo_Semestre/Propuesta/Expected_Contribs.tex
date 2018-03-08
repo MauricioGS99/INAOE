@@ -1,0 +1,75 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, mexico]{babel}
+\usepackage{listings}
+\usepackage{breakcites}
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{amssymb,amsthm,amsmath,latexsym}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{natbib}
+%\bibliographystyle{stylename}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+\theoremstyle{plain}
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}[teo]{Proposición}
+\newtheorem{defi}[teo]{Definición}
+\newtheorem{obs}[teo]{Observación}
+\newtheorem{lem}[teo]{Lema}
+\newtheorem{cor}[teo]{Corolario}
+\usepackage[pdftex]{color,graphicx}
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\title{Survey}
+\author{Mauricio Gonzalez Soto}
+\begin{document}
+%\nocite{*}
+\maketitle
+\tableofcontents
+\newpage
+\section{Introducción}
+En múltiples ocasiones y contextos diversos nos vemos forzados a tomar decisiones cuyas consecuencias son inciertas. A lo más, podemos contar con estimaciones sobre lo probable que es la ocurrencia de algún evento incierto.\\
+\\
+La Teoría de la Decisión bajo Incertidumbre, desarrollada en los trabajos de \cite{von1944theory}, \cite{definetti1930}, \cite{definetti1937}, \cite{savage1954the}, \cite{bernardo2000bayesian}, define un criterio formal de elección, el cual consiste en la maximización de la utilidad esperada.\\
+\\
+En diversas ocasiones, un tomador de decisiones no tiene a su alcance todos los parámetros, pero puede \textit{aprenderlos} del mismo entorno. Un caso particular de esto es cuando el tomador de decisiones sabe con certeza que en el ambiente en el cual se llevan a cabo sus decisiones existen ciertos aspectos estructurales que pueden ser incorporados en la toma de decisiones; el caso en el cual nos vamos a centrar es en el caso en el cual existen relaciones causa-efecto en el ambiente.
+\section{Motivación}
+\section{Problema de investigación}
+Adqusición y uso de información causal en problemas de toma de decisiónes secuenciales bajo incertidumbre.
+\section{Planteamiento del Problema}
+Supondremos que se conoce de antemano cuando un ambiente está regido por un modelo causal, y suponemos que este es desconocido, pero fijo.\\
+\\
+Un problema de decisión bajo incertidumbre (de una etapa) consiste en un conjunto de acciones, un conjunto de consecuencias y un conjunto de \textit{eventos inciertos}; la interpretación estándar es que el agente escogerá una de estas acciones, luego ocurrirá uno de estos eventos inciertos y será esto lo que determine la consecuencia. Que un modelo causal exista y opere sobre este ambiente implica que controla la relación entre los eventos inciertos, las causas así como las probabilidades de los eventos inciertos; de este modo, si se conoce el modelo causal, se conocen las probabilidades de ocurrencia de las consecuencias dado el evento incierto y las acciones y de esta manera se puede encontrar la acción (o serie de acciones) mediante la maximización de la utilidad esperada, pues este es el único criterio de solución que es coherente con los axiomas de decisión de \cite{savage1954the}.
+\\
+Cuando no se conoce el modelo causal, no se puede encontrar el camino a seguir de acuerdo a la maximización de utilidad esperada, y se podría intentar aprender los parámetros a partir de la información que provee el ambiente. Tenemos que un problema de decisión bajo incertidumbre puede resolverse con algunas de las técnicas ya conocidas en el área de Aprendizaje por Refuerzo (\cite{sutton1998reinforcement}), resulta además que una política óptima aprendida con estas técnicas alcanza la MUE (\cite{webb2007game}). Lo que estas técnicas no toman en cuenta es cuando el agente sabe que su entorno tiene cierta estructura particular, y se desea utilizar esto para aprender los parámetros.\\
+\\
+Para esto, queremos dotar al agente con \textit{creencias} sobre la estructura de su entorno; entonces, vamos a pensar que el agente está interactuando con otro ente abstracto (llamémosle Naturaleza), y esta interacción la vamos a modelar como un \textit{juego}.\\
+\\
+Teoría de Juegos (\cite{osborne1994course}) es un área de las matemáticas que los economistas y otros científicos sociales utilizan para modelar situaciones de interacción estratégica; es decir, problemas de decisión en los cuales importa no solo las acciones y preferencias de un sólo agente sino las de otros. En particular, en esta área existen los llados \textit{juegos Bayesianos} en los cuales cada jugador tiene creencias a priori sobre algunos aspectos del ambiente (en las aplicaciones de economía estas creencias suelen versar sobre las recompensas o sobre las estrategias de otros jugadores).\\
+\\
+En nuestro caso, vamos a pensar que se está llevando a cabo un juego (bayesiano) entre el tomador de decisiones y la Naturaleza, quien va a muestrear sus acciones a partir del modelo causal que opera en el entorno. Queremos que a lo largo de las jugadas (o de repeticiones de los juegos) el jugador vaya actualizando sus creencias causales y descubriendo ese modelo causal; es decir, se necesita que las creencias actualizadas del jugador converjan al verdadero modelo. Lo que esperamos tener al final de estas rondas de aprendizaje es un \textit{diagrama de influencia causal}, que consistirá en la extensión al caso causal de los diagramas de influencia tradicionales.\\
+\\
+La clase de juegos necesaria para modelar un proceso de decisiones secuenciales bajo incertidumbre y con información incompleta se llaman \textit{Juegos Estocásticos}, que de hecho generalizan los Proceso de Decisión Markovianos, pues un MDP es simplemente un juego estocástico con un solo jugador (\cite{shoham2008multiagent}).
+\section{Contribuciones Esperadas}
+Para llevar esto a cabo se necesita:
+\begin{itemize}
+\item Una forma de especificar creencias sobre estructura causal; esto puede ser mediante una distribución probabilista sobre un espacio de grafos. Podemos suponer que el número de variables es conocido de antemano, con lo cual podríamos limitarnos a trabajar sobre distribuciones de matrices de tamaño fijo. Si se permite que el número de variables sea arbitrario/desconocido, tendríamos que operar con modelos Bayesianos no paramétricos.
+\item Un criterio de actualización de creencias causales que además debe cumplir la propiedad de que converge al verdadero modelo causal.
+\item Un criterio de solución del problema: Si no es posible esperar hasta la convergencia del modelo, sí debemos garantizar que las decisiones tomadas con el modelo causal aprendido hasta cierta ronda aproximan la utilidad máxima esperada.
+\item Un diagrama de influencia causal que permita \textit{exportar} el conocimiento adquirido para problemas similares; de esta manera, ya sabríamos directamente cómo actuar conociendo el modelo causal.
+\end{itemize}
+\section{Ejemplo}
+Supongamos que un paciente que llega a un hospital puede tener un padecimiento $A$ con probabilidad $p$ o $B$ con probabilidad $q$. El médico de guardia tiene a su alcance tres tratamientos posibles: cirugía, fármaco o nada. En caso de no hacer nada, el paciente morirá con una probabilidad $p_{dn}=0.8$ y sobrevivirá con una probabilidad $1-p_d$. Sin importar la enfermedad, el paciente puede morir durante la cirugía con probabilidad $p_{dc}=0.5$. De la misma manera, el medicamento producirá una reacción alérgica mortal con probabilidad $p_{df}=0.2$\\
+\\
+Si el paciente tenía la enfermedad $A$, y no muere de una reacción alérgica al fármaco, entonces el fármaco le curará con una probabilidad de $p_{sf}=0.9$. Si el paciente tenía la enfermedad $B$, entonces el fármaco no le curará y morirá.\\
+\\
+Por otro lado, si el paciente sobrevive a la cirugía, ésta le curará con una probabilidad de $0.5$ si el paciente tenía la enfermedad $A$. Si el paciente tenía la enfermedad $B$, entonces ésta lo curará con probabilidad de $0.6$. \qed
+\\
+\\
+Entonces, en este ejemplo, tenemos que el juego consiste en el médico, y en la Naturaleza. Las acciones disponibles al médico son el fármaco, cirugía, o nada, mientras que las jugadas de la Naturaleza son \textit{volados} que determinarán si el paciente vive o no; el juego va así, primero la naturaleza hace su jugada, lo cual determina qué enfermedad tenía el paciente. Después, el médico decide qué hacer, y después la Naturaleza lanzará una moneda cargada que determinará si el paciente sobrevive. Notemos que, de manera latente, es un modelo causal el que determina que el fármaco no cura la enfermedad B, o que éste causa alergias, etc. 
+\\
+Sabemos que el médico fue a la escuela de medicina, de donde posee una gran cantidad de información (causal) a priori, pero puede que se esté enfrentando a una nueva enfermedad, es decir, no conoce realmente las probabilidades de muerte ni los casos en que el fármaco no actua. Lo que se desea es que a partir de este caso, o de varios más, pueda actualizar su conocimiento causal para la siguiente ocasión en la que deba enfrentarse a  un problema similar.
+
+\bibliographystyle{apalike}
+\bibliography{Bibliografia}
+\end{document}
