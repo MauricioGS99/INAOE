@@ -32,7 +32,23 @@
 \section{Marco Teórico}
 	\subsection{Relaciones Causales}
 		\subsubsection{Definición de Causalidad}
+		La definición de Causalidad que estamos considerando es la que aparece en \cite{spirtes2000causation} y que consiste en lo siguiente:
+		\begin{defi}
+		Dado un espacio de probabilidad $(\Omega, \mathcal{F},\mathbb{P})$, consideramos una relación binaria $\to$ definida sobre elementos de $\mathcal{F}$ que sea
+		\begin{itemize}
+		\item Transitiva
+		\item Irefflexiva
+		\item Antisimétrica
+		\end{itemize}
+		\end{defi}
+		De esta manera, si $A \to B$ decimos que $A$ es una \textit{causa directa} de $B$ y que $B$ es el efecto de la ocurrencia de $A$. Abusando de la notación, podemos construir un grafo que 	         represente las relaciones  causales entre eventos de $\mathcal{F}$ de la siguiente manera: si $A \to B$, entonces se tiene un nodo que representa el evento $A$ y un nodo que representa el evento $B$ y una arista dirigida que los une en el sentido de la causa hacia el efecto. Además, requerimos las siguientes condiciones que relacionan el grafo así construido con la distribución de probabilidad que éste expresa:
+		\begin{itemize}
+		\item Markov Causal
+		\item Minimalidad causal
+		\item Fidelidad Causal
+		\end{itemize}
 		\subsubsection{Modelos gráficos causales}
+		Un modelo gráfico causal consiste en un conjunto de variables aleatorias $\mathcal{X}=\{ X_1,...,X_n \}$, un grafo $\mathcal{G}$ cuyos nodos corresponden a variables en $\mathcal{X}$ y las aristas entre ellos a relaciones causales. Además, un operador $do()$ que está definido sobre grafos y cuya acción corresponde a lo siguiente: Dado $\mathbf{X} \subseteq \mathcal{X}$ y $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$, $do(\mathbf{X} = \mathbf{x} )$ consiste en asignar a cada $X_j \in \mathbf{X}$ el valor $x_{x_{i_j}}$ y eliminar todas las aristas que entran al nodo correspondiente a $X_i$ en el grafo $\mathcal{G}$.
 		\subsubsection{El problema de la identificabilidad}
 		\subsubsection{Cálculo Do}
 	\subsection{Toma de decisiones}
