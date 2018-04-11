@@ -42,21 +42,36 @@
 		\end{itemize}
 		\end{defi}
 		\subsubsection{Causas Directas e Indirectas}
-		En términos de la definición anterior, si $A \to B$ entonces decimos que $A$ es una \textit{causa} de $B$ y que $B$ es el efecto de la ocurrencia de $A$. Consideremos ahora un \textit{refinamiento} $\mathcal{F}_s$ de la sigma-álgebra $\mathcal{F}$ de modo que ahora puedan existir nuevos eventos $C_s \in \mathcal{F}_s$ tales que $A \to C_s \to B$. Decimos que $A$ es una \textit{causa directa} de $B$ si se cumple que $A \to B$ y no existe evento $C$ tal que $A \to C \to B$ para todo refinamiento de $\mathcal{F}$. Notemos que la definición depende del conjunto de variables, por lo que al decir que un evento es causa directa de otro, es siempre relativo al conjunto de variables. 
+		En términos de la definición anterior, si $A \to B$ entonces decimos que $A$ es una \textit{causa} de $B$ y que $B$ es el efecto de la ocurrencia de $A$. Consideremos ahora un \textit{refinamiento} $\mathcal{F}_s$ de la sigma-álgebra $\mathcal{F}$ de modo que ahora puedan existir nuevos eventos $C_s \in \mathcal{F}_s$ tales que $A \to C_s \to B$. Decimos que $A$ es una \textit{causa directa} de $B$ si se cumple que $A \to B$ y no existe evento $C$ tal que $A \to C \to B$ para todo refinamiento propio de $\mathcal{F}$. Notemos que la definición depende del conjunto de variables, por lo que al decir que un evento es causa directa de otro, es siempre relativo al conjunto de variables. 
 		
 		\subsubsection{Construcción de un grafo que represente relaciones causales}
-		Abusando de la notación, podemos construir un grafo que represente las relaciones causales entre eventos de $\mathcal{F}$ de la siguiente manera: si $A \to B$ y $A$ es una causa directa de $B$, entonces se añade un nodo que representa el evento $A$ y un nodo que representa el evento $B$ y una arista dirigida que los une en el sentido de la causa hacia el efecto. Además, requerimos las siguientes condiciones que relacionan el grafo así construido con la distribución de probabilidad que éste expresa:
+		Abusando de la notación, podemos construir un grafo que represente las relaciones causales entre eventos de $\mathcal{F}$ de la siguiente manera: si $A \to B$ y $A$ es una causa directa de $B$, entonces se añade un nodo que representa el evento $A$ y un nodo que representa el evento $B$ y una arista dirigida que los une en el sentido de la causa hacia el efecto. A partir de definición de relación causal se obtiene un grafo acíclico dirigido. Además, requerimos las siguientes condiciones que relacionan el grafo así construido con la distribución de probabilidad $P_{\mathcal{G}}$ que éste expresa:
 		\begin{itemize}
 		\item Markov Causal
 		\item Minimalidad Causal
 		\item Fidelidad Causal
 		\end{itemize}
 		\subsubsection{Modelos gráficos causales}
-		Un modelo gráfico causal consiste en un conjunto de variables aleatorias $\mathcal{X}=\{ X_1,...,X_n \}$, un grafo $\mathcal{G}$ cuyos nodos corresponden a variables en $\mathcal{X}$ y las aristas entre ellos a causas directas. Además, un operador $do()$ que está definido sobre grafos y cuya acción corresponde a lo siguiente: Dado $\mathbf{X} \subseteq \mathcal{X}$ y $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$, $do(\mathbf{X} = \mathbf{x} )$ consiste en asignar a cada $X_j \in \mathbf{X}$ el valor $x_{x_{i_j}}$ y eliminar todas las aristas que entran al nodo correspondiente a $X_i$ en el grafo $\mathcal{G}$.
+		Un modelo gráfico causal consiste en un conjunto de variables aleatorias $\mathcal{X}=\{ X_1,...,X_n \}$, un grafo $\mathcal{G}$ cuyos nodos corresponden a variables en $\mathcal{X}$ y las aristas entre ellos a causas directas. Las variables de $\mathcal{X}$ están divididas en dos subconjuntos: las variables endógenas y las variables exógenas, en donde estas últimas son aquellas que no tienen padres en el grafo. Además, un operador $do()$ que está definido sobre grafos y cuya acción corresponde a lo siguiente: Dado $\mathbf{X} \subseteq \mathcal{X}$ y $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$, $do(\mathbf{X} = \mathbf{x} )$ consiste en asignar a cada $X_j \in \mathbf{X}$ el valor $x_{x_{i_j}}$ y eliminar todas las aristas que entran al nodo correspondiente a $X_i$ en el grafo $\mathcal{G}$.
 		\subsubsection{El problema de la identificabilidad}
 		
 		\subsubsection{Cálculo Do}
-		\begin{teo}{\cite{peters2017elements}}
+		El cálculo do (\cite{pearl1995causal}, \cite{pearl2009causality}) consiste en un conjunto de reglas de inferencia que permiten manipular enunciados sobre observaciones que provienen de 		intervenciones. Consideremos un modelo gráfico causal $\mathcal{G}$ y sean $X,Y,Z$ conjuntos disjuntos de nodos de $\mathcal{G}$. Como notación, $\mathcal{G}_{\bar{X}}$ será el grafo que 	se obtiene al eliminar de $\mathcal{G}$ todas las aristas que entran en elementos de $X$; análogamente, $\mathcal{G}_{\underline{X}}$ será el grafo que se obtiene al eliminar de $\mathcal{G}$ todas las aristas que salen de elementos de $X$ y por último, $\mathcal{G}_{\underline{Z}\bar{X}}$ al eliminar arcos que entran de uno y que salen de otro conjunto.\\
+	\\
+		Las reglas de inferencia consisten en lo siguiente:
+		\begin{teo}
+		Sea $\mathcal{G}$ un modelo gráfico causal y $P_{\mathcal{G}}$ la medida de probabilidad inducida por el modelo; entonces, para cualesquiera conjuntos disjuntos de variables $X,Y,Z,W$ se cumple que
+		\begin{itemize}
+		\item Si en el grafo $\mathcal{G}_{\bar{X}}$ se cumple que $Y$ es condicionalmente independiente de $Z$ dados $X$ y $W$, entonces
+		\[ P_{\mathcal{G}}(Y=y | do(X=x), Z=z, W=w) = P_{\mathcal{G}}(Y=y | do(X=x), W=w). \]
+		\item Si en el grafo $\mathcal{G}_{\bar{X}\underline{Z}}$ se cumple que $Y$ es condicionalmente independiente de $Z$ dados $X$ y $W$, entonces
+		\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), Z = z, W=w). \]
+		\item Sea $Z(W)$ el conjunto de nodos en $Z$ tales que no son ancestros de ningún nodo en $W$ en el grafo $\mathcal{G}_{\bar{X}}$. Si en el grafo $G_{\bar{X}, \bar{Z(W)}}$ se cumple que $Y$ es condicionalmente independiente de $Z$ dados $X$ y $W$ entonces,
+		\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
+		\end{itemize}
+		\end{teo}
+		La interpretación de estos puntos, en palabras de \cite{pearl2009causality} se sigue intepretar la acción $do(X=x)$ como la imposición de un nuevo mecanismo el cual induce un sub-modelo caracterizado por $\mathcal{G}_{\bar{X}}$. El primer punto se obtiene al considerar que eliminar ecuaciones en un sistema no introduce nuevas dependencias y muestra que la d-separación es un criterio válido para la independencia condicional en el nuevo grafo $\mathcal{G}_{\bar{X}}$. El punto dos provee una condición para que una intervención tenga el mismo efecto que una observación pasiva y el tercer punto provee una condición para poder introducir, o eliminar una intervención externa sin afectar la probabilidad de observar $Y=y$.
+		\begin{teo}{\cite{peters2017elements}}\\
 		Los siguientes enunciados se cumplen:
 		\begin{itemize}
 		\item El cálculo do es completo; es decir, para cada intervención identificable existe una manera iterativa de aplicar las tres reglas que resulta en dicha intervención (\cite{huang2006pearl}, \cite{shpitser2006identification})
@@ -71,8 +86,11 @@
 	\subsection{Teoría de Juegos}
 		\subsubsection{Juegos en forma normal}
 		\subsubsection{Juegos en forma extensiva}
+		\subsubsection{Representaciones más generales}
 	
 	\subsection{Trabajo Previo}
+
+\section{Planteamiento y Modelado}
 
 \section{Objetivos}
 	\section{Objetivo General (debe ir relacionado con el título)}
@@ -83,14 +101,19 @@
 	\subsection{Metodología de Trabajo}
 
 \section{Resultados Preliminares}
-Para mostrar la factibilidad del modelo planteado, consideramos por separado tres casos cuyo grado de dificultad es ascendente. En el primer caso, supondremos que el modelo causal es conocido completamente por el agente y veremos cuál sería su manera de actuar en este caso. Que el modelo sea conocido completamente significa que el agente conoce la estructura del grafo así como las probabilidades asociadas a cada variable. Posteriormente, en el segundo caso, el agente sólo tendrá a su disposición la estructura del grafo, pero no los parámetros de este. En el tercer caso, el agente no conocerá nada del modelo, pero tendrá \textit{creencias} sobre este; este caso generaliza los anteriores, pues en el primer y segundo caso las creencias con las que inicia el agente es la información que conoce sobre el modelo
+Para mostrar la factibilidad del modelo planteado, consideramos por separado tres casos cuyo grado de dificultad es ascendente. En el primer caso, supondremos que el modelo causal es conocido completamente por el agente y veremos cuál sería su manera de actuar en este caso. Que el modelo sea conocido completamente significa que el agente conoce la estructura del grafo así como las probabilidades asociadas a cada variable. Posteriormente, en el segundo caso, el agente sólo tendrá a su disposición la estructura del grafo, pero no los parámetros de este. En el tercer caso, el agente no conocerá nada del modelo, pero tendrá \textit{creencias} sobre este; este caso generaliza los anteriores, pues en el primer y segundo caso las creencias con las que inicia el agente es la información que conoce sobre el modelo. En resumen, en los tres casos el agente contará con \textit{creencias} sobre el modelo causal verdadero; en el primer caso, sus creencias coincidirán plenamente con el modelo; en el segundo caso, sólo con la estructura y en el tercer caso, no tenemos garantía de nada. 
 \subsection{Caso en el que se conoce el modelo completo}
-Básicamente lo que quiero es que para cada acción posible se consideren las probabilidades de los efectos y con esto calcular utilidad esperada
+Consideremos el caso en el que el modelo gráfico causal es completamente conocido por el tomador de decisiones, tanto en su estructura como en sus parámetros. En este caso, el juego consistiría en lo siguiente:
+
+
 \subsection{Caso en el que se conoce la estructura del modelo}
 Aquí se conocen los efectos de las causas, pero no sus probabilidades, entonces primero debo conocer el subconjunto posible de consecuencias y ahí tal vez hacer exploración greedy.
 \subsection{Caso general}
 No tengo idea aun.
 \section{Conclusiones}
+
+\section{Extensiones posibles}
+Más oponentes...la naturaleza tiene intenciones,
 
 \bibliographystyle{apalike}
 \bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
