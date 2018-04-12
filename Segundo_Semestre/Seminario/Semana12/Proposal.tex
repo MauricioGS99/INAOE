@@ -28,6 +28,8 @@
 %\nocite{*}
 \maketitle
 \section{Introducción}
+	\subsection{Motivación}
+	\subsection{Justificación}
 
 \section{Marco Teórico}
 	\subsection{Relaciones Causales}
@@ -59,7 +61,7 @@
 		El cálculo do (\cite{pearl1995causal}, \cite{pearl2009causality}) consiste en un conjunto de reglas de inferencia que permiten manipular enunciados sobre observaciones que provienen de 		intervenciones. Consideremos un modelo gráfico causal $\mathcal{G}$ y sean $X,Y,Z$ conjuntos disjuntos de nodos de $\mathcal{G}$. Como notación, $\mathcal{G}_{\bar{X}}$ será el grafo que 	se obtiene al eliminar de $\mathcal{G}$ todas las aristas que entran en elementos de $X$; análogamente, $\mathcal{G}_{\underline{X}}$ será el grafo que se obtiene al eliminar de $\mathcal{G}$ todas las aristas que salen de elementos de $X$ y por último, $\mathcal{G}_{\underline{Z}\bar{X}}$ al eliminar arcos que entran de uno y que salen de otro conjunto.\\
 	\\
 		Las reglas de inferencia consisten en lo siguiente:
-		\begin{teo}
+		\begin{teo}{\label{docalculus}} (\cite{pearl2009causality})\\
 		Sea $\mathcal{G}$ un modelo gráfico causal y $P_{\mathcal{G}}$ la medida de probabilidad inducida por el modelo; entonces, para cualesquiera conjuntos disjuntos de variables $X,Y,Z,W$ se cumple que
 		\begin{itemize}
 		\item Si en el grafo $\mathcal{G}_{\bar{X}}$ se cumple que $Y$ es condicionalmente independiente de $Z$ dados $X$ y $W$, entonces
@@ -79,9 +81,43 @@
 		\item Existe un criterio necesario y suficiente para la identificabilidad de las distribuciones de intervención (\cite{shpitser2006identification}, \cite{huang2006pearl}).
 		\end{itemize}
 		\end{teo}
+		Ademas
+		\begin{cor} Solución al problema de la identificabilidad
+		Una distribución $q=P(y_1,...,y_k | do(x_1),...,do(x_n))$ es identificable en un modelo gráfico causal $\mathcal{G}$ si existe una secuencia finita de transformaciones, donde cada una de las cuales corresponde a una de las reglas del teorema \ref{docalculus} que reduce $q$ a una expresión de probabilidad condicionada sólo en datos observacionales (i.e. no aparece el operador $do$)
+		\end{cor}
 	\subsection{Toma de decisiones}
 		\subsubsection{Teorema de von Neumann-Morgenstern: existencia de utilidad}
+		Sea $X$ un conjunto de \textit{alternativas}, los objetos a elegir son loterías de soprte finito; de manera formal, definimos
+\[ L = \{ P:X \to [0,1] | \sum_{x \in X} P(x) = 1, \textrm{ $P$ tiene soporte finito} \}. \]
+Una mezcla de loterías se puede definir de la siguiente manera: se toma una probabilidad $\alpha$ y se define una lotería $l^\alpha = \alpha P + (1- \alpha) Q$.\\
+\\
+Consideremos una relación  $\succeq L \times L$. El Teorema de von Neumann-Morgenstern requiere de los siguientes axiomas:
+\begin{itemize}
+\item A1. Órden débil: $\succeq$ es completa y transitiva
+\item A2. Continuidad: Para toda $P,Q,R \in L$ tales que $P \succ Q \succ R$ existen $\alpha$ y $\beta$ tales que:
+\[  \alpha P + (1-\alpha) R \succ Q \succ \beta P + (1-\beta) R\]
+\item A3. Independencia: Para toda lotería $P,Q,R \in L$ y toda $\alpha \in (0,1)$ se tiene que $P \succeq Q$ si y sólo si $\alpha P + (1-\alpha) R \succeq \alpha Q  + (1-\alpha) R$.
+\end{itemize}
+\begin{teo}
+Una relación $\succeq L \times L$ satisface los axiomas A1 - A3 si y sólo sí existe una función $u: X \to \mathbb{R}$ tal que para toda $P,Q \in L$ se tiene que $P \succeq Q$ si y sólo si 
+\[ \sum_{x \in X} P(x) u(x) \geq \sum_{x \in X} Q(x) u(x).  \]
+\end{teo}
+Este Teorema dice que para un tomador de decisiones racional (es decir, que se comporta según los axiomas) existe una función de utilidad tal que las preferencias del tomador de decisiones son equivalentes a maximizar una utilidad esperada.
 		\subsubsection{Teorema de DeFinetti: existencia de probabilidad subjetiva}
+		De Finetti consideró apuestas sobre \textit{estados del mundo}. Consideremos que existen $1,...,n$ estados en el mundo. Una apuesta es una función que toma valores en el espacio de estados y los mapea a valores monetarios; es decir, una apuesta $x$ es un vector de $n$ elementos en donde $x_i$ es la ganancia en el caso de que la apuesta resulte en el estado $i$ como el ganador. Consideramos una relación $\succeq \subseteq X \times X$. Y consideremos los siguientes axiomas:
+\begin{itemize}
+\item A1. Órden débil: $\succeq$ es completa y transitiva.
+\item A2. Continuidad: Para cada $x \in X$, los conjuntos $\{ y | x \succ y \}$ y $\{ y | y \succ x \}$ son abiertos.
+\item A3. Aditividad: Para toda $x,y,z \in X$, $x \succeq y$ si y sólo si $x+z \succeq y+z$.
+\item A4 Monotonicidad: Para toda $x,y \in X$, si se cumple que $x_i \geq y_i$ entonces se tiene que $x \succeq y$.
+\item A5 No-trivialidad: Existen $x,y \in X$ tales que $x \succ y$.
+\end{itemize}
+Notemos que el axioma A3 sólo aplica si el tomador de decisiones es neutral al riesgo (\cite{gilboa2009decision}).
+\begin{teo}
+La relación $\succeq \subseteq X \times X$ satisface A1-A5 si y sólo si existe un vector de probabilidad $p$ de tamaño $n$ tal que para toda $x,y \in X$ se cumple que
+\[ x \succeq y \textrm { si y sólo si } px \geq py. \]
+\end{teo}
+Entonces, la definición de probabilidad subjetiva sería aquella probabilidad utilizada por un tomador de decisiones para escoger una acción mediante el criterio de utilidad esperado.
 		\subsubsection{Teorema de Savage: existencia de utilidad y probabilidad subjetiva}
 	\subsection{Teoría de Juegos}
 		\subsubsection{Juegos en forma normal}
@@ -101,9 +137,22 @@
 	\subsection{Metodología de Trabajo}
 
 \section{Resultados Preliminares}
-Para mostrar la factibilidad del modelo planteado, consideramos por separado tres casos cuyo grado de dificultad es ascendente. En el primer caso, supondremos que el modelo causal es conocido completamente por el agente y veremos cuál sería su manera de actuar en este caso. Que el modelo sea conocido completamente significa que el agente conoce la estructura del grafo así como las probabilidades asociadas a cada variable. Posteriormente, en el segundo caso, el agente sólo tendrá a su disposición la estructura del grafo, pero no los parámetros de este. En el tercer caso, el agente no conocerá nada del modelo, pero tendrá \textit{creencias} sobre este; este caso generaliza los anteriores, pues en el primer y segundo caso las creencias con las que inicia el agente es la información que conoce sobre el modelo. En resumen, en los tres casos el agente contará con \textit{creencias} sobre el modelo causal verdadero; en el primer caso, sus creencias coincidirán plenamente con el modelo; en el segundo caso, sólo con la estructura y en el tercer caso, no tenemos garantía de nada. 
+Para mostrar la factibilidad del modelo planteado, consideramos un escenario particular y tres casos por separado cuyo grado de dificultad es ascendente. El escenario es el de un médico que tiene que escoger uno de entre varios tratamientos para un paciente con enfermedad desconocida. Los tratamientos posibles conllevan riesgos y ventajas, que están regidos por un modelo causal.\\
+\\
+Los tres casos a considerar son los siguientes:\\
+\\
+En el primer caso, supondremos que el modelo causal es conocido completamente por el agente y veremos cuál sería su manera de actuar en este caso. Que el modelo sea conocido completamente significa que el agente conoce la estructura del grafo así como las probabilidades asociadas a cada variable.\\
+\\ 
+Posteriormente, en el segundo caso, el agente sólo tendrá a su disposición la estructura del grafo, pero no los parámetros de este. \\
+\\
+En el tercer caso, el agente no conocerá nada del modelo, pero tendrá \textit{creencias} sobre este; este caso generaliza los anteriores, pues en el primer y segundo caso las creencias con las que inicia el agente es la información que conoce sobre el modelo. En resumen, en los tres casos el agente contará con \textit{creencias} sobre el modelo causal verdadero; en el primer caso, sus creencias coincidirán plenamente con el modelo; en el segundo caso, sólo con la estructura y en el tercer caso, no tenemos garantía de nada. 
 \subsection{Caso en el que se conoce el modelo completo}
-Consideremos el caso en el que el modelo gráfico causal es completamente conocido por el tomador de decisiones, tanto en su estructura como en sus parámetros. En este caso, el juego consistiría en lo siguiente:
+Consideremos el caso en el que el modelo gráfico causal es completamente conocido por el tomador de decisiones, tanto en su estructura como en sus parámetros. En este caso, el juego consistiría en lo siguiente:\\
+\begin{itemize}
+\item Un modelo gráfico causal conocido para el tomador de decisiones.
+\item Jugadores: Naturaleza y el Tomador de Decisiones.
+\item Acciones: Las acciones de la Naturaleza consisten en asignar cierto estado incierto; en este caso, asigna inicialmente la enfermedad del paciente; posteriormente, selecciona sus acciones a partir del modelo causal.
+\end{itemize}
 
 
 \subsection{Caso en el que se conoce la estructura del modelo}
