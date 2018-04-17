@@ -20,6 +20,7 @@
 \newtheorem{cor}[teo]{Corolario}
 \usepackage[pdftex]{color,graphicx}
 \usepackage{tikz}
+\usetikzlibrary{trees}
 \usetikzlibrary{calc}
 %\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
 \title{Adquisición y uso de relaciones causales para la toma de decisiones bajo incertidumbre.}
@@ -34,9 +35,9 @@
 \section{Marco Teórico}
 	\subsection{Relaciones Causales}
 		\subsubsection{Definición de Causalidad}
-		La definición de Causalidad que estamos considerando es la que aparece en \cite{spirtes2000causation} y que consiste en lo siguiente:
+		La definición de Causalidad que estamos considerando, que está inspirada en la definición que da  \cite{spirtes2000causation} consiste en lo siguiente:
 		\begin{defi}
-		Dado un espacio de probabilidad $(\Omega, \mathcal{F},\mathbb{P})$, consideramos una relación binaria $\to$ definida sobre elementos de $\mathcal{F}$ que sea
+		Dado un espacio medible $(\Omega, \mathcal{F})$, consideramos una relación binaria $\to$ definida sobre elementos de $\mathcal{F}$ que sea
 		\begin{itemize}
 		\item Transitiva: si $A \to B$ y $B \to C$ para $A,B,C \in \mathcal{F}$ entonces $A \to C$.
 		\item Irefflexiva: Para todo $A \in \mathcal{F}$ no es cierto que $A \to A$.
@@ -44,18 +45,20 @@
 		\end{itemize}
 		\end{defi}
 		\subsubsection{Causas Directas e Indirectas}
-		En términos de la definición anterior, si $A \to B$ entonces decimos que $A$ es una \textit{causa} de $B$ y que $B$ es el efecto de la ocurrencia de $A$. Consideremos ahora un \textit{refinamiento} $\mathcal{F}_s$ de la sigma-álgebra $\mathcal{F}$ de modo que ahora puedan existir nuevos eventos $C_s \in \mathcal{F}_s$ tales que $A \to C_s \to B$. Decimos que $A$ es una \textit{causa directa} de $B$ si se cumple que $A \to B$ y no existe evento $C$ tal que $A \to C \to B$ para todo refinamiento propio de $\mathcal{F}$. Notemos que la definición depende del conjunto de variables, por lo que al decir que un evento es causa directa de otro, es siempre relativo al conjunto de variables. 
+		En términos de la definición anterior, dado $(\Omega, \mathcal{F})$ si se tiene que $A \to B$ para $A,B \in \mathcal{F}$, entonces decimos que $A$ es una \textit{causa} de $B$ y que $B$ es el efecto de la ocurrencia de $A$. Consideremos ahora un \textit{refinamiento} $\mathcal{F}_s$ de la sigma-álgebra $\mathcal{F}$ de modo que ahora puedan existir nuevos eventos $C_s \in \mathcal{F}_s$ tales que $A \to C_s \to B$. Decimos que $A$ es una \textit{causa directa} de $B$ si se cumple que $A \to B$ y no existe evento $C$ tal que $A \to C \to B$ para todo refinamiento propio de $\mathcal{F}$. Notemos que la definición depende del conjunto de variables, por lo que al decir que un evento es causa directa de otro, es siempre relativo al conjunto de variables. 
 		
 		\subsubsection{Construcción de un grafo que represente relaciones causales}
-		Abusando de la notación, podemos construir un grafo que represente las relaciones causales entre eventos de $\mathcal{F}$ de la siguiente manera: si $A \to B$ y $A$ es una causa directa de $B$, entonces se añade un nodo que representa el evento $A$ y un nodo que representa el evento $B$ y una arista dirigida que los une en el sentido de la causa hacia el efecto. A partir de definición de relación causal se obtiene un grafo acíclico dirigido. Además, requerimos las siguientes condiciones que relacionan el grafo así construido con la distribución de probabilidad $P_{\mathcal{G}}$ que éste expresa:
+		Abusando de la notación, podemos construir un grafo que represente las relaciones causales entre eventos de $\mathcal{F}$ de la siguiente manera: si $A \to B$ y $A$ es una causa directa de $B$, entonces se añade un nodo que representa el evento $A$ y un nodo que representa el evento $B$ y una arista dirigida que los une en el sentido de la causa hacia el efecto. A partir de definición anterior de relación causal se obtiene un grafo acíclico dirigido.\\
+\\		
+		 Dado un grafo acíclico dirigido, podemos construir una medida de probabilidad que expresa las relaciones que se encuentran establecidas en el grafo, la cual denotaremos $P_{\mathcal{G}}$. Requerimos que se cumplan las siguientes condiciones que relacionan el grafo así construido con la distribución de probabilidad $P_{\mathcal{G}}$ que éste expresa:
 		\begin{itemize}
 		\item Markov Causal
 		\item Minimalidad Causal
 		\item Fidelidad Causal
 		\end{itemize}
 		\subsubsection{Modelos gráficos causales}
-		Un modelo gráfico causal consiste en un conjunto de variables aleatorias $\mathcal{X}=\{ X_1,...,X_n \}$, un grafo $\mathcal{G}$ cuyos nodos corresponden a variables en $\mathcal{X}$ y las aristas entre ellos a causas directas. Las variables de $\mathcal{X}$ están divididas en dos subconjuntos: las variables endógenas y las variables exógenas, en donde estas últimas son aquellas que no tienen padres en el grafo. Además, un operador $do()$ que está definido sobre grafos y cuya acción corresponde a lo siguiente: Dado $\mathbf{X} \subseteq \mathcal{X}$ y $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$, $do(\mathbf{X} = \mathbf{x} )$ consiste en asignar a cada $X_j \in \mathbf{X}$ el valor $x_{x_{i_j}}$ y eliminar todas las aristas que entran al nodo correspondiente a $X_i$ en el grafo $\mathcal{G}$.
-		\subsubsection{El problema de la identificabilidad}
+		Un modelo gráfico causal consiste en un conjunto de variables aleatorias $\mathcal{X}=\{ X_1,...,X_n \}$, un grafo acíclico dirigido $\mathcal{G}$ cuyos nodos corresponden a variables en $\mathcal{X}$ y las aristas entre ellos a causas directas. Las variables de $\mathcal{X}$ están divididas en dos subconjuntos: las variables endógenas y las variables exógenas, en donde estas últimas son aquellas que no tienen padres en el grafo, esto se deriva naturalmente de la construcción del grafo a partir de las relaciones causales. Además, se tiene un operador $do()$ que está definido sobre grafos y cuya acción corresponde a lo siguiente: Dado $\mathbf{X} \subseteq \mathcal{X}$ y $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$, $do(\mathbf{X} = \mathbf{x} )$ consiste en asignar a cada $X_j \in \mathbf{X}$ el valor $x_{x_{i_j}}$ y eliminar todas las aristas que entran al nodo correspondiente a $X_i$ en el grafo $\mathcal{G}$. Más adelante entraremos en detalle respecto a este operador.
+		\subsubsection{El problema de la identificabilidad} 
 		
 		\subsubsection{Cálculo Do}
 		El cálculo do (\cite{pearl1995causal}, \cite{pearl2009causality}) consiste en un conjunto de reglas de inferencia que permiten manipular enunciados sobre observaciones que provienen de 		intervenciones. Consideremos un modelo gráfico causal $\mathcal{G}$ y sean $X,Y,Z$ conjuntos disjuntos de nodos de $\mathcal{G}$. Como notación, $\mathcal{G}_{\bar{X}}$ será el grafo que 	se obtiene al eliminar de $\mathcal{G}$ todas las aristas que entran en elementos de $X$; análogamente, $\mathcal{G}_{\underline{X}}$ será el grafo que se obtiene al eliminar de $\mathcal{G}$ todas las aristas que salen de elementos de $X$ y por último, $\mathcal{G}_{\underline{Z}\bar{X}}$ al eliminar arcos que entran de uno y que salen de otro conjunto.\\
@@ -72,6 +75,7 @@
 		\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
 		\end{itemize}
 		\end{teo}
+		
 		La interpretación de estos puntos, en palabras de \cite{pearl2009causality} se sigue intepretar la acción $do(X=x)$ como la imposición de un nuevo mecanismo el cual induce un sub-modelo caracterizado por $\mathcal{G}_{\bar{X}}$. El primer punto se obtiene al considerar que eliminar ecuaciones en un sistema no introduce nuevas dependencias y muestra que la d-separación es un criterio válido para la independencia condicional en el nuevo grafo $\mathcal{G}_{\bar{X}}$. El punto dos provee una condición para que una intervención tenga el mismo efecto que una observación pasiva y el tercer punto provee una condición para poder introducir, o eliminar una intervención externa sin afectar la probabilidad de observar $Y=y$.
 		\begin{teo}{\cite{peters2017elements}}\\
 		Los siguientes enunciados se cumplen:
@@ -81,52 +85,93 @@
 		\item Existe un criterio necesario y suficiente para la identificabilidad de las distribuciones de intervención (\cite{shpitser2006identification}, \cite{huang2006pearl}).
 		\end{itemize}
 		\end{teo}
-		Ademas
+		Las reglas del cálculo do proveen una solución al problema de la identificabilidad:
 		\begin{cor} Solución al problema de la identificabilidad
 		Una distribución $q=P(y_1,...,y_k | do(x_1),...,do(x_n))$ es identificable en un modelo gráfico causal $\mathcal{G}$ si existe una secuencia finita de transformaciones, donde cada una de las cuales corresponde a una de las reglas del teorema \ref{docalculus} que reduce $q$ a una expresión de probabilidad condicionada sólo en datos observacionales (i.e. no aparece el operador $do$)
 		\end{cor}
 	\subsection{Toma de decisiones}
 		\subsubsection{Teorema de von Neumann-Morgenstern: existencia de utilidad}
-		Sea $X$ un conjunto de \textit{alternativas}, los objetos a elegir son loterías de soprte finito; de manera formal, definimos
-\[ L = \{ P:X \to [0,1] | \sum_{x \in X} P(x) = 1, \textrm{ $P$ tiene soporte finito} \}. \]
-Una mezcla de loterías se puede definir de la siguiente manera: se toma una probabilidad $\alpha$ y se define una lotería $l^\alpha = \alpha P + (1- \alpha) Q$.\\
-\\
-Consideremos una relación  $\succeq L \times L$. El Teorema de von Neumann-Morgenstern requiere de los siguientes axiomas:
+		Sea $X$ un conjunto finito de \textit{alternativas} y consideremos una relación de preferencias $\succeq$ sobre $X$, definimos el conjunto de \textit{loterías} sobre elementos de $X$ de la siguiente manera:
+\[ \mathcal{L} = \{ P:X \to [0,1] | \sum_{x \in X} P(x) = 1, \textrm{ $P$ tiene soporte finito} \}. \]
+Es decir, una lotería es una distribución de probabilidad sobre elementos de $X$. Para $P \in \mathcal{L}$ y $x \in X$. Denotamos $P(x)$ como la probabilidad que la lotería $P$ asigna a la alternativa $x$. Una forma útil de representar loterías es la siguiente (\cite{sucar2015probabilistic}, \cite{shoham2008multiagent}):
+
+\[ [p_1: x_1, ... , p_k : o_k]; \textrm{  }, x_i \in X, p_i \geq 0, \sum_{i=1}^k  p_i = 1.\]
+
+Podemos extender la relación de preferencias $\succeq$ que está definida sobre $X$ a $\mathcal{L}$ de modo que un tomador de decisiones puede escoger entre alternativas que son elementos de $X$ o loterías de $\mathcal{L}$. En particular, notemos que $X \subseteq \mathcal{L}$ pues un elemento $x \in X$ corresponde a la lotería $[1:x]$. Dicho esto, podemos considerar sólo relaciones de preferencia sobre $\mathcal{L}$. Para cada $P, Q \in \mathcal{L}$ y $\alpha \in [0,1]$ definimos la mezcla de loterías como
+\[ (\alpha P + (1- \alpha)Q)(x) = \alpha P(x) + (1-\alpha)Q(x). \]
+El Teorema de von Neumann-Morgenstern requiere de los siguientes axiomas sobre la relación de preferencias $\succeq$ que está definida sobre $\mathcal{L}$:
 \begin{itemize}
 \item A1. Órden débil: $\succeq$ es completa y transitiva
 \item A2. Continuidad: Para toda $P,Q,R \in L$ tales que $P \succ Q \succ R$ existen $\alpha$ y $\beta$ tales que:
 \[  \alpha P + (1-\alpha) R \succ Q \succ \beta P + (1-\beta) R\]
-\item A3. Independencia: Para toda lotería $P,Q,R \in L$ y toda $\alpha \in (0,1)$ se tiene que $P \succeq Q$ si y sólo si $\alpha P + (1-\alpha) R \succeq \alpha Q  + (1-\alpha) R$.
+\item A3. Independencia: Para toda lotería $P,Q,R \in L$ y toda $\alpha \in (0,1)$ se tiene que $P \succeq Q$ si y sólo si 
+\[\alpha P + (1-\alpha) R \succeq \alpha Q  + (1-\alpha) R.\]
 \end{itemize}
-\begin{teo}
-Una relación $\succeq L \times L$ satisface los axiomas A1 - A3 si y sólo sí existe una función $u: X \to \mathbb{R}$ tal que para toda $P,Q \in L$ se tiene que $P \succeq Q$ si y sólo si 
+\begin{teo}{según la formulación de \cite{jensen1967introduction}}\\
+Una relación de preferencias $\succeq$ definida sobre un conjunto $\mathcal{L}$ de loterías definidas sobre un conjunto finito de alternativas $X$ satisface los axiomas A1 - A3 si y sólo sí existe una función $u: X \to \mathbb{R}$ tal que para toda $P,Q \in \mathcal{L}$ se tiene que $P \succeq Q$ si y sólo si 
 \[ \sum_{x \in X} P(x) u(x) \geq \sum_{x \in X} Q(x) u(x).  \]
 \end{teo}
 Este Teorema dice que para un tomador de decisiones racional (es decir, que se comporta según los axiomas) existe una función de utilidad tal que las preferencias del tomador de decisiones son equivalentes a maximizar una utilidad esperada.
 		\subsubsection{Teorema de DeFinetti: existencia de probabilidad subjetiva}
-		De Finetti consideró apuestas sobre \textit{estados del mundo}. Consideremos que existen $1,...,n$ estados en el mundo. Una apuesta es una función que toma valores en el espacio de estados y los mapea a valores monetarios; es decir, una apuesta $x$ es un vector de $n$ elementos en donde $x_i$ es la ganancia en el caso de que la apuesta resulte en el estado $i$ como el ganador. Consideramos una relación $\succeq \subseteq X \times X$. Y consideremos los siguientes axiomas:
+		El Teorema de DeFinetti considera el caso opuesto: consideremos un conjunto de  $n$ \textit{estados}. Una \textit{apuesta} sobre este conjunto de estados es una función que mapea estados a un número real, y podemos identificar cada una de estas apuestas como un vector de tamaño $n$, cuya $i$-ésima entrada denota el valor que se asigna al estado $i$. Denotemos por $X$ el conjunto de apuestas sobre estados del mundo y consideramos una relación $\succeq$ definida sobre $X$. De la misma manera que el Teorema de Von Neumann, requerimos de axiomas sobre la relación:
 \begin{itemize}
 \item A1. Órden débil: $\succeq$ es completa y transitiva.
-\item A2. Continuidad: Para cada $x \in X$, los conjuntos $\{ y | x \succ y \}$ y $\{ y | y \succ x \}$ son abiertos.
+\item A2. Continuidad: Para cada $x \in X$, los conjuntos $\{ y | x \succ y \}$ y $\{ y | y \succ x \}$ son abiertos en la topología estándar de $\mathbb{R}^n$.
 \item A3. Aditividad: Para toda $x,y,z \in X$, $x \succeq y$ si y sólo si $x+z \succeq y+z$.
 \item A4 Monotonicidad: Para toda $x,y \in X$, si se cumple que $x_i \geq y_i$ entonces se tiene que $x \succeq y$.
 \item A5 No-trivialidad: Existen $x,y \in X$ tales que $x \succ y$.
 \end{itemize}
 Notemos que el axioma A3 sólo aplica si el tomador de decisiones es neutral al riesgo (\cite{gilboa2009decision}).
-\begin{teo}
+\begin{teo}{\cite{definetti1937}}\\
 La relación $\succeq \subseteq X \times X$ satisface A1-A5 si y sólo si existe un vector de probabilidad $p$ de tamaño $n$ tal que para toda $x,y \in X$ se cumple que
-\[ x \succeq y \textrm { si y sólo si } px \geq py. \]
+\[ x \succeq y \textrm { si y sólo si } p^t x \geq p^t y. \]
 \end{teo}
-Entonces, la definición de probabilidad subjetiva sería aquella probabilidad utilizada por un tomador de decisiones para escoger una acción mediante el criterio de utilidad esperado.
+Este Teorema arroja una probabilidad para cada tomador de decisiones tal que la relación de preferencias del éste sea equivalente con la utilidad esperada bajo esta distrbución; por esto, a tal distribución se le conoce como \textit{probabilidad subjetiva}.
 		\subsubsection{Teorema de Savage: existencia de utilidad y probabilidad subjetiva}
+	    Los resultados anteriores parecen estar en polos opuestos, pues el Teorema de De Finetti provee una distribución de probabilidad para tomar decisiones con ella si el tomador de decisiones tiene una manera de medir su utilidad; por otro lado, el Teorema de Von Neumann supone que se conocen las probabilidades y otorga una forma de medir utilidad para tomar decisiones. El gran logro del Teorema de Savage es garantizar la existencia tanto de probabildad subjetiva como de una función de utilidad y además hacerlo en tándem (\cite{gilboa2009decision}).\\
+	    \\
+	    El Teorema de Savage requiere dos conceptos básicos: un conjunto de estados $S$ y un conjunto de resultados $X$ y las opciones a escoger en este contexto son \textit{actos}, que son funciones de los estados a los resultados:
+	    \[ F = X^S = \{ f | f: S \to X \}. \]
+	    Consideramos una relación binaria $\succeq$ definida sobre $F$.
+	    Diremos que un conjunto $A \subseteq S$ es un evento, y no se requieren suposiciones en cuanto a la medibilidad de estos.
+	    Consideremos la siguiente notación: para actos $f,g \in F$, y un evento $A \subseteq S$ definimos un acto $f_A^g$ como sigue:
+	    \[ f_A^g(s)=g(s) \textrm{ si  } s \in A, \textrm{  } f(s) \textrm{ si  } s \in A^c   \]
+	    Es decir, $ f_A^g$ es $g$ para valores en $A$. Con esta notación, será más fácil expresar los axiomas que este Teorema requiere:
+	    \begin{itemize}
+	    \item P1. Existen $f,g$ tales que $f \succeq g$
+	    \item P2. Órden débil: $\succeq$ es un órden débil.
+	    \item P3. Para toda $f,g,h,h' \in F$ y todo $A \subseteq S$,
+	    \[ f_{A^c}^h \succeq g_{A^c}^h  \textrm{ si y sólo si }  f_{A^c}^{h'}  \succeq g_{A^c}^{h'} .\]
+	    \item P4. Para toda $f \in F$, para $A \subseteq$ no-nulo y para $x,y \in X$,
+	    \[ x \succeq y \textrm{ si y sólo si } f_A^x \succeq f_A^y.  \]
+	    donde un evento nulo $A$ es aquel evento tal que la restricción de $\succeq$ a $A$ cumple que $f \sim_A g$ para toda $f,g \in F$.
+	    \item P5. Para todo $A,B \subseteq S$ y toda $x,y,z,w \in F$ tales que $x \succeq y$, $z \succeq w$, se cumple que
+	    \[ y_A^x \succeq y_B^x \textrm{ si y sólo si } w_A^z \succeq w_B^z.\]
+	    \item P6. Para toda $f,g,h \in F$ tales que $f \succ g$ existe una partición $\{ A_1, ... , A_n \}$ de $S$ tal que para toda $ i \leq n$,
+	    \[ f_{A_i}^h \succ g, \textrm{ y además } f \succ g_{A_i}^h. \]
+	    \item P7. Para toda $f,g \in F$ y eventos $A \subseteq S$, si para toda $s \in A$ se tiene que $f \succeq_A g(s)$, entonces $f \succeq_A g$ y si para toda $s \in A$, $g(s) \succeq_A f$ entonces $g \succeq_A f$
+	    \end{itemize}
+	    \begin{teo}{\cite{savage1954the}}\\
+	    Para un conjunto $X$ finito de resultados y un conjunto $S$ de estados. Una relación de preferencias $\succeq$ definida sobre $F=X^S$ sastisface los axiomas P1-P7 si y sólo si existe una medida $\mu$ definida sobre el espacio medible $(S, 2^S)$ que es no-atómica y finitamente aditiva, y existe una función no-constante $u :X \to \mathbb{R}$ tal que para toda $f,g \in F$,
+	    \[ f \succeq g \textrm{ si y sólo si } \int_S u(f(s)) d \mu(s) \geq \int_S u(g(s)) d \mu(s). \]
+	    \end{teo}
+	    El caso para conjuntos de resultados generales:
+	    \begin{teo}
+	    Para un conjunto $X$ (no necesariamente finito) de resultados y un conjunto $S$ de estados. Una relación de preferencias $\succeq$ definida sobre $F=X^S$ sastisface los axiomas P1-P7 si y sólo si existe una medida $\mu$ definida sobre el espacio medible $(S, 2^S)$ que es no-atómica y finitamente aditiva, y existe una función no-constante $u :X \to \mathbb{R}$ tal que para toda $f,g \in F$,
+	    \[ f \succeq g \textrm{ si y sólo si } \int_S u(f(s)) d \mu(s) \geq \int_S u(g(s)) d \mu(s). \]
+	    \end{teo}
 	\subsection{Teoría de Juegos}
-		\subsubsection{Juegos en forma normal}
-		\subsubsection{Juegos en forma extensiva}
+		\subsubsection{Comportamiento Racional}
+		\subsubsection{Juegos estratégicos y la forma normal}
+		\subsubsection{Juegos extensivos con información perfecta}
+		\subsubsection{Juegos extensivos con información imperfecta}
 		\subsubsection{Representaciones más generales}
 	
-	\subsection{Trabajo Previo}
 
+\section{Pregunta de investigación}
 \section{Planteamiento y Modelado}
+
+\section{Trabajo Previo}
 
 \section{Objetivos}
 	\section{Objetivo General (debe ir relacionado con el título)}
@@ -134,6 +179,8 @@ Entonces, la definición de probabilidad subjetiva sería aquella probabilidad u
 	
 \section{Metodología}
 	\subsection{Hipótesis}
+	Tentativa: La incorporación efectiva de información causal en un proceso de toma de decisiones bajo incertidumbre produce un mejora en el desempeño del tomador de decisiones.
+	Otra opción: Bajo ciertas condiciones, un agente inteligente puede adquirir y utilizar conocimiento causal a partir de su interacción con un entorno incierto.
 	\subsection{Metodología de Trabajo}
 
 \section{Resultados Preliminares}
@@ -146,23 +193,80 @@ En el primer caso, supondremos que el modelo causal es conocido completamente po
 Posteriormente, en el segundo caso, el agente sólo tendrá a su disposición la estructura del grafo, pero no los parámetros de este. \\
 \\
 En el tercer caso, el agente no conocerá nada del modelo, pero tendrá \textit{creencias} sobre este; este caso generaliza los anteriores, pues en el primer y segundo caso las creencias con las que inicia el agente es la información que conoce sobre el modelo. En resumen, en los tres casos el agente contará con \textit{creencias} sobre el modelo causal verdadero; en el primer caso, sus creencias coincidirán plenamente con el modelo; en el segundo caso, sólo con la estructura y en el tercer caso, no tenemos garantía de nada. 
+\subsection{Escenario}
+Consideremos un paciente que llega a un hospital y puede tener la enfermedad $A$ o la enfermedad $B$, lo cual es desconocido para el médico que lo atiende, éste tiene a su disposición tres opciones: mandar el paciente a cirugía, darle un fármaco, o no hacer nada, con lo cual el paciente morirá casi con certeza. Cada una de estas opciones entraña un riesgo: durante la cirugía el paciente puede morir, y al recibir el fármaco el paciente puede tener una reacción alérgica y morir. Aun si el paciente sobrevive, no está garantizado con certeza que el procedimiento lo cure, sino que esto depende de cuál enfermedad tenía. La cirugía es más probable que cure la enfermedad $A$ y el fármaco la $B$. Además, que el fármaco o la cirugía no tengan efecto es equivalente en términos de probabilidades a no hacer nada. 
 \subsection{Caso en el que se conoce el modelo completo}
-Consideremos el caso en el que el modelo gráfico causal es completamente conocido por el tomador de decisiones, tanto en su estructura como en sus parámetros. En este caso, el juego consistiría en lo siguiente:\\
+Consideremos el caso en el que el modelo gráfico causal es completamente conocido por el tomador de decisiones (el médico en este caso), tanto en su estructura como en sus parámetros. En este caso, el juego consistiría en lo siguiente:\\
 \begin{itemize}
-\item Un modelo gráfico causal conocido para el tomador de decisiones.
-\item Jugadores: Naturaleza y el Tomador de Decisiones.
+\item Un modelo gráfico causal conocido para el médico.
+\item Jugadores: Naturaleza y el médico.
 \item Acciones: Las acciones de la Naturaleza consisten en asignar cierto estado incierto; en este caso, asigna inicialmente la enfermedad del paciente; posteriormente, selecciona sus acciones a partir del modelo causal.
 \end{itemize}
-
-
+Y el juego ocurre de la siguiente forma:
+\begin{itemize}
+\item Primero, la Naturaleza escoge la enfermedad del paciente, pero esto el médico no lo ve.
+\item Debido a que el médico no sabe qué enfermedad escogió la naturaleza, el médico se encuentra en un \textit{conjunto de información}; es decir, los nodos de decisión en los que tiene que escoger son indistinguibles. Aquí, debe escoger el médico qué acción llevar a cabo. 
+\item Ahora, a partir de la elección del médico, la naturaleza muestrea del modelo causal su siguiente jugada, lo que dará la consecuencia de la acción del médico; es decir, ahora la Naturaleza escoge (a partir del modelo causal) si al paciente le da alergia y muere, si no le da alergia y se cura, si no le da alergia y muere, etc.
+\end{itemize}
+Debido a que el médico tiene a su disposición el modelo causal desde un inicio, puede consultar las probabilidades de $P( \textrm{vivir} | do(\textrm{procedimiento}))$ y escoger como estrategia el procedimiento que arroje la probabilidad más alta; de esta manera, el médico estaría escogiendo su \textit{mejor respuesta} a cualquiera de las jugadas de la naturaleza por lo que esta sería una solución de equilibrio. Notemos que para tener una solución de equilibrio también las jugadas de la naturaleza deben ser la mejor respuesta a cualquiera de las acciones posibles del médico,  pero vamos a darle a la naturaleza el mismo pago en todos los resultados posibles para no entrar en discusión de las \textit{intenciones} de la naturaleza. Además, darle a la Naturaleza utilidad en los pagos permite dejar espacio para posibles generalizaciones futuras; por ejemplo, en el caso en el que la Naturaleza sí tenga algún tipo de intenciones o de objetivos a cumplir.
+\\
+% Node styles
+\tikzset{
+% Two node styles for game trees: solid and hollow
+solid node/.style={circle,draw,inner sep=1.5,fill=black},
+hollow node/.style={circle,draw,inner sep=1.5}
+}
+\begin{tikzpicture}[scale=1.5,font=\footnotesize]
+% Specify spacing for each level of the tree
+\tikzstyle{level 1}=[level distance=15mm,sibling distance=40mm]
+\tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+\tikzstyle{level 3}=[level distance=15mm,sibling distance=11mm]
+% The Tree
+\node(0)[solid node,label=above:{$N$}]{}
+	child{node(1)[solid node]{}
+		child{node[hollow node,label=left:{$N$}]{} 
+			child{node[hollow node,label=below:{$m$}]{}} 
+			child{node[hollow node,label=below:{$v$}]{}}
+		edge from parent node[left]{$f$}}	
+		child{node[hollow node,label=below:{$N$}]{} 
+			child{node[hollow node,label=below:{$m$}]{}} 
+			child{node[hollow node,label=below:{$v$}]{}}
+		edge from parent node[right]{$c$}}
+		child{node[hollow node,label=below:{$N$}]{} 
+			child{node[hollow node,label=below:{$m$}]{}} 
+			child{node[hollow node,label=below:{$v$}]{}}		
+		edge from parent node[right]{$n$}}
+	edge from parent node[left,xshift=-3]{$A$}
+}
+child{node(2)[solid node]{}
+child{node[hollow node,label=below:{$(e,f)$}]{} edge from parent node[left]{$f$}}
+child{node[hollow node,label=below:{$(g,h)$}]{} edge from parent node[right]{$c$}}
+child{node[hollow node,label=below:{$(c,d)$}]{} edge from parent node[right]{$n$}}
+edge from parent node[right,xshift=3]{$B$}
+};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.25)$)rectangle($(2) +(.2,-.25)$);
+% specify mover at 2nd information set
+\node at ($(1)!.5!(2)$) {$M$};
+\end{tikzpicture}
 \subsection{Caso en el que se conoce la estructura del modelo}
 Aquí se conocen los efectos de las causas, pero no sus probabilidades, entonces primero debo conocer el subconjunto posible de consecuencias y ahí tal vez hacer exploración greedy.
 \subsection{Caso general}
-No tengo idea aun.
+En el caso general en el cual el tomador de decisiones no conoce el modelo causal, lo dotaremos de \textit{creencias} sobre este; es decir, el tomador de decisiones tendrá un modelo causal \textit{propio} que usará y modificará con la experiecia
+
+\section{Plan de trabajo}
+
 \section{Conclusiones}
 
+\section{Limitaciones}
+En este trabajo consideramos un tomador de decisiones que actúa racionalmente.
+
+Consideramos la definición de causalidad que aparece arriba y la consideramos de forma axiomática; es decir, no se pone en tela de juicio si los supuestos son realistas o no, ni es intención encontrar la definición de causalidad que mejor se adapte a una situación particular del mundo \textit{real}.
+
+
+
 \section{Extensiones posibles}
-Más oponentes...la naturaleza tiene intenciones,
+Más pasos dentro de un mismo juego, oponentes, intenciones de la naturaleza
 
 \bibliographystyle{apalike}
 \bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
