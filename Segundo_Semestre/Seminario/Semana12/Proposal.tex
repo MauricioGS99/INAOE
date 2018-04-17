@@ -23,7 +23,7 @@
 \usetikzlibrary{trees}
 \usetikzlibrary{calc}
 %\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
-\title{Adquisición y uso de relaciones causales para la toma de decisiones bajo incertidumbre.}
+\title{Adquisición y uso de relaciones causales para la toma de decisiones bajo incertidumbre utilizando juegos con información imperfecta.}
 \author{Mauricio Gonzalez Soto}
 \begin{document}
 %\nocite{*}
@@ -33,6 +33,7 @@
 	\subsection{Justificación}
 
 \section{Marco Teórico}
+En esta sección se mencionarán las definiciones más importantes relativas a esta propuesta de investigación doctoral sin pretender ser exhaustivo. El contenido de estas secciones es para dar al lector certeza sobre la existencia y validez de los resultados que se pretenden utilizar. 
 	\subsection{Relaciones Causales}
 		\subsubsection{Definición de Causalidad}
 		La definición de Causalidad que estamos considerando, que está inspirada en la definición que da  \cite{spirtes2000causation} consiste en lo siguiente:
@@ -91,6 +92,7 @@
 		\end{cor}
 	\subsection{Toma de decisiones}
 		\subsubsection{Teorema de von Neumann-Morgenstern: existencia de utilidad}
+		El Teorema de Von Neumann-Morgenstern (\cite{von1944theory}) surge en el contexto de Teoría de Juegos, en donde otros resultados de los mismos autores exigen que un jugador busque maximizar su ganancia esperada, lo cual requería una justificación teórica (\cite{gilboa2009decision})
 		Sea $X$ un conjunto finito de \textit{alternativas} y consideremos una relación de preferencias $\succeq$ sobre $X$, definimos el conjunto de \textit{loterías} sobre elementos de $X$ de la siguiente manera:
 \[ \mathcal{L} = \{ P:X \to [0,1] | \sum_{x \in X} P(x) = 1, \textrm{ $P$ tiene soporte finito} \}. \]
 Es decir, una lotería es una distribución de probabilidad sobre elementos de $X$. Para $P \in \mathcal{L}$ y $x \in X$. Denotamos $P(x)$ como la probabilidad que la lotería $P$ asigna a la alternativa $x$. Una forma útil de representar loterías es la siguiente (\cite{sucar2015probabilistic}, \cite{shoham2008multiagent}):
@@ -161,11 +163,36 @@ Este Teorema arroja una probabilidad para cada tomador de decisiones tal que la 
 	    \[ f \succeq g \textrm{ si y sólo si } \int_S u(f(s)) d \mu(s) \geq \int_S u(g(s)) d \mu(s). \]
 	    \end{teo}
 	\subsection{Teoría de Juegos}
+	Teoría de Juegos es un área de las matemáticas cuyo objetivo es dar las herramientas necesarias para analizar la interacción estratégica de varios tomadores de decisiones (\cite{osborne1994course}). En esta sub-sección veremos varios tipos de juegos posibles. Por el momento, sólo veremos distintas clases de juegos para mostrar que el problema a tratar en esta propuesta cuenta con la maquinaria suficiente para ser modelado, pero se dejarán de lado otras cuestiones importantes de Teoría de Juegos como son el Equilibrio de Nash y las Estrategias Mixtas. 
 		\subsubsection{Comportamiento Racional}
+		Vamos a asumir que los agentes involucrados tienen preferencias racionales en el sentido de los axiomas de Decisión que fueron mencionados.
 		\subsubsection{Juegos estratégicos y la forma normal}
+		Consideremos una situación en la que dos o más agentes interactúan, y donde cada uno de ellos busca lograr un objetivo. Cada agente tomará una y sólo una decisión y de manera simultánea a los demás, a esta clase de situaciones se le conoce como Juegos Estratégicos.
+		\begin{defi}{Juego estratégico en forma normal (\cite{osborne1994course}, \cite{shoham2008multiagent}) }\\
+		Un juego finito en forma normal es una tupla $(N,A,u)$ donde:
+		\begin{itemize}
+		\item $N$ es un conjunto finito de jugadores.
+		\item $A= A_1 \times \cdots \times A_n$ donde cada $A_i$ son las acciones disponibles para el jugador $i$. Cada elemento $a = (a_1,...,a_n) \in A$ es llamado un perfil de acción.
+		\item Para cada jugador $i \in N$, una relación de preferencias $\succeq_i$ definida sobre $A$.
+		\end{itemize}
+		\end{defi}
+		Notemos que por los Teoremas de Decisión que hemos visto, bajo ciertas condiciones podemos sustituir la relación de preferencias $\succeq_i$ por una función de utilidad $u_i$ para cada jugador donde $a \succeq_i b$ si y sólo si $u_i(a) \geq u_i(b)$. Notemos que podemos asociar directamente cada acción de cada jugador con un valor numérico (su utilidad y pago), lo cual permite representar el juego en forma matricial, a esta representación matricial se le conoce como la Forma Normal. \\
+		\\
+		Es deseable considerar el caso en el que un jugador no conoce todas las características del otro jugador; ya sea sus acciones o sus pagos, y es este desconocimiento lo que se pretende modelar con los Juegos Estratégicos Bayesianos.
+		\begin{defi}{Juego Estratégico Bayesiano en Forma Normal (\cite{osborne1994course})}\\
+		Un juego estratégico Bayesiano consiste en
+		\begin{itemize}
+		\item Un conjunto finito de jugadores $N$
+		\item Un conjunto de \textit{estados} $\Omega$
+		\item Para cada jugador: un conjuto de acciones posibles $A_i$
+		\item Para cada jugador: Un conjunto finito $T_i$ de señales que puede observar el jugador $i$
+		\item Una función de señal $\tau_i : \Omega \to T_i$
+		\item Para cada jugador: una medida de probabilidad $P_i$ sobre $\Omega$ tal que $P( \tau^{-1}_i (t_i)) >0$ para $t_i \in T_i$
+		\end{itemize}
+		\end{defi}
 		\subsubsection{Juegos extensivos con información perfecta}
-		\subsubsection{Juegos extensivos con información imperfecta}
-		\subsubsection{Representaciones más generales}
+		\subsubsection{Juegos extensivos con información incompleta}
+		
 	
 
 \section{Pregunta de investigación}
@@ -252,7 +279,9 @@ edge from parent node[right,xshift=3]{$B$}
 \subsection{Caso en el que se conoce la estructura del modelo}
 Aquí se conocen los efectos de las causas, pero no sus probabilidades, entonces primero debo conocer el subconjunto posible de consecuencias y ahí tal vez hacer exploración greedy.
 \subsection{Caso general}
-En el caso general en el cual el tomador de decisiones no conoce el modelo causal, lo dotaremos de \textit{creencias} sobre este; es decir, el tomador de decisiones tendrá un modelo causal \textit{propio} que usará y modificará con la experiecia
+En el caso general en el cual el tomador de decisiones no conoce el modelo causal, lo dotaremos de \textit{creencias} sobre éste; es decir, el tomador de decisiones tendrá un modelo causal \textit{propio} que usará y modificará con la experiencia. Estas creencias tendrán la forma de una distribución de probabilidad sobre algún espacio; si suponemos que el tomador de decisiones conoce al menos el número de variables del modelo, entonces las creencias serán distribuciones de probabilidad sobre matrices de tamaño fijo; en cambio, de no conocer el tamaño del modelo causal, debemos recurrir a distribuciones de probabilidad que permitan representar objetos mucho más complejos. Una opción, es recurrir a distribuciones sobre espacios de dimensión infinita, como pudiera ser el espacio de los Grafos Acíclicos Dirigidos. Estas distribuciones sobre espacios de dimensión infinita se conocen en la literatura como \textit{priors Bayesianos no-paramétricos} y existe toda un área de la Estadística que los estudia, a saber, la Estadística Bayesiana No Paramétrica (\cite{ghosal2017fundamentals}).\\
+\\
+Además de la maquinaria matemática para representar dichas creencias, debemos considerar que el proceso de adquisición y uso de creencias debe ser coherente con los axiomas de racionalidad que estamos suponiendo, pues estas creencias afectarán el proceso de toma de decisiones, y como es deseable poder utilizar los resultados ya establecidos, es necesario que la construcción de estas creencias se mantengan en la misma línea. Además, para tener cierto grado de realismo e interpretación, es importante apegarse también a lo que dice la psicología (\cite{larrouy2017mindreading}).
 
 \section{Plan de trabajo}
 
@@ -263,7 +292,7 @@ En este trabajo consideramos un tomador de decisiones que actúa racionalmente.
 
 Consideramos la definición de causalidad que aparece arriba y la consideramos de forma axiomática; es decir, no se pone en tela de juicio si los supuestos son realistas o no, ni es intención encontrar la definición de causalidad que mejor se adapte a una situación particular del mundo \textit{real}.
 
-
+No estamos considerando que el ente que llamamos Naturaleza tenga intenciones, pero al darle \textit{pagos} en cada juego, aunque iguales, podríamos permitir que busque maximizar algún objetivo.
 
 \section{Extensiones posibles}
 Más pasos dentro de un mismo juego, oponentes, intenciones de la naturaleza
