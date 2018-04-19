@@ -1,0 +1,337 @@
+\documentclass{beamer}
+
+\mode<presentation> {
+
+
+\usetheme{Madrid}
+
+}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, mexico]{babel}
+\usepackage{listings}
+\usepackage{breakcites}
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{amssymb,amsthm,amsmath,latexsym}
+\usepackage{natbib}
+\theoremstyle{plain}
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}[teo]{Proposición}
+\newtheorem{defi}[teo]{Definición}
+\newtheorem{obs}[teo]{Observación}
+\newtheorem{lem}[teo]{Lema}
+\newtheorem{cor}[teo]{Corolario}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usetikzlibrary{calc}
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[Short title]{Main Topic } % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Mauricio Gonzalez Soto} % Your name
+\institute[INAOE] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution for the title page
+\medskip
+\textit{mauricio@inaoep.mx} % Your email address
+}
+\date{\today} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{Overview} % Table of contents slide, comment this block out to remove it
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+%------------------------------------------------
+\section{Introduction} 
+\begin{frame}
+\frametitle{Introduction}
+\begin{itemize}
+\item Given the enormous complexity in our environment, we are constantly faced with making decision in uncertain environments.
+\item Causal relations that hold in our environment allows to predict consequences.
+\item “Causality” evokes certain regularities, we want to think about the causes of a disease in order to avoid it. 
+\item Human beings tend to find causal narratives, sometimes excesively and that leads to incorrect judgements \cite{tversky1977causal}, \cite{tversky1980causal}, \cite{kahneman2011thinking}.
+\item How to effectively use causal knowledge to make decisions?
+\end{itemize}
+\end{frame}
+	\subsection{Motivation} 
+	\begin{frame}
+	\frametitle{Motivation}
+	\begin{itemize}
+	\item In decision making processes with a concrete goal to be achieved, causal knowledge is correctly used by human beings (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}).
+	\item Although they sometimes violate some of the axioms required in the formalization of causality (\cite{rottman2014reasoning}).
+	\item \cite{lattimoreNIPS2016} show that an autonomous agent can choose good actions if it uses causal information.
+	\end{itemize}
+	\end{frame}
+	\subsection{Justification}
+	\begin{frame}
+	\frametitle{Justification}
+	\begin{itemize}
+	\item Human beings conceive their actions upon the world as \textit{interventions} (\cite{hagmayer2009decision})
+	\item Following this idea, \cite{lattimoreNIPS2016} consider a decision making process where available actions are interventions in a causal graphical model. Faster identification of best-action.
+	\item They require the full model to be known, how to acquire and use causal info on the fly? 
+	\item This is, in part, how human beings work (\cite{hagmayer2013repeated}).
+	\item Human beings learn local aspects and then unify them in a coherent story (\cite{fernbach2009causal}, \cite{waldmann2008causal}, \cite{wellen2012learning}).
+	\end{itemize}
+	\end{frame}
+\section{Framework}
+	\subsection{Causal Relations}
+		\subsubsection{Definition of Causality}
+		\begin{frame}
+		\frametitle{So, what is causality?}
+		\begin{itemize}
+		\item Subject of heavy philosophical debate.
+		\item Statisticians have some kind of fear about using this word.
+		\item Economists try to find assumptions under an econometric model is causal.
+		\item Many definitions exists, (see for example \cite{arlo2016readings}).
+		\item Our attitude here is the expressed by \cite{danks2013functions}, \cite{danks2014unifying}:\\
+		\textit{...all that matters is that our concept appropriately tracks some relation(s) in the world that can ground and support the learning, reasoning and inferences that we do with our causal knowledge...}
+		\end{itemize}
+		\end{frame}
+		\begin{frame}
+		\frametitle{Definition of Causality}
+		The working definition of Causality that we will be using is based upon \cite{spirtes2000causation}
+		\begin{defi}
+		Let $(\Omega, \mathcal{F})$ a finite, measurable space and consider a binary relation  $\to  \subseteq \mathcal{F} \times \mathcal{F}$ such that
+		\begin{itemize}
+		\item Transitive: if $A \to B$ and $B \to C$ for $A,B,C \in \mathcal{F}$ then $A \to C$.
+		\item  Irefflexive: for each $A \in \mathcal{F}$ it is not true that $A \to A$.
+		\item Antisymetric: For $A, B \in \mathcal{F}$, if $A \to B$, then it is not true that $B \to A$.
+		\end{itemize}
+		If $A \to B$ we will say that $A$ is a cause of $B$.
+		\end{defi}
+		\end{frame}
+		\subsubsection{Direct and indirect causes}
+		\begin{frame}
+		\frametitle{Direct and Indirect Causes}
+		Consider a refinement $\mathcal{F}_s$ of $\mathcal{F}$ and extend “$\to$” properly. Notice that it could happen that if $A \to B$, then for some $C_s \in \mathcal{F}$ we have that $A \to C_s \to B$. 
+		\begin{defi}
+		Under the same setup as the previous definition, we say that $A$ is a direct cause of $B$ if $A \to B$ and if it does not exist any $C$ such that $A \to C \to B$ for all proper refinements $\mathcal{F}_s$ of $\mathcal{F}$.
+		\end{defi}
+		\end{frame}
+		\subsubsection{Causal Graph Construction}
+		\begin{frame}
+		\frametitle{From Causes to Graphs}
+		Abusing notation, notice that we can build a graph that represent all of the direct causes between events that are members of $\mathcal{F}$.\\
+		For each pair $A,B \in \mathcal{F}$ such that $A \to B$ and $A$ is a direct cause of $B$, define a node representing each variable, and a directed edge joining them.
+		\begin{prop}
+		Given a binary relation “$\to$” that satisfies previous requirement, let $\mathcal{G}$ be the directed graph that is obtained by the previous procedure. Then, $\mathcal{G}$ contains no cycles.
+		\end{prop}
+		\begin{proof}
+		Consider a cycle $A \to C_1 \to C_2 \to \cdots \to A$, then we would have that $A \to A$, which contradicts the Irreflexive property.
+		\end{proof}
+		\end{frame}
+		\begin{frame}
+		\begin{obs}
+		Notice that if the graph is finite, then necesarily there will be nodes without parents, which in the context of causal models will be called exogenous variables
+		\end{obs}
+		\end{frame}
+		\subsubsection{Probability Measure built from the Graph}
+		\begin{frame}
+		\frametitle{from Graphs to Probability Measures}
+		Given a Directed Acyclic Graph, one can build the probability distribution $P_\mathcal{G}$ that expresses the relations of the graph.
+		An interesting question would be to study the relation of $P_\mathcal{G}$ and any other measure in the \textit{upper level} of the measurable space .
+		\end{frame}
+	\subsection{Causal Graphical Models}
+	\begin{frame}
+	\frametitle{Causal Graphical Models}
+	\begin{defi}
+	A causal graphical model consists of:
+	\begin{itemize}
+	 \item A set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, 
+	 \item A directed acyclic graph $\mathcal{G}$
+	 \item An operator $do()$ defined over the space of DAG's whose action consists of: given $\mathbf{X} \subseteq \mathcal{X}$ and $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$, then $do(\mathbf{X} = \mathbf{x} )$ assigns to each $X_j \in \mathbf{X}$ the value $x_{i_j}$ and deletes any incoming edge on it.
+	 \end{itemize}
+	 \end{defi}
+	 \end{frame}
+		\subsubsection{The identifiability issue} 
+		\begin{frame}
+		\frametitle{Identifiability}
+		When can causal questions be answered using only observational data?
+		\end{frame}
+		\subsubsection{Do Calculus}
+		\begin{frame}[allowframebreaks]
+		\frametitle{Do calculus}
+		The structure of the causal graph produces some equivalence rules between observational an interventional data.
+		\begin{teo}{\label{docalculus}} (\cite{pearl2009causality})\\
+		Sea $\mathcal{G}$ un modelo gráfico causal y $P_{\mathcal{G}}$ la medida de probabilidad inducida por el modelo; entonces, para cualesquiera conjuntos disjuntos de variables $X,Y,Z,W$ 	se cumple que
+		\begin{itemize}
+		\item If $Y$ is conditionally independent from $Z$ given $X$ y $W$ in $\mathcal{G}_{\bar{X}}$, then
+		\[ P_{\mathcal{G}}(Y=y | do(X=x), Z=z, W=w) = P_{\mathcal{G}}(Y=y | do(X=x), W=w). \]
+		\item Si en el grafo $\mathcal{G}_{\bar{X}\underline{Z}}$ se cumple que $Y$ es condicionalmente independiente de $Z$ dados $X$ y $W$, entonces
+		\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), Z = z, W=w). \]
+		\item Sea $Z(W)$ el conjunto de nodos en $Z$ tales que no son ancestros de ningún nodo en $W$ en el grafo $\mathcal{G}_{\bar{X}}$. Si en el grafo $G_{\bar{X}, \bar{Z(W)}}$ se cumple que $Y$ es condicionalmente independiente de $Z$ dados $X$ y $W$ entonces,
+		\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
+		\end{itemize}
+		\end{teo}
+		\end{frame}
+		\begin{frame}
+		\frametitle{Some results}
+		\begin{teo}{\cite{peters2017elements}}\\
+ 		The next statements hold:
+		\begin{itemize}
+		\item The do-calculus is complete; i.e., for all identifiable intervention there exists a sequential application of the rules that enables one to compute such intervention (\cite{huang2006pearl}, 				\cite{shpitser2006identification}).
+		\item There is an algorithm capable of finding all identifiable interventional distributions (\cite{tian2002}, \cite{huang2006pearl}).
+		\item There exits a necessary and sufficient graphical criterion for identifiability of interventional distributions (\cite{shpitser2006identification}, \cite{huang2006pearl}).
+		\end{itemize}
+		\end{teo}
+		\end{frame}
+		\begin{frame}
+		\frametitle{Answering the identifiability problem}
+		\begin{cor} 
+		A distribution $q=P(y_1,...,y_k | do(x_1),...,do(x_n))$ is identifiable in a causal graphical model $\mathcal{G}$ if there exists a finite sequence of transformations, where each of them corresponds to one of the simplification rules of Theorem \ref{docalculus} which reduces $q$ to a probability statement conditioned only on observations (i.e. the $do$ operator doesn't appear).
+\end{cor}
+		\end{frame}
+	\subsection{Decision Theory}
+	\begin{frame}
+	\frametitle{Decision Theory: some classic results}
+	\end{frame}
+		\subsubsection{von Neumann-Morgenstern's Theorem}
+		\begin{frame}
+		\frametitle{von Neumann-Morgenstern's Theorem: existence of a utility function}
+		Let $X$ be a finite set of outomes and consider $\mathcal{L}$ the set of lotteries over elements of $X$ and consider a preference relation $\succeq$ over $\mathcal{L}$.
+		\begin{teo}
+		A preference relation $\succeq$ over lotteries satisfies the (not shown here) axioms of rational choice if and only if there exists a function $u: X \to \mathbb{R}$ such that for all pair of lotteries $P,Q \in \mathcal{L}$ we have that $P \succeq Q$ if and only if 
+		\[ \sum_{x \in X} P(x) u(x) \geq \sum_{x \in X} Q(x) u(x).  \]
+		\end{teo}
+		\end{frame}
+		\subsubsection{De Finetti's Theorem}
+		\begin{frame}
+		\frametitle{De Finetti's Theorem: existence of subjective probability}
+		Consider $n$ states of the world and consider $X$ the set of \textit{bets} over this set, where a bet is an $n$-dimensional vector whose $i$-th entry corresponds to the monetary amount that is being bet on state $n$. Consider a preference relationship $\succeq$ over the $X$. Also, some axioms are required over $\succeq$
+		\begin{teo}
+		The relationship $\succeq$ satisfies the axioms if an only if there exists a probability vector of size $n$ such that for all $x,y \in X$,
+		\[ x \succeq y \textrm { if and only if } p^t x \geq p^t y. \]
+		\end{teo}
+		\end{frame}
+		\subsubsection{Savage's Theorem}
+		\begin{frame}
+		\frametitle{Savage's Theorem}
+		vNM Theorem requires probabilities and guarantees the existence of utility. DeFinetti's Theorem requires utility and guarantees the existence of probability...where do we start? Savage's Theorem gives both in tandem, but requires more abstract (and criticizable) axioms.
+		\begin{teo}
+		Consider a finite set $X$ of outcomes and a set $S$ of states.  A preference relationship $\succeq$ over $F=X^S$ satisfies the axioms if and only if there exists a finite non-atomic measure $\mu$ defined over the measurable space $(S, 2^S)$ and a non-constant function $u :X \to \mathbb{R}$ such that for all $f,g \in F$ it holds that
+		\[ f \succeq g \textrm{ if and only if} \int_S u(f(s)) d \mu(s) \geq \int_S u(g(s)) d \mu(s). \]
+		\end{teo}
+		\end{frame}
+		
+	\subsection{Game Theory}
+		\subsubsection{Games in normal form}
+		\subsubsection{Games in extensive form}
+\section{Research Question}
+\begin{frame}
+\frametitle{Research Question}
+How can an intelligent agent acquire and use causal knowledge from his interaction with an uncertain environment in a decision making process?
+\end{frame}
+
+\section{Set up and modelling}
+\begin{frame}[allowframebreaks]
+\frametitle{Modelling}
+\begin{itemize}
+\item A (one-stage) decision problem under uncertainty consists in a set of actions, a set of consequences and a set of uncertain events.
+\item The standard interpretation (\cite{bernardo2000bayesian}, \cite{gilboa2009decision}) is that an agent will choose some action, then an uncertain event will occur and this will determine the outcome.
+\item If all probabilities and utilities of outcomes are known, one can choose by maximizing MEU.
+
+\end{itemize}
+\end{frame}
+\begin{frame}
+\begin{itemize}
+\item Now, consider an environment where the relation between the actions, the events, and the consequences is given by a causal model.
+\item If this model is known by a decision maker, then it can be used for determining the probabilities of effects given causes (outcomes given actions).
+\item If the model is not known, we want to learn it by interaction.
+\end{itemize}
+\end{frame}
+\begin{frame}
+\begin{itemize}
+\item Interaction will be modelled as a \textit{game} between two players: the original decision maker, and a new abstract entity called Nature.
+\item Nature will pick its actions from the causal model.
+\end{itemize}
+\end{frame}
+\begin{frame}
+\begin{itemize}
+\item If the agent doesn't know the causal model, we must give him some way to reason about it.
+\item The agent will have \textit{beliefs} about the causal model which will be used as a \textit{personal} causal model at any given time.
+\item Beliefs will be updated from what is observed in each game.
+\item Updating must be done in some \textit{consistent} (consistency is a statistical definition for estimators that converge to the true parameter.)
+\end{itemize}
+\end{frame}
+
+
+\section{Previous work}
+	\subsection{Causality and Decision Theory}
+	\subsection{Optimal Interventions}
+	\begin{frame}[allowframebreaks]
+	\frametitle{Identifying Optimal Interventions}
+	\begin{itemize}
+		\item \cite{lattimoreNIPS2016} study the problem of decision making under uncertainty in causal models where the causal model is completely known.
+		\item In their setup, the actions or choices available to dhe decision maker are interventions in the model.
+		\item They look for the minimal-regret intervention that maximices some reward variable. 
+		\item They show that optimal intervention can be found faster than if no causal info was considered. Open question of what to do when the causal graph is unknown
+		\item Later, \cite{sen2017identifying} start with the same setting than in \cite{lattimoreNIPS2016} but they consider the case when not all of the graph is known. 
+		\item They also find the optimal intervention over some variable in the unknown part of the model. They improve the results of \cite{lattimoreNIPS2016} in experiments, but they still require knowing conditional distributions.
+	\end{itemize}
+\end{frame}
+\section{Objectives}
+	\subsection{General Objective}
+	\begin{frame}
+	The proposed research has 2 general objectives: 
+	\begin{itemize}
+	\item Find the way in which an agent facing an uncertain environment (governed by a causal model) can use causal knowledge in order to make good choices and improve his performance when compared to non-causal ways of choosing.
+	\item Find the way in which an agent can acquire causal information while interacting with an uncertain (governed by a causal model) environment.
+	\end{itemize}
+	\end{frame}
+	\subsection{Specific Objectives}
+	\begin{frame}[allowframebreaks]
+	\frametitle{Specific Objectives}
+	\begin{itemize}
+\item To find a way to specify beliefs about causal structure; i.e., find (or build) a family of parametric distributions that represent in a coherent way beliefs or previous knowledge about the causal structure of some environment.
+\item  We have to consider two cases: if the decision-maker (or the owner of the beliefs) knows the maximum number of variables that the causal model can have.
+\item On the other side, if the agent doesn't know the max number of variables.
+\item To find a way of effectively using causal knowledge that the agent has at a given moment.
+\item Develop an update criterion for the beliefs of the agent based upon what he has observed from the environment while interacting. This updating must be achieved in a way that the sequence of models converges to the true model. In the Bayesian Non parametric setting this is known as \textit{consistency} (\cite{ghosal2017fundamentals}). Also, the beliefs obtained must be coherent with the decision making since we will be using those results. 
+\item An aproximate soluton criteria: maybe we can't wait until convergence, so what can be done with the current knowledge.
+\end{itemize}
+	\end{frame}
+\section{Methodology}
+	\subsection{Hypothesis}
+	\begin{frame}
+	\frametitle{Hypothesis}
+	Under certain conditions, an agent can acquire and use causal knowledge from interaction with an uncertain environment and effectively use it in a decision problem under uncertainty.
+	\end{frame}
+	\subsection{Working methodology}
+\section{Preliminary Results}
+\begin{frame}
+\frametitle{Preliminary Results}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apalike}
+\bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\Huge{\centerline{The End}}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
