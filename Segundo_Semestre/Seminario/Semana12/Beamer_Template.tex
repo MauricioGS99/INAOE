@@ -31,7 +31,7 @@
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
 
-\title[Short title]{Main Topic } % The short title appears at the bottom of every slide, the full title is only on the title page
+\title[Short title]{Use and acquisition of causal knowledge in a decision making process} % The short title appears at the bottom of every slide, the full title is only on the title page
 
 \author{Mauricio Gonzalez Soto} % Your name
 \institute[INAOE] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
@@ -82,7 +82,7 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 	\begin{frame}
 	\frametitle{Justification}
 	\begin{itemize}
-	\item Human beings conceive their actions upon the world as \textit{interventions} (\cite{hagmayer2009decision})
+	\item Human beings conceive their actions upon the world as \textit{interventions} (\cite{hagmayer2009decision}).
 	\item Following this idea, \cite{lattimoreNIPS2016} consider a decision making process where available actions are interventions in a causal graphical model. Faster identification of best-action.
 	\item They require the full model to be known, how to acquire and use causal info on the fly? 
 	\item This is, in part, how human beings work (\cite{hagmayer2013repeated}).
@@ -167,18 +167,7 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 		\subsubsection{Do Calculus}
 		\begin{frame}[allowframebreaks]
 		\frametitle{Do calculus}
-		The structure of the causal graph produces some equivalence rules between observational an interventional data.
-		\begin{teo}{\label{docalculus}} (\cite{pearl2009causality})\\
-		Sea $\mathcal{G}$ un modelo gráfico causal y $P_{\mathcal{G}}$ la medida de probabilidad inducida por el modelo; entonces, para cualesquiera conjuntos disjuntos de variables $X,Y,Z,W$ 	se cumple que
-		\begin{itemize}
-		\item If $Y$ is conditionally independent from $Z$ given $X$ y $W$ in $\mathcal{G}_{\bar{X}}$, then
-		\[ P_{\mathcal{G}}(Y=y | do(X=x), Z=z, W=w) = P_{\mathcal{G}}(Y=y | do(X=x), W=w). \]
-		\item Si en el grafo $\mathcal{G}_{\bar{X}\underline{Z}}$ se cumple que $Y$ es condicionalmente independiente de $Z$ dados $X$ y $W$, entonces
-		\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), Z = z, W=w). \]
-		\item Sea $Z(W)$ el conjunto de nodos en $Z$ tales que no son ancestros de ningún nodo en $W$ en el grafo $\mathcal{G}_{\bar{X}}$. Si en el grafo $G_{\bar{X}, \bar{Z(W)}}$ se cumple que $Y$ es condicionalmente independiente de $Z$ dados $X$ y $W$ entonces,
-		\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
-		\end{itemize}
-		\end{teo}
+		The do calculus is a set of rules which allow, under certain conditions, to express interventional statements in terms of observational statements.
 		\end{frame}
 		\begin{frame}
 		\frametitle{Some results}
@@ -230,13 +219,26 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 		\end{frame}
 		
 	\subsection{Game Theory}
-		\subsubsection{Games in normal form}
-		\subsubsection{Games in extensive form}
+\begin{frame}
+\frametitle{Game Theory}
+Game Theory is an area of Mathematics that is used to model strategic interaction situations, which can be interpreted as multi-agent decision problems, where the outcomes for each player depend on the actions of the other players. Several classes exist:
+\begin{itemize}
+\item Strategic Games
+\item Extensive Games
+\item Stochastic Games
+\end{itemize}
+\end{frame}
 \section{Research Question}
 \begin{frame}
 \frametitle{Research Question}
-How can an intelligent agent acquire and use causal knowledge from his interaction with an uncertain environment in a decision making process?
+In an uncertain environment where the relationship between events is governed by some causal mechanism, how can an intelligent agent acquire and use causal knowledge from his interaction with the environment in a decision making proces in order to learn faster to choose good actions?
 \end{frame}
+
+	\subsection{Hypothesis}
+	\begin{frame}
+	\frametitle{Hypothesis}
+Let $\mathcal{G}$ a causal graphical model whose probability distribution $P_\mathcal{G}$ satisfies (the axioms). Let $(D,E,c)$ a decision problem whose uncertain events are related to the variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$, then by repeatedly making decisions he can learn causal information and use it to find the optimal actions (in the sense of expected utility theory) in less rounds than if he doesn't consider causal information.
+	\end{frame}
 
 \section{Set up and modelling}
 \begin{frame}[allowframebreaks]
@@ -272,7 +274,6 @@ How can an intelligent agent acquire and use causal knowledge from his interacti
 
 
 \section{Previous work}
-	\subsection{Causality and Decision Theory}
 	\subsection{Optimal Interventions}
 	\begin{frame}[allowframebreaks]
 	\frametitle{Identifying Optimal Interventions}
@@ -285,6 +286,7 @@ How can an intelligent agent acquire and use causal knowledge from his interacti
 		\item They also find the optimal intervention over some variable in the unknown part of the model. They improve the results of \cite{lattimoreNIPS2016} in experiments, but they still require knowing conditional distributions.
 	\end{itemize}
 \end{frame}
+
 \section{Objectives}
 	\subsection{General Objective}
 	\begin{frame}
@@ -307,16 +309,17 @@ How can an intelligent agent acquire and use causal knowledge from his interacti
 \end{itemize}
 	\end{frame}
 \section{Methodology}
-	\subsection{Hypothesis}
-	\begin{frame}
-	\frametitle{Hypothesis}
-	Under certain conditions, an agent can acquire and use causal knowledge from interaction with an uncertain environment and effectively use it in a decision problem under uncertainty.
-	\end{frame}
+
 	\subsection{Working methodology}
 \section{Preliminary Results}
 \begin{frame}
 \frametitle{Preliminary Results}
-
+For the preliminary results we set up a toy example (the same one that we have been using) and analyze 3 separate cases in order of growing difficulty:
+\begin{itemize}
+\item In the first case, the decision maker knows it all.
+\item In the second case, the decision maker only knows for certain the structure of the model, but not its parameters so he has beliefs about them.
+\item In the third case, the decision maker knows nothing at all, so he has general beliefs about the causal model itself.
+\end{itemize}
 \end{frame}
 
 
