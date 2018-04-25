@@ -57,7 +57,7 @@ Las relaciones causa-efecto\footnote{Esto será definido formalmente más adelan
 \\
 \indent Que un agente pueda \textit{aprender} algo de su entorno a lo largo de una serie de interacciones, o juegos, ha sido estudiado ya en el caso en el que el jugador busca aprender los pagos del juego o las estrategias de alguno de los otros agentes \cite{fudenberg1998learning} lo que motiva a pensar que un agente podría aprender sobre el modelo causal que rige su entorno. \\
 \\
-\indent Desde el punto de vista de la epistemología y la fiolosofía de las ciencias han existido diversos intentos de formalizar una Teoría de Decisión que incorpore información causal, como han sido los trabajos de \cite{joyce1999foundations}, \cite{board2006equivalence}, \cite{joyce2012regret}, \cite{ahmed2012push}, \cite{rottman2014reasoning}, \cite{soares2015toward}, \cite{stalnaker2016knowledge}, los cuales hacen uso del “razonamiento contrafactual” para proponer una manera de tomar decisiones a la luz de “lo que hubiera pasado si...”. Estos trabajos tienen ciertas limitaciones filosóficas y conceptuales, pues ignoran el caso en el cual las acciones de un tomador de decisiones están correlacionadas (pero no causalmente conectadas) con algunas partes del ambiente, además de la dificultad que implica la construcción de un modelo causal. 
+\indent Desde el punto de vista de la epistemología y la fiolosofía de las ciencias han existido diversos intentos de formalizar una Teoría de Decisión que incorpore información causal, como han sido los trabajos de \cite{joyce1999foundations}, \cite{board2006equivalence}, \cite{joyce2012regret}, \cite{ahmed2012push}, \cite{rottman2014reasoning}, \cite{soares2015toward}, \cite{stalnaker2016knowledge}, los cuales hacen uso del \textit{razonamiento contrafactual} para proponer una manera de tomar decisiones a la luz de “lo que hubiera pasado si...”. Estos trabajos tienen ciertas limitaciones filosóficas y conceptuales, pues ignoran el caso en el cual las acciones de un tomador de decisiones están correlacionadas (pero no causalmente conectadas) con algunas partes del ambiente, además de la dificultad que implica la construcción de un modelo causal. 
 \subsection{Justificación}
 Contar con información sobre la estructura causal de cierto entorno puede hacer que un proceso de toma de decisiones se lleve a cabo de manera eficiente; en el trabajo de \cite{lattimoreNIPS2016} se muestra cómo al contar con un modelo causal del ambiente se pueden encontrar acciones óptimas de manera más rápida que si sólo se llevara a cabo una exploración a ciegas con tal de encontrar la mejor acción como llevan a cabo \cite{audibert2010best}. \cite{lattimoreNIPS2016} consideran el caso en el cual un tomador de decisiones quiere maximizar cierta variable de recompensa y las acciones que tiene a su disposición el agente están relacionadas de manera causal con la variable recompensa y entre sí.\\
 \\
@@ -110,7 +110,7 @@ La prueba se deriva trivialmente de los requerimientos de la relación binaria, 
 \end{proof}
 Notemos que al ser finito el grafo dirigido, existirán necesariamente variables que no tengan padres, las cuales serán conocidas como variables exógenas.
 
-\subsubsection{Una medida de probabilidad a partir del grafo}
+\subsubsection{Una medida de probabilidad a partir del grafo}{\label{axiomas}}
 Dado un grafo acíclico dirigido, podemos construir una medida de probabilidad que expresa las relaciones que se encuentran establecidas en el grafo, la cual denotaremos $P_{\mathcal{G}}$. Requerimos que la medida $P_{\mathcal{G}}$ cumpla las siguientes condiciones que la relacionan con el grafo:
 \begin{itemize}
 \item Markov Causal: Un evento $V$ (o nodo en el grafo) es independiente de todo aquel evento (nodo) que no sea ni una causa directa ni un efecto directo dadas las causas directas de $V$.
@@ -302,10 +302,20 @@ Lo que representa cada partición es que un jugador no pueda distinguir entre no
 \end{defi}
 \subsection{Representaciones más generales}
 \subsubsection{Juegos repetidos}
-Un juego repetido consiste en jugar el mismo juego (uno en forma normal) en repetidas ocasiones por los mismos jugadores. Este caso es importante para la propuesta de investigación que aquí se expone porque veremos que un tomador de decisiones debe aprender
+Un juego repetido consiste en jugar el mismo juego (uno en forma normal) en repetidas ocasiones por los mismos jugadores. Por ejemplo, jugar de manera secuencial, por los mismos jugadores, el dilema del prisionero o cualquier otro juego conocido. En esta clase de situaciones, se puede considerar que el pago final es la suma de los pagos de cada ronda, descontados o no. En estas situaciones vale la pena preguntar si los jugadores van a realizar siempre las soluciones de equilibrio, o si en el largo plazo llevarán a cabo otras estrategias.Este caso es importante para la propuesta de investigación que aquí se expone porque veremos que un tomador de decisiones debe aprender
 \subsubsection{Juegos estocásticos}
 De manera informal, un juego estocástico es una colección de juegos estratégicos en forma normal, a los que se conoce como juegos base, y los agentes juegan sucesivamente elementos de esta esta colección, y donde el juego que es jugado en cierta etapa depende probabilísticamente del juego anterior. Resulta que un juego estocástico generaliza los Proceso de Decisión Markovianos así como los juegos repetidos, pues un MDP es un juego estocástico de un jugador mientras que un juego repetido es un juego estocástico en el que sólo hay un juego base.
 \subsection{Aprendizaje en Juegos}
+¿Cómo después de observar una secuencia de juegos los tomadores de decisiones pueden aprender algo sobre estos? Tal vez al observar las acciones de los otros agentes puedan inferir sus estrategias y plantear una \textit{mejor respuesta} a la estrategia aprendida. Para llevar esto a cabo existen varias técnicas, como el \textit{aprendizaje ficticio}, el \textit{aprendizaje Bayesiano o racional} e incluso algoritmos de aprendizaje por refuerzo. Pueden consultarse con más detalle en \cite{shoham2008multiagent}, \cite{fudenberg1998theory}. En particular, se tiene el siguiente resultado de interés
+\begin{teo}
+Sea $s$ un perfil de estrategias para un juego repetido de $n$ jugadores y sea $P=P_1,...,P_n$ donde $P_i$ son las crrencias del jugador $i$. Sean $\mu_s, \mu_p$ distribuciones sobre las historias infinitas de los juegos inducidas por el perfil $s$ y las probabilidades $P$ Si se cumple que:
+\begin{itemize}
+\item En cada ronda el jugador $i$ juega una \textit{mejor respuesta} dadas sus creencias $P_i$
+\item Después de cada ronda el jugador actualiza Bayesianamente.
+\item La medida $\mu_s$ es absolutamente continua respecto a $\mu_P$.
+\end{itemize}
+Entonces, para toda $\varepsilon>0$ y para casi toda historia en el soporte de $\mu_s$ existe un tiempo $T$ tal que para toda $t \geq T$, la jugada $\mu_{P_i}$ predicha por las creencias del jugador $i$ están $\varepsilon$-cercanas de la distribución $\mu_S$ predicha por las estrategias actuales.
+\end{teo}
 \section{Trabajo Previo}
 \subsection{Causalidad y Teoría de Decisión}
 Existen trabajos que utilizan en conjunto inferencia causal junto con toma de decisiones; por ejemplo \cite{heckerman1995decision} argumenta que los trabajos usuales sobre causalidad no contienen primitivas suficientemente básicas, por lo que plantea el problema de inferencia causal como uno de toma de decisiones.\\
@@ -345,7 +355,7 @@ A manera de cierre de esta sección, resaltamos la importancia inmediate de los 
 \section{Pregunta de investigación}
 En un entorno incierto para el cual se cumplen una serie de relaciones causales ¿cómo puede un agente inteligente adquirir y utilizar información acerca de estas relaciones a partir de su interacción con el entorno en un proceso de toma de decisiones para aprender más rápido a tomar mejores decisiones?
 \subsection{Hipótesis}
-Sea $\mathcal{G}$ un modelo gráfico causal y consideremos un problema de decisión bajo incertidumbre que involucra variables del modelo causal. Entonces, si modelamos el problema de decisión como un juego entre el tomador de decisiones y la Naturaleza, y si el tomador de decisiones actua racionalmente, entonces el uso de información causal por parte del tomador de decisiones lo llevará a escoger sus acciones óptimas (en el sentido de maximización de utilidad) más rápido que si no considerara la información causal del entorno.
+Sea $\mathcal{G}$ un modelo gráfico causal cuya distribución de probabilidad asociada $P_\mathcal{G}$ satisface los axiomas mencionados en la sección \ref{axiomas} y consideremos un problema de decisión bajo incertidumbre $(D,E,C)$ cuyos eventos inciertos están relacionados variables del modelo causal $\mathcal{G}$. Además, el tomador de decisiones tiene preferencias racionales sobre las consecuencias de sus decisiones. Entonces, mediante la interacción con el entorno el tomador de decisiones podrá adquirir y hacer uso de información causal para  escoger sus acciones óptimas (en el sentido de maximización de utilidad) más rápido que si no considerara la información causal del entorno.
 
 \section{Planteamiento y Modelado}
 Suponemos un ambiente que está regido por un modelo causal, y suponemos que este es desconocido, pero fijo y además cumple que todas las variables se encuentran contenidas en él (suficiencia causal).\\
@@ -514,8 +524,8 @@ No estamos considerando que el ente que llamamos Naturaleza tenga intenciones, p
 Dadas las limitaciones del trabajo propuesto, existen varias extensiones posibles que se dejan como trabajo futuro; entre algunas de estas encontramos:
 \begin{itemize}
 \item Considerar juegos de mayor duración.
-\item Considerar varios jugadores además de la naturaleza.
-\item Considerar que la Naturaleza tiene algún tipo de intenciones o de objetivo a maximizar; por ejemplo, el concepto de Naturaleza que hemos usado podría bien representar a un gobierno o un Banco central.
+\item Considerar varios jugadores además de la Naturaleza.
+\item Considerar que la Naturaleza tiene algún tipo de intenciones o de objetivo a maximizar; por ejemplo, el concepto de Naturaleza que hemos usado podría bien representar a un gobierno o un Banco central. Por ejemplo, en una negociación salarial los jugadores podrían ser el empleador, los empleados y el gobierno; en este ejemplo, la Naturaleza sería el gobierno y el modelo causal las leyes actuales que definen el actuar del gobierno, quien podría tener el interés de maximizar el número de personas con empleo.
 \item Estudiar equilibrios en este tipo de juegos en términos de la estructura del modelo causal. 
 \end{itemize}
 
