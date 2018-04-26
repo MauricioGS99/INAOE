@@ -100,7 +100,7 @@ Diremos que $A$ es una causa de $B$ si $A \to B$ para $A,B \in \mathcal{F}$.
 \end{defi}
 
 \subsubsection{Causas Directas e Indirectas}
-Consideremos ahora un \textit{refinamiento}\footnote{En el sentido de una Topología más fina \cite{munkres2000topology}.} $\mathcal{F}_s$ de la sigma-álgebra $\mathcal{F}$ de modo que ahora puedan existir nuevos eventos $C_s \in \mathcal{F}_s$ tales que $A \to C_s \to B$. Decimos que $A$ es una \textit{causa directa} de $B$ si se cumple que $A \to B$ y no existe evento $C$ tal que $A \to C \to B$ para todo refinamiento propio de $\mathcal{F}$. Notemos que la definición depende del conjunto de variables, por lo que al decir que un evento es causa directa de otro, es siempre relativo al conjunto de variables. Diremos que la familia de conjuntos sobre la cual tenemos causas directas es un \textit{contexto}. 
+Consideremos ahora un \textit{refinamiento}\footnote{En el sentido de una Topología más fina (\cite{munkres2000topology}).} $\mathcal{F}_s$ de la sigma-álgebra $\mathcal{F}$ de modo que ahora puedan existir nuevos eventos $C_s \in \mathcal{F}_s$ tales que $A \to C_s \to B$. Decimos que $A$ es una \textit{causa directa} de $B$ si se cumple que $A \to B$ y no existe evento $C$ tal que $A \to C \to B$ para todo refinamiento propio de $\mathcal{F}$. Notemos que la definición depende del conjunto de variables, por lo que al decir que un evento es causa directa de otro, es siempre relativo al conjunto de variables. Diremos que la familia de conjuntos sobre la cual tenemos causas directas es un \textit{contexto}. 
 
 
 \subsubsection{Construcción de un grafo que represente relaciones causales}
@@ -115,13 +115,13 @@ La prueba se deriva trivialmente de los requerimientos de la relación binaria, 
 Notemos que al ser finito el grafo dirigido, existirán necesariamente variables que no tengan padres, las cuales serán conocidas como variables exógenas.
 
 \subsubsection{Una medida de probabilidad a partir del grafo}{\label{axiomas}}
-Dado un grafo acíclico dirigido, podemos construir una medida de probabilidad que expresa las relaciones que se encuentran establecidas en el grafo, la cual denotaremos $P_{\mathcal{G}}$. Requerimos que la medida $P_{\mathcal{G}}$ cumpla las siguientes condiciones que la relacionan con el grafo:
+Dado un grafo acíclico dirigido, podemos construir una medida de probabilidad que expresa las relaciones que se encuentran establecidas en el grafo, la cual denotaremos $P_{\mathcal{G}}$. Requerimos que la medida $P_{\mathcal{G}}$ cumpla las siguientes condiciones que la relacionan con el grafo (\cite{spirtes2000causation}):
 \begin{itemize}
 \item Markov Causal: Un evento $V$ (o nodo en el grafo) es independiente de todo aquel evento (nodo) que no sea ni una causa directa ni un efecto directo dadas las causas directas de $V$.
 \item Minimalidad Causal: el grafo $\mathcal{G}$ es mínimo en el sentido de que ningun sub-grafo propio satisface la condición Markov Causal.
 \item Fidelidad Causal: La condición Markov Causal contiene las independencias condicionales que el grafo $\mathcal{G}$ expresa.
 \end{itemize}
-\indent Estos requerimientos vamos a tratarlos de manera axiomática, en el sentido de que se dan por sentado sin cuestionarlos. Quien no esté de acuerdo con los axiomas, no lo estará con las conclusiones y queda siempre la invitación de desarrollar la teoría utilizando otras altenativas.
+\indent Estos requerimientos vamos a tratarlos de manera axiomática, en el sentido de que se dan por sentado sin cuestionarlos. No cae dentro del enfoque de la investigación propuesta el encontrar definiciones o estructuras causales que se adapten de manera más o menos realista a cierta situación particular.
 
 \subsubsection{Relación entre $\mathbb{P}$ y $P_\mathcal{G}$}{\label{relacion}}
 Es interesante estudiar la relación entre la medida de probabilidad del espacio $\mathbb{P}$ y la medida de probabilidad definida por el grafo que captura las relaciones causales $P_\mathcal{G}$. La pregunta concreta que se hace es si la medida $P_\mathcal{G}$ captura por sí sola todas las relaciones causales. Sabemos (\cite{koller2009probabilistic}) que una Red Bayesiana captura sólo las (mínimas) independencias de la distribución de probabilidad que representa, por lo que en la extensión al caso causal falta algo más que conecte a la medida de probabilidad que el grafo genera con las relaciones causales que existen en el espacio.
@@ -163,7 +163,9 @@ Las reglas del cálculo do proveen una solución al problema de la identificabil
 Una distribución $q=P(y_1,...,y_k | do(x_1),...,do(x_n))$ es identificable en un modelo gráfico causal $\mathcal{G}$ si existe una secuencia finita de transformaciones, donde cada una de las cuales corresponde a una de las reglas del teorema \ref{docalculus} que reduce $q$ a una expresión de probabilidad condicionada sólo en datos observacionales (i.e. no aparece el operador $do$)
 \end{cor}
 \subsection{Toma de decisiones}
-El Teorema de Von Neuman-Morgenstern, garantiza la existencia de una función de utilidad si un tomador de decisiones conoce las probabilidades de los eventos, entonces  la relación de preferencias del agente es equivalente al orden que impone la utilidad esperada respecto a esta función y las probabilidades conocidas, por lo que la mejor decisión a tomar es aquella que maximice esta cantidad.\\
+En lo siguiente, mencionaremos tres resultados de alta importancia en la formalización de la toma de decisiones bajo incertidumbre. Veremos que los elementos comunes en estos resultados son un agente, o tomador de decisiones, que busca escoger una de entre varias opciones, cuyas consecuencias son inciertas, de modo que se maximice cierta cantidad como consecuencia de esta elección. Para ello, se requiere que el agente sepa distinguir entre qué opciones le representan un mayor bienestar, el cual llamaremos \textit{utilidad}. La característica principal de los resultados que veremos a continuación es que proveen una manera formal de escoger entre las acciones si el tomador de decisiones cumple ciertas condiciones en cuanto a sus preferencias.\\
+\\
+\indent El Teorema de Von Neuman-Morgenstern, garantiza la existencia de una función de utilidad tal que si un tomador de decisiones conoce las probabilidades de los eventos, entonces la relación de preferencias del agente es equivalente al orden que impone la utilidad esperada calculada respecto a esta función y las probabilidades conocidas, por lo que la mejor decisión a tomar es aquella que maximice esta cantidad.\\
 \\
 \indent Por otro lado, el Teorema de DeFinnetti supone conocida la utilidad para el agente y el resultado garantiza la existencia de una medida de probabilidad (subjetiva) tal que la relación de preferencias es equivalente a maximizar la utilidad respecto a esta medida. De esta manera, se resuelve parcialmente el problema de toma de decisiones, pues si por un lado se cuenta con las probabilidades de eventos inciertos el Teorema de von Neumann devuelve la utilidad, y si se cuenta con la utilidad para el tomador de decisiones, DeFinetti devuelve las probabiliddes, pero ¿por dónde empezar? \\
 \\
