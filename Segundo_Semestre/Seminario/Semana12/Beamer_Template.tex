@@ -65,7 +65,7 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 \item Given the enormous complexity in our environment, we are constantly faced with making decision in uncertain environments.
 \item Causal relations that hold in our environment allows to predict consequences.
 \item “Causality” evokes certain regularities, we want to think about the causes of a disease in order to avoid it. 
-\item Human beings tend to find causal narratives, sometimes excesively and that leads to incorrect judgements \cite{tversky1977causal}, \cite{tversky1980causal}, \cite{kahneman2011thinking}.
+\item Human beings tend to find causal narratives, sometimes excesively and that leads to incorrect judgements (\cite{tversky1977causal}, \cite{tversky1980causal}, \cite{kahneman2011thinking}).
 \item How to effectively use causal knowledge to make decisions?
 \end{itemize}
 \end{frame}
@@ -97,7 +97,7 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 		\begin{itemize}
 		\item Subject of heavy philosophical debate.
 		\item Statisticians have some kind of fear about using this word.
-		\item Economists try to find assumptions under an econometric model is causal.
+		\item Economists try to find assumptions under which an econometric model is causal.
 		\item Many definitions exists, (see for example \cite{arlo2016readings}).
 		\item Our attitude here is the expressed by \cite{danks2013functions}, \cite{danks2014unifying}:\\
 		\textit{...all that matters is that our concept appropriately tracks some relation(s) in the world that can ground and support the learning, reasoning and inferences that we do with our causal knowledge...}
@@ -107,7 +107,7 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 		\frametitle{Definition of Causality}
 		The working definition of Causality that we will be using is based upon \cite{spirtes2000causation}
 		\begin{defi}
-		Let $(\Omega, \mathcal{F})$ a finite, measurable space and consider a binary relation  $\to  \subseteq \mathcal{F} \times \mathcal{F}$ such that
+		Let $(\Omega, \mathcal{F}, \mathbb{P})$ a finite, probability space and consider a binary relation  $\to  \subseteq \mathcal{F} \times \mathcal{F}$ such that
 		\begin{itemize}
 		\item Transitive: if $A \to B$ and $B \to C$ for $A,B,C \in \mathcal{F}$ then $A \to C$.
 		\item  Irefflexive: for each $A \in \mathcal{F}$ it is not true that $A \to A$.
@@ -119,7 +119,7 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 		\subsubsection{Direct and indirect causes}
 		\begin{frame}
 		\frametitle{Direct and Indirect Causes}
-		Consider a refinement $\mathcal{F}_s$ of $\mathcal{F}$ and extend “$\to$” properly. Notice that it could happen that if $A \to B$, then for some $C_s \in \mathcal{F}$ we have that $A \to C_s \to B$. 
+		Consider a refinement\footnote{In the sense as a refined topology} $\mathcal{F}_s$ of $\mathcal{F}$ and extend “$\to$” properly. Notice that it could happen that if $A \to B$, then for some $C_s \in \mathcal{F}$ we have that $A \to C_s \to B$. 
 		\begin{defi}
 		Under the same setup as the previous definition, we say that $A$ is a direct cause of $B$ if $A \to B$ and if it does not exist any $C$ such that $A \to C \to B$ for all proper refinements $\mathcal{F}_s$ of $\mathcal{F}$.
 		\end{defi}
@@ -127,7 +127,6 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 		\subsubsection{Causal Graph Construction}
 		\begin{frame}
 		\frametitle{From Causes to Graphs}
-		Abusing notation, notice that we can build a graph that represent all of the direct causes between events that are members of $\mathcal{F}$.\\
 		For each pair $A,B \in \mathcal{F}$ such that $A \to B$ and $A$ is a direct cause of $B$, define a node representing each variable, and a directed edge joining them.
 		\begin{prop}
 		Given a binary relation “$\to$” that satisfies previous requirement, let $\mathcal{G}$ be the directed graph that is obtained by the previous procedure. Then, $\mathcal{G}$ contains no cycles.
@@ -144,8 +143,13 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 		\subsubsection{Probability Measure built from the Graph}
 		\begin{frame}
 		\frametitle{from Graphs to Probability Measures}
-		Given a Directed Acyclic Graph, one can build the probability distribution $P_\mathcal{G}$ that expresses the relations of the graph.
-		An interesting question would be to study the relation of $P_\mathcal{G}$ and any other measure in the \textit{upper level} of the measurable space .
+		Given a Directed Acyclic Graph, one can build the probability distribution $P_\mathcal{G}$ that expresses the relations of the graph. We require that this measure satisfies:
+        \begin{itemize}
+        \item Causal Markov Condition.
+        \item Causal Minimality.
+         \item Causal Faithfulness.
+\end{itemize}
+This requirements will be treated in an axiomatic fashion.
 		\end{frame}
 	\subsection{Causal Graphical Models}
 	\begin{frame}
@@ -221,12 +225,119 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 	\subsection{Game Theory}
 \begin{frame}
 \frametitle{Game Theory}
-Game Theory is an area of Mathematics that is used to model strategic interaction situations, which can be interpreted as multi-agent decision problems, where the outcomes for each player depend on the actions of the other players. Several classes exist:
+Game Theory is an area of Mathematics that is used to model strategic interaction situations, which can be interpreted as multi-agent decision problems, where the outcomes for each player depend on the actions of the other players.\\
+Aumann defined Game Theory as \textit{...optimal decision making in the presence of others with different objectives...}\\
+ Several classes exist:
 \begin{itemize}
 \item Strategic Games
 \item Extensive Games
 \item Stochastic Games
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Strategic Games}
+Consider a situation where two or more agents interact and each one of them seeks to fullfill an objective. Here, each agent will take one and only one decision and simultaneously with other agents.
+\begin{defi}{A strategic normal form game (\cite{osborne1994course}, \cite{shoham2008multiagent}) }\\
+A finite normal form game is a tuple $(N,A,u)$ where:
+\begin{itemize}
+\item $N$ finite set of players.
+\item $A= A_1 \times \cdots \times A_n$ each $A_i$ are the actions available to player $i$. Each element  $a = (a_1,...,a_n) \in A$ es lis called an action or strategy profile.
+\item For each player $i \in N$, a preference relation $\succeq_i$ defined over $A$.
+\end{itemize}
+\end{defi}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bayesian Games}
+\begin{defi}{\label{juegobayesiano}}
+A strategic normal form Bayesian game is composed by:
+\begin{itemize}
+\item finite set of players $N$
+\item Set of states $\Omega$.
+\item For each player: 
+\begin{itemize}
+\item Set of possible actions $A_i$,  and define $A = A_1 \times \cdots \times A_n$.
+\item A finite set $T_i$ of observable signals for player $i$.
+\item Signal function $\tau_i : \Omega \to T_i$.
+\item A probability measure $P_i$ defined over $\Omega$ such that $P( \tau^{-1}_i (t_i)) >0$ for all  $t_i \in T_i$.
+\item Preference relation $\succeq_i$ defined over  $\mathcal{M}(A \times \Omega)$
+\end{itemize}
+\end{itemize}
+\end{defi}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bayesian games: interpretation}
+\begin{itemize}
+\item $\Omega$ contains all of the descriptions of players' relevant characteristics.
+\item Each player has prior beliefs over this characteristics, represented by $P_i$.
+\item At any given play, $\omega \in \Omega$ is realized.
+\item Each player observes $\tau_i(\omega)$ and let $T_i$ all posible values of $\tau_i$.
+\item Player $i$ receives $t_i$, so he  deduces that the true state is in the set $\tau_i^{-1}(t_i)$.
+\item So he updates the probability asigned to $\omega \in \Omega$ by $P_i(\omega) / P(\tau_i^{-1}(t_i))$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{Perfect Information Extensive Games}
+\begin{defi}
+A perfect information extensive game:
+\begin{itemize}
+\item A finite set  $N$ of players.
+\item Set $A$ of actions.
+\item Set $H$ of sequences (called histories) such that:
+	\begin{itemize}
+	%	\item The empty sequence belongs to $H$.
+		\item If $(a_k)_{k=1}^K \in H$ ($K$ can be infinite) and $L < K$ then $(a_k)_{k=1}^L \in H$.
+		\item If $(a_k)_{k=1}^\infty$ satisfies $(a_k)_{k=1}^L \in H$ for all $L$ then $(a_k)_{k=1}^\infty \in H$
+	\end{itemize}
+\item If $(a_k)_{k=1}^K \in H$ where $K$ is finite and if no $K+1$ exists such that $(a_k)_{k=1}^{K+1} \in H$ then the sequence is called terminal. The set of terminal histories is called $Z$
+\item A function $\chi : H \to 2^A$  that assigns a set of possible actions to be taken after a history $h$ has ocurred.
+\item A function $\rho: H \to N$ that assigns to every nonterminal history a player $\rho(h) \in N$ who will take an action after history $h$ has ocurred.
+\item For each player, a preference relation $\succeq_i$.
+\end{itemize}
+\end{defi}
+\end{frame}
+
+\begin{frame}
+\frametitle{Imperfect Information Extensive Games}
+\begin{itemize}
+\item $(N,A,H,Z,\chi,\rho,\sigma, u)$ is a perfect information extensive game.
+\item $I=(I_1,...,I_n)$for each player $i$, we have that  $I_i = \{ I_{i,1}, I_{i,2}, ... , I_{i,k_i} \}$ is a partition of $\{ h \in H: \rho(h)=i \}$ that satisfies that if $\chi(h)=\chi(h')$ then there exists $j$  such that $h \in I_{i,j}$ and $h \in I_{i,j}$.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Repeated Games}
+Playing repeatedly a \textit{base game}: this is interesting because if the sum of payments is considered in the long run, then the one-step equilibria can change. For example, in the Prisoner Dilemma, players may realize that the one-stage Nash equilibrium is not optimal: players can \textit{learn}.
+\end{frame}
+
+\begin{frame}
+\frametitle{Learning in Games}
+In a repeated game, what can a rational agent learn? After several rounds he can learn the strategy of others and use it, or play a certain strategy to deceive others that are learning. 
+\end{frame}
+
+\begin{frame}
+\frametitle{Rational Learning}
+Let $S$ be the set of the opponents considered by player $i$ and $H$ the stories of the game. Then, the probability assigned by player $i$ to the event in which the opponent is playing a particular strategy $s_{-i} \in S^i_{-i}$ given that story $h$ is observed is:
+\[ P_i(s_{-1} | h) = \frac{P_i(h|s_{-i})P_i(s_{-i})}{\sum_{s'_{-i}} P_i(h | s'_{-i})P_i(s'_{-i})}. \]
+\end{frame}
+\begin{frame}
+\frametitle{Rational Learning and Belief accuracy}
+\begin{teo}
+Let $s$ be a repeated game strategy profile  for a given $n$ player game and let $P=P_1,...,P_n$ be a tuple of probability distributions over such strategy profiles ($P_i$ are player $i$'s beliefs). Let $\mu_s$ be de distribution over infinite game histories induced by the profile $s$ and let $\mu_P$ the distribution induced by the belief tuple $P$. Then, if
+\begin{itemize}
+\item At each round each payer $i$ plays a best-response strategy given his beliefs $P_i$.
+\item After each round player $i$ updates $P_i$ using rational updating.
+\item $\mu_s$ is absolutely continuous with respect to $\mu_p$.
+\end{itemize}
+Then, for all $\varepsilon > 0$ and for almost every history in the support of $\mu_s$ there is a time $T$ such that for all $t \geq T$ the play $\mu_{P_i}$ predicted by player $i$'s beliefs is $\varepsilon$-close to the distribution of play $\mu_s$ predicted by the actual strategies.
+\end{teo}
+\end{frame}
+\begin{frame}
+This means that a players' beliefs will converge to the truth if he is using Rational Updating and playing a Best Response.
 \end{frame}
 \section{Research Question}
 \begin{frame}
@@ -237,7 +348,7 @@ In an uncertain environment where the relationship between events is governed by
 	\subsection{Hypothesis}
 	\begin{frame}
 	\frametitle{Hypothesis}
-Let $\mathcal{G}$ a causal graphical model whose probability distribution $P_\mathcal{G}$ satisfies (the axioms). Let $(D,E,c)$ a decision problem whose uncertain events are related to the variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$, then by repeatedly making decisions he can learn causal information and use it to find the optimal actions (in the sense of expected utility theory) in less rounds than if he doesn't consider causal information.
+Let $\mathcal{G}$ a causal graphical model whose probability distribution $P_\mathcal{G}$ satisfies (the axioms). Let $(D,E,c)$ a decision problem whose uncertain events are related to the variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$,  by repeatedly making decisions he can learn causal information and use it to find the optimal actions (in the sense of expected utility theory) in less rounds than if he doesn't consider causal information.
 	\end{frame}
 
 \section{Set up and modelling}
@@ -290,27 +401,45 @@ Let $\mathcal{G}$ a causal graphical model whose probability distribution $P_\ma
 \section{Objectives}
 	\subsection{General Objective}
 	\begin{frame}
-	The proposed research has 2 general objectives: 
+	The proposed research has as a general objective: 
 	\begin{itemize}
-	\item Find the way in which an agent facing an uncertain environment (governed by a causal model) can use causal knowledge in order to make good choices and improve his performance when compared to non-causal ways of choosing.
-	\item Find the way in which an agent can acquire causal information while interacting with an uncertain (governed by a causal model) environment.
+	\item Find the way in which an agent facing an uncertain environment which governed by a causal model can acquire and make use of causal knowledge in order to make good choices and improve his performance when compared to non-causal guided ways of choosing.
 	\end{itemize}
 	\end{frame}
 	\subsection{Specific Objectives}
 	\begin{frame}[allowframebreaks]
 	\frametitle{Specific Objectives}
 	\begin{itemize}
+	\item To find a way to specify a game that captures the essential aspects of a decision making problem. This means that the strategies and equilibria of the game must be in correspondence with optimal solutions of the decision making problem.
 \item To find a way to specify beliefs about causal structure; i.e., find (or build) a family of parametric distributions that represent in a coherent way beliefs or previous knowledge about the causal structure of some environment.
-\item  We have to consider two cases: if the decision-maker (or the owner of the beliefs) knows the maximum number of variables that the causal model can have.
-\item On the other side, if the agent doesn't know the max number of variables.
-\item To find a way of effectively using causal knowledge that the agent has at a given moment.
+\item A way to specify initial beliefs according to past knowledge in a coherent fashion, previous work in \cite{billot2005probabilities}. Not any belief can be modelled by Bayesian priors  \cite{gilboa2016ambiguity}.
+\item Theoretical guarantees of learning in this class of games.
+\item To find a way of effectively using causal knowledge that the agent has at a given moment in order to make a good choice relative to the max utility.
 \item Develop an update criterion for the beliefs of the agent based upon what he has observed from the environment while interacting. This updating must be achieved in a way that the sequence of models converges to the true model. In the Bayesian Non parametric setting this is known as \textit{consistency} (\cite{ghosal2017fundamentals}). Also, the beliefs obtained must be coherent with the decision making since we will be using those results. 
+\item A way to specify a game strategy given past games and current beliefs.
 \item An aproximate soluton criteria: maybe we can't wait until convergence, so what can be done with the current knowledge.
 \end{itemize}
 	\end{frame}
+	
 \section{Methodology}
+\subsection{Working methodology}
+\begin{frame}[allowframebreaks]
+\frametitle{Working Methodology}
+\begin{itemize}
+\item Fix the class of games will be used to model the interactions between a decision maker and his environment.
+\item Define what are the mentioned beliefs and how to represent them using probability distributions.
+\item Update criteria that must converge to the true causal model.
+\item Theoretical guarantees over the conditions and the update criteria.
+\item Analyze, experiment and compare in three cases:
+\begin{itemize}
+	\item Knowing all of the model: how the chosen decision compares to best-action identification algorithm?
+	\item Knowing only the structure of the model: using in each round the current knowledge as the “true” model and choosing with it.
+	\item Not knowing anything: choosing-observing-updating cycle, compare number of rounds for utility above certain threshold
+\end{itemize}
+\end{itemize}
+\end{frame}
 
-	\subsection{Working methodology}
+
 \section{Preliminary Results}
 \begin{frame}
 \frametitle{Preliminary Results}
@@ -319,6 +448,31 @@ For the preliminary results we set up a toy example (the same one that we have b
 \item In the first case, the decision maker knows it all.
 \item In the second case, the decision maker only knows for certain the structure of the model, but not its parameters so he has beliefs about them.
 \item In the third case, the decision maker knows nothing at all, so he has general beliefs about the causal model itself.
+\end{itemize}
+\end{frame}
+
+
+\section{Limitations and possible extensions}
+\begin{frame}
+\frametitle{Limitations}
+\begin{itemize}
+\item We are considering a rational decision maker.
+
+\item Causality is used as defined above and it is not questioned if it suits correctly realistic situations. We do not consider if other possible definitions of causality correspond better to decision making.
+
+\item Nature has not intentions, but since we are giving her equal payments this could be modified later.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Possible extensions}
+\begin{itemize}
+\item Other forms of decision making, behavioral approach, bounded rationality.
+\item Longer games of unknown structure.
+\item More players besides nature.
+\item Nature has intentions.
+\item Game solutions (equilibria) in terms of the structure of the causal graphical model.
+\item Dynamica systems associated with the learning process.
 \end{itemize}
 \end{frame}
 
