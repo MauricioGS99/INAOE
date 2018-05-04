@@ -171,7 +171,7 @@ En lo siguiente, mencionaremos tres resultados de alta importancia en la formali
 \\
 \indent El gran logro de J.L. Savage fue derivar  la utilidad y la probabilidad en conjunto en vez de utilizarlas como primitivas del modelo (\cite{gilboa2009decision}). Lo único que requiere el Teorema de Savage es una serie de axiomas de coherencia sobre la relación de preferencias de un tomador de decisiones; con esto, muestra la existencia de una función de utilidad y de una medida de probabilidad tal que la relación de preferencias es equivalente a la maximización de la utilidad esperada.\\
 \\
- \indent Es importante mencionar que existen otros criterios de optimalidad cuando los axiomas clásicos (vNM-Savage) son cuestionados; por ejemplo, la utilidad maxmin, o la utilidad esperada de Choquet (\cite{gilboa2009decision}). \cite{gilboa2001theory} propone un nuevo paradigma de toma de decisiones, llamado \textit{Case-Based Decision Theory}, en el cual los agentes toman decisiones haciendo analogías a eventos pasados en los cuales tuvieron un buen desempeño.
+ \indent Es importante mencionar que existen otros criterios de optimalidad cuando los axiomas clásicos (vNM-Savage) son cuestionados; por ejemplo, la utilidad maxmin, o la utilidad esperada de Choquet (\cite{gilboa2009decision}). \cite{gilboa2001theory} propone un nuevo paradigma de toma de decisiones, llamado \textit{Case-Based Decision Theory}, en el cual los agentes toman decisiones haciendo analogías a eventos pasados en los cuales tuvieron un buen desempeño. Para más detalles respecto a los últimos avances en Teoría de la Decisión ver \cite{wakker2010prospect}.
 \subsubsection{Teorema de von Neumann-Morgenstern: existencia de utilidad}
 El Teorema de Von Neumann-Morgenstern (\cite{von1944theory}) surge en el contexto de Teoría de Juegos, en donde otros resultados de los mismos autores exigen que un jugador busque maximizar su ganancia esperada, lo cual requería una justificación teórica (\cite{gilboa2009decision})\\
 \\
@@ -210,7 +210,7 @@ La relación $\succeq \subseteq X \times X$ satisface A1-A5 si y sólo si existe
 \end{teo}
 \indent Este Teorema arroja una probabilidad para cada tomador de decisiones tal que la relación de preferencias del éste sea equivalente con la utilidad esperada bajo esta distrbución; por esto, a tal distribución se le conoce como \textit{probabilidad subjetiva}.
 \subsubsection{Teorema de Savage: existencia de utilidad y probabilidad subjetiva}
-Los resultados anteriores parecen estar en polos opuestos, pues el Teorema de De Finetti provee una distribución de probabilidad para tomar decisiones con ella si el tomador de decisiones tiene una manera de medir su utilidad; por otro lado, el Teorema de Von Neumann supone que se conocen las probabilidades y otorga una forma de medir utilidad para tomar decisiones. El gran logro del Teorema de Savage es garantizar la existencia tanto de probabildad subjetiva como de una función de utilidad y además hacerlo en tándem (\cite{gilboa2009decision}).\\
+Los resultados anteriores parecen estar en polos opuestos, pues el Teorema de De Finetti provee una distribución de probabilidad para tomar decisiones con ella si el tomador de decisiones tiene una manera de medir su utilidad; por otro lado, el Teorema de Von Neumann supone que se conocen las probabilidades y otorga una forma de medir utilidad para tomar decisiones. El gran logro del Teorema de Savage es garantizar la existencia tanto de probabildad subjetiva como de una función de utilidad y además derivar ambas en conjunto (\cite{gilboa2009decision}).\\
 \\
 \indent El Teorema de Savage requiere dos conceptos básicos: un conjunto de estados $S$ y un conjunto de resultados $X$ y las opciones a escoger en este contexto son \textit{actos}, que son funciones de los estados a los resultados:
 \[ F = X^S = \{ f | f: S \to X \}. \]
@@ -242,6 +242,46 @@ El caso para conjuntos de resultados generales:
 Para un conjunto $X$ (no necesariamente finito) de resultados y un conjunto $S$ de estados. Una relación de preferencias $\succeq$ definida sobre $F=X^S$ sastisface los axiomas P1-P7 si y sólo si existe una medida $\mu$ definida sobre el espacio medible $(S, 2^S)$ que es no-atómica y finitamente aditiva, y existe una función no-constante $u :X \to \mathbb{R}$ tal que para toda $f,g \in F$,
 \[ f \succeq g \textrm{ si y sólo si } \int_S u(f(s)) d \mu(s) \geq \int_S u(g(s)) d \mu(s). \]
 \end{teo}
+
+\subsubsection{Formalismo Moderno}
+A partir de los resultados anteriores,
+\begin{defi}
+Un problema de decisión es la situación en la cual un agente (llamado tomador de decisiones) se enfrenta a un conjunto de decisiiones $D$ de entre las cuales tiene que escoger una.
+\end{defi}
+Basado en \cite{Bernardo1985}, \cite{bernardo2000bayesian}, \cite{gilboa2009decision}, tenemos que los elementos que componen un problema de decisión son:
+\begin{itemize}
+\item Un espacio de medida $(\Omega, \mathcal{E})$
+\item Un conjunto $\{d_i, i \in I\}$ llamado conjunto de decisiones, también llamadas acciones u opciones.
+\item Para cada $d_i \in D$, una partición $E_i= \{E_{ij}, j \in J \}$ de $\mathcal{E}$ de \textit{eventos inciertos}.
+\item Correspondiente a cada $E_i$, un conjunto de consecuencias $C_i = \{ c_{ij}, j \in J \}$.
+\item Una relación de orden $\preceq$ sobre $D \times D$
+\end{itemize}
+Notemos que las particiones asociadas a cada decisión no tienen por qué ser iguales, pero siempre podemos construir
+\[ E = \cap_{i \in I} A_i \textrm{ donde } A_i \in E_i. \]
+De modo que en el futuro supondremos, sin perdida de generalidad, que es una misma partición para todas las decisiones, y por lo tanto un solo conjunto de consecuencias, por lo que la notación utilizada para representar cada posible decisión es la siguiente $d_i = \{ c_j | E_j, j \in J\}$ lo cual se interpreta como que al escoger $d_i$, ocurrirá uno de los eventos inciertos dentro de la partición $E$, digamos, $E_j$ y eso trae como consecuencia $c_j$. Además, notemos que el orden de los índices es irrelevante, pues la opción $\{ c_1 | E, c_2 | E^c \}$ es la misma que $\{ c_2 | E^c, c_1 | E \}$.
+\begin{defi}
+Diremos que un problema de decisión es sin incertidumbre si para cada $d_i \in D$ se tiene que $C_i = \{c_i\}$; es decir,  el conjunto de consecuencias posibles  asociadas a la decisión $d_i$ consta de un solo elemento.
+\end{defi}
+\begin{defi}
+Análogamente, un problema de decisión para el cual se tiene que para al menos un elemento $d_i \in D$ existe más de una posible consecuencia se dice que es un problema de decisión con incertidumbre.
+\end{defi}
+Como requerimiento técnico, necesitamos que todos los elementos del conjunto de consecuencias pertenezcan al conjunto de opciones; esto se logra identificando cada consecuencia como la opción $\{c|\Omega \}$. Siguiendo esta notación, podemos definir una relación de preferencias entre consecuencias a partir de la relación de preferencia entre opciones de la siguiente manera
+\[ c_1 \leq c_2 \Leftrightarrow \{ c_1 | \Omega \} \preceq \{ c_2 | \Omega \}.\]
+A través de un razonamiento análogo, odemos definir una noción de qué tan \textit{creíble} es un evento incierto para un tomador de decisiones a partir de sus preferencias sobre las acciones de la siguiente manera
+\begin{defi}
+Se dice que un evento más creible que otro como
+\[E \leq F \Leftrightarrow \textrm{ para todo } c_1 < c_2 \{ c_2 | E, c_1 | E^c \} \preceq \{ c_2 | F, c_1 | F^c \} \]
+\end{defi}
+Esto permite definir una relación de preferencia a la luz de la ocurrencia de algún evento incierto
+\begin{defi}
+Para cualquier evento $G$ distinto del vacío, definimos:
+\begin{itemize}
+\item $d_1 \leq_G d_2 \Leftrightarrow \textrm{ para toda opción } d \textrm{ se tiene que } \{d_1 | G, d | G^c \} \preceq \{ d_2 | G, d | G^c\}$
+\item $c_1 \leq_G c_2 \Leftrightarrow \{ c_1 | \Omega \} \leq_G \{ c_2 | \Omega \}$.
+\item $E \leq_G F \Leftrightarrow \textrm{ para } c_1 \leq_G c_2, \{ c_2 | E, c_1 | E^c \} \leq_G \{ c_2 | F, c_1 | F^c \} $
+\end{itemize}
+\end{defi} 
+
 \subsection{Teoría de Juegos}{\label{juegos}}
 Teoría de Juegos (\cite{osborne1994course}) es un área de las matemáticas que los economistas y otros científicos sociales utilizan para modelar situaciones de interacción estratégica; es decir, problemas de decisión en los cuales importa no sólo las acciones y preferencias de un agente sino también de otros y donde además los \textit{pagos} o la utilidad de las acciones de cada jugador se ven afectadas por las acciones de los demás. En particular, en esta área existen los llamados \textit{juegos Bayesianos}, también conocidos como Juegos con Información Incompleta (\cite{osborne1994course}, \cite{10.1007/978-94-010-0189-2_25}),  en los cuales cada jugador tiene \textit{creencias} \textit{a priori} sobre algunos aspectos del ambiente las cuales son actualizadas conforme se desarrolla el juego. Usualmente, las creencias que suele tener un jugador son sobre ciertas características específicas; por ejemplo, creencias sobre las acciones de los otros jugadores (\cite{costa2008stated}), creencias sobre el estado del mundo (\cite{dominitz2009empirical}) y creencias sobre las creencias de los otros jugadores.\\
 \\
