@@ -1,0 +1,147 @@
+\documentclass{article}
+
+% Recommended, but optional, packages for figures and better typesetting:
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{amssymb,amsthm,amsmath,latexsym}
+\usepackage{booktabs} % for professional tables
+
+% hyperref makes hyperlinks in the resulting PDF.
+% If your build breaks (sometimes temporarily if a hyperlink spans a page)
+% please comment out the following usepackage line and replace
+% \usepackage{icml2018} with \usepackage[nohyperref]{icml2018} above.
+\usepackage{hyperref}
+
+% Attempt to make hyperref and algorithmic work together better:
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Use the following line for the initial blind version submitted for review:
+\usepackage{icml2018}
+
+% If accepted, instead use the following line for the camera-ready submission:
+%\usepackage[accepted]{icml2018}
+
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{Submission and Formatting Instructions for ICML 2018}
+
+\begin{document}
+
+\twocolumn[
+\icmltitle{Use and acquisition of causal information for decision making under uncertainty}
+
+% It is OKAY to include author information, even for blind
+% submissions: the style file will automatically remove it for you
+% unless you've provided the [accepted] option to the icml2018
+% package.
+
+% List of affiliations: The first argument should be a (short)
+% identifier you will use later to specify author affiliations
+% Academic affiliations should list Department, University, City, Region, Country
+% Industry affiliations should list Company, City, Region, Country
+
+% You can specify symbols, otherwise they are numbered in order.
+% Ideally, you should not use this facility. Affiliations will be numbered
+% in order of appearance and this is the preferred way.
+\icmlsetsymbol{equal}{*}
+
+\begin{icmlauthorlist}
+\icmlauthor{Mauricio Gonzalez-Soto}{inaoe}
+\icmlauthor{Luis Enrique Sucar}{inaoe}
+\icmlauthor{Hugo Jair Escalante}{inaoe}
+
+\end{icmlauthorlist}
+
+\icmlaffiliation{inaoe}{Department of Computer Science, National Institute of Astrophysics Optics and Electronics (INAOE), Puebla, Mexico}
+
+
+\icmlcorrespondingauthor{Cieua Vvvvv}{c.vvvvv@googol.com}
+\icmlcorrespondingauthor{Eee Pppp}{ep@eden.co.uk}
+
+% You may provide any keywords that you
+% find helpful for describing your paper; these are used to populate
+% the "keywords" metadata in the PDF but will not be shown in the document
+\icmlkeywords{Causality, Causal Inference, Game Theory, Decision under Uncertainty}
+
+\vskip 0.3in
+]
+
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column
+% listing the affiliations and the copyright notice.
+% The command takes one argument, which is text to display at the start of the footnote.
+% The \icmlEqualContribution command is standard text for equal contribution.
+% Remove it (just {}) if you do not need this facility.
+
+%\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
+\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
+
+\begin{abstract}
+We study how a decision maker can learn and use causal information in an uncertain environment which is governed by a causal model. 
+Interaction between the decision maker and his environment is modelled as a repeated game where a player called Nature selects his actions from the causal model.
+\end{abstract}
+
+\section{Introduction}
+A fundamental part of autonomous and intelligent reasoning (\cite{lake2017building}, \cite{danks2014unifying}) is being able to make decisions under uncertain conditions. In some cases, the decision maker has enough information about his environment so she can decide what decision to make using this information by predicting consequences and utilities. In some other cases the decision maker does not have enough information to proceed in this way. One possible way is to try to \textit{learn} from the environment by interaction.
+
+We consider the case when the uncertain environment where the decision maker is acting is governed by a \textit{causal mechanism}. 
+
+Human beings are known to learn causal graphical models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), although this learning is not perfect (\cite{rottman2014reasoning}).
+
+Learning by interaction has been extensively studied in Reinforcement Learning, but the most common used techniques are purely reactive (\cite{garnelo2016towards}) and do not consider any structure of the environment such as causal relations.
+
+\section{Related Work}
+Since we are considering one stage decision problems in which the decision maker will choose one action, and one action only, and then observe the consequences of it, we could consider this as a bandit problem.
+
+In a bandit problem (\cite{sutton1998reinforcement}) an agent chooses an \textit{arm}, observes a reward, and moves on to the next machine wich is of the same kind.
+
+Several algorithms exists for finding the best arm in a multi-arm bandit, such as \cite{bubeck2009pure}, \cite{gabillon2012best}, \cite{agarwal2014taming} \cite{audibert2010best}, \cite{jamieson2014lil},  \cite{jamieson2014best},  \cite{ortega2014generalized}, \cite{chen2015optimal},\cite{carpentier2016tight},  \cite{russo2016simple},  \cite{kaufmann2016complexity}, but none of this works consider causal-governed environments.
+
+\cite{lattimoreNIPS2016} is, up to our current knowledge, the first paper to consider causal relations between the effects of actions. They consider a decision maker who must choose the best among several possible interventions on a given, and fully known, causal model. The optimality of the action in this context is in terms of the minimal regret. The case where the causal model is not known is left as future work.
+
+\cite{sen2017identifying} extend the work of \cite{lattimoreNIPS2016} by considering a causal model partially known and intervening variables from the unknown part.
+
+
+
+\section{Problem setup}
+By \textit{causality} we mean a stochastic binary relation between events of a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ denoted by $“\to”$ such that is transitive, irreflexive and antisymmetric (\cite{spirtes2000causation}). 
+
+A directed acyclic graph (DAG) can be used to represent all of the relations that occur in that space by considering a node for every variable that is related to another and a directed edge to express the causal relation, call this DAG $\mathcal{G}$ and consider a probability measure $P_{\mathcal{G}}$ that expresses the conditional statements from the DAG. 
+
+We require that this measure satisfies the Markov Causal Condition, Causal Minimality and Causal Faithfulness as stated in \cite{spirtes2000causation}. The relation between $\mathbb{P}$ and $P_{\mathcal{G}}$ is given by the Manipulation Theorem of \cite{spirtes2000causation} and the Do-Calculus rules from \cite{pearl2009causality}.
+
+Consider a Decision Problem under Uncertainty $(A,E,C,\succeq)$ where family of uncertain events $E$ and the set of consequences $C$ are causally related. We assume that the decision maker has \textit{rational preferences}, and because of this we can substitute his preferences $\succeq$ for a utility function $u$. The decision maker does not know the probabilities underlying the causal model therefore he can not calculate the expected utility of any action. 
+
+Instead, the agent will try to learn from succesive rounds of decision making. Each round will be independent from the previous ones.
+
+We propose to model this setting as a repeated game between the original decision maker and a new abstract player called Nature. Nature will be indifferent among the different possible outcomes of the game and will select its actions from the causal model. The decision maker will have \textit{beliefs} about the causal model and in each round she will use those beliefs as a \textit{personal} causal model. 
+
+\section{Belief formation and updating}
+For an agent to reason about and modify his causal knowledge we endow him with a probability distribution $p(\theta)$ over a space of causal models.
+
+This beliefs must allow to be used in a given moment as a \textit{true} causal model and to be updated in a coherent way.
+\section{Test scenario}
+ 
+\bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
+\bibliographystyle{icml2018}
+
+
+
+
+
+\end{document}
+
+
+% This document was modified from the file originally made available by
+% Pat Langley and Andrea Danyluk for ICML-2K. This version was created
+% by Iain Murray in 2018. It was modified from a version from Dan Roy in
+% 2017, which was based on a version from Lise Getoor and Tobias
+% Scheffer, which was slightly modified from the 2010 version by
+% Thorsten Joachims & Johannes Fuernkranz, slightly modified from the
+% 2009 version by Kiri Wagstaff and Sam Roweis's 2008 version, which is
+% slightly modified from Prasad Tadepalli's 2007 version which is a
+% lightly changed version of the previous year's version by Andrew
+% Moore, which was in turn edited from those of Kristian Kersting and
+% Codrina Lauth. Alex Smola contributed to the algorithmic style files.
