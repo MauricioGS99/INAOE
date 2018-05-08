@@ -78,13 +78,16 @@
 %\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
 \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
-\begin{abstract}
-We study how a decision maker can learn and use causal information in an uncertain environment which is governed by a causal model. 
-Interaction between the decision maker and his environment is modelled as a repeated game where a player called Nature selects his actions from the causal model.
-\end{abstract}
+%\begin{abstract}
+%We study how a decision maker can learn and use causal information in an uncertain environment which is governed by a causal model. 
+%Interaction between the decision maker and his environment is modelled as a repeated game where a player called Nature selects his actions from the causal model.
+%The decision maker has beliefs over the causal model which she updates in each round. 
+%\end{abstract}
 
 \section{Introduction}
-A fundamental part of autonomous and intelligent reasoning (\cite{lake2017building}, \cite{danks2014unifying}) is being able to make decisions under uncertain conditions. In some cases, the decision maker has enough information about his environment so she can decide what decision to make using this information by predicting consequences and utilities. In some other cases the decision maker does not have enough information to proceed in this way. One possible way is to try to \textit{learn} from the environment by interaction.
+A fundamental part of autonomous and intelligent reasoning (\cite{lake2017building}, \cite{danks2014unifying}) is being able to make decisions under uncertain conditions. In some cases, the decision maker has enough information about his environment to decide which decision to make by predicting consequences and utilities. 
+
+In some cases the decision maker does not have enough information to proceed in this way. One possible way is to try to \textit{learn} from the environment by interaction.
 
 We consider the case when the uncertain environment where the decision maker is acting is governed by a \textit{causal mechanism}. 
 
@@ -93,7 +96,7 @@ Human beings are known to learn causal graphical models in sequential decision m
 Learning by interaction has been extensively studied in Reinforcement Learning, but the most common used techniques are purely reactive (\cite{garnelo2016towards}) and do not consider any structure of the environment such as causal relations.
 
 \section{Related Work}
-Since we are considering one stage decision problems in which the decision maker will choose one action, and one action only, and then observe the consequences of it, we could consider this as a bandit problem.
+Similar one stage decision problems in which the decision maker will choose one action, and one action only, and then observe the consequences of it have been modelled as bandit problems.
 
 In a bandit problem (\cite{sutton1998reinforcement}) an agent chooses an \textit{arm}, observes a reward, and moves on to the next machine wich is of the same kind.
 
@@ -102,8 +105,6 @@ Several algorithms exists for finding the best arm in a multi-arm bandit, such a
 \cite{lattimoreNIPS2016} is, up to our current knowledge, the first paper to consider causal relations between the effects of actions. They consider a decision maker who must choose the best among several possible interventions on a given, and fully known, causal model. The optimality of the action in this context is in terms of the minimal regret. The case where the causal model is not known is left as future work.
 
 \cite{sen2017identifying} extend the work of \cite{lattimoreNIPS2016} by considering a causal model partially known and intervening variables from the unknown part.
-
-
 
 \section{Problem setup}
 By \textit{causality} we mean a stochastic binary relation between events of a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ denoted by $“\to”$ such that is transitive, irreflexive and antisymmetric (\cite{spirtes2000causation}). 
@@ -116,14 +117,39 @@ Consider a Decision Problem under Uncertainty $(A,E,C,\succeq)$ where family of 
 
 Instead, the agent will try to learn from succesive rounds of decision making. Each round will be independent from the previous ones.
 
-We propose to model this setting as a repeated game between the original decision maker and a new abstract player called Nature. Nature will be indifferent among the different possible outcomes of the game and will select its actions from the causal model. The decision maker will have \textit{beliefs} about the causal model and in each round she will use those beliefs as a \textit{personal} causal model. 
+We attempt to model this setting as a repeated game between the original decision maker and a new abstract player called Nature. Nature will be indifferent among the different possible outcomes of the game and will select its actions from the causal model. Nature having objectives to pursue (non-constant payments) will be left as future work.
+
+The decision maker will have \textit{beliefs} about the causal model and in each round she will use those beliefs as a \textit{personal} causal model and modify them using the observations from each round.
 
 \section{Belief formation and updating}
-For an agent to reason about and modify his causal knowledge we endow him with a probability distribution $p(\theta)$ over a space of causal models.
+For an agent to reason about and modify his causal knowledge we endow him with a probability distribution $p(\theta)$ over a suitable space. Since we are considering causal graphical models, and for each DAG there exists a one-to-one correspondence to a matrix, one way to express beliefs about DAG's is using distributions over matrices for the structure of the graph.
+
+Since the beliefs must behave as a \textit{local} model in a given moment, it is preferable to use probability distributions over a graph space, so this distribution gives specific models when sampled upon. 
 
 This beliefs must allow to be used in a given moment as a \textit{true} causal model and to be updated in a coherent way.
 \section{Test scenario}
- 
+Consider a patient who arrives at a hospital and he can have either disease $A$ or $B$. The doctor can either give him some pill or send him into surgery. 
+
+Both treatments entail risks and whether the treatment cures the patient or not depends on which disease it had originally.
+
+Asume that the causal model that governs this situation is given by:
+
+\includegraphics[scale=0.3]{/Users/MauricioGS1/INAOE/Segundo_Semestre/Seminario/Semana12/codigo/causal_graph.png}
+
+The node corresponding to the variable lives is the \textit{target variable} and, in this example, the only variable that can be intervened upon is the treatment.
+
+\subsection{If the causal model is completely known}
+If the decision maker knows the causal model, then she can obtain the probabilities of different values for the target variable given that an intervention on \textit{treatment} is made. 
+
+The tratment that is the arg max for the highest probability of the desired value for the target variable will be chosen, and this choice will be a \textit{best response} and the max expected utility choice.
+
+Applying Pearl's \cite{pearl2009causality} do-calculus, we see that the interventional distribution $P_{do(Tr)}(V)$ is given by
+\[ \sum_{E,R}P(V|E,Tr,R)P(R|Tr)P(E) \]
+\subsection{Knowing only the structure}
+If only the structure of the graph is known, the decision maker will have \textit{beliefs} over the parameters (conditional probabilities) which she must learn by repetitions.
+
+We consider a repeated game between the original decision maker and Nature, which acts without intentions and obeys the causal model by sampling from it given the interventions of the decision maker. As usual, Nature is considered to play first to asign a random state of the environment, which in this case is the disease.
+
 \bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
 \bibliographystyle{icml2018}
 
