@@ -104,7 +104,7 @@ Several algorithms exists for finding the best arm in a multi-arm bandit, such a
 
 \cite{lattimoreNIPS2016} is, up to our current knowledge, the first paper to consider causal relations between the effects of actions. They consider a decision maker who must choose the best among several possible interventions on a given, and fully known, causal model. The optimality of the action in this context is in terms of the minimal regret. The case where the causal model is not known is left as future work.
 
-\cite{sen2017identifying} extend the work of \cite{lattimoreNIPS2016} by considering a causal model partially known and intervening variables from the unknown part.
+\cite{sen2017identifying} extend the work of \cite{lattimoreNIPS2016} by considering a causal model partially known and intervening variables from the unknown part and by avoiding sampling arms that are considered sub-optimal
 
 \section{Problem setup}
 By \textit{causality} we mean a stochastic binary relation between events of a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ denoted by $“\to”$ such that is transitive, irreflexive and antisymmetric (\cite{spirtes2000causation}). 
@@ -115,9 +115,9 @@ We require that this measure satisfies the Markov Causal Condition, Causal Minim
 
 Consider a Decision Problem under Uncertainty $(A,E,C,\succeq)$ where family of uncertain events $E$ and the set of consequences $C$ are causally related. We assume that the decision maker has \textit{rational preferences}, and because of this we can substitute his preferences $\succeq$ for a utility function $u$. The decision maker does not know the probabilities underlying the causal model therefore he can not calculate the expected utility of any action. 
 
-Instead, the agent will try to learn from succesive rounds of decision making. Each round will be independent from the previous ones.
+Instead, the agent will try to learn by interaction with the environment succesive rounds of decision making. Inside each round, any response from the environment will be independent from the previous rounds.
 
-We attempt to model this setting as a repeated game between the original decision maker and a new abstract player called Nature. Nature will be indifferent among the different possible outcomes of the game and will select its actions from the causal model. Nature having objectives to pursue (non-constant payments) will be left as future work.
+We attempt to model the interaction between the decision maker and the environment as a repeated game between two players: the original decision maker and a new abstract player called Nature. Nature will be indifferent among the different possible outcomes of the game and will select its actions from the causal model. Nature having objectives to pursue (non-constant payments) will be left as future work.
 
 The decision maker will have \textit{beliefs} about the causal model and in each round she will use those beliefs as a \textit{personal} causal model and modify them using the observations from each round.
 
@@ -132,9 +132,17 @@ Consider a patient who arrives at a hospital and he can have either disease $A$ 
 
 Both treatments entail risks and whether the treatment cures the patient or not depends on which disease it had originally.
 
-Asume that the causal model that governs this situation is given by:
+The causal model that governs this situation is shown in Figure \ref{causal_model}
 
-\includegraphics[scale=0.3]{/Users/MauricioGS1/INAOE/Segundo_Semestre/Seminario/Semana12/codigo/causal_graph.png}
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/Segundo_Semestre/Seminario/Semana12/codigo/causal_graph.png}}
+\caption{Causal graphical model: the target variable is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
+\label{causal_model}
+\end{center}
+\vskip -0.2in
+\end{figure}
 
 The node corresponding to the variable lives is the \textit{target variable} and, in this example, the only variable that can be intervened upon is the treatment.
 
