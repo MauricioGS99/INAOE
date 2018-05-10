@@ -85,18 +85,17 @@
 %\end{abstract}
 
 \section{Introduction}
-A fundamental part of intelligent reasoning (\cite{lake2017building}, \cite{danks2014unifying}) is being able to make decisions under uncertain conditions. In some cases, a decision maker has enough information about his environment to make choices by calculating expected utilities. 
+A fundamental part of intelligent reasoning (\cite{lake2017building}, \cite{danks2014unifying}) is being able to make decisions under uncertain conditions. In some cases, a decision maker who faces an uncertain environment has enough information to make choices by maximizing expected utilities.  If enough information is not available, the decision maker could try to \textit{learn} from the environment by interacting with it.
 
-In other cases she may not have enough information to proceed in this way. One possible way is to try to \textit{learn} that missing information from the environment by interacting with it.
+Learning by interaction has been extensively studied in Reinforcement Learning \cite{sutton1998reinforcement}, but the most common used techniques are purely reactive (\cite{garnelo2016towards}) and do not consider any structure of the environment.
 
-We consider the case where the uncertain environment is governed by a \textit{causal mechanism} unknown to the agent. 
+In this paper we consider the case where the uncertain environment is governed by a \textit{causal mechanism} unknown to the agent. Since human beings are known to learn causal graphical models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), although this learning is not perfect (\cite{rottman2014reasoning}), we propose that an autonomous agent can learn and use causal information while interacting with an uncertain environment.
 
-Human beings are known to learn causal graphical models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), although this learning is not perfect (\cite{rottman2014reasoning}).
+We model the interaction between the decision maker and his environment a repeated game with incomplete information between a player called Nature whi selects his actions from the causal model and the decision maker.
 
-Learning by interaction has been extensively studied in Reinforcement Learning \cite{sutton1998reinforcement}, but the most common used techniques are purely reactive (\cite{garnelo2016towards}) and do not consider any structure of the environment such as causal relations.
 
 \section{Related Work}
-One stage decision problems in which the decision maker will choose one action, and one action only, and then observe the consequences of it have been modelled as \textit{bandit problems}.
+Consider a one stage decision problem where the relation between actions and consequences is given by a causal model, \cite{lattimoreNIPS2016} analyzes this situation as a \textit{bandit problem}.
 
 In a bandit problem (\cite{sutton1998reinforcement}) an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine wich is of the same kind and whose initial settings are independent of the previous machine and action.
 
