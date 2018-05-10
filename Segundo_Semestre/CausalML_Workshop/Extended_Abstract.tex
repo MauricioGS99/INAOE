@@ -85,29 +85,29 @@
 %\end{abstract}
 
 \section{Introduction}
-A fundamental part of autonomous and intelligent reasoning (\cite{lake2017building}, \cite{danks2014unifying}) is being able to make decisions under uncertain conditions. In some cases, the decision maker has enough information about his environment to decide which decision to make by predicting consequences and utilities. 
+A fundamental part of intelligent reasoning (\cite{lake2017building}, \cite{danks2014unifying}) is being able to make decisions under uncertain conditions. In some cases, a decision maker has enough information about his environment to make choices by calculating expected utilities. 
 
-In some cases the decision maker does not have enough information to proceed in this way. One possible way is to try to \textit{learn} from the environment by interaction.
+In other cases she may not have enough information to proceed in this way. One possible way is to try to \textit{learn} that missing information from the environment by interacting with it.
 
-We consider the case when the uncertain environment where the decision maker is acting is governed by a \textit{causal mechanism}. 
+We consider the case where the uncertain environment is governed by a \textit{causal mechanism} unknown to the agent. 
 
 Human beings are known to learn causal graphical models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), although this learning is not perfect (\cite{rottman2014reasoning}).
 
-Learning by interaction has been extensively studied in Reinforcement Learning, but the most common used techniques are purely reactive (\cite{garnelo2016towards}) and do not consider any structure of the environment such as causal relations.
+Learning by interaction has been extensively studied in Reinforcement Learning \cite{sutton1998reinforcement}, but the most common used techniques are purely reactive (\cite{garnelo2016towards}) and do not consider any structure of the environment such as causal relations.
 
 \section{Related Work}
-Similar one stage decision problems in which the decision maker will choose one action, and one action only, and then observe the consequences of it have been modelled as bandit problems.
+One stage decision problems in which the decision maker will choose one action, and one action only, and then observe the consequences of it have been modelled as \textit{bandit problems}.
 
-In a bandit problem (\cite{sutton1998reinforcement}) an agent chooses an \textit{arm}, observes a reward, and moves on to the next machine wich is of the same kind.
+In a bandit problem (\cite{sutton1998reinforcement}) an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine wich is of the same kind and whose initial settings are independent of the previous machine and action.
 
 Several algorithms exists for finding the best arm in a multi-arm bandit, such as \cite{bubeck2009pure}, \cite{gabillon2012best}, \cite{agarwal2014taming} \cite{audibert2010best}, \cite{jamieson2014lil},  \cite{jamieson2014best},  \cite{ortega2014generalized}, \cite{chen2015optimal},\cite{carpentier2016tight},  \cite{russo2016simple},  \cite{kaufmann2016complexity}, but none of this works consider causal-governed environments.
 
 \cite{lattimoreNIPS2016} is, up to our current knowledge, the first paper to consider causal relations between the effects of actions. They consider a decision maker who must choose the best among several possible interventions on a given, and fully known, causal model. The optimality of the action in this context is in terms of the minimal regret. The case where the causal model is not known is left as future work.
 
-\cite{sen2017identifying} extend the work of \cite{lattimoreNIPS2016} by considering a causal model partially known and intervening variables from the unknown part and by avoiding sampling arms that are considered sub-optimal
+\cite{sen2017identifying} extend the work of \cite{lattimoreNIPS2016} by considering a causal model partially known and intervening variables from the unknown part and by avoiding sampling arms that are considered sub-optimal.
 
 \section{Problem setup}
-By \textit{causality} we mean a stochastic binary relation between events of a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ denoted by $“\to”$ such that is transitive, irreflexive and antisymmetric (\cite{spirtes2000causation}). 
+By \textit{causality} we mean a stochastic binary relation between events of a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ denoted by $“\to”$ that is transitive, irreflexive and antisymmetric (\cite{spirtes2000causation}). 
 
 A directed acyclic graph (DAG) can be used to represent all of the relations that occur in that space by considering a node for every variable that is related to another and a directed edge to express the causal relation, call this DAG $\mathcal{G}$ and consider a probability measure $P_{\mathcal{G}}$ that expresses the conditional statements from the DAG. 
 
@@ -117,16 +117,16 @@ Consider a Decision Problem under Uncertainty $(A,E,C,\succeq)$ where family of 
 
 Instead, the agent will try to learn by interaction with the environment succesive rounds of decision making. Inside each round, any response from the environment will be independent from the previous rounds.
 
-We attempt to model the interaction between the decision maker and the environment as a repeated game between two players: the original decision maker and a new abstract player called Nature. Nature will be indifferent among the different possible outcomes of the game and will select its actions from the causal model. Nature having objectives to pursue (non-constant payments) will be left as future work.
+We attempt to model the interaction between the decision maker and the environment as a repeated game between two players: the original decision maker and a new abstract player called Nature. The base game will be the original decision problem.
 
-The decision maker will have \textit{beliefs} about the causal model and in each round she will use those beliefs as a \textit{personal} causal model and modify them using the observations from each round.
+Nature will be indifferent among the different possible outcomes of the game and will select its actions from the causal model. Nature having objectives to pursue (non-constant payments) will be left as future work.
 
 \section{Belief formation and updating}
-For an agent to reason about and modify his causal knowledge we endow him with a probability distribution $p(\theta)$ over a suitable space. Since we are considering causal graphical models, and for each DAG there exists a one-to-one correspondence to a matrix, one way to express beliefs about DAG's is using distributions over matrices for the structure of the graph.
+For an agent to reason about and modify his causal knowledge we endow her with a probability distribution $p(\theta)$ over a suitable space. Since we are considering causal graphical models, and for each DAG there exists a one-to-one correspondence to a matrix, one way to express beliefs about DAG's is using distributions over matrices for the structure of the graph.
 
-Since the beliefs must behave as a \textit{local} model in a given moment, it is preferable to use probability distributions over a graph space, so this distribution gives specific models when sampled upon. 
+Since the beliefs must behave as a \textit{local} model in a given moment, it is preferable to assign probabilities directly to causal models rather than edges in a model in order to have a fixed model when sampling from this probability assignement.
 
-This beliefs must allow to be used in a given moment as a \textit{true} causal model and to be updated in a coherent way.
+After each round of the base game, the probabilities representing causal beliefs will be updated in a Bayesian way in order to guarantee Bayesian consistency \cite{shoham2008multiagent}.
 \section{Test scenario}
 Consider a patient who arrives at a hospital and he can have either disease $A$ or $B$. The doctor can either give him some pill or send him into surgery. 
 
@@ -146,6 +146,8 @@ The causal model that governs this situation is shown in Figure \ref{causal_mode
 
 The node corresponding to the variable lives is the \textit{target variable} and, in this example, the only variable that can be intervened upon is the treatment.
 
+In this scenario, Nature's move will consist in randomly assigning the disease to the patient. Then, the medic will asign a treatment, the decision nodes for this play form an information set because the medic doesn't know how she arrived there since she doesn't know what disease did Nature assign. Finally, Nature will sample the consequence of the treatment from the causal model and the medic will observe the outcome.
+
 \subsection{If the causal model is completely known}
 If the decision maker knows the causal model, then she can obtain the probabilities of different values for the target variable given that an intervention on \textit{treatment} is made. 
 
@@ -154,9 +156,11 @@ The tratment that is the arg max for the highest probability of the desired valu
 Applying Pearl's \cite{pearl2009causality} do-calculus, we see that the interventional distribution $P_{do(Tr)}(V)$ is given by
 \[ \sum_{E,R}P(V|E,Tr,R)P(R|Tr)P(E) \]
 \subsection{Knowing only the structure}
-If only the structure of the graph is known, the decision maker will have \textit{beliefs} over the parameters (conditional probabilities) which she must learn by repetitions.
+If only the structure of the graph is known, the decision maker will have \textit{beliefs} over the parameters (conditional probabilities) of the model which she must learn by repetitions.
 
-We consider a repeated game between the original decision maker and Nature, which acts without intentions and obeys the causal model by sampling from it given the interventions of the decision maker. As usual, Nature is considered to play first to asign a random state of the environment, which in this case is the disease.
+As usual in the previous case, Nature is considered to play first to asign a random state of the environment, which in this case is the disease.
+
+The decision maker (medic) doesn't know the probabilities, but since she knows the graph structure, she can explicitly a non interventional expression for the invterventional distribution and the values that appear in the expression can be estimated from succesive observations.
 
 \bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
 \bibliographystyle{icml2018}
