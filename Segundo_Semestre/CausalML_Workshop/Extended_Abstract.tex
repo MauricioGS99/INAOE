@@ -93,17 +93,16 @@ In this paper we consider the case where the uncertain environment is governed b
 
 We model the interaction between the decision maker and his environment a repeated game with incomplete information between a player called Nature which selects his actions from the causal model and the decision maker and propose a way for the agent to have \textit{beliefs} about the causal model that governs the environment.
 
-
 \section{Related Work}
 Consider a one stage decision problem where the relation between actions and consequences is given by a causal model, \cite{lattimoreNIPS2016} analyzes this situation as a \textit{bandit problem}.
 
-In a bandit problem (\cite{sutton1998reinforcement}) an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine wich is of the same kind and whose initial settings are independent of the previous machine and action.
+In a bandit problem an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine wich is of the same kind and whose initial settings are independent of the previous machine and action \cite{sutton1998reinforcement} .
 
 Several algorithms exists for finding the best arm in a multi-arm bandit, such as \cite{bubeck2009pure}, \cite{gabillon2012best}, \cite{agarwal2014taming} \cite{audibert2010best}, \cite{jamieson2014lil},  \cite{jamieson2014best},  \cite{ortega2014generalized}, \cite{chen2015optimal},\cite{carpentier2016tight},  \cite{russo2016simple},  \cite{kaufmann2016complexity}, but none of this works consider causal-governed environments.
 
-\cite{lattimoreNIPS2016} is, up to our current knowledge, the first paper to consider causal relations between the effects of actions. They consider a decision maker who must choose the best among several possible interventions on a given, and fully known, causal model. The optimality of the action in this context is in terms of the minimal regret. The case where the causal model is not known is left as future work.
+Up to our current knowledge \cite{lattimoreNIPS2016} is the first paper to consider causal relations between the effects of actions. They consider a decision maker who must choose the best among several possible interventions on a given, and fully known, causal model. The optimality of the action in this context is in terms of the minimal regret. The case where the causal model is not known is left as future work.
 
-\cite{sen2017identifying} extend the work of \cite{lattimoreNIPS2016} by considering a causal model partially known and intervening variables from the unknown part and by avoiding sampling arms that are considered sub-optimal.
+By considering a causal model which is partially known and intervening variables from the unknown part and by avoiding sampling arms that are considered sub-optimal \cite{sen2017identifying} extend the work of \cite{lattimoreNIPS2016}.
 
 \section{Problem setup}
 By \textit{causality} we mean a stochastic binary relation between events of a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ denoted by $“\to”$ that is transitive, irreflexive and antisymmetric (\cite{spirtes2000causation}). 
