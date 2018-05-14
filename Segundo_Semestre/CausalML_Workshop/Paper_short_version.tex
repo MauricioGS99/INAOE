@@ -148,6 +148,13 @@ The node corresponding to the variable lives is the \textit{target variable} and
 
 In this scenario, Nature's move will consist in randomly assigning the disease to the patient. Then, the medic will asign a treatment, the decision nodes for this play form an information set because the medic doesn't know how she arrived there since she doesn't know what disease did Nature assign. Finally, Nature will sample the consequence of the treatment from the causal model and the medic will observe the outcome.
 
+We consider three cases of increasing complexity:
+\begin{itemize}
+\item The decision maker fully knows the causal model.
+\item The decision maker knows only the graph structure.
+\item The decision maker knows nothing about the causal model. 
+\end{itemize}
+
 \subsection{The casual model is completely known}
 If the decision maker knows the causal model, then she can obtain the probabilities of different values for the target variable given that an intervention on \textit{treatment} is made. 
 
