@@ -89,20 +89,22 @@ A fundamental part of intelligent reasoning  is being able to make decisions und
 
 Learning by interaction has been extensively studied in Reinforcement Learning \cite{sutton1998reinforcement}, but the most common used techniques are purely reactive (\cite{garnelo2016towards}) and do not consider any structure of the environment beyond what is expressable in an MDP.
 
-In this paper we consider the case where the uncertain environment is governed by a fixed \textit{causal mechanism} unknown to the agent. Since human beings are known to learn causal graphical models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), although this learning is not perfect (\cite{rottman2014reasoning}), we propose that an autonomous agent can learn and use causal information while interacting with an uncertain environment.
+Since human beings are known to learn causal graphical models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), although this learning is not perfect (\cite{rottman2014reasoning}).
+
+In this paper which we propose that an autonomous agent can learn and use causal information while interacting with an uncertain environment which is governed by a fixed \textit{causal mechanism} unknown to the agent.  
 
 The interaction between the decision maker and his environment is modelled as a repeated game with incomplete information between a player called Nature which selects his actions from the causal model and the decision maker and propose a way for the agent to have \textit{beliefs} about the causal model that governs the environment.
 
 \section{Related Work}
-Consider a one stage decision problem where the relation between actions and consequences is given by a causal model, \cite{lattimoreNIPS2016} analyze this situation as a \textit{bandit problem}.
-
-In a bandit problem an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine which is of the same kind and whose initial settings are independent of the previous machine and action \cite{sutton1998reinforcement}.
+One stage decision problem where the relation between actions and consequences is given by a causal model, is analyzed by \cite{lattimoreNIPS2016} as a \textit{bandit problem}. In bandit problems an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine which is of the same kind and whose initial settings are independent of the previous machine and action \cite{sutton1998reinforcement}.
 
 Several algorithms exists for finding the best arm in a multi-arm bandit, such as \cite{bubeck2009pure}, \cite{audibert2010best}, \cite{gabillon2012best}, \cite{agarwal2014taming} , \cite{jamieson2014lil},  \cite{jamieson2014best},  \cite{ortega2014generalized}, \cite{chen2015optimal},\cite{carpentier2016tight},  \cite{russo2016simple},  \cite{kaufmann2016complexity}, but none of this works consider causal-governed environments.
 
 Up to our current knowledge \cite{lattimoreNIPS2016} is the first paper to consider causal relations between the effects of actions. They consider a decision maker who must choose the best among several possible interventions on a given, and fully known, causal model. The optimality of the action in this context is in terms of the minimal regret. The case where the causal model is not known is left as future work.
 
 By considering a causal model which is partially known and intervening variables from the unknown part and by avoiding sampling arms that are considered sub-optimal \cite{sen2017identifying} extend the work of \cite{lattimoreNIPS2016}.
+
+The aforementioned papers assume the causal model is known to the decision makers so their work focuses on \textit{using} causal information to make good choices but the problem of \textit{acquiring} this causal knowledge is left unatacked. Here we propose to acquire, and use, causal information while interacting with the environment. 
 
 \section{Problem setup}
 By \textit{causality} we mean a stochastic binary relation between events of a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ denoted by $“\to”$ that is transitive, irreflexive and antisymmetric (\cite{spirtes2000causation}). 
@@ -113,7 +115,7 @@ We require that this measure satisfies the Markov Causal Condition, Causal Minim
 
 Consider a Decision Problem under Uncertainty $(A,E,C,\succeq)$ where family of uncertain events $E$ and the set of consequences $C$ are causally related. We assume that the decision maker has \textit{rational preferences}, and because of this we can substitute his preferences $\succeq$ for a utility function $u$. The decision maker does not know the probabilities underlying the causal model therefore he can not calculate the expected utility of any action. 
 
-Instead, the agent will try to learn by interaction with the environment succesive rounds of decision making. Inside each round, any response from the environment will be independent from the previous rounds.
+Instead, the agent will try to learn by interaction with the environment succesive rounds of decision making. Inside each round, any response from the environment will be independent from the previous rounds, but the actions of the decision maker, which will be based upon previously acquired causal information are expected to improve the utility for the agent.
 
 We define a game between the decision maker and a new abstract player called Nature. The base game will be the original decision problem.
 
