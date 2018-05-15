@@ -114,7 +114,7 @@ We require that this measure satisfies the Markov Causal Condition, Causal Minim
 
 Consider a Decision Problem under Uncertainty $(A,E,C,\succeq)$ where family of uncertain events $E$ and the set of consequences $C$ are causally related. We assume that the decision maker has \textit{rational preferences}, and because of this we can substitute his preferences $\succeq$ for a utility function $u$. The decision maker does not know the probabilities underlying the causal model therefore he can not calculate the expected utility of any action. 
 
-Instead, the agent will try to learn by interaction with the environment succesive rounds of decision making. Inside each round, any response from the environment will be independent from the previous rounds.
+Instead, the agent will try to learn by interaction with the environment succesive rounds of decision making. Inside each round, any response from the environment will be independent from the previous rounds, but the actions of the decision maker, which will be based upon previously acquired causal information are expected to improve the utility for the agent.
 
 We define a game between the decision maker and a new abstract player called Nature. The base game will be the original decision problem.
 
@@ -161,7 +161,10 @@ If only the structure of the graph is known, the decision maker will have \texti
 
 As usual in the previous case, Nature is considered to play first to asign a random state of the environment, which in this case is the disease.
 
-The decision maker (medic) doesn't know the probabilities, but since she knows the graph structure, she can explicitly a non interventional expression for the invterventional distribution and the values that appear in the expression can be estimated from succesive observations.
+The decision maker (medic) doesn't know the parameters of the model, but since she knows the graph structure, she can explicitly find a non interventional expression for the invterventional distribution and estimate from succesive observations the values that appear in the expression.
+
+\subsection{The model is not known}
+The causal model were unknown, the decision maker will have to deal with the problem using only any previous knowledge and his own intuitions. The set of any previous knowledge and considerations will be known as \textit{beliefs}, which will take the form of a probability distributions over causal models. 
 
 \bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
 \bibliographystyle{icml2018}
