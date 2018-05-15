@@ -78,11 +78,12 @@
 %\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
 \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
-%\begin{abstract}
-%We study how a decision maker can learn and use causal information in an uncertain environment which is governed by a causal model. 
+\begin{abstract}
+We consider decision problems under uncertainty $(A,E,C,u)$ where elements in $C$ and elements in $E$ are related through a causal mechanism which is unknown to the decision maker. 
+We study how a decision maker can learn about this causal mechanism through sequential decision making as well as using current causal knowledge in each round.
 %Interaction between the decision maker and his environment is modelled as a repeated game where a player called Nature selects his actions from the causal model.
 %The decision maker has beliefs over the causal model which she updates in each round. 
-%\end{abstract}
+\end{abstract}
 
 \section{Introduction}
 A fundamental part of intelligent reasoning  is being able to make decisions under uncertain conditions (\cite{lake2017building}, \cite{danks2014unifying}). In some cases, a decision maker who faces an uncertain environment has enough information to make choices by maximizing expected utilities. If enough information is not available, the decision maker could try to \textit{learn} from the environment by interacting with it.
@@ -96,7 +97,7 @@ In this paper which we propose that an autonomous agent can learn and use causal
 The interaction between the decision maker and his environment is modelled as a repeated game with incomplete information between a player called Nature which selects his actions from the causal model and the decision maker and propose a way for the agent to have \textit{beliefs} about the causal model that governs the environment.
 
 \section{Related Work}
-One stage decision problem where the relation between actions and consequences is given by a causal model, is analyzed by \cite{lattimoreNIPS2016} as a \textit{bandit problem}. In bandit problems an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine which is of the same kind and whose initial settings are independent of the previous machine and action \cite{sutton1998reinforcement}.
+One stage decision problems where the actions available to a decision maker are interventions over a known causal model are analyzed by \cite{lattimoreNIPS2016} as a \textit{bandit problem} where the optimal action must be learned over $T$ rounds. In a classic bandit problem an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine which is of the same kind and whose initial settings are independent of the previous machine and action \cite{sutton1998reinforcement}.
 
 Several algorithms exists for finding the best arm in a multi-arm bandit, such as \cite{bubeck2009pure}, \cite{audibert2010best}, \cite{gabillon2012best}, \cite{agarwal2014taming} , \cite{jamieson2014lil},  \cite{jamieson2014best},  \cite{ortega2014generalized}, \cite{chen2015optimal},\cite{carpentier2016tight},  \cite{russo2016simple},  \cite{kaufmann2016complexity}, but none of this works consider causal-governed environments.
 
@@ -155,7 +156,13 @@ The treatment which achieves the highest probability for the desired value of th
 The action thus selected will be a \textit{best response} for the decision maker and the max expected utility choice.
 
 Applying Pearl's \cite{pearl2009causality} do-calculus, we see that the interventional distribution $P_{do(Tr)}(V)$ is given by
-\[ \sum_{E,R}P(V|E,Tr,R)P(R|Tr)P(E) \]
+\[ \sum_{E,R}P(V|E,Tr,R)P(R|Tr)P(E). \]
+
+In fact, noting that the variable to be intervened by the decision maker doesn't has parents, one can explicitly calculate the probability of the target variable given a value for the treatment. 
+
+Proceeding in this way, the probability of the patient living if the assigned treatment is surgery is only $0.26$.
+
+On the other hand, if the treatment assigned is the pill, then the living probability is $0.4$
 \subsection{Only the structure is known}
 If only the structure of the graph is known, the decision maker will have \textit{beliefs} over the parameters (conditional probabilities) of the model which she must learn by repetitions.
 
