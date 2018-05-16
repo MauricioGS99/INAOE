@@ -55,10 +55,6 @@
 
 \icmlaffiliation{inaoe}{Department of Computer Science, National Institute of Astrophysics Optics and Electronics (INAOE), Puebla, Mexico}
 
-
-\icmlcorrespondingauthor{Cieua Vvvvv}{c.vvvvv@googol.com}
-\icmlcorrespondingauthor{Eee Pppp}{ep@eden.co.uk}
-
 % You may provide any keywords that you
 % find helpful for describing your paper; these are used to populate
 % the "keywords" metadata in the PDF but will not be shown in the document
@@ -86,13 +82,11 @@ We study how a decision maker can learn about this causal mechanism through sequ
 \end{abstract}
 
 \section{Introduction}
-A fundamental part of intelligent reasoning  is being able to make decisions under uncertain conditions (\cite{lake2017building}, \cite{danks2014unifying}). In some cases, a decision maker who faces an uncertain environment has enough information to make choices by maximizing expected utilities. If enough information is not available, the decision maker could try to \textit{learn} from the environment by interacting with it.
+A fundamental part of intelligent reasoning  is being able to make decisions under uncertain conditions (\cite{lake2017building}, \cite{danks2014unifying}). In some cases, a decision maker who faces an uncertain environment has enough information to make choices by maximizing expected utility, which is the formal criteria for making decisions if rational preferences are assumed (\cite{bernardo2000bayesian}, \cite{gilboa2009decision}). On the other hand, if enough information is not available, the decision maker could try to \textit{learn} from the environment by interacting with it.
 
-Learning by interaction has been extensively studied in Reinforcement Learning \cite{sutton1998reinforcement}, but the most common used techniques are purely reactive (\cite{garnelo2016towards}) and do not consider any structure of the environment beyond what is expressable in an MDP.
+Learning by interaction has been extensively studied by computer scientists using the Reinforcement Learning  setting \cite{sutton1998reinforcement}, but the most common used techniques  in this field are purely reactive and do not consider any high-level structure of the environment beyond what is expressable in a Markov Decision Process (\cite{garnelo2016towards}).
 
-Since human beings are known to learn causal graphical models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), although this learning is not perfect (\cite{rottman2014reasoning}).
-
-In this paper which we propose that an autonomous agent can learn and use causal information while interacting with an uncertain environment which is governed by a fixed \textit{causal mechanism} unknown to the agent.  
+Since human beings are known to learn causal graphical models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), although this learning is not perfect (\cite{rottman2014reasoning}) ,we propose that an autonomous agent can learn and use causal information while interacting with an uncertain environment which is governed by a fixed \textit{causal mechanism} unknown to the agent.  
 
 The interaction between the decision maker and his environment is modelled as a repeated game with incomplete information between a player called Nature which selects his actions from the causal model and the decision maker and propose a way for the agent to have \textit{beliefs} about the causal model that governs the environment.
 
