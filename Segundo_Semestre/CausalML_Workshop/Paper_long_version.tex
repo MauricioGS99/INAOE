@@ -107,7 +107,7 @@ By \textit{causality} we mean a stochastic binary relation between events of a p
 
 A directed acyclic graph (DAG) can be used to represent all of the relations that occur in that space by considering a node for every variable that is related to another and a directed edge to express the causal relation, call this DAG $\mathcal{G}$ and consider a probability measure $P_{\mathcal{G}}$ that expresses the conditional statements from the DAG. 
 
-We require that this measure satisfies the Markov Causal Condition, Causal Minimality and Causal Faithfulness as stated in \cite{spirtes2000causation}. The relation between $\mathbb{P}$ and $P_{\mathcal{G}}$ is given by the Manipulation Theorem of \cite{spirtes2000causation} and the Do-Calculus rules from \cite{pearl2009causality}.
+We require that this measure satisfies the Markov Causal Condition, Causal Minimality and Causal Faithfulness as stated in \cite{spirtes2000causation}. The relation between $\mathbb{P}$ and $P_{\mathcal{G}}$ is given by the Manipulation Theorem of \cite{spirtes2000causation} and the Do-Calculus rules from \cite{pearl2009causality}. We also require that the condition known as Causal Sufficiency is satisfied by the model, which means there are not any causes lying \textit{outside} of the model. 
 
 Consider a Decision Problem under Uncertainty $(A,E,C,\succeq)$ where family of uncertain events $E$ and the set of consequences $C$ are causally related. We assume that the decision maker has \textit{rational preferences}, and because of this we can substitute his preferences $\succeq$ for a utility function $u$. The decision maker does not know the probabilities nor the structure of the underlying causal model therefore he can not calculate the expected utility of any action. 
 
@@ -180,7 +180,9 @@ We consider a repeated game in which the base game is described by the narrative
 \item \textbf{Beliefs:} Since the decision maker doesn't know some aspects about her environment, she will encode any uncertainty about it in a probability distribution $p(\theta)$.
 \end{itemize}
 
-Since she knows the graph structure, she can explicitly find a non interventional expression for the interventional distribution and update her beliefs about this unknown quantities. If the decision maker were not allowed to know, at the end of each round, the play of the Nature then this will have to be estimated as a hidden variable using, for example, the EM algorithm but meanwhile we are assuming that this information is available at the end of each round.
+Notice that the base game is an extensive game with imperfect information since the decision maker makes a choice without knowing the play made by Nature, which is the asigning a disease to the patient, and then assigning the outcome for the patient after the medic has chosen a treatment. 
+
+Since she knows the graph structure, she can explicitly find a non interventional expression for the interventional distribution and update her beliefs about this unknown quantities. If the decision maker were not allowed to know, at the end of each round, the play of the Nature then this will have to be estimated as a hidden variable using, for example, the EM algorithm \cite{dempster1977maximum} but meanwhile we are assuming that this information is available at the end of each round.
 
 Given the structure of the model, which is shown in Figure \ref{causal_model}, we see that the involved probabilities in any calculations are:
 \[ P(\textrm{disease}), P(\textrm{treatment}), P(\textrm{reaction} | \textrm{treatment}), \]
@@ -198,9 +200,11 @@ A natural way of encoding beliefs about causal relations is to consider all the 
 Had she a DAG in mind whose edges have associated weights, she could sample a random variable with a $U(0,1)$ distribution and see if that sample value is less than the probability attached to the edge, if so, then she fixes this edge in the model. Proceeding this way, she will have a fully specified causal graphical model, which will be then used as in Case 1.
 
 \subsection{The model is not known}
-The causal model were unknown, the decision maker will have to deal with the problem using only any previous knowledge and his own intuitions. The set of any previous knowledge and considerations will be known as \textit{beliefs}, which will take the form of a probability distributions over causal models. 
+The causal model were fully unknown, the decision maker will have to deal with the problem using only any previous knowledge and his own intuitions. Again, consider the set of any previous knowledge and considerations will as \textit{beliefs} about the uncertainties in the environment, which will take the form of a probability distributions over causal models. 
 
-For this case we consider two sub-cases depending on the maximum number of variables in the causal model are known or not.
+For this third case, we make an extra assumption: the maximum number of variables in the model is known to the decision maker. This allow to consider only distributions of fixed dimension. In this case we will consider distributions over matrixes of fixed size rather than vectors as in the previous case. 
+
+
 
 \bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
 \bibliographystyle{icml2018}
