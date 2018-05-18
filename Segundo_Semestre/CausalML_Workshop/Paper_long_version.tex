@@ -152,21 +152,50 @@ For the sake of explanation we consider three separate cases:
 \end{itemize}
 
 \subsection{The casual model is completely known}
-If the decision maker knows the causal model, then she can directly obtain the probabilities of different values for the target variable given that an intervention on \textit{treatment} is made and choose the treatment which achieves the highest probability for the desired value of the target variable will be chosen. The action selected will be a \textit{best response} for the decision maker as well as the maximum expected utility choice.
+Consider a decision problem under uncertainty where a decision maker has to choose on out of many elements of a set $A$ and where the consequence, or effect, of his actions is expressed by the realization of a random variable $Y$. The decision maker whishes to obtain a value from $Y$ that maximizes his utility. 
 
-Applying Pearl's \cite{pearl2009causality} do-calculus, we see that the interventional distribution $P_{do(Tr)}(V)$ is given by
+The relation between values of $Y$ and actions $a \in A$ is expressed through realizations of \textit{uncertain events}, which causally relate $a$ and values $y \in \textrm{Val}(Y)$ and this relations are expressed by a causal graphical model $\mathcal{G}$.
+
+This is the simplest case of the three mentioned because if the decision maker fully knows the causal model, then she can proceed as in classic decision problems by directly obtain the probabilities of different values for the target variable given that an intervention on \textit{treatment} is made and choose the treatment which achieves the highest probability for the desired value of the target variable will be chosen. The action selected will be a \textit{best response} for the decision maker as well as the maximum expected utility choice.
+
+For the test scenario whose causal graphical model is shown in Figure \ref{causal_model}, we see  by applying Pearl's \cite{pearl2009causality} do-calculus, we see that the interventional distribution $P_{do(Tr)}(V)$ is given by
 \[ \sum_{E,R}P(V|E,Tr,R)P(R|Tr)P(E). \]
 
 In fact, noting that the variable to be intervened by the decision maker doesn't has parents in the graph one can explicitly calculate the probability of the target variable given a value for the treatment using variable elimination (\cite{koller2009probabilistic}) given the treatment as evidence. 
 
 On the other hand, if a decision maker hadn't known the causal nature of the problem, but had he known the probabilities of the possible outomes given his own actions then a choice could be made using expected utilities. 
 
-What is shown with this gedankenexperiment is that in this full knowledge setting causal information achieves the same performance than simple probabilities.
+What is shown with this \textit{gedankenexperiment} is that in this full knowledge setting causal information achieves the same performance than simple probabilities.
 
 \subsection{Only the structure is known}
-If only the structure of the graph is known, the decision maker will have \textit{beliefs} over the parameters (conditional probabilities) of the model which she must learn by repetitions. As usual in the previous case, Nature is considered to play first to asign a random state of the environment, which in this case is the disease.
+If only the structure of the graph is known, then it is not obvious how to find the best action to make since the information required for calculating expected utilities is not available.
 
-The decision maker (medic) doesn't know the parameters of the model, but since she knows the graph structure, she can explicitly find a non interventional expression for the invterventional distribution and estimate from succesive observations the values that appear in the expression. If the decision maker were not allowed to know, at the end of each round, the play of the Nature then this will have to be estimated as a hidden variable using, for example, the EM algorithm but meanwhile we are assuming that this information is available at the end of each round.
+The decision maker will attempt to learn from her uncertain environment by forming \textit{beliefs} over the unknown parameters (conditional probabilities) of the model and update them according to the observed outcomes. 
+
+We consider a repeated game in which the base game is described by the narrative of the test scenario: 
+\begin{itemize}
+\item \textbf{Players:} The set of players of this game is the set whose elements are the original decision maker, and a new player called Nature.
+\item \textbf{Actions:} The actions for the decision maker are the possible treatments that the medic can give to patient. And the actions for the nature are the set of possible diseases, and the set of outcomes for the sick patient.
+\item \textbf{Preferences:} The decision maker satisfies the von Neumann-Morgenstern axioms of rationality and he receives a payment of $1$ if the patient lives and $0$ in other case. Nature is indifferent over outcomes.
+\item \textbf{Beliefs:} Since the decision maker doesn't know some aspects about her environment, she will encode any uncertainty about it in a probability distribution $p(\theta)$.
+\end{itemize}
+
+Since she knows the graph structure, she can explicitly find a non interventional expression for the interventional distribution and update her beliefs about this unknown quantities. If the decision maker were not allowed to know, at the end of each round, the play of the Nature then this will have to be estimated as a hidden variable using, for example, the EM algorithm but meanwhile we are assuming that this information is available at the end of each round.
+
+Given the structure of the model, which is shown in Figure \ref{causal_model}, we see that the involved probabilities in any calculations are:
+\[ P(\textrm{disease}), P(\textrm{treatment}), P(\textrm{reaction} | \textrm{treatment}), \]
+\[P(\textrm{lives} | \textrm{disease, treatment, reaction}). \]
+denoting the variables in the model as $X_1 = \textrm{disease}$, $\textrm{treatment}=X_2$, $\textrm{reaction}=X_3$ and $\textrm{lives}=Y$ then a natural notation for the probabilities arises as following:
+\[ p_1 = P(\textrm{disease}), \]
+\[ p_2 = P(\textrm{treatment}), \]
+\[ p_3 = P(\textrm{reaction}),\]
+\[p_y= P(\textrm{lives}), \]
+\[ p_{3 | 2} = P(\textrm{reaction} | \textrm{treatment}), \]
+\[p_{y |1,2,3} = P(\textrm{lives} | \textrm{disease, treatment, reaction}). \]
+
+A natural way of encoding beliefs about causal relations is to consider all the possible variables and assign probabilities to the edges that connect them in a Directed Aciclyc Graph (DAG). Since the decision maker pretends to \textit{use} her beliefs and not only update them it is necessary that in each round of the game she can use her current knowledge in order to choose an action.
+
+Had she a DAG in mind whose edges have associated weights, she could sample a random variable with a $U(0,1)$ distribution and see if that sample value is less than the probability attached to the edge, if so, then she fixes this edge in the model. Proceeding this way, she will have a fully specified causal graphical model, which will be then used as in Case 1.
 
 \subsection{The model is not known}
 The causal model were unknown, the decision maker will have to deal with the problem using only any previous knowledge and his own intuitions. The set of any previous knowledge and considerations will be known as \textit{beliefs}, which will take the form of a probability distributions over causal models. 
