@@ -109,7 +109,7 @@ A directed acyclic graph (DAG) can be used to represent all of the relations tha
 
 We require that this measure satisfies the Markov Causal Condition, Causal Minimality and Causal Faithfulness as stated in \cite{spirtes2000causation}. The relation between $\mathbb{P}$ and $P_{\mathcal{G}}$ is given by the Manipulation Theorem of \cite{spirtes2000causation} and the Do-Calculus rules from \cite{pearl2009causality}.
 
-Consider a Decision Problem under Uncertainty $(A,E,C,\succeq)$ where family of uncertain events $E$ and the set of consequences $C$ are causally related. We assume that the decision maker has \textit{rational preferences}, and because of this we can substitute his preferences $\succeq$ for a utility function $u$. The decision maker does not know the probabilities underlying the causal model therefore he can not calculate the expected utility of any action. 
+Consider a Decision Problem under Uncertainty $(A,E,C,\succeq)$ where family of uncertain events $E$ and the set of consequences $C$ are causally related. We assume that the decision maker has \textit{rational preferences}, and because of this we can substitute his preferences $\succeq$ for a utility function $u$. The decision maker does not know the probabilities nor the structure of the underlying causal model therefore he can not calculate the expected utility of any action. 
 
 Instead, the agent will try to learn by interaction with the environment succesive rounds of decision making. Inside each round, any response from the environment will be independent from the previous rounds, but the actions of the decision maker, which will be based upon previously acquired causal information are expected to improve the utility for the agent.
 
@@ -123,18 +123,18 @@ For an agent to reason about and modify his causal knowledge we endow her with a
 Since the beliefs must behave as a \textit{local} model in a given moment, it is preferable to assign probabilities directly to causal models rather than edges in a model in order to have a fixed model when sampling from this probability assignement.
 
 After each round of the base game, the probabilities representing causal beliefs will be updated in a Bayesian way in order to guarantee Bayesian consistency \cite{shoham2008multiagent}.
+
+Consider the classical rain example from \cite{pearl2009causality} where a floor being wet causes it to be slippery and therefore that causes people to fall over it, but being wet can be caused by either a sprinkler turned on or because it recently rained, which itself is caused by the current season of the year. Suppose that a person who recently arrived in the city is about to go out. She doesn't know precisely which are the rainy months in this new place, but she believes that rainy dayws are almost the same that in her past home. She also noticed a nearby sprinkler which she believes is far away from her house to wet her floor. When she goes out and falls and notices the sprinkler turned on, that increases her belief about it affecting her floor. 
+
+Even though she didn't knew the causal model itself, some days later she was certain that the sprinkler caused her floor to be wet and since the beliefs she had in her mind were about causal relations.
 \section{Test scenario}
-Consider a patient who arrives at a hospital and he can have either disease $A$ or $B$. The doctor can either give him some pill or send him into surgery. 
-
-Both treatments entail risks and whether the treatment cures the patient or not depends on which disease it had originally.
-
-The causal model that governs this situation is shown in Figure \ref{causal_model}
+Consider a patient who arrives at a hospital and he can have either disease $A$ or $B$. The doctor can either give him some pill or send him into surgery.  Both treatments entail risks and whether the treatment cures the patient or not depends on which disease it had originally. The causal model that governs this situation is shown in Figure \ref{causal_model}
 
 \begin{figure}[ht]
 \vskip 0.2in
 \begin{center}
 \centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/Segundo_Semestre/Seminario/Semana12/codigo/causal_graph.png}}
-\caption{Causal graphical model: the target variable is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
+\caption{Causal graphical model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
 \label{causal_model}
 \end{center}
 \vskip -0.2in
@@ -144,30 +144,34 @@ The node corresponding to the variable lives is the \textit{target variable} and
 
 In this scenario, Nature's move will consist in randomly assigning the disease to the patient. Then, the medic will asign a treatment, the decision nodes for this play form an information set because the medic doesn't know how she arrived there since she doesn't know what disease did Nature assign. Finally, Nature will sample the consequence of the treatment from the causal model and the medic will observe the outcome.
 
+For the sake of explanation we consider three separate cases:
+\begin{itemize}
+\item The decision maker fully knows the causal model.
+\item The decision maker knows only the structure of the causal model.
+\item The decision maker does not know the causal model.
+\end{itemize}
+
 \subsection{The casual model is completely known}
-If the decision maker knows the causal model, then she can obtain the probabilities of different values for the target variable given that an intervention on \textit{treatment} is made. 
-
-The treatment which achieves the highest probability for the desired value of the target variable will be chosen.
-
-The action thus selected will be a \textit{best response} for the decision maker and the max expected utility choice.
+If the decision maker knows the causal model, then she can directly obtain the probabilities of different values for the target variable given that an intervention on \textit{treatment} is made and choose the treatment which achieves the highest probability for the desired value of the target variable will be chosen. The action selected will be a \textit{best response} for the decision maker as well as the maximum expected utility choice.
 
 Applying Pearl's \cite{pearl2009causality} do-calculus, we see that the interventional distribution $P_{do(Tr)}(V)$ is given by
 \[ \sum_{E,R}P(V|E,Tr,R)P(R|Tr)P(E). \]
 
 In fact, noting that the variable to be intervened by the decision maker doesn't has parents in the graph one can explicitly calculate the probability of the target variable given a value for the treatment using variable elimination (\cite{koller2009probabilistic}) given the treatment as evidence. 
 
-Proceeding in this way, the probability of the patient living if the assigned treatment is surgery is only $0.28$.
+On the other hand, if a decision maker hadn't known the causal nature of the problem, but had he known the probabilities of the possible outomes given his own actions then a choice could be made using expected utilities. 
 
-On the other hand, if the treatment assigned is the pill, then the living probability is $0.37$
+What is shown with this gedankenexperiment is that in this full knowledge setting causal information achieves the same performance than simple probabilities.
+
 \subsection{Only the structure is known}
-If only the structure of the graph is known, the decision maker will have \textit{beliefs} over the parameters (conditional probabilities) of the model which she must learn by repetitions.
+If only the structure of the graph is known, the decision maker will have \textit{beliefs} over the parameters (conditional probabilities) of the model which she must learn by repetitions. As usual in the previous case, Nature is considered to play first to asign a random state of the environment, which in this case is the disease.
 
-As usual in the previous case, Nature is considered to play first to asign a random state of the environment, which in this case is the disease.
-
-The decision maker (medic) doesn't know the parameters of the model, but since she knows the graph structure, she can explicitly find a non interventional expression for the invterventional distribution and estimate from succesive observations the values that appear in the expression.
+The decision maker (medic) doesn't know the parameters of the model, but since she knows the graph structure, she can explicitly find a non interventional expression for the invterventional distribution and estimate from succesive observations the values that appear in the expression. If the decision maker were not allowed to know, at the end of each round, the play of the Nature then this will have to be estimated as a hidden variable using, for example, the EM algorithm but meanwhile we are assuming that this information is available at the end of each round.
 
 \subsection{The model is not known}
 The causal model were unknown, the decision maker will have to deal with the problem using only any previous knowledge and his own intuitions. The set of any previous knowledge and considerations will be known as \textit{beliefs}, which will take the form of a probability distributions over causal models. 
+
+For this case we consider two sub-cases depending on the maximum number of variables in the causal model are known or not.
 
 \bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
 \bibliographystyle{icml2018}
