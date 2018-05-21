@@ -229,8 +229,27 @@ where $c$ is a vector of the number of occurrences of that observed data point.
 For the second case, we must consider both the occurrences of that data point as well as the parents for each of the variables. Following \cite{barber2012bayesian} we denote as $\theta_i(X,j)$ the probability $P(X=i | Pa(X)=j)$ In this case, if the prior of $X$ is given by a a Dirichlet($\alpha$), then the posterior for a variable $X$ with parents $Pa(X)$ and an observed data point is given by 
 \[ \prod_j \textrm{Dirichlet}(\alpha + u(j)) \]
 where $u(j)$ counts the number of times that in the data point the parents of $X$ had the value $j$.
+
+\subsubsection{Experiment}
+As proof of concept we implemented this belief updating. We started with a random assignation of the $\alpha$ parameter for each of the distributions considered. 
+
+With this parameters, the decision maker forms a causal model and chooses the action that maximizes the probability of the desired value for target variable. In the medic scenario, this desired value corresponds to the patient living. With this action chosen, we simulate from the causal graphical model using the chosen action as evidence. This evidence is used to update the parameters, which then will be used to generate a new causal model, and so on.
+
+If we plot the average rewards obtained we observe they converge to 1 as shown in the next figure.
+
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/rewar.png}}
+\caption{Average reward obtained by the decision maker in 50 rounds of the decision makin-belief updating cycle.}
+\label{average_reward}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
 \subsection{The model is not known}
-The causal model were fully unknown, the decision maker will have to deal with the problem using only any previous knowledge and his own intuitions. Again, consider the set of any previous knowledge and considerations will as \textit{beliefs} about the uncertainties in the environment, which will take the form of a probability distributions over causal models. 
+The causal model were fully unknown, the decision maker will have to deal with the problem using only any previous knowledge and his own intuitions. Again, consider the set of any previous knowledge and considerations will as \textit{beliefs} about the uncertainties in the environment, which will take the form of a probability distributions over a suitable space. 
 
 For this third case, we make an extra assumption: the maximum number of variables in the model is known to the decision maker. This allow to consider only distributions of fixed dimension. In this case we will consider distributions over matrixes of fixed size rather than vectors as in the previous case. 
 
@@ -240,9 +259,18 @@ In this game, as well as in the previous one, the decision maker will attempt to
 
 The most notable difference with the previous case is that the \textit{structure} of the model is also to be learned in such a way that both the structure and parameters converge to the true model in the limit. 
 
-A natural way of encoding beliefs about causal relations is to consider all the possible variables and assign probabilities to the edges that connect them in a Directed Aciclyc Graph (DAG). Since the decision maker pretends to \textit{use} her beliefs and not only update them it is necessary that in each round of the game she can use her current knowledge in order to choose an action.
+In the previous case the decision maker knew the form of the CPT's involved in any calculation. In this case, she doesn't know the structure of the DAG so which CPT's are involved is unknown.
 
-Had she a DAG in mind whose edges have associated weights, she could sample a random variable with a $U(0,1)$ distribution and see if that sample value is less than the probability attached to the edge, if so, then she fixes this edge in the model. Proceeding this way, she will have the structure of causal graphical model, which will be then used as in Case 2.
+If the decision maker knew exactly what variables are involved, even though she didn't know how they are connected, she could use a \textit{Dirichlet Process} to generate Dirichlet distributions and generate causal graphical models the same way as in case 2. The Dirichlet Process, which was introduced by \cite{ferguson1973bayesian}, is a stochastic process whose finite-dimensional distributions are Dirichlet random variables \cite{hjort2010bayesian}, \cite{ghosal2017fundamentals}. It is the most common \textit{nonparametric prior} in the context of Bayesian Nonparametrics.
+
+Belief updating in this context is yet to be studied.
+
+
+ 
+ 
+%A natural way of encoding beliefs about causal relations is to consider all the possible variables and assign probabilities to the edges that connect them in a Directed Aciclyc Graph (DAG). Since the decision maker pretends to \textit{use} her beliefs and not only update them it is necessary that in each round of the game she can use her current knowledge in order to choose an action.
+
+%Had she a DAG in mind whose edges have associated weights, she could sample a random variable with a $U(0,1)$ distribution and see if that sample value is less than the probability attached to the edge, if so, then she fixes this edge in the model. Proceeding this way, she will have the structure of causal graphical model, which will be then used as in Case 2.
 
 
 \bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
