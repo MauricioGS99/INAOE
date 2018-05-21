@@ -158,8 +158,11 @@ The relation between values of $Y$ and actions $a \in A$ is expressed through re
 
 This is the simplest case of the three mentioned because if the decision maker fully knows the causal model, then she can proceed as in classic decision problems by directly obtain the probabilities of different values for the target variable given that an intervention on \textit{treatment} is made and choose the treatment which achieves the highest probability for the desired value of the target variable will be chosen. The action selected will be a \textit{best response} for the decision maker as well as the maximum expected utility choice.
 
-For the test scenario whose causal graphical model is shown in Figure \ref{causal_model}, we see  by applying Pearl's \cite{pearl2009causality} do-calculus, we see that the interventional distribution $P_{do(Tr)}(V)$ is given by
-\[ \sum_{E,R}P(V|E,Tr,R)P(R|Tr)P(E). \]
+Pearl's  do-calculus \cite{pearl2009causality} says that the effect of setting some variable $X_i$ to a value $x_j$ can be expressed in terms of observational distributions as follows:
+\[ P(X_1,...,X_n | do(X_i = j )) = \prod_{k \neq i} P(X_k | \textrm{Pa}(X_k)) \] 
+
+For the test scenario whose causal graphical model is shown in Figure \ref{causal_model}, we see  by applying the previous formula that the interventional distribution $P_{do(Tr)}(V)$ is given by
+\[ P(V | do(Tr))=P(Y | E, Tr, R)P(R | Tr) P(E). \]
 
 In fact, noting that the variable to be intervened by the decision maker doesn't has parents in the graph one can explicitly calculate the probability of the target variable given a value for the treatment using variable elimination (\cite{koller2009probabilistic}) given the treatment as evidence. 
 
@@ -195,10 +198,37 @@ denoting the variables in the model as $X_1 = \textrm{disease}$, $\textrm{treatm
 \[ p_{3 | 2} = P(\textrm{reaction} | \textrm{treatment}), \]
 \[p_{y |1,2,3} = P(\textrm{lives} | \textrm{disease, treatment, reaction}). \]
 
-A natural way of encoding beliefs about causal relations is to consider all the possible variables and assign probabilities to the edges that connect them in a Directed Aciclyc Graph (DAG). Since the decision maker pretends to \textit{use} her beliefs and not only update them it is necessary that in each round of the game she can use her current knowledge in order to choose an action.
+Since these distributions fully characterize the model, the decision maker will have beliefs over each one of this parameters. 
 
-Had she a DAG in mind whose edges have associated weights, she could sample a random variable with a $U(0,1)$ distribution and see if that sample value is less than the probability attached to the edge, if so, then she fixes this edge in the model. Proceeding this way, she will have a fully specified causal graphical model, which will be then used as in Case 1.
+Notice that each of this parameter is itself a distribution of length equal to the number of possible values of the variable which is being conditioned, call the maximum number of possible values $k$ 
 
+A distribution suitable to modelling discrete probability vectors is the $k$-dimensional Dirichlet distribution, whose support is the set of probability vectors of length $k$ \cite{hjort2010bayesian}. 
+
+The $k$ dimensional Dirichlet distribution has a density $f$ with respect to the Lebesgue measure given by
+
+\[ \frac{1}{B(\alpha)}  \prod_{i=1}^k x_i^{\alpha-1},\]
+
+where $(x_1,...,x_k)$ are such that $\sum_{i=1}^k x_i =1$ and $\alpha=(\alpha_1,...,\alpha_k)$
+
+The Dirichlet distribution is useful and practical since it is conjugate for itself \cite{bernardo2000bayesian}.
+
+So, in this way, the decision maker will have beliefs about the CPT's. Using the current beliefs, a causal graphical model can be specified. Using this fully specified (structure + parameters), the decision maker will make her choice as in Case 1.
+
+Previously we argued that the agent's beliefs were going to be \textit{distributions} over a suitable space, but what is going to be updated are the parameters of such distributions. Namely, the $\alpha$ corresponding to the Dirichlet random variable assigned to each CPT.
+
+For the belief updating, given a new data point,  two cases must be considered:
+\begin{itemize}
+\item The variable to update has no parents.
+\item The variable to update has parents.
+\end{itemize}
+
+In the first case, if a prior Dirichlet($\alpha$) is used, then the posterior is given by
+\[ \textrm{Dirichlet}(\alpha + c) \]
+where $c$ is a vector of the number of occurrences of that observed data point. 
+
+For the second case, we must consider both the occurrences of that data point as well as the parents for each of the variables. Following \cite{barber2012bayesian} we denote as $\theta_i(X,j)$ the probability $P(X=i | Pa(X)=j)$ In this case, if the prior of $X$ is given by a a Dirichlet($\alpha$), then the posterior for a variable $X$ with parents $Pa(X)$ and an observed data point is given by 
+\[ \prod_j \textrm{Dirichlet}(\alpha + u(j)) \]
+where $u(j)$ counts the number of times that in the data point the parents of $X$ had the value $j$.
 \subsection{The model is not known}
 The causal model were fully unknown, the decision maker will have to deal with the problem using only any previous knowledge and his own intuitions. Again, consider the set of any previous knowledge and considerations will as \textit{beliefs} about the uncertainties in the environment, which will take the form of a probability distributions over causal models. 
 
@@ -209,6 +239,10 @@ As in the previous case, consider a repeated game where the base game consists o
 In this game, as well as in the previous one, the decision maker will attempt to learn by updating, and using, beliefs in a suitable way. 
 
 The most notable difference with the previous case is that the \textit{structure} of the model is also to be learned in such a way that both the structure and parameters converge to the true model in the limit. 
+
+A natural way of encoding beliefs about causal relations is to consider all the possible variables and assign probabilities to the edges that connect them in a Directed Aciclyc Graph (DAG). Since the decision maker pretends to \textit{use} her beliefs and not only update them it is necessary that in each round of the game she can use her current knowledge in order to choose an action.
+
+Had she a DAG in mind whose edges have associated weights, she could sample a random variable with a $U(0,1)$ distribution and see if that sample value is less than the probability attached to the edge, if so, then she fixes this edge in the model. Proceeding this way, she will have the structure of causal graphical model, which will be then used as in Case 2.
 
 
 \bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
