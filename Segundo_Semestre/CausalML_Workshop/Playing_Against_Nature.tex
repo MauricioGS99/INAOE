@@ -102,7 +102,7 @@ By considering a causal model which is partially known and intervening variables
 The aforementioned papers assume the causal model is known to the decision makers so their work focuses on \textit{using} causal information to make good choices, but the problem of \textit{acquiring} this causal knowledge is left unatacked.
 
 In this work we propose to acquire, by repeated interaction, causal information about the environment as well as using the current causal knowledge inside each round to make better decisions. By modelling the environment as a player in a game we allow it to have objectives to pursue which will allow to model a rich family of situations where several agents are competing against each other and a causal entity controls the outcomes. 
-\section{Problem setup}
+\section{Problem setup}{\label{problem_setup}}
 By \textit{causality} we mean a stochastic binary relation between events of a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ denoted by $“\to”$ that is transitive, irreflexive and antisymmetric (\cite{spirtes2000causation}). 
 
 A directed acyclic graph (DAG) can be used to represent all of the relations that occur in that space by considering a node for every variable that is related to another and a directed edge to express the causal relation, call this DAG $\mathcal{G}$ and consider a probability measure $P_{\mathcal{G}}$ that expresses the conditional statements from the DAG. 
@@ -127,3 +127,24 @@ Consider the classical rain example from \cite{pearl2009causality} where a floor
 Even though she didn't knew the causal model itself, some days later she was certain that the sprinkler caused her floor to be wet and since the beliefs she had in her mind were about causal relations.
 
 \section{Proposed Method}
+In this section we describe our approach for studying decision making in causal environments as described in Section \ref{problem_setup}.
+
+For the sake of explanation we consider three separate cases:
+
+\begin{itemize}
+\item The decision maker fully knows the causal model.
+\item The decision maker knows only the structure of the causal model.
+\item The decision maker does not know the causal model.
+\end{itemize}
+
+\subsection{The causal model is completely known}
+Consider a decision problem under uncertainty where a decision maker has to choose on out of many elements of a set $A$ and where the consequence, or effect, of his actions is expressed by the realization of a random variable $Y$ which we will call \textit{target variable}.  The decision maker whishes to obtain a value from $Y$ that maximizes his utility. 
+
+The relation between values of $Y$ and actions $a \in A$ is expressed through realizations of \textit{uncertain events}, which causally relate $a$ and values $y \in \textrm{Val}(Y)$ and this relations are expressed by a causal graphical model $\mathcal{G}$. The action chosen by the decision maker is considered as an \textit{intervention} over some variable in this causal model.
+
+This is the simplest case of the three mentioned because if the decision maker fully knows the causal model, then she can proceed as in classic decision problems by directly obtaining the probabilities of different values for the target variable given that an intervention on \textit{treatment} is made and choose the treatment which achieves the highest probability for the desired value of the target variable will be chosen. The action selected will be a \textit{best response} for the decision maker as well as the maximum expected utility choice.
+
+Pearl's do-calculus \cite{pearl2009causality} says that the effect of setting some variable $X_i$ to a value $x_j$ can be expressed in terms of observational distributions as follows:
+\[ P(X_1,...,X_n | do(X_i = j )) = \prod_{k \neq i} P(X_k | \textrm{Pa}(X_k)) \] 
+
+If a decision maker knows the causal model that is governing her environment, then she could use this expression to find out the probability of her desired value for the target variable and choose the action that maximizes this probability. 
