@@ -88,7 +88,7 @@ Since human beings are known to learn causal graphical models in sequential deci
 
 The proposed way for an agent to learn from repeated interactions is by giving her \textit{beliefs} about the structure of the environment in form of a probability distribution over a suitable space. This beliefs will be updated according with what is observed.
 
-While the standard setting in RL is to model the interaction agent-environment as an agent that moves from one \textit{state} to another inside a model of the environment and observing a reward as this transitions occur, we propose to model it as a \textit{game} between the decision maker and a player called \textit{Nature} which will select his actions from the causal model.
+While the standard setting in RL is to model the interaction agent-environment as an agent that moves from one \textit{state} to another inside a model of the environment and observing a reward as these transitions occur, we propose to model it as a \textit{game} between the decision maker and a player called \textit{Nature} which will select his actions from the causal model.
 
 \section{Related Work}
 Decision problems where the actions available to a decision maker are interventions over a known causal model are analyzed by \cite{lattimoreNIPS2016} as a \textit{bandit problem} where the optimal action must be learned over $T$ rounds of action-observation in which only one action can be chosen. In a classic bandit problem an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine which is of the same kind and whose initial settings are independent of the previous machine and action \cite{sutton1998reinforcement}.
