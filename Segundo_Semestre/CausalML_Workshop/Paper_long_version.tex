@@ -206,7 +206,7 @@ A distribution suitable to modelling discrete probability vectors is the $k$-dim
 
 The $k$ dimensional Dirichlet distribution has a density $f$ with respect to the Lebesgue measure given by
 
-\[ \frac{1}{B(\alpha)}  \prod_{i=1}^k x_i^{\alpha-1},\]
+\[ f(x_1,...,x_k | \alpha_i,...,\alpha_k)=\frac{1}{B(\alpha)}  \prod_{i=1}^k x_i^{\alpha_i-1},\]
 
 where $(x_1,...,x_k)$ are such that $\sum_{i=1}^k x_i =1$ and $\alpha=(\alpha_1,...,\alpha_k)$
 
@@ -226,18 +226,16 @@ In the first case, if a prior Dirichlet($\alpha$) is used, then the posterior is
 \[ \textrm{Dirichlet}(\alpha + c) \]
 where $c$ is a vector of the number of occurrences of that observed data point. 
 
-For the second case, we must consider both the occurrences of that data point as well as the parents for each of the variables. Following \cite{barber2012bayesian} we denote as $\theta_i(X,j)$ the probability $P(X=i | Pa(X)=j)$ In this case, if the prior of $X$ is given by a a Dirichlet($\alpha$), then the posterior for a variable $X$ with parents $Pa(X)$ and an observed data point is given by 
-\[ \prod_j \textrm{Dirichlet}(\alpha + u(j)) \]
-where $u(j)$ counts the number of times that in the data point the parents of $X$ had the value $j$.
+For the second case, we must consider both the occurrences of that data point as well as the parents for each of the variables. Following \cite{barber2012bayesian} we denote as $\theta_i(X,j)$ the number of times the event $\{X=i | Pa(X)=j\}$ is observed. In this case, if the prior of $X_i$ is given by a a Dirichlet($\alpha$), then the posterior for a variable $X_i$ with parents $Pa(X)$ and an observed data point is given by 
+\[ \prod_j \textrm{Dirichlet}(\alpha + \theta_i(\cdot,j)). \]
+
 
 \subsubsection{Experiment}
 As proof of concept we implemented this belief updating. We started with a random assignation of the $\alpha$ parameter for each of the distributions considered. 
 
 With this parameters, the decision maker forms a causal model and chooses the action that maximizes the probability of the desired value for target variable. In the medic scenario, this desired value corresponds to the patient living. With this action chosen, we simulate from the causal graphical model using the chosen action as evidence. This evidence is used to update the parameters, which then will be used to generate a new causal model, and so on.
 
-If we plot the average rewards obtained we observe they converge to 1 as shown in the next figure.
-
-
+The agent obtained a total reward of $47$ out of $50$ posible points
 \begin{figure}[ht]
 \vskip 0.2in
 \begin{center}
@@ -248,22 +246,34 @@ If we plot the average rewards obtained we observe they converge to 1 as shown i
 \vskip -0.2in
 \end{figure}
 
+
+On the other hand, an agent that is randomly choosing one of the two treatment options obtains a reward of $37$ out of $50$ possible points
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/random_reward.png}}
+\caption{Average reward obtained by the decision maker in 50 rounds of randomly choosing a treatment in the causal model.}
+\label{random_reward}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+
+
+
 \subsection{The model is not known}
 The causal model were fully unknown, the decision maker will have to deal with the problem using only any previous knowledge and his own intuitions. Again, consider the set of any previous knowledge and considerations will as \textit{beliefs} about the uncertainties in the environment, which will take the form of a probability distributions over a suitable space. 
-
-For this third case, we make an extra assumption: the maximum number of variables in the model is known to the decision maker. This allow to consider only distributions of fixed dimension. In this case we will consider distributions over matrixes of fixed size rather than vectors as in the previous case. 
 
 As in the previous case, consider a repeated game where the base game consists of Nature assigning a disease to a patient, a medic choosing a treatment for it and Nature once again choosing the final outcome. This final choice of Nature is governed by the causal model.
 
 In this game, as well as in the previous one, the decision maker will attempt to learn by updating, and using, beliefs in a suitable way. 
 
-The most notable difference with the previous case is that the \textit{structure} of the model is also to be learned in such a way that both the structure and parameters converge to the true model in the limit. 
+The most notable difference with the previous case is that the \textit{structure} of the model is also to be learned in such a way that both the structure and parameters converge to the true model in the limit. In the previous case the decision maker knew the form of the CPT's involved in any calculation. In this case, she doesn't know the structure of the DAG so which CPT's are involved is unknown.
 
-In the previous case the decision maker knew the form of the CPT's involved in any calculation. In this case, she doesn't know the structure of the DAG so which CPT's are involved is unknown.
+If the decision maker knew exactly the variables that appear in the true model thar governs the environment, even though she didn't know how they are connected, she could use a \textit{Dirichlet Process} to generate Dirichlet distributions and generate causal graphical models the same way as in case 2. The Dirichlet Process\footnote{with parameters $M,G_0$}, which was introduced by \cite{ferguson1973bayesian}, is random measure defined over a space $S$ such that for each partition $B_1,...,B_k$ the vector $(G(B_1),...,G(B_k))$ follows a Dirichlet distribution \cite{hjort2010bayesian}, \cite{muller2016bayesian}, \cite{ghosal2017fundamentals}. 
 
-If the decision maker knew exactly what variables are involved, even though she didn't know how they are connected, she could use a \textit{Dirichlet Process} to generate Dirichlet distributions and generate causal graphical models the same way as in case 2. The Dirichlet Process, which was introduced by \cite{ferguson1973bayesian}, is a stochastic process whose finite-dimensional distributions are Dirichlet random variables \cite{hjort2010bayesian}, \cite{ghosal2017fundamentals}. It is the most common \textit{nonparametric prior} in the context of Bayesian Nonparametrics.
-
-Belief updating in this context is yet to be studied.
+Belief updating using causal information is yet to be studied and left as future work. 
 
 
  
