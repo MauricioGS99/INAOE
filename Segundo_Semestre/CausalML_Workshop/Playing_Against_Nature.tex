@@ -122,10 +122,6 @@ Since the beliefs must behave as a \textit{local} model in a given moment, it is
 
 After each round of the base game, the probabilities representing causal beliefs will be updated in a Bayesian way in order to guarantee Bayesian consistency \cite{shoham2008multiagent}.
 
-Consider the classical rain example from \cite{pearl2009causality} where a floor being wet causes it to be slippery and therefore that causes people to fall over it, but being wet can be caused by either a sprinkler turned on or because it recently rained, which itself is caused by the current season of the year. Suppose that a person who recently arrived in the city is about to go out. She doesn't know precisely which are the rainy months in this new place, but she believes that rainy dayws are almost the same that in her past home. She also noticed a nearby sprinkler which she believes is far away from her house to wet her floor. When she goes out and falls and notices the sprinkler turned on, that increases her belief about it affecting her floor. 
-
-Even though she didn't knew the causal model itself, some days later she was certain that the sprinkler caused her floor to be wet and since the beliefs she had in her mind were about causal relations.
-
 \section{Proposed Method}
 In this section we describe our approach for studying decision making in causal environments as described in Section \ref{problem_setup}.
 
@@ -138,13 +134,107 @@ For the sake of explanation we consider three separate cases:
 \end{itemize}
 
 \subsection{The causal model is completely known}
-Consider a decision problem under uncertainty where a decision maker has to choose on out of many elements of a set $A$ and where the consequence, or effect, of his actions is expressed by the realization of a random variable $Y$ which we will call \textit{target variable}.  The decision maker whishes to obtain a value from $Y$ that maximizes his utility. 
+Consider a decision problem under uncertainty where a decision maker has to choose on out of many elements of a set $A$ and where the consequence, or effect, of his actions is expressed by the realization of a random variable $Y$ which we will call \textit{target variable}. The relation between values of $Y$ and actions $a \in A$ is expressed by a causal graphical model $\mathcal{G}$, which is known by the decision maker. The decision maker whishes to obtain a value from $Y$ that maximizes her utility. It is assumed that which variable is going to be intervened is known for the decision maker.
 
-The relation between values of $Y$ and actions $a \in A$ is expressed through realizations of \textit{uncertain events}, which causally relate $a$ and values $y \in \textrm{Val}(Y)$ and this relations are expressed by a causal graphical model $\mathcal{G}$. The action chosen by the decision maker is considered as an \textit{intervention} over some variable in this causal model.
+This is the simplest case of the three mentioned because if the decision maker fully knows the causal model, then she can proceed as in classic decision problems by directly obtaining the probabilities of different values for the target variable given that an action is made and choose $a$ which achieves the highest probability for the desired value of the target variable. The action selected will be a \textit{best response} for the decision maker as well as the maximum expected utility choice.
 
-This is the simplest case of the three mentioned because if the decision maker fully knows the causal model, then she can proceed as in classic decision problems by directly obtaining the probabilities of different values for the target variable given that an intervention on \textit{treatment} is made and choose the treatment which achieves the highest probability for the desired value of the target variable will be chosen. The action selected will be a \textit{best response} for the decision maker as well as the maximum expected utility choice.
+Pearl's do-calculus \cite{pearl2009causality} says that the effect of setting some variable $X_i$ to a value $x_j$ can be expressed in terms of \textit{observational} distributions as follows:
+\[ P(X_1,...,X_n | do(X_i = j )) = \prod_{k \neq i} P(X_k | \textrm{Pa}(X_k)). \]
 
-Pearl's do-calculus \cite{pearl2009causality} says that the effect of setting some variable $X_i$ to a value $x_j$ can be expressed in terms of observational distributions as follows:
-\[ P(X_1,...,X_n | do(X_i = j )) = \prod_{k \neq i} P(X_k | \textrm{Pa}(X_k)) \] 
+The decision maker can use this expression to find the probabilities for her desired value of the target variable given the possible interventions available to her.
 
-If a decision maker knows the causal model that is governing her environment, then she could use this expression to find out the probability of her desired value for the target variable and choose the action that maximizes this probability. 
+\subsection{Only the structure is known}
+If only the structure of $\mathcal{G}$ this known, then it is not obvious how to find the best action to make since the information required for calculating expected utilities is not available.
+
+In this case, the decision maker will attempt to learn from her uncertain environment by forming \textit{beliefs} over unknown parameters of the environment and update them according to the observed outcomes. 
+
+To model the interaction between the decision maker and the environment, we consider a repeated game in which the base game is described by the narrative of the decision problem: 
+\begin{itemize}
+\item \textbf{Players:} The set of players of this game is the set whose elements are the original decision maker, and a new player called Nature.
+\item \textbf{Actions:} The actions for the decision maker are the available options she has in the decision problem;i.e. $A$. The actions of Nature are possible realizations of the variables of the causal model. This is interpreted as Nature assigning a \textit{state} over the environment that is  either the effect of the action chosen by the agent, or it is assigning some initial random state.
+\item \textbf{Preferences:} The decision maker satisfies the von Neumann-Morgenstern axioms of rationality and therefore it is assumed to be maximizing expected utilities. Nature is indifferent over outcomes.
+\item \textbf{Beliefs:} Since the decision maker has uncertainty about her environment, she will encode it in a probability distribution $p(\theta)$ over a suitable space.
+\end{itemize}
+
+In this game we will assume that Nature moves first and assigns some \textit{state} to the environment which is unknown to the decision maker. For this reason, the base game is an extensive game with imperfect information since the decision maker makes a choice without knowing the play made by Nature.
+
+Since she knows the graph structure, she can explicitly find a non interventional expression for the interventional distribution and update her beliefs about this unknown quantities. If the decision maker were not allowed to know, at the end of each round, the play of the Nature then this will have to be estimated as a hidden variable using, for example, the EM algorithm \cite{dempster1977maximum} but meanwhile we are assuming that this information is available at the end of each round.
+
+Given the structure of the model;i.e., the variables in it and the directed edges, we fan factorize the joint distribution as a product of the form $P(X_j | Pa(X_j))$ where $Pa(X_j)$ are the parents of $X_j$ in the DAG corresponding to $\mathcal{G}$.
+
+Since these distributions fully characterize the model, the decision maker will have beliefs over each one of these parameters. 
+
+Notice that each of this parameter is itself a distribution of length equal to the number of possible values of the variable which is being conditioned, call the maximum number of possible values $k$ . As a proof of concept we will later consier only binary variables.
+
+A distribution suitable to modelling discrete probability vectors is the $k$-dimensional Dirichlet distribution, whose support is the set of probability vectors of length $k$ \cite{hjort2010bayesian}. 
+
+The $k$ dimensional Dirichlet distribution has a density $f$ with respect to the Lebesgue measure given by
+
+\[ f(x_1,...,x_k | \alpha_i,...,\alpha_k)=\frac{1}{B(\alpha)}  \prod_{i=1}^k x_i^{\alpha_i-1},\]
+
+where $(x_1,...,x_k)$ are such that $\sum_{i=1}^k x_i =1$ and $\alpha=(\alpha_1,...,\alpha_k)$
+
+The Dirichlet distribution is useful and practical since it is conjugate for itself \cite{bernardo2000bayesian}.
+
+So, in this way, the decision maker will have beliefs about the CPT's. Using the current beliefs, a causal graphical model can be specified. Using this fully specified (structure + parameters), the decision maker will make her choice as in Case 1. When the decision maker observes the value of the target variable, she will update the parameters the specify her beliefs.
+
+Previously we argued that the agent's beliefs were going to be \textit{distributions} over a suitable space, but what is going to be updated are the parameters of such distributions. Namely, the $\alpha$ corresponding to the Dirichlet random variable assigned to each CPT.
+
+For the belief updating, given a new data point,  two cases must be considered:
+\begin{itemize}
+\item The variable to update has no parents.
+\item The variable to update has parents.
+\end{itemize}
+
+In the first case, if a prior Dirichlet($\alpha$) is used, then the posterior is given by
+\[ \textrm{Dirichlet}(\alpha + c) \]
+where $c$ is a vector of the number of occurrences of that observed data point. 
+
+For the second case, we must consider both the occurrences of that data point as well as the parents for each of the variables. Following \cite{barber2012bayesian} we denote as $\theta_i(X,j)$ the number of times the event $\{X=i | Pa(X)=j\}$ is observed. In this case, if the prior of $X_i$ is given by a a Dirichlet($\alpha$), then the posterior for a variable $X_i$ with parents $Pa(X)$ and an observed data point is given by 
+\[ \prod_j \textrm{Dirichlet}(\alpha + \theta_i(\cdot,j)). \]
+
+\section{Test scenario}
+To show how the previous ideas could be applied, we consider a hypothetical example.
+
+Consider a patient who arrives at a hospital who can either have disease $A$ or disease $B$. The doctor can either give him some pill or send him into surgery.  Both treatments entail risks and whether the treatment cures the patient or not depends on which disease it had originally. The causal model that governs this situation is shown in Figure \ref{causal_model}
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/Segundo_Semestre/Seminario/Semana12/codigo/causal_graph.png}}
+\caption{Causal graphical model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
+\label{causal_model}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+The node corresponding to the variable lives is the \textit{target variable} and, in this example, the only variable that can be intervened upon is the treatment.
+
+In this scenario, Nature's move will consist in randomly assigning the disease to the patient. Then, the medic will asign a treatment, the decision nodes for this play form an \textit{information set} because the medic doesn't know how she arrived there since she doesn't know what disease did Nature assign. Finally, Nature will sample the consequence of the treatment from the causal model and the medic will observe the outcome.
+
+For this  test scenario whose causal graphical model is shown in Figure \ref{causal_model}, we see  by applying the Pearl's do-calculus that the interventional distribution $P_{do(Tr)}(Y)$ is given by
+\[ P(Y | do(Tr))=P(Y | E, Tr, R)P(R | Tr) P(E). \]
+
+In fact, from the structure of the model, which is shown in Figure \ref{causal_model}, we see that the involved probabilities in any calculations are:
+\[ P(\textrm{disease}), P(\textrm{treatment}), P(\textrm{reaction} | \textrm{treatment}), \]
+and
+\[P(\textrm{lives} | \textrm{disease, treatment, reaction}). \]
+
+\section{Experiment}
+As proof of concept we implemented this belief updating. 
+
+\subsection{Case 1: The causal model is completely known}
+If the causal model is completely known to the decision maker, then in one step she can obtain the probability for her desired value of the target variable, which in this case is the value corresponding to the outcome in which the patient lives at the end. Using this probability, she can choose which treatment to assign.
+
+\subsection{Case 2}
+
+We started with a random assignation of the $\alpha$ parameter for each of the distributions considered. We are considering a Dirichlet distribution for each of the conditional probability tables that appear in the factorization of the joint probability for the graph of $\mathcal{G}$. Since each of the variables in the model is binary, then the product of these Dirichlets is Dirichlet.
+
+With this parameters, the decision maker forms a causal model and chooses the action that maximizes the probability of the desired value for target variable as in Case 1.  With this action chosen, we simulate an outcome from the causal graphical model using the chosen action as an intervention. This evidence is used to update the parameters, which then will be used to generate a new causal model, and so on.
+
+
+
+\bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
+\bibliographystyle{icml2018}
+
+\end{document}
