@@ -54,7 +54,11 @@
 
 \end{icmlauthorlist}
 
-\icmlaffiliation{inaoe}{Department of Computer Science, National Institute of Astrophysics Optics and Electronics (INAOE), Puebla, Mexico}
+\icmlaffiliation{inaoe}{Department of Computer Science, National Institute of Astrophysics Optics and Electronics (INAOE), Mexico}
+
+\icmlcorrespondingauthor{Mauricio Gonzalez-Soto}{mauricio@inaoep.mx}
+\icmlcorrespondingauthor{Luis Enrique Sucar}{esucar@inaoep.mx}
+\icmlcorrespondingauthor{Hugo Jair Escalante}{hugojair@inaoep.mx}
 
 % You may provide any keywords that you
 % find helpful for describing your paper; these are used to populate
@@ -231,7 +235,11 @@ We can also see that the joint distribution for all of the variables can be expr
 \[ P(Y | D, Tr, R)P(R | Tr) P(D)P(Tr). \]
 This expression will be useful when specifying beliefs about the model as Dirichlet distributions.
 \section{Experiment}
-As proof of concept we implemented this belief updating. 
+As proof of concept we implemented  Case 1 and Case 2 for the test scenario and compared it with an agent performing Q-learning and an agent choosing his actions at random. 
+
+For the implementation, we defined a \textit{true} causal model as the one shown in Figure \ref{causal_model} using the library Pgmpy \cite{ankan2015pgmpy}. Then, we defined an agent which has beliefs for each of the CPT that appear in the factorization for the model and randomly assigned values for the $\alpha$ parameters for each one of the Dirichlet distributions as mentioned before. 
+
+This agent will find the action that maximizes her desired value for the target variable using do-calculus. The action thus selected will be used as \textit{evidence} in the true causal model and a MAP inference will be used to simulate the most likely outcome given this action. The target variable will output a $1$ value if the patient lives. The value of the target variable will be the reward of each round.
 
 \subsection{Case 1: The causal model is completely known}
 If the causal model is completely known to the decision maker, then in one step she can obtain the probability for her desired value of the target variable, which in this case is the value corresponding to the outcome in which the patient lives at the end. Using this probability, she can choose which treatment to assign. Since this action maximizes the probability of the occurence desired value, it maximizes the expected utility, and it is also a \textit{best response} to the player Nature.
