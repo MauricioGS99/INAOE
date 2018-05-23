@@ -80,7 +80,7 @@
 \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 \begin{abstract}
-We consider decision problems under uncertainty where the options available to a decision maker and the resulting outcome are related through a causal mechanism which is unknown to the decision maker. We study how a decision maker can learn about this causal mechanism through sequential decision making as well as using current causal knowledge inside each round in order to make better choices had she not considered causal knowledge. As proof-of- concept, we present a preliminary implementation of the decision making model and apply it to a simple problem. The model achieves a performance similar to the classic Q-learning and acquires a causal model of the environment. 
+We consider decision problems under uncertainty where the options available to a decision maker and the resulting outcome are related through a causal mechanism which is unknown to the decision maker. We study how a decision maker can learn about this causal mechanism through sequential decision making as well as using current causal knowledge inside each round in order to make better choices had she not considered causal knowledge. We propose a decision making procedure in which an agent holds \textit{beliefs} about her environment which are used to make a choice and then are updated using the observed outcome. As proof of concept, we present an implementation of this causal decision making model and apply it to a simple problem. We show that the model achieves a performance similar to the classic Q-learning while it also acquires a causal model of the environment. 
 \end{abstract}
 
 \section{Introduction}
@@ -150,7 +150,7 @@ Pearl's do-calculus \cite{pearl2009causality} says that the effect of setting so
 The decision maker can use this expression to find the probabilities for her desired value of the target variable given the possible interventions available to her.
 
 \subsection{Only the structure is known}
-If only the graphical structure of $\mathcal{G}$ this known, then it is not obvious how to find the best action to make since the information required for calculating expected utilities is not available.
+If only the graphical structure of $\mathcal{G}$ is known, then it is not obvious how to find the best action to make since the information required for calculating expected utilities is not available.
 
 In this case, the decision maker will attempt to learn from her uncertain environment by forming \textit{beliefs} over unknown parameters of the environment and update them according to the observed outcomes. In order to make a Bayesian update over the parameters, these must be defined in such way that in each round the decision maker can define a causal model from the parameters in order to make a decision using this model as if it was the true one as in Case 1.
 
@@ -166,7 +166,7 @@ In this game we will assume that Nature moves first and assigns some \textit{sta
 
 Since the decision maker knows the graph structure, she can explicitly find a non interventional expression for the interventional distribution and update her beliefs about these unknown quantities. If the decision maker were not allowed to know, at the end of each round, the play of the Nature then this will have to be estimated as a hidden variable using, for example, the EM algorithm \cite{dempster1977maximum}, but meanwhile we are assuming that this information is available at the end of each round.
 
-Given the structure of the model; i.e., the variables in it and the directed edges, the joint distribution of those variables can be expressed as a product of the form $P(X_j | Pa(X_j))$ where $Pa(X_j)$ are the parents of $X_j$ in the underlying DAG in $\mathcal{G}$. Since these distributions fully characterize the model, the decision maker will have beliefs over each one of these parameters. Notice that each of these parameters is itself a distribution of length equal to the number of possible values of the variable which is being conditioned, call the maximum number of possible values $k$ . As a proof of concept we will later consider only binary variables.
+Given the structure of the model; i.e., the variables in it and the directed edges, the joint distribution of those variables can be expressed as a product of the form $P(X_j | Pa(X_j))$ where $Pa(X_j)$ are the parents of $X_j$ in the underlying DAG in $\mathcal{G}$. Since these distributions fully characterize the model, the decision maker will have beliefs over each one of these parameters. Notice that each of these parameters is itself a distribution of length equal to the number of possible values of the variable which is being conditioned, call the maximum number of possible values $k$ . 
 
 A distribution suitable to modelling discrete probability vectors is the $k$-dimensional Dirichlet distribution, whose support is the set of probability vectors of length $k$ \cite{hjort2010bayesian}. The $k$ dimensional Dirichlet distribution has a density $f$ with respect to the Lebesgue measure given by
 
@@ -198,7 +198,7 @@ As in the previous case, we consider a repeated game where the base game consist
 
 The most notable difference with the previous case is that the \textit{structure} of the model is also to be learned in such a way that both the structure and parameters converge to the true model in the limit. In the previous case the decision maker knew the form of the Conditional Probability Tables (CPT) involved in any calculation. In this case, she doesn't know the structure of the DAG so which CPT's are involved is unknown.
 
-If the decision maker knew exactly the variables that appear in the true model that governs the environment, even though she didn't know how they are connected, she could use a \textit{Dirichlet Process} to generate Dirichlet distributions and generate causal graphical models the same way as in Case 2 and updating the parameters of the process using the observed information. The Dirichlet Process\footnote{with parameters $M,G_0$}, which was introduced by \cite{ferguson1973bayesian}, is random measure defined over a space $S$ such that for each partition $B_1,...,B_k$ the vector $(G(B_1),...,G(B_k))$ follows a Dirichlet distribution \cite{hjort2010bayesian}, \cite{muller2016bayesian}, \cite{ghosal2017fundamentals}. 
+If the decision maker knew which variables appear in the true model that governs the environment, even though she didn't know how they are connected, she could use a \textit{Dirichlet Process} to generate Dirichlet distributions and generate causal graphical models the same way as in Case 2 and updating the parameters of the process using the observed information. The Dirichlet Process\footnote{with parameters $M,G_0$}, which was introduced by \cite{ferguson1973bayesian}, is random measure defined over a space $S$ such that for each partition $B_1,...,B_k$ the vector $(G(B_1),...,G(B_k))$ follows a Dirichlet distribution \cite{hjort2010bayesian}, \cite{muller2016bayesian}, \cite{ghosal2017fundamentals}. 
 
 Belief updating using causal information when the decision maker doesn't know the structure of the model nor its parameters is yet to be studied and left as future work. 
 
@@ -208,6 +208,16 @@ To illustrate how the previous ideas could be applied, we consider the following
 Consider a patient who arrives at a hospital who can either have disease $A$ or disease $B$. The doctor can either give him some pill or send him into surgery.  Both treatments entail risks and whether the treatment cures the patient or not depends on which disease it had originally. The doctor could be facing a mutation from a known disease, so she has some knowledge about what could happen if a treatment is given to the patient. Using her previous knowledge as a true model, she can choose a treatment and observe the outcome from which she will learn about this disease, so she could make a better decision the next time a similar patient arrives.
 
 The causal model that governs this situation is shown in Figure \ref{causal_model}. The parameters for this model were fixed intuitively in such a way that each treatment is effective for only one disease, but the most effective treatment is riskier.
+
+The variables in the model are: 
+\begin{itemize}
+\item \textbf{Disease:} Either $A$ or $B$.
+\item \textbf{Treatment:} Either pill or surgery.
+\item \textbf{Reaction:} Either dying or surviving.
+\item \textbf{Lives:} Either living or dying.
+\end{itemize}
+
+The variables are causally related as shown in Figure \ref{causal_model}.
 
 \begin{figure}[ht]
 \vskip 0.2in
@@ -244,7 +254,7 @@ This agent will find the action that maximizes her desired value for the target 
 \subsection{Case 1: The causal model is completely known}
 If the causal model is completely known to the decision maker, then in one step she can obtain the probability for her desired value of the target variable, which in this case is the value corresponding to the outcome in which the patient lives at the end. Using this probability, she can choose which treatment to assign. Since this action maximizes the probability of the occurence desired value, it maximizes the expected utility, and it is also a \textit{best response} to the player Nature.
 
-\subsection{Case 2}
+\subsection{Case 2: Only the structure is known}
 From the expression of the joint probability we notice that we need to specify a distribution over each one of these distributions, which will be each one a Dirichlet distribution.
 
 We begin with a random assignation of the $\alpha$ parameter for each of the distributions considered. We use Dirichlet distribution for each of the conditional probability tables that appear in the factorization of the joint probability for the graph of $\mathcal{G}$. Since each of the variables in the model is binary, then the product of these Dirichlets is Dirichlet.
@@ -264,7 +274,6 @@ In Figure \ref{20_rounds} we observe the average rewards for each agent in 20 ro
 \end{center}
 \vskip -0.2in
 \end{figure}
-
 
 In Figure \ref{50_rounds} we observe the average rewards for each agent in 50 rounds of decision making. Our algorithm follow closely the Q-learning agent and outperform the random agent.
 
