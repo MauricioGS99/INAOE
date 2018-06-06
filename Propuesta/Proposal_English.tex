@@ -49,7 +49,11 @@ The agent, using her current beliefs, will generate a \textit{local} causal mode
 Learning a causal model of the environment allows to extract high-level insights of a phenomena beyond associative descriptions of what is observed.
 
 \section{Main Concepts}
-	\subsection{Causal Relations}
+	\subsection{Attempts to define Causality}
+	Causality has been a difficult concept to define and several attempts have been made. In fact, in mainstream statistics  the term \textit{cause} have been nearly banned as documented by \cite{pearl2018why}.
+	
+	In the classic works on Causality (\cite{spirtes2000causation}, \cite{pearl2009causality}) the term \textit{causality} is defined in terms of common language and then the mathematical machinery required to model causality is provided. In this way, causality becomes defined as what is modeled by causal models, which are themselves defined as to model causality. This apparent circularity is deeply studied by \cite{woodward2005making}. For this reason, we will give here a formal working definition of causal relations which allows to be used formally.
+	\subsection{Definition of Causality}
 	Causality is understood as a relation between \textit{events}. Some event \textit{causes} another event to occurr. The formal definition of Causality that will be adopted in this work is the definition provided in \cite{spirtes2000causation}.
 	\begin{defi}{\label{causal_relation}}
 	Let $(\Omega, \mathcal{F}, \mathbb{P})$ a finite probability space, and consider a binary relation $\to \subseteq \mathcal{F} \times \mathcal{F}$ which is:
@@ -67,7 +71,9 @@ Learning a causal model of the environment allows to extract high-level insights
 	Given a causal relation $\to$ as in Definition \ref{causal_relation} then the graph that is obtained by considering nodes for events and edges for the causal relations as previously described is a Directed Acyclic Graph.
 	\end{prop}
 	\begin{proof}
+	The graph is directed since the definition of causality imposes a direction between events; namely, a direction between the cause and the effect. To see that the graph is acyclic, suppose that a cycle $A \to B \to C \to A$ exists, this would imply, because of transitivity, that $A \to A$, which can not be since the relation is irreflexive.
 	\end{proof}
+	Notice that since the graph is finite, there exist some nodes that does not have causes, which are called \textit{exogenous}. If an $A$ event is caused by some other event, then we say it is \textit{endogenous} and we denote the set of its causes as $Pa(A)$.
 	\subsection{Causal Graphical Models}
 	\subsection{Decision Theory}
 	A Decision Problem under Uncertainty is a situation in which an agent must choose one out of many actions with uncertain consequences. We follow \cite{bernardo2000bayesian}.
@@ -80,20 +86,82 @@ Learning a causal model of the environment allows to extract high-level insights
 	\item For each action $a_i$, a set of consequences $C_i = \{ c_j : j \in J \}$. Define $\mathcal{C}=\cup_{i \in I} C_i$
 	\item A preference relation $\succeq$ defined over $\mathcal{A}$.
 	\end{itemize}
-	Since we are considering that a decision maker chooses an action $a \in \mathcal{A}$, and then an uncertain event $E$ will occur which will then produce the consequence $c$, we will identify actions in $\mathcal{A}$ as $a_i = \{ c_j | E_j : j \in J \}$. As a technical assumption required for all of the math to work, we require that elements of $\mathcal{C}$ belong to $\mathcal{A}$. This is achieved by adding into $A$ elements of the form $\{ c | \Omega \}$ for $c \in \mathcal{C}$. This being said, we can extend the preference relation $\succeq$ to elements of $\mathcal{C}$.
-	
-	From the prerefence relation $\succeq$ we can derive some other relations:
+	Since we are considering that a decision maker chooses an action $a \in \mathcal{A}$, and then an uncertain event $E$ will occur which will then produce the consequence $c$, we will identify actions in $\mathcal{A}$ as $a_i = \{ c_j | E_j : j \in J \}$. As a technical assumption required for all of the math to work, we require that elements of $\mathcal{C}$ belong to $\mathcal{A}$. This is achieved by adding into $A$ elements of the form $\{ c | \Omega \}$ for $c \in \mathcal{C}$. This being said, we can extend the preference relation $\succeq$ to elements of $\mathcal{C}$ and therefore indistinctively write $c_1 \succeq c_2$ for $c_1, c_2 \in \mathcal{C}$ or $a_1 \succeq a_2$ for $a_1,a_2 \in \mathcal{A}$. We require that $\mathcal{E}$ is an \textit{algebra}.	
+	\begin{defi}
+	From the prerefence relation $\succeq$ we can derive some other relations between actions:
 	\begin{itemize}
 	\item $a_1 \sim a_2 \Leftrightarrow a_1 \succeq a_2 \textrm{ and } a_2 \succeq a_1$
-	\item $a_1 \succ a_2 \Leftrightarrow a_1 \succeq a_2 \textrm{ and it does not hold that } a_2 \succeq a_1$
+	\item $a_1 \succ a_2 \Leftrightarrow a_1 \succeq a_2 \textrm{ and it does not hold that } a_2 \succeq a_1$.
 	\end{itemize}
-	\subsubsection{Axioms of Coherence}
-	We require the following axioms for the preference relation $\succeq$ which we will call Axioms of Coherence or Rationality, and define a Rational decision maker as a decision maker whose preferences are rational in the sense of the axioms (\cite{bernardo2000bayesian}).\\
-	\\
-	\textbf{Axiom 1}.
+	\end{defi}
+	\begin{defi}
+	A relation between events can be derived from $\succeq$ in the following way:
+	\[E \succeq F \Leftrightarrow \textrm{ for all } c_1 \succeq c_2 \textrm{ it holds that } \{ c_2 | E, c_1 | E^c \} \succeq \{ c_2 | F, c_1 | F^c \}. \]
+	In this case, we say that $F$ is not \textit{more likely} than $E$. It can easily be shown that $\Omega \succ \emptyset$, and a relation $\sim$ for events is defined in an analog way than for consequences.
+	\end{defi}
+	\begin{defi}
+	Given some $G \succ \emptyset$ we define a conditional preference relation as follows:
 	\begin{itemize}
-	\item i) There exists consequences $c_1$, $c_2$ such that $c_1 < c_2$.
+	\item i) $a_1 \succeq_G a_2 \Leftrightarrow \textrm{ for all a } \{ a_1 | G, a | G^c \} \succeq \{ a_2 | G, a | G^c \}$.
+	\item ii) $E \succeq_G F \Leftrightarrow \textrm{ for } c_1 \succeq_G c_2 \{ c_2 | E , c_1 | E^c \} \succeq_G \{c_2 | F , c_1  | F^c \}$ 
 	\end{itemize}
+	\end{defi}
+	\begin{defi}
+	Two events $E,F \in \mathcal{E}$ are said to be independent if and only if:
+	\begin{itemize}
+	\item 	
+	\end{itemize}
+	\end{defi}
+	\subsubsection{Axioms of Coherence}
+	We require the following axioms for the preference relation $\succeq$ which we will call Axioms of Coherence or Rationality, and define a Rational decision maker as a decision maker who will choose according to a preference relation and whose preferences are rational in the sense of the axioms (\cite{bernardo2000bayesian}).\\
+	\\
+	\indent \textbf{Axiom 1}.
+	\begin{itemize}
+	\item i) There exists consequences $c_1$, $c_2$ such that $c_1 \succ c_2$.
+	\item ii) For all consequences $c_1, c_2$ and events $E,F \in \mathcal{E}$ either $\{  c_2 | E , c_1 | E^c\} \succeq \{ c_2 | F, c_1 | F^c \}$ or $\{ c_2 | F, c_1 | F^c \} \succeq \{  c_2 | E , c_1 | E^c\}$
+	\end{itemize}
+	
+	\textbf{Axiom 2}.
+	\begin{itemize}
+	\item i) $a \succeq a$ for all $a \in \mathcal{A}$.
+	\item ii) If $a \succeq b$ and $b \succeq c$ for $a,b,c \in \mathcal{A}$, then $a \succeq c$.
+	\end{itemize}
+	
+	\textbf{Axiom 3}
+	\begin{itemize}
+	\item i) If $a_1 \succeq a_2$ then for all $G \succ \emptyset$ $a_1 \succeq_G a_2$.
+	\end{itemize}
+	
+	\textbf{Axiom 4.}\\
+	There exists a sub-algebra $\mathcal{S}$ of $\mathcal{E}$ and a function $\mu : \mathcal{S} \to [0,1]$ such that:
+	\begin{itemize}
+	\item i) $S_1 \succeq S_2$ if and only if $\mu(S_1) \succeq \mu(S_2)$.
+	\item ii) If $S_1 \cap S_2 = \empty$ then $\mu(S_1 \cup S_2) = \mu(S_1) + \mu(S_2)$.
+	\item iii) For any number $\alpha \in [0,1]$ and independent events $E,F$, there is an event $S$, which is called a standard event, such that $\mu(S)=\alpha$ and $S$ is independent from $E$ and from $F$.
+	\item iv) If $S_1$ is independent from $S_2$ then $\mu(S_1 \cap S_2)=\mu(S_1)\mu(S_2)$.
+	\item v) If $E$ independent of $S$, $S$ independent from $F$ and $E$ independent from $F$ then $E \sim S$ implies that $E \sim_F S$.
+	\end{itemize}
+	
+	\textbf{Axiom 5.}
+	\begin{itemize}
+	\item i) If $c_1 \succeq c \succeq c_2$ then there exists a standard event $S$ such that $c \sim \{ c_2 | S, c_1 | S^c \}$.
+	\item ii) For each event $E$ there exists a standard event $S$ such that $E \sim S$.
+	\end{itemize}
+	\subsubsection{Subjective Probability and Utility}
+	\begin{defi}
+	Given a preference relation $\succeq$, we define the (subjective) probability of an event $E \in \mathcal{E}$ as the real number $\mu(S)$ associated with the standard event $S$ such that $E \sim S$.
+	\end{defi}
+	\begin{defi}
+	Given a preference relatin $\succeq$ we define the utility $u(c)$ of a consequence $c \in \mathcal{C}$ relative to the extreme consequences $c_\ast$, $c^\ast$, as the real number $\mu(S)$ associated with any standard event $S$ such that $c \sim \{c^\ast | S, c_\ast | S^c\}$.
+	\end{defi}
+	\subsubsection{Decision Criteria for Decision Problems}
+	\begin{teo}
+	For any bounded decision problem with extreme consequences $c^\ast \succ c_\ast$ and any $G \succ \emptyset$
+	\[ a_1 \succeq_G a_2 \Leftrightarrow \bar{u}(a_1) \geq \bar{u}(a_2). \]
+	\end{teo}
+	\begin{proof}
+	See \cite{bernardo2000bayesian} Chapter 2 Proposition 2.22
+	\end{proof}
 	\subsection{Game Theory}
 
 \section{Problem Statement}
