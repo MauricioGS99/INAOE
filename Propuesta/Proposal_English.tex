@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+%\usepackage[spanish, mexico]{babel}
+\usepackage{listings}
+\usepackage{breakcites}
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{amssymb,amsthm,amsmath,latexsym}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{natbib}
+%\bibliographystyle{stylename}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+\theoremstyle{plain}
+\newtheorem{teo}{Theorem}
+\newtheorem{prop}[teo]{Proposition}
+\newtheorem{defi}[teo]{Definition}
+\newtheorem{obs}[teo]{Observation}
+\newtheorem{lem}[teo]{Lemma}
+\newtheorem{cor}[teo]{Corolary}
+\usepackage[pdftex]{color,graphicx}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usetikzlibrary{calc}
+%\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+\title{Use and acquisition of causal relations for decision making under uncertainty using imperfect information repeated games}
+\author{Mauricio Gonzalez Soto}
+\begin{document}
+%\nocite{*}
+\maketitle
+\tableofcontents
+\newpage
+\begin{abstract}
+We consider decision problems under uncertainty where the options available to a decision maker and the resulting outcome are related through a causal mechanism which is unknown to the decision maker. We study how a decision maker can learn about this causal mechanism through sequential decision making as well as using current causal knowledge inside each round in order to make better choices had she not considered causal knowledge. We propose a decision making procedure in which an agent holds \textit{beliefs} about her environment which are used to make a choice and then are updated using the observed outcome. As proof of concept, we present an implementation of this causal decision making model and apply it to a simple problem. We show that the model achieves a performance similar to the classic Q-learning while it also acquires a causal model of the environment. 
+\end{abstract}
+\section{Introduction}
+\indent A fundamental part of intelligent reasoning is being able to make decisions under uncertain conditions (\cite{danks2014unifying}, \cite{lake2017building}, \cite{pearlwhy}). In some cases, a decision maker who faces an uncertain environment has enough information to make choices by maximizing expected utility, which is the classic formal criteria for making decisions if rational preferences are assumed (\cite{bernardo2000bayesian}, \cite{gilboa2009decision}). On the other hand, if enough information is not available, the decision maker could attempt to \textit{learn} from the environment by interacting with it.
+
+Learning by interaction has been extensively studied by computer scientists using the Reinforcement Learning (RL) setting \cite{sutton1998reinforcement}, but the most common used techniques  in this field are purely associative and do not consider any high-level structure of the environment beyond what is expressable in a Markov Decision Process \cite{garnelo2016towards}.
+
+Since human beings are known to learn causal models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), and even though this learning is not perfect \cite{rottman2014reasoning}, we propose that an autonomous agent can learn and use causal information while interacting with an uncertain environment which is governed by a fixed \textit{causal mechanism} which is unknown to the agent.  
+
+The proposed way for an agent to learn from repeated interactions is by giving her \textit{beliefs} about the structure of the environment and a way to update them after an outcome has been observed.
+
+While the standard setting in RL is to model the agent-environment interaction as an agent that moves from one \textit{state} to another inside a model of the environment and observing a reward as these transitions occur, we propose to model it as a \textit{game} between the decision maker and a player called \textit{Nature} which will select his actions from the causal model in response to what the decision maker has chosen. 
+
+The agent, using her current beliefs, will generate a \textit{local} causal model and choose an action from it as if that model was the true one. Then, after she observes the consequences of her actions, her beliefs will be updated according to the observed information in order to make a better choice the next time. The agent, besides learning a policy to choose actions will also learn a causal model from the environment since the causal model she forms will approximate the true model.
+
+Learning a causal model of the environment allows to extract high-level insights of a phenomena beyond associative descriptions of what is observed.
+
+\section{Main Concepts}
+	\subsection{Causal Relations}
+	Causality is understood as a relation between \textit{events}. Some event \textit{causes} another event to occurr. The formal definition of Causality that will be adopted in this work is the definition provided in \cite{spirtes2000causation}.
+	\begin{defi}{\label{causal_relation}}
+	Let $(\Omega, \mathcal{F}, \mathbb{P})$ a finite probability space, and consider a binary relation $\to \subseteq \mathcal{F} \times \mathcal{F}$ which is:
+	\begin{itemize}
+	\item Transitivity: If $A \to B$ and $B \to C$ for any $A, B, C \in \mathcal{F}$ then $A \to C$.
+	\item Irreflexive: For all $A \in \mathcal{F}$ it doesn't hold that $A \to A$.
+	\item Antisymmetric: For $A,B \in \mathcal{F}$ such that $A \neq B$ if $A \to B$ then it doesn't hold that $B \to A$.
+	\end{itemize}
+	We will say that $A$ is \textit{a cause} of $B$ (or that $A$ causes $B$, $A$ is the cause and $B$ is the effect) if $A \to B$.
+	\end{defi}
+	We will assume that for any event $A \in \mathcal{F}$ there are no causes lying outside $\mathcal{F}$, and that the relations expressed by $\to$ are the only causal relations in the environment. This assumption can be interpreted as not allowing \textit{intermediate} events between events known to be causally related. For example, if in our space we have that striking a match causes fire, we will not allow into consideration the underlying chemical reactions that cause fire from friction. In this sense, we will say that striking a match is a \textit{direct cause} of fire and this will be the only causes considered (\cite{spirtes2000causation}). 
+	\subsection{Representation into a Directed Acyclic Graph}
+	Making some notation abuse, the causal relations contained in $\to$ can be summarized in a graph $G=(V,E)$ in the following way: If $A \to B$ then the graph must contain a node $A \in V$ representing $A$, a node  $B \in V$ representing $B$ and a directed edge $e \in E$ connecting the respective nodes in the direction of the causal relation.
+	\begin{prop}
+	Given a causal relation $\to$ as in Definition \ref{causal_relation} then the graph that is obtained by considering nodes for events and edges for the causal relations as previously described is a Directed Acyclic Graph.
+	\end{prop}
+	\begin{proof}
+	\end{proof}
+	\subsection{Causal Graphical Models}
+	\subsection{Decision Theory}
+	A Decision Problem under Uncertainty is a situation in which an agent must choose one out of many actions with uncertain consequences. We follow \cite{bernardo2000bayesian}.
+	\subsubsection{Elements of a Decision Problem}
+	A Decision Problem under Uncertainty is composed by:
+	\begin{itemize}
+	\item A set $\Omega$ 
+	\item A set $\mathcal{A}=\{a_i : i \in I \}$ of actions.
+	\item For each action $a_i$, a partition $E_i = \{ E_j : j \in J \}$ of $\Omega$. Define $\mathcal{E} = \cup_{i \in I } E_i$.
+	\item For each action $a_i$, a set of consequences $C_i = \{ c_j : j \in J \}$. Define $\mathcal{C}=\cup_{i \in I} C_i$
+	\item A preference relation $\succeq$ defined over $\mathcal{A}$.
+	\end{itemize}
+	Since we are considering that a decision maker chooses an action $a \in \mathcal{A}$, and then an uncertain event $E$ will occur which will then produce the consequence $c$, we will identify actions in $\mathcal{A}$ as $a_i = \{ c_j | E_j : j \in J \}$. As a technical assumption required for all of the math to work, we require that elements of $\mathcal{C}$ belong to $\mathcal{A}$. This is achieved by adding into $A$ elements of the form $\{ c | \Omega \}$ for $c \in \mathcal{C}$. This being said, we can extend the preference relation $\succeq$ to elements of $\mathcal{C}$.
+	
+	From the prerefence relation $\succeq$ we can derive some other relations:
+	\begin{itemize}
+	\item $a_1 \sim a_2 \Leftrightarrow a_1 \succeq a_2 \textrm{ and } a_2 \succeq a_1$
+	\item $a_1 \succ a_2 \Leftrightarrow a_1 \succeq a_2 \textrm{ and it does not hold that } a_2 \succeq a_1$
+	\end{itemize}
+	\subsubsection{Axioms of Coherence}
+	We require the following axioms for the preference relation $\succeq$ which we will call Axioms of Coherence or Rationality, and define a Rational decision maker as a decision maker whose preferences are rational in the sense of the axioms (\cite{bernardo2000bayesian}).\\
+	\\
+	\textbf{Axiom 1}.
+	\begin{itemize}
+	\item i) There exists consequences $c_1$, $c_2$ such that $c_1 < c_2$.
+	\end{itemize}
+	\subsection{Game Theory}
+
+\section{Problem Statement}
+	\subsection{Problem Statement}
+	\subsection{Motivation}
+	Decision making under uncertain conditions is a fundamental part of intelligent reasoning (\cite{lake2017building}). Intelligent agents often face situations where an action must be chosen in the presence of uncertain conditions; this means that an outcome will be observed according to some probability distribution given the action chosen by the agent.
+	
+	In many real-world applications, the agent doesn't know all of the parameters required to calculate the maximum utility, but if the agent knew that his actions and the possible consequences were \textit{causally related}, then he could attempt to discover this relations and use them in order to predict consequences of actions better than if he only observes multiple action-outcome pairs as done in Reinforcement Learning (\cite{sutton1998reinforcement}). 
+	
+	It is known that human beings conceive their actions on the world as \textit{intervening} in the world. Following this idea, \cite{lattimoreNIPS2016} consider decision problems where the action to be chosen is an intervention over a known causal graphical model. The agent must choose the intervention that maximizes the value of a \textit{target variable} after a series of learning rounds. They model their problem as if choosing an intervention was choosing an arm of a \textit{slot machine}, in which a gambler chooses an arm and gets some reward. From the rewardsm they estimate probabilities and output an optimal action in the sense of obtaining minimal regret.
+	
+	 Their work considers that the causal model is fully known. They mention that the case where the causal model is unknown is left as an open question, and it is precisely what we are proposing to answer. 
+	\subsection{Justification}
+	Besides obtaining a criteria of choosing actions, our agent will also learn a causal model of his environment. Learning causal models is importante since it allows further questions to be asked. 
+	\subsection{Research Question}
+	\subsection{Hypothesis}
+	Let $\mathcal{G}$ a causal graphical model whose probability distribution $P_\mathcal{G}$ satisfies (the axioms). Let $(D,E,c)$ a decision problem whose uncertain events are related to the variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$,  by repeatedly making decisions he can learn causal information and use it to find the optimal actions (in the sense of expected utility theory) in less rounds than if he doesn't consider causal information.
+	\subsection{Objectives}
+		\subsubsection{General Objectives}
+		\subsubsection{Specific Objectives}
+		\subsubsection{Limitations}
+
+\section{Related Work}
+
+\section{Methodology}
+\subsection{Modelling}
+\subsection{Working plan}
+
+\newpage
+\bibliographystyle{apalike}
+\bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
+\end{document}
