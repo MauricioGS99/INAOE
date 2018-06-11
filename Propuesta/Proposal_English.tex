@@ -76,15 +76,20 @@ Learning a causal model of the environment allows to extract high-level insights
 	Notice that since the graph is finite, there exist some nodes that does not have causes, which are called \textit{exogenous}. If an $A$ event is caused by some other event, then we say it is \textit{endogenous} and we denote the set of its causes as $Pa(A)$.
 	\subsection{Causal Graphical Models}
 	\subsection{Decision Theory}
-	A Decision Problem under Uncertainty is a situation in which an agent must choose one out of many actions with uncertain consequences. We follow \cite{bernardo2000bayesian}.
+	A Decision Problem under Uncertainty is a situation in which an agent must choose one out of many actions with uncertain consequences. The most common theories for Decision Making under Uncertainty are those from \cite{von1944theory} and \cite{savage1954the}. In the former theory it is assumed that the decision maker knows the stochastic relation between actions and consequences, and in that case the theory guarantees that the decision maker behaves as if he maximizes the expected value of an utility function. On the other hand, if the decision maker doesn't know the probabilities of observing outcomes given a chosen action, then Savage's theory guarantees that the decision maker behaves as if he had in mind a \textit{subjective} probability distribution, a utility function and chooses the action which maximizes the expected utility with respect to that subjective probability distribution and utility function. 
+	
+Both von Neumann and Savage's Decision Under Uncertainty theories are known as the \textit{classic} theories in other areas, mostly in Economics. It is important to say that other Decision Making theories exist, such as Prospect Theory (\cite{kahneman1979prospect}), Case-Based Decision Theory (\cite{gilboa1995case}) among others that are out of the scope of this work.
+
+For what remains of this section, we follow \cite{bernardo2000bayesian} in his exposition of Savage's theory since it is the most suitable for our purposes because we will be considering decision makers that do not know all of their environment.
+	
 	\subsubsection{Elements of a Decision Problem}
 	A Decision Problem under Uncertainty is composed by:
 	\begin{itemize}
-	\item A set $\Omega$ 
+	\item A set $\Omega$ of \textit{states}.
 	\item A set $\mathcal{A}=\{a_i : i \in I \}$ of actions.
 	\item For each action $a_i$, a partition $E_i = \{ E_j : j \in J \}$ of $\Omega$. Define $\mathcal{E} = \cup_{i \in I } E_i$.
 	\item For each action $a_i$, a set of consequences $C_i = \{ c_j : j \in J \}$. Define $\mathcal{C}=\cup_{i \in I} C_i$
-	\item A preference relation $\succeq$ defined over $\mathcal{A}$.
+	\item A preference relation $\succeq$ defined over $\mathcal{A}$ which represent the decision-maker whishes. It is assumed that the decision maker will choose among his options according to his preferences, which are represented by $\succeq$.
 	\end{itemize}
 	Since we are considering that a decision maker chooses an action $a \in \mathcal{A}$, and then an uncertain event $E$ will occur which will then produce the consequence $c$, we will identify actions in $\mathcal{A}$ as $a_i = \{ c_j | E_j : j \in J \}$. As a technical assumption required for all of the math to work, we require that elements of $\mathcal{C}$ belong to $\mathcal{A}$. This is achieved by adding into $A$ elements of the form $\{ c | \Omega \}$ for $c \in \mathcal{C}$. This being said, we can extend the preference relation $\succeq$ to elements of $\mathcal{C}$ and therefore indistinctively write $c_1 \succeq c_2$ for $c_1, c_2 \in \mathcal{C}$ or $a_1 \succeq a_2$ for $a_1,a_2 \in \mathcal{A}$. We require that $\mathcal{E}$ is an \textit{algebra}.	
 	\begin{defi}
@@ -147,14 +152,33 @@ Learning a causal model of the environment allows to extract high-level insights
 	\item i) If $c_1 \succeq c \succeq c_2$ then there exists a standard event $S$ such that $c \sim \{ c_2 | S, c_1 | S^c \}$.
 	\item ii) For each event $E$ there exists a standard event $S$ such that $E \sim S$.
 	\end{itemize}
+	
+	For interpretations of the axioms in diverse contexts we refer the reader to \cite{bernardo2000bayesian}, \cite{binmore2008rational}, \cite{gilboa2009decision}, \cite{wakker2010prospect}.
 	\subsubsection{Subjective Probability and Utility}
 	\begin{defi}
-	Given a preference relation $\succeq$, we define the (subjective) probability of an event $E \in \mathcal{E}$ as the real number $\mu(S)$ associated with the standard event $S$ such that $E \sim S$.
+	Given a preference relation $\succeq$, we define the (subjective) \textbf{probability} of an event $E \in \mathcal{E}$ as the real number $\mu(S)$ associated with the standard event $S$ such that $E \sim S$.
+	\end{defi}
+	The subjective probability thus defined satisfies all of the Kolmogorov's axioms of probability (\cite{bernardo2000bayesian}). So, we can use all of the mathematical machinery for classic probability measures, including the definition of conditional probability, Bayes' theorem, etc.
+	\begin{defi}
+	Consequences $c^\ast$ and $c_\ast$ are called respectively best and worst (extreme consequences) if for any other consequence $c \in \mathcal{C}$ then $c^\ast \succeq c \succeq c_\ast$. Decision problems in which we add extreme consequences are called bounded decision problems.
 	\end{defi}
 	\begin{defi}
-	Given a preference relatin $\succeq$ we define the utility $u(c)$ of a consequence $c \in \mathcal{C}$ relative to the extreme consequences $c_\ast$, $c^\ast$, as the real number $\mu(S)$ associated with any standard event $S$ such that $c \sim \{c^\ast | S, c_\ast | S^c\}$.
+	Given a preference relation $\succeq$ we define the canonical \textbf{utility} $u(c)=u(c | c_\ast, c^\ast)$ of a consequence $c \in \mathcal{C}$ relative to the extreme consequences $c_\ast$, $c^\ast$, as the real number $\mu(S)$ associated with any standard event $S$ such that $c \sim \{c^\ast | S, c_\ast | S^c\}$.
 	\end{defi}
 	\subsubsection{Decision Criteria for Decision Problems}
+	\begin{prop}
+	For any bounded decision problem with extreme consequences $c_\ast$ and $c^\ast$ it holds:
+	\begin{itemize}
+	\item i) For all $c \in \mathcal{C}$, $u(c | c_\ast, c^\ast)$ exists and is unique.
+	\item ii) The value of $u(c | c_\ast, c^\ast)$ is unafected by the occurrence of any event $G \succ \emptyset$.
+	\item iii) $0 = u(c_\ast | c_\ast, c^\ast) \leq u(c | c_\ast, c^\ast) \leq u(c^\ast | c_\ast, c^\ast) = 1$.
+	\end{itemize}
+	\end{prop}
+	\begin{defi}
+	For a bounded decision problem and any event $G \succ \emptyset$ and $a = \{ c_j | E_j : j \in J \}$ we define the conditional expected utility of $a$ as
+	\[ \bar{u}(a | c_\ast, c^\ast, G) = \sum_{j \in J} u(c_j | c_\ast, c^\ast)P(E_j | G). \]
+	If $G = \Omega$ we simply denote $\bar{u}(a | c_\ast, c^\ast, G)$ as $\bar{u}(a | c_\ast, c^\ast)$
+	\end{defi}
 	\begin{teo}
 	For any bounded decision problem with extreme consequences $c^\ast \succ c_\ast$ and any $G \succ \emptyset$
 	\[ a_1 \succeq_G a_2 \Leftrightarrow \bar{u}(a_1) \geq \bar{u}(a_2). \]
@@ -162,7 +186,13 @@ Learning a causal model of the environment allows to extract high-level insights
 	\begin{proof}
 	See \cite{bernardo2000bayesian} Chapter 2 Proposition 2.22
 	\end{proof}
+	This result means that for any decision maker whose preferences satisfies axioms 1 through 5 the only election criteria that is compatible with the axioms is the maximization of expected utility. Of course, this result establishes a complete ordering of the options, but it does not guarantees the existence of an option for which the expected utility is maximum (\cite{bernardo2000bayesian}).
 	\subsection{Game Theory}
+
+
+
+
+
 
 \section{Problem Statement}
 	\subsection{Problem Statement}
@@ -192,5 +222,5 @@ Learning a causal model of the environment allows to extract high-level insights
 
 \newpage
 \bibliographystyle{apalike}
-\bibliography{/Users/MauricioGS1/INAOE/Segundo_Semestre/Propuesta/Bibliografia.bib}
+\bibliography{/Users/MauricioGS1/INAOE/Propuesta/Bibliografia.bib}
 \end{document}
