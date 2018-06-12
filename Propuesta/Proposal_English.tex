@@ -75,12 +75,13 @@ Learning a causal model of the environment allows to extract high-level insights
 	\end{proof}
 	Notice that since the graph is finite, there exist some nodes that does not have causes, which are called \textit{exogenous}. If an $A$ event is caused by some other event, then we say it is \textit{endogenous} and we denote the set of its causes as $Pa(A)$.
 	\subsection{Causal Graphical Models}
+	A causal graphical model (CGM) consists of a set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, an acyclic directed graph (DAG) whose nodes are in correspondence with the variables in $\mathcal{X}$ and whose edges represent relations of cause-effect. Also, the model, which up to this point is nothing more than a Bayesian Network with causal semantics, is enriched with an operator named $do()$ which is defined over graphs and whose action is described as follows:
 	\subsection{Decision Theory}
 	A Decision Problem under Uncertainty is a situation in which an agent must choose one out of many actions with uncertain consequences. The most common theories for Decision Making under Uncertainty are those from \cite{von1944theory} and \cite{savage1954the}. In the former theory it is assumed that the decision maker knows the stochastic relation between actions and consequences, and in that case the theory guarantees that the decision maker behaves as if he maximizes the expected value of an utility function. On the other hand, if the decision maker doesn't know the probabilities of observing outcomes given a chosen action, then Savage's theory guarantees that the decision maker behaves as if he had in mind a \textit{subjective} probability distribution, a utility function and chooses the action which maximizes the expected utility with respect to that subjective probability distribution and utility function. 
 	
 Both von Neumann and Savage's Decision Under Uncertainty theories are known as the \textit{classic} theories in other areas, mostly in Economics. It is important to say that other Decision Making theories exist, such as Prospect Theory (\cite{kahneman1979prospect}), Case-Based Decision Theory (\cite{gilboa1995case}) among others that are out of the scope of this work.
 
-For what remains of this section, we follow \cite{bernardo2000bayesian} in his exposition of Savage's theory since it is the most suitable for our purposes because we will be considering decision makers that do not know all of their environment.
+For what remains of this section, we follow \cite{bernardo2000bayesian} in his exposition of Savage's theory since it is the most suitable for our purposes because we will be considering decision makers that do not know all of their environment. Savage's Decision Making theory, together with von Neumann's theory is what it is commonly known as \textit{classical} decision making. 
 	
 	\subsubsection{Elements of a Decision Problem}
 	A Decision Problem under Uncertainty is composed by:
@@ -102,10 +103,10 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\begin{defi}
 	A relation between events can be derived from $\succeq$ in the following way:
 	\[E \succeq F \Leftrightarrow \textrm{ for all } c_1 \succeq c_2 \textrm{ it holds that } \{ c_2 | E, c_1 | E^c \} \succeq \{ c_2 | F, c_1 | F^c \}. \]
-	In this case, we say that $F$ is not \textit{more likely} than $E$. It can easily be shown that $\Omega \succ \emptyset$, and a relation $\sim$ for events is defined in an analog way than for consequences.
+	In this case, we say that $F$ is \textbf{not more likely} than $E$. It can easily be shown that $\Omega \succ \emptyset$, and a relation $\sim$ for events is defined in an analog way than for consequences.
 	\end{defi}
 	\begin{defi}
-	Given some $G \succ \emptyset$ we define a conditional preference relation as follows:
+	Given some $G \succ \emptyset$ we define a conditional preference relation $\succeq_G$ as follows:
 	\begin{itemize}
 	\item i) $a_1 \succeq_G a_2 \Leftrightarrow \textrm{ for all a } \{ a_1 | G, a | G^c \} \succeq \{ a_2 | G, a | G^c \}$.
 	\item ii) $E \succeq_G F \Leftrightarrow \textrm{ for } c_1 \succeq_G c_2 \{ c_2 | E , c_1 | E^c \} \succeq_G \{c_2 | F , c_1  | F^c \}$ 
@@ -118,7 +119,7 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\end{itemize}
 	\end{defi}
 	\subsubsection{Axioms of Coherence}
-	We require the following axioms for the preference relation $\succeq$ which we will call Axioms of Coherence or Rationality, and define a Rational decision maker as a decision maker who will choose according to a preference relation and whose preferences are rational in the sense of the axioms (\cite{bernardo2000bayesian}).\\
+	We require the following axioms for the preference relation $\succeq$ which we will call Axioms of Coherence or Rationality, and define a Rational decision maker as a decision maker who will choose according to a preference relation and whose preferences satisfy the axioms (\cite{bernardo2000bayesian}, \cite{gilboa2009decision}).\\
 	\\
 	\indent \textbf{Axiom 1}.
 	\begin{itemize}
@@ -184,31 +185,62 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\[ a_1 \succeq_G a_2 \Leftrightarrow \bar{u}(a_1) \geq \bar{u}(a_2). \]
 	\end{teo}
 	\begin{proof}
-	See \cite{bernardo2000bayesian} Chapter 2 Proposition 2.22
+	See \cite{bernardo2000bayesian} Chapter 2 “Foundations”, Proposition 2.22.
 	\end{proof}
-	This result means that for any decision maker whose preferences satisfies axioms 1 through 5 the only election criteria that is compatible with the axioms is the maximization of expected utility. Of course, this result establishes a complete ordering of the options, but it does not guarantees the existence of an option for which the expected utility is maximum (\cite{bernardo2000bayesian}).
+	This result means that for any decision maker whose preferences satisfies axioms 1 through 5 the only election criteria that is compatible with the axioms is the maximization of expected utility and thus establishes a \textit{normative} criteria for decision making for rational agents. Of course, this result establishes a complete ordering of the options, but it does not guarantees the existence of an option for which the expected utility is maximum and further mathematical assumptions are required over the utility function $u$ in order to guarantee the existence of the maxmimum utility option (\cite{bernardo2000bayesian}).
+	
+	The result extends previous work of \cite{von1944theory} who assumed that the decision maker knows the probabilties of the uncertain events and guarantees the existence of an utility function such that the decision maker chooses by calculating expected value of this utility function.
 	\subsection{Game Theory}
+	A \textit{game} arises when two or more \textit{rational} decision makers, or players, have to make decisions in a situation in which the outcome for each player is partly determined by the choices of other players (\cite{binmore2008rational}).
+	
+	Game Theory is an area of Mathematics which is used to model games. The basic assumptions of the theory is that each decision maker is rational, and they take into account their knowledge or expectations of other decision makers behavior.
+	
+	In this section we will review the basic models of Game Theory that are required to this thesis proposal, which are the normal-form game, and the extensive-form game. 
+	
+	The normal-form game models a situation in which two or more agents interact and where each one of them will choose an action simultaneously. Also, it is assumed that all of the relevant aspects of the game are known for each player.
+	
+	\begin{defi}
+	A normal-form game is a tuple $(N,A,(\succeq_i)_{i \in N})$ where:
+	\begin{itemize}
+	\item $N$ is a finite set of players.
+	\item $A=A_1 \times ... \times A_n$ where each $A_i$ is the set of available actions for player $i$. Each $a=(a_1,...,a_n) \in A$ is called an action profile.
+	\item For each player $i \in N$, a preference relation $\succeq_i$ defined over $A$.
+	\end{itemize}
+	\end{defi}
 
+Because of the decision-making criteria we know that each player can replace his preferences $\succeq_i$ for a utility function $u_i$.
 
+The prisoner's dilemma is the most common example of a normal-form game, where two suspects must either confess or remain silent about a crime and they can't communicate with each other. In this game, both of the players know the consequences of each \textit{outcome} and the rewards (utilities) associated with each outcome.
 
+In some cases, the players do not know all of the relevant aspects of a game, such as the payoffs or the available actions to other players. It is this situation that is modeled by normal-form Bayesian games (\cite{osborne1994course}, \cite{shoham2008multiagent}).
+
+\begin{defi}
+A normal-form Bayesian game consists of:
+\begin{itemize}
+\item A set of states $\mathcal{S}$.
+\item A finite set of players $N$.
+\end{itemize}
+\end{defi}
 
 
 
 \section{Problem Statement}
 	\subsection{Problem Statement}
+	Let  $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem under uncertainty whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. And consider a rational decision maker who doesn't know the parameters of the causal model which control the probabilities of observing a consequence given an action $a \in \mathcal{A}$, we ask how the decision maker could learn about the causal structure that controls his environment in order to make good choices with respect to the decision makers' preferences.
 	\subsection{Motivation}
 	Decision making under uncertain conditions is a fundamental part of intelligent reasoning (\cite{lake2017building}). Intelligent agents often face situations where an action must be chosen in the presence of uncertain conditions; this means that an outcome will be observed according to some probability distribution given the action chosen by the agent.
 	
 	In many real-world applications, the agent doesn't know all of the parameters required to calculate the maximum utility, but if the agent knew that his actions and the possible consequences were \textit{causally related}, then he could attempt to discover this relations and use them in order to predict consequences of actions better than if he only observes multiple action-outcome pairs as done in Reinforcement Learning (\cite{sutton1998reinforcement}). 
 	
-	It is known that human beings conceive their actions on the world as \textit{intervening} in the world. Following this idea, \cite{lattimoreNIPS2016} consider decision problems where the action to be chosen is an intervention over a known causal graphical model. The agent must choose the intervention that maximizes the value of a \textit{target variable} after a series of learning rounds. They model their problem as if choosing an intervention was choosing an arm of a \textit{slot machine}, in which a gambler chooses an arm and gets some reward. From the rewardsm they estimate probabilities and output an optimal action in the sense of obtaining minimal regret.
-	
-	 Their work considers that the causal model is fully known. They mention that the case where the causal model is unknown is left as an open question, and it is precisely what we are proposing to answer. 
+	It is known that human beings conceive their actions on the world as \textit{intervening} in the world (\cite{hagmayer2009decision}). Following this idea, \cite{lattimoreNIPS2016} consider decision problems where the action to be chosen is an intervention over a known causal graphical model. The agent must choose the intervention that maximizes the value of a \textit{target variable} after a series of learning rounds. They model their problem as if choosing an intervention was choosing an arm of a \textit{slot machine}, in which a gambler chooses an arm and gets some reward. From the rewards they estimate probabilities and output an optimal action in the sense of obtaining minimal regret. Their work considers that the causal model is fully known. They mention that the case where the causal model is unknown is left as an open question, and it is precisely what we are proposing to answer. 
 	\subsection{Justification}
-	Besides obtaining a criteria of choosing actions, our agent will also learn a causal model of his environment. Learning causal models is importante since it allows further questions to be asked. 
+	Learning a causal model of some phenomena is important, since it allows to \textit{explain} aspects of the model that a purely associative model would not be abel to explain. 
+	
+	
 	\subsection{Research Question}
+	How a rational decision maker who faces an uncertain environment which is governed by a causal mechanism can learn and make use of this causal structure in order to make good choices? How can causal structure help a decision maker in order to guide his learning process?
 	\subsection{Hypothesis}
-	Let $\mathcal{G}$ a causal graphical model whose probability distribution $P_\mathcal{G}$ satisfies (the axioms). Let $(D,E,c)$ a decision problem whose uncertain events are related to the variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$,  by repeatedly making decisions he can learn causal information and use it to find the optimal actions (in the sense of expected utility theory) in less rounds than if he doesn't consider causal information.
+	Let $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$, by repeatedly making decisions he can learn causal information and use it to find the optimal actions (in the sense of expected utility theory) in less, or equal, rounds than if he doesn't consider causal information.
 	\subsection{Objectives}
 		\subsubsection{General Objectives}
 		\subsubsection{Specific Objectives}
@@ -219,7 +251,13 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 \section{Methodology}
 \subsection{Modelling}
 \subsection{Working plan}
+\subsubsection{Publication plan}
+\begin{itemize}
+\item Gonzalez-Soto, M., Sucar, L.E., Escalante, H.J., \textbf{Playing against Nature: causal discovery for decision making under uncertainty}. Accepted for a poster presentation at the CausalML 2018 workshop at ICML 2018.
+\end{itemize}
 
+\section{Preliminary Results}
+To show the factibility of this proposal, we considered a test scenario and two cases in ascending difficulty
 \newpage
 \bibliographystyle{apalike}
 \bibliography{/Users/MauricioGS1/INAOE/Propuesta/Bibliografia.bib}
