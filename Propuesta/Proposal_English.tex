@@ -1,6 +1,7 @@
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 %\usepackage[spanish, mexico]{babel}
+\usepackage[font=small,labelfont=bf]{caption}
 \usepackage{listings}
 \usepackage{breakcites}
 \usepackage{dsfont}
@@ -46,8 +47,9 @@ While the standard setting in RL is to model the agent-environment interaction a
 
 The agent, using her current beliefs, will generate a \textit{local} causal model and choose an action from it as if that model was the true one. Then, after she observes the consequences of her actions, her beliefs will be updated according to the observed information in order to make a better choice the next time. The agent, besides learning a policy to choose actions will also learn a causal model from the environment since the causal model she forms will approximate the true model.
 
-Learning a causal model of the environment allows to extract high-level insights of a phenomena beyond associative descriptions of what is observed.
+Learning a causal model of the environment allows to extract high-level insights of a phenomena beyond associative descriptions of what is observed. A causal model is able to \textit{explain} why a particular decision was made since it allows to extract the causes and effects of an agent's actions.
 
+\newpage
 \section{Main Concepts}
 	\subsection{Attempts to define Causality}
 	Causality has been a difficult concept to define and several attempts have been made. In fact, in mainstream statistics  the term \textit{cause} have been nearly banned as documented by \cite{pearl2018why}.
@@ -180,6 +182,7 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\[ \bar{u}(a | c_\ast, c^\ast, G) = \sum_{j \in J} u(c_j | c_\ast, c^\ast)P(E_j | G). \]
 	If $G = \Omega$ we simply denote $\bar{u}(a | c_\ast, c^\ast, G)$ as $\bar{u}(a | c_\ast, c^\ast)$
 	\end{defi}
+	
 	\begin{teo}
 	For any bounded decision problem with extreme consequences $c^\ast \succ c_\ast$ and any $G \succ \emptyset$
 	\[ a_1 \succeq_G a_2 \Leftrightarrow \bar{u}(a_1) \geq \bar{u}(a_2). \]
@@ -189,6 +192,8 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\end{proof}
 	This result means that for any decision maker whose preferences satisfies axioms 1 through 5 the only election criteria that is compatible with the axioms is the maximization of expected utility and thus establishes a \textit{normative} criteria for decision making for rational agents. Of course, this result establishes a complete ordering of the options, but it does not guarantees the existence of an option for which the expected utility is maximum and further mathematical assumptions are required over the utility function $u$ in order to guarantee the existence of the maxmimum utility option (\cite{bernardo2000bayesian}).
 	
+	In the particular case where the algegra $\Omega$ contains only the set $\Omega$ we say that it is a decision problem without uncertainty and in this case applying the previous Theorem we obtain the decision criteria which consist in maximizing the utility.
+	
 	The result extends previous work of \cite{von1944theory} who assumed that the decision maker knows the probabilties of the uncertain events and guarantees the existence of an utility function such that the decision maker chooses by calculating expected value of this utility function.
 	\subsection{Game Theory}
 	A \textit{game} arises when two or more \textit{rational} decision makers, or players, have to make decisions in a situation in which the outcome for each player is partly determined by the choices of other players (\cite{binmore2008rational}).
@@ -196,8 +201,10 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	Game Theory is an area of Mathematics which is used to model games. The basic assumptions of the theory is that each decision maker is rational, and they take into account their knowledge or expectations of other decision makers behavior.
 	
 	In this section we will review the basic models of Game Theory that are required to this thesis proposal, which are the normal-form game, and the extensive-form game. 
-	
+	\subsubsection{Building blocks}
 	The normal-form game models a situation in which two or more agents interact and where each one of them will choose an action simultaneously. Also, it is assumed that all of the relevant aspects of the game are known for each player.
+	
+	We follow the exposition from \cite{osborne1994course}, \cite{binmore2007playing}, \cite{shoham2008multiagent}
 	
 	\begin{defi}
 	A normal-form game is a tuple $(N,A,(\succeq_i)_{i \in N})$ where:
@@ -208,7 +215,7 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\end{itemize}
 	\end{defi}
 
-Because of the decision-making criteria we know that each player can replace his preferences $\succeq_i$ for a utility function $u_i$.
+Because of the decision-making criteria shown in the last section we know that each player can replace his preferences $\succeq_i$ for a utility function $u_i$.
 
 The prisoner's dilemma is the most common example of a normal-form game, where two suspects must either confess or remain silent about a crime and they can't communicate with each other. In this game, both of the players know the consequences of each \textit{outcome} and the rewards (utilities) associated with each outcome.
 
@@ -219,11 +226,18 @@ A normal-form Bayesian game consists of:
 \begin{itemize}
 \item A set of states $\mathcal{S}$.
 \item A finite set of players $N$.
+\item For each player: a set of actions $A_i$ and as in the previous definition we define $A= A_1 \times \cdots \times A_n$.
+\item For each player: a finite set $T_i$ of \textit{signals} that are observable to player $i$.
+\item For each player: a signal function $\tau_i : \mathcal{S} \to T_i$.
+\item For each player: a probability measure $P_i$ defined over $\mathcal{S}$ such that $P(\tau^{-1}_i (t_i)) >0$ for $t_i \in T_i$.
+\item For each player: a rational preference relation $\succeq_i$ defined over the set of probability measures defined over $A \times \mathcal{S}$.
 \end{itemize}
 \end{defi}
 
+\subsubsection{Repeated Games}
+\subsubsection{Learning in Games}
 
-
+\newpage
 \section{Problem Statement}
 	\subsection{Problem Statement}
 	Let  $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem under uncertainty whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. And consider a rational decision maker who doesn't know the parameters of the causal model which control the probabilities of observing a consequence given an action $a \in \mathcal{A}$, we ask how the decision maker could learn about the causal structure that controls his environment in order to make good choices with respect to the decision makers' preferences.
@@ -234,7 +248,9 @@ A normal-form Bayesian game consists of:
 	
 	It is known that human beings conceive their actions on the world as \textit{intervening} in the world (\cite{hagmayer2009decision}). Following this idea, \cite{lattimoreNIPS2016} consider decision problems where the action to be chosen is an intervention over a known causal graphical model. The agent must choose the intervention that maximizes the value of a \textit{target variable} after a series of learning rounds. They model their problem as if choosing an intervention was choosing an arm of a \textit{slot machine}, in which a gambler chooses an arm and gets some reward. From the rewards they estimate probabilities and output an optimal action in the sense of obtaining minimal regret. Their work considers that the causal model is fully known. They mention that the case where the causal model is unknown is left as an open question, and it is precisely what we are proposing to answer. 
 	\subsection{Justification}
-	Learning a causal model of some phenomena is important, since it allows to \textit{explain} aspects of the model that a purely associative model would not be abel to explain. 
+	Many real-world applications of decision making are solved by \textit{associative} methods which capture only statistical patterns that are found in data. For example, current methods in Reinforcement Learning, and specifically in Deep Reinforcement Learning, although they have good performance in the task that were supposed to solve, they can not explain \textit{why} a specific trajectory was chosen by the algorithm. This is highly relevant in real-world applications such as self-driving cars, where it is very important to understand why an accident happened. Methods based in Deep Neural Networks aren't supposed to explain why a certain action was chosen since those methods are based in \textit{parallel distributed representations}.
+	
+	Learning a causal model of an environment and using it to act upon the environment allows to \textit{explain} aspects of the model that a purely associative model would not be abel to explain. It allows to ask \textit{why}. 
 	
 	
 	\subsection{Research Question}
@@ -246,18 +262,153 @@ A normal-form Bayesian game consists of:
 		\subsubsection{Specific Objectives}
 		\subsubsection{Limitations}
 
+\newpage
 \section{Related Work}
 
+\newpage
 \section{Methodology}
-\subsection{Modelling}
+\subsection{Modelling a Decision Problem under Uncertainty as a Game}
+\subsubsection{Knowing only the graph structure}
+\subsubsection{General case}
+\subsection{Experimental methodology}
 \subsection{Working plan}
 \subsubsection{Publication plan}
 \begin{itemize}
 \item Gonzalez-Soto, M., Sucar, L.E., Escalante, H.J., \textbf{Playing against Nature: causal discovery for decision making under uncertainty}. Accepted for a poster presentation at the CausalML 2018 workshop at ICML 2018.
 \end{itemize}
 
+\newpage
 \section{Preliminary Results}
-To show the factibility of this proposal, we considered a test scenario and two cases in ascending difficulty
+To show the factibility of this proposal, we considered a test scenario and two cases in ascending difficulty.
+\subsection{Test scenario}
+Consider a sick patient who arrives at a hospital and he either has disease $A$ or disease $B$. The doctor can either give him some pill or send him into surgery.  Both treatments entail risks and whether the treatment cures the patient or not depends on which disease it had originally. The doctor could be facing a mutation from a known disease, so she has some knowledge about what could happen if a treatment is given to the patient. Using her previous knowledge as a true model, she can choose a treatment and observe the outcome from which she will learn about this disease, so she could make a better decision the next time a similar patient arrives.
+
+The causal model that governs this situation is shown in Figure \ref{causal_model}. The parameters for this model were fixed intuitively in such a way that each treatment is effective for only one disease, but the most effective treatment is riskier.
+
+The variables in the model are: 
+\begin{itemize}
+\item \textbf{Disease:} Either $A$ or $B$.
+\item \textbf{Treatment:} Either pill or surgery.
+\item \textbf{Reaction:} Either dying or surviving.
+\item \textbf{Lives:} Either living or dying.
+\end{itemize}
+
+The variables are causally related as shown in Figure \ref{causal_model}.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[scale=0.5]{/Users/MauricioGS1/INAOE/Segundo_Semestre/Seminario/Semana12/codigo/causal_graph.png}}
+\caption{Causal graphical model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
+\label{causal_model}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+The variable \textit{Lives} is the \textit{target variable} and, in this example, the only variable that can be intervened upon is the variable \textit{Treatment}. The decision maker prefers an outcome in which the patient lives.
+
+In this scenario, Nature's move will consist in randomly assigning a disease to the patient. Then, the medic will asign a treatment using his current beliefs about the disease and the possible outcomes. The decision nodes for this play of the medic form an \textit{information set} because the medic doesn't know how she arrived there since she doesn't know what disease did Nature assign. Finally, Nature will sample the consequence of the treatment from the causal model and the medic will observe the outcome.
+
+For this test scenario whose causal graphical model is shown in Figure \ref{causal_model}, we see  by applying the Pearl's do-calculus that the interventional distribution $P_{do(Tr)}(Y)$ is given by
+\[ P(Y | do(Tr))=P(Y | D, Tr, R)P(R | Tr) P(D). \]
+\\
+In fact, from the structure of the model, which is shown in Figure \ref{causal_model}, we see that the involved probabilities in any calculations are:
+\[ P(\textrm{disease}), P(\textrm{treatment}), P(\textrm{reaction} | \textrm{treatment}), \]
+and
+\[P(\textrm{lives} | \textrm{disease, treatment, reaction}). \]
+\\
+We can also see that the joint distribution for all of the variables can be expressed as
+\[ P(Y | D, Tr, R)P(R | Tr) P(D)P(Tr). \]
+This expression will be useful when specifying beliefs about the model as Dirichlet distributions.
+
+\subsection{Case 1: The causal model is completely known}
+If the causal model is completely known to the decision maker, then in one step she can obtain the probability for her desired value of the target variable, which in this case is the value corresponding to the outcome in which the patient lives at the end. Using this probability, she can choose which treatment to assign. Since this action maximizes the probability of the occurence desired value, it maximizes the expected utility, and it is also a \textit{best response} to the player Nature.
+
+\subsection{Case 2: Only the structure is known}
+From the expression of the joint probability we notice that we need to specify a distribution over each one of these distributions, which will be each one a Dirichlet distribution.
+
+We begin with a random assignation of the $\alpha$ parameter for each of the distributions considered. We use Dirichlet distribution for each of the conditional probability tables that appear in the factorization of the joint probability for the graph of $\mathcal{G}$. Since each of the variables in the model is binary, then the product of these Dirichlets is Dirichlet.
+
+With this parameters, the decision maker forms a causal model and chooses the action that maximizes the probability of the desired value for target variable as in Case 1.  With this action chosen, we simulate an outcome from the causal graphical model using the chosen action as an intervention. This evidence is used to update the parameters, which then will be used to generate a new causal model, and so on.
+
+We show the results of two experiments. We compare the performance obtained by the causal agent, a \textit{random agent} who selects his actions at random, and an agent performing Q-learning. We show the average perform over $20, 50, 100$ and $200$ rounds.
+
+
+\begin{center}
+\begin{minipage}{0.48\linewidth}
+\includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/20_rounds_format.png}
+\captionof{figure}{Average reward in 20 rounds}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.49\linewidth}
+\includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/50_rounds_format.png}
+\captionof{figure}{Average reward in 50 rounds}
+\end{minipage}
+\end{center}
+\begin{center}
+\begin{minipage}{0.49\linewidth}
+\includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/100_rounds_format.png}
+\captionof{figure}{Average reward in 100 rounds}
+\end{minipage}
+\hfill
+\begin{minipage}{0.49\linewidth}
+\includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/200_rounds_format.png}
+\captionof{figure}{Average reward in 200 rounds}
+\end{minipage}
+\end{center}
+
+
+
+%In Figure \ref{20_rounds} we observe the average rewards for each agent in 20 rounds of decision making. Here we notice that Q-learning outperforms our algorithm, which has a similar performance as the random choosin procedure until round 11.
+%
+%\begin{figure}[ht]
+%\vskip 0.2in
+%\begin{center}
+%\centerline{\includegraphics[scale=0.5]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/20_rounds_format.png}}
+%\caption{Average reward obtained in each round for each agent}
+%\label{20_rounds}
+%\end{center}
+%\vskip -0.2in
+%\end{figure}
+%
+%In Figure \ref{50_rounds} we observe the average rewards for each agent in 50 rounds of decision making. Our algorithm follow closely the Q-learning agent and outperform the random agent.
+%
+%\begin{figure}[ht]
+%\vskip 0.2in
+%\begin{center}
+%\centerline{\includegraphics[scale=0.5]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/50_rounds_format.png}}
+%\caption{Average reward obtained in each round for each agent}
+%\label{50_rounds}
+%\end{center}
+%\vskip -0.2in
+%\end{figure}
+%
+%In Figure \ref{100_rounds} we observe the average reward obtained by the three agents in 100 rounds, where our algorithm slightly outperforms Q-Learning.
+%
+%\begin{figure}[ht]
+%\vskip 0.2in
+%\begin{center}
+%\centerline{\includegraphics[scale=0.5]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/100_rounds_format.png}}
+%\caption{Average reward obtained in each round for each agent}
+%\label{100_rounds}
+%\end{center}
+%\vskip -0.2in
+%\end{figure}
+%
+%In Figure \ref{200_rounds} we observe the average reward obtained by the three agents in 200 rounds. The average reward obtained is very similar for Q-learning and our algorithm.
+%
+%\begin{figure}[ht]
+%\vskip 0.2in
+%\begin{center}
+%\centerline{\includegraphics[scale=0.5]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/200_rounds_format.png}}
+%\caption{Average reward obtained in each round for each agent}
+%\label{200_rounds}
+%\end{center}
+%\vskip -0.2in
+%\end{figure}
+
+We see that our method obtains a very similar reward as the classic Q-learning algorithm for a larger number of rounds, where the random agent is outperformed, but our model offers something extra because it learns a causal model of the environment. 
+
 \newpage
 \bibliographystyle{apalike}
 \bibliography{/Users/MauricioGS1/INAOE/Propuesta/Bibliografia.bib}
