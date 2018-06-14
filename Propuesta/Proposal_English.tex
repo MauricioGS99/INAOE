@@ -78,8 +78,38 @@ Learning a causal model of the environment allows to extract high-level insights
 	The graph is directed since the definition of causality imposes a direction between events; namely, a direction between the cause and the effect. To see that the graph is acyclic, suppose that a cycle $A \to B \to C \to A$ exists, this would imply, because of transitivity, that $A \to A$, which can not be since the relation is irreflexive.
 	\end{proof}
 	Notice that since the graph is finite, there exist some nodes that does not have causes, which are called \textit{exogenous}. If an $A$ event is caused by some other event, then we say it is \textit{endogenous} and we denote the set of its causes as $Pa(A)$.
+	\subsubsection{Relation between the graph and probabilities}
+	Given a Directed Acyclic Graph it is possible to obtain a probability measure that expresses the conditional independence relations that are expressed in the graph (\cite{koller2009probabilistic}), which we will call $P_\mathcal{G}$. For the DAG built from the causal relations, we require that its correspondent $P_\mathcal{G}$ satisfies the following conditions (\cite{spirtes2000causation}):
+	\begin{itemize}
+	\item Markov Causality: an event $V$ (or node in $\mathcal{G}$) is independent of every other event $A$ such that $A$ isn't either a cause nor an effect of $V$ given the causes of $V$.
+	\item Causal Minimality: No proper sub-graph of $\mathcal{G}$ satisfies the Markov Causality condition.
+	\item Causal Faithfulness: The Markov Causal condition contains all of the conditional independence statements expressed by the DAG $\mathcal{G}$.
+	\end{itemize}
+	This conditions are required in an axiomatic fashion so they will be taken as they are without questioning.
 	\subsection{Causal Graphical Models}
-	A causal graphical model (CGM) consists of a set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, an acyclic directed graph (DAG) whose nodes are in correspondence with the variables in $\mathcal{X}$ and whose edges represent relations of cause-effect. Also, the model, which up to this point is nothing more than a Bayesian Network with causal semantics, is enriched with an operator named $do()$ which is defined over graphs and whose action is described as follows:
+	A causal graphical model (CGM) consists of a set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, an acyclic directed graph (DAG) whose nodes are in correspondence with the variables in $\mathcal{X}$ and whose edges represent relations of cause-effect. Also, the model, which up to this point is nothing more than a Bayesian Network with causal semantics, is enriched with an operator named $do()$ which is defined over graphs and whose action is described as follows: given $\mathbf{X} \subseteq \mathcal{X}$ and $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$ the action $do(\mathbf{X} = \mathbf{x} )$ corresponds to assign to each $X_j \in \mathbf{X}$ the value $x_{x_{i_j}}$ and to delet every incoming edges into the node corresponding to each $X_j$ in the graph $\mathcal{G}$ (\cite{koller2009probabilistic}, \cite{sucar2015probabilistic}) To apply the $do()$ operator over a variable (or set of variables) is also called as an \textit{intervention} over the variable.
+	
+	It is required that the probability distribution that results from an intervention over a variable is Markov compatible with the graph; this is, the resulting interventional distribution is equivalent to the product of the conditional probability of every variable given its parents in the intervened graph (\cite{sucar2015probabilistic}).
+	\subsubsection{The identifiability problem}
+	Under what conditions can causal inquiries be answered in terms of purely \textit{observational} data? It is known that if the Markov Causal condition and Causal Faithfulness hold, then it is possible to identify the causal graph up to Markov equivalence (\cite{peters2012identifiability}, \cite{mooij2016distinguishing}).
+	\subsubsection{Do-Calculus}
+	The Do-Calculus (\cite{pearl1995causal}, \cite{pearl2009causality}) is a set of rules for manipulating probabilistic statements that involve interventions. 
+	
+	Some notation is important to be mentioned: Consider a causal graphical model $\mathcal{G}$ and $X,Y,Z$ disjoint sets of nodes of $\mathcal{G}$. We denote by $\mathcal{G}_{\bar{X}}$ the graph that is obtained by deleting from $\mathcal{G}$ all of the edges that enter nodes in $X$. In the same way, $\mathcal{G}_{\underline{X}}$ is the graph obtained by deleting the edges that emerge from $X$. Finally, $\mathcal{G}_{\underline{Z}\bar{X}}$ is the graph obtained by deleting edges incoming into $X$ and outgoing from $Z$.
+	
+	\begin{teo}{\label{docalculus}} (\cite{pearl2009causality})\\
+Let $\mathcal{G}$ a CGM y $P_{\mathcal{G}}$ the probability measure induced by the model; then, for disjoint sets of nodes $X,Y,Z,W$ it holds:
+\begin{itemize}
+\item If for the graph $\mathcal{G}_{\bar{X}}$ it holds that $Y$ is conditionally independent from  $Z$ given $X$ y $W$, then
+\[ P_{\mathcal{G}}(Y=y | do(X=x), Z=z, W=w) = P_{\mathcal{G}}(Y=y | do(X=x), W=w). \]
+\item If for the graph $\mathcal{G}_{\bar{X}\underline{Z}}$ it holds that $Y$ is conditionally independent from $Z$ given $X$ y $W$, then
+\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), Z = z, W=w). \]
+\item Let $Z(W)$ the set of nodes in  $Z$ that aren't ancestors of any node in  $W$ in the graph $\mathcal{G}_{\bar{X}}$.   If $Y$ is conditionally independent from $Z$ given $X$ y $W$ in the graph $G_{\bar{X}, \bar{Z(W)}}$, then
+\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
+\end{itemize}
+\end{teo}
+	
+	
 	\subsection{Decision Theory}
 	A Decision Problem under Uncertainty is a situation in which an agent must choose one out of many actions with uncertain consequences. The most common theories for Decision Making under Uncertainty are those from \cite{von1944theory} and \cite{savage1954the}. In the former theory it is assumed that the decision maker knows the stochastic relation between actions and consequences, and in that case the theory guarantees that the decision maker behaves as if he maximizes the expected value of an utility function. On the other hand, if the decision maker doesn't know the probabilities of observing outcomes given a chosen action, then Savage's theory guarantees that the decision maker behaves as if he had in mind a \textit{subjective} probability distribution, a utility function and chooses the action which maximizes the expected utility with respect to that subjective probability distribution and utility function. 
 	
