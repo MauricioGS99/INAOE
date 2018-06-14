@@ -32,7 +32,7 @@
 \tableofcontents
 \newpage
 \begin{abstract}
-We consider decision problems under uncertainty where the options available to a decision maker and the resulting outcome are related through a causal mechanism which is unknown to the decision maker. We study how a decision maker can learn about this causal mechanism through sequential decision making as well as using current causal knowledge inside each round in order to make better choices had she not considered causal knowledge. We propose a decision making procedure in which an agent holds \textit{beliefs} about her environment which are used to make a choice and then are updated using the observed outcome. As proof of concept, we present an implementation of this causal decision making model and apply it to a simple problem. We show that the model achieves a performance similar to the classic Q-learning while it also acquires a causal model of the environment. 
+We consider decision problems under uncertainty where the options available to a decision maker and the resulting outcome are related through a causal mechanism which is unknown to the decision maker, although he is aware of the causal nature of his environment. We study how a decision maker can learn about this causal mechanism through sequential decision making as well as using current causal knowledge inside each round in order to make better choices had he not considered causal knowledge. We propose a decision making procedure in which an agent holds \textit{beliefs} about her environment which are used to make a choice and then are updated using the observed outcome. As proof of concept, we present an implementation of this causal decision making model and apply it to a simple problem. We show that the model achieves a performance similar to the classic Q-learning while it also acquires a causal model of the environment. 
 \end{abstract}
 \section{Introduction}
 \indent A fundamental part of intelligent reasoning is being able to make decisions under uncertain conditions (\cite{danks2014unifying}, \cite{lake2017building}, \cite{pearlwhy}). In some cases, a decision maker who faces an uncertain environment has enough information to make choices by maximizing expected utility, which is the classic formal criteria for making decisions if rational preferences are assumed (\cite{bernardo2000bayesian}, \cite{gilboa2009decision}). On the other hand, if enough information is not available, the decision maker could attempt to \textit{learn} from the environment by interacting with it.
@@ -54,9 +54,11 @@ Learning a causal model of the environment allows to extract high-level insights
 	\subsection{Attempts to define Causality}
 	Causality has been a difficult concept to define and several attempts have been made. In fact, in mainstream statistics  the term \textit{cause} have been nearly banned as documented by \cite{pearl2018why}.
 	
-	In the classic works on Causality (\cite{spirtes2000causation}, \cite{pearl2009causality}) the term \textit{causality} is defined in terms of common language and then the mathematical machinery required to model causality is provided. In this way, causality becomes defined as what is modeled by causal models, which are themselves defined as to model causality. This apparent circularity is deeply studied by \cite{woodward2005making}. For this reason, we will give here a formal working definition of causal relations which allows to be used formally.
+	In the reference works on Causality (\cite{spirtes2000causation}, \cite{pearl2009causality}) the term \textit{causality} is defined in terms of common language and then the mathematical machinery required to model causality is provided. In this way, causality becomes defined as what is modeled by causal models, which are themselves defined as to model causality. This apparent circularity is deeply studied by \cite{woodward2005making}. For this reason, we will give here a formal working definition of causal relations which allows to be used formally.
+	
+	Several definitions of Causality exist in diverse contexts with diverse applications in mind, such as the Topological Causality for Dynamical Systems (\cite{harnack2017topological}), Lamport's Causality (\cite{lamport1978time}), Granger's Causality for Time Series (\cite{granger1969investigating}), Suppes' Causality (\cite{suppes1970probabilistic}) each with its own mathematical framework. A review of several of this theories, including Suppes' and Granger's can be found in \cite{holland1985statistics}.
 	\subsection{Definition of Causality}
-	Causality is understood as a relation between \textit{events}. Some event \textit{causes} another event to occurr. The formal definition of Causality that will be adopted in this work is the definition provided in \cite{spirtes2000causation}.
+	Causality is understood as a \textit{stochastic} relation between \textit{events}. Some event \textit{causes} another event to occurr. For example, The formal definition of Causality that will be adopted in this work is the definition provided in \cite{spirtes2000causation}.
 	\begin{defi}{\label{causal_relation}}
 	Let $(\Omega, \mathcal{F}, \mathbb{P})$ a finite probability space, and consider a binary relation $\to \subseteq \mathcal{F} \times \mathcal{F}$ which is:
 	\begin{itemize}
@@ -156,7 +158,7 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\item ii) For each event $E$ there exists a standard event $S$ such that $E \sim S$.
 	\end{itemize}
 	
-	For interpretations of the axioms in diverse contexts we refer the reader to \cite{bernardo2000bayesian}, \cite{binmore2008rational}, \cite{gilboa2009decision}, \cite{wakker2010prospect}.
+	For interpretations and critiques of the axioms we refer the reader to \cite{bernardo2000bayesian}, \cite{binmore2008rational}, \cite{gilboa2009decision}, \cite{wakker2010prospect}, \cite{peterson2017introduction}.
 	\subsubsection{Subjective Probability and Utility}
 	\begin{defi}
 	Given a preference relation $\succeq$, we define the (subjective) \textbf{probability} of an event $E \in \mathcal{E}$ as the real number $\mu(S)$ associated with the standard event $S$ such that $E \sim S$.
@@ -192,7 +194,7 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\end{proof}
 	This result means that for any decision maker whose preferences satisfies axioms 1 through 5 the only election criteria that is compatible with the axioms is the maximization of expected utility and thus establishes a \textit{normative} criteria for decision making for rational agents. Of course, this result establishes a complete ordering of the options, but it does not guarantees the existence of an option for which the expected utility is maximum and further mathematical assumptions are required over the utility function $u$ in order to guarantee the existence of the maxmimum utility option (\cite{bernardo2000bayesian}).
 	
-	In the particular case where the algegra $\Omega$ contains only the set $\Omega$ we say that it is a decision problem without uncertainty and in this case applying the previous Theorem we obtain the decision criteria which consist in maximizing the utility.
+	In the particular case where the algebra $\mathcal{E}$ contains only the set $\Omega$ as its only element we say that it is a decision problem without uncertainty and in this case applying the previous Theorem we obtain the decision criteria which consist in maximizing the utility function.
 	
 	The result extends previous work of \cite{von1944theory} who assumed that the decision maker knows the probabilties of the uncertain events and guarantees the existence of an utility function such that the decision maker chooses by calculating expected value of this utility function.
 	\subsection{Game Theory}
@@ -204,7 +206,7 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\subsubsection{Building blocks}
 	The normal-form game models a situation in which two or more agents interact and where each one of them will choose an action simultaneously. Also, it is assumed that all of the relevant aspects of the game are known for each player.
 	
-	We follow the exposition from \cite{osborne1994course}, \cite{binmore2007playing}, \cite{shoham2008multiagent}
+	We follow the exposition from \cite{osborne1994course}, \cite{binmore2007playing}, \cite{shoham2008multiagent}.
 	
 	\begin{defi}
 	A normal-form game is a tuple $(N,A,(\succeq_i)_{i \in N})$ where:
@@ -248,7 +250,11 @@ A normal-form Bayesian game consists of:
 	
 	It is known that human beings conceive their actions on the world as \textit{intervening} in the world (\cite{hagmayer2009decision}). Following this idea, \cite{lattimoreNIPS2016} consider decision problems where the action to be chosen is an intervention over a known causal graphical model. The agent must choose the intervention that maximizes the value of a \textit{target variable} after a series of learning rounds. They model their problem as if choosing an intervention was choosing an arm of a \textit{slot machine}, in which a gambler chooses an arm and gets some reward. From the rewards they estimate probabilities and output an optimal action in the sense of obtaining minimal regret. Their work considers that the causal model is fully known. They mention that the case where the causal model is unknown is left as an open question, and it is precisely what we are proposing to answer. 
 	\subsection{Justification}
-	Many real-world applications of decision making are solved by \textit{associative} methods which capture only statistical patterns that are found in data. For example, current methods in Reinforcement Learning, and specifically in Deep Reinforcement Learning, although they have good performance in the task that were supposed to solve, they can not explain \textit{why} a specific trajectory was chosen by the algorithm. This is highly relevant in real-world applications such as self-driving cars, where it is very important to understand why an accident happened. Methods based in Deep Neural Networks aren't supposed to explain why a certain action was chosen since those methods are based in \textit{parallel distributed representations}.
+	Many real-world applications of decision making are solved by \textit{associative} methods which capture only statistical patterns that are found in data. For example, current methods in Reinforcement Learning, and specifically in Deep Reinforcement Learning, although they have good performance in the task that were supposed to solve, they can not explain \textit{why} a specific trajectory was chosen by the algorithm. This is highly relevant in real-world applications such as self-driving cars, where it is very important to understand why an accident happened. 
+	
+	For example, as told by \cite{bornstein2016artificial}, at the University of Pittsburgh Medical Center a team of researchers tried to use Machine Learning to predict whether pneumonia patients might develop severe complications. For this purpose they trained Neural Networks and Decision Trees using the hospital's own data. Neural Networks outperformed Decision Trees, but only by studying the decisions made by the latter did the doctors find out that the algorithms instructed doctors to send home pneumonia patients who already had asthma, despite the fact that asthma sufferers are known to be extremely vulnerable to complications. The problem relied in the training data, because the hospital policy was to automatically send asthma sufferers with pneumonia to intensive care, and this policy worked so well that asthma sufferers almost never developed severe complications. It was only through the interpretability of the Decision Trees that the doctors didn't send asthma patients with pneumonia home to a certain death. 
+	
+	Methods based in Deep Neural Networks aren't supposed to explain why a certain output was produced since those methods are based in \textit{parallel distributed representations} and the same goes for any other learning algorithm that uses Deep Neural Networks, like Deep Reinforcement learning; when AlphaGo (\cite{silver2017mastering}) defeated the world-champion, humanity didn't learn anything new about the game of Go, because the algorithm was not designed to explain its moves, it was just curve fitting.
 	
 	Learning a causal model of an environment and using it to act upon the environment allows to \textit{explain} aspects of the model that a purely associative model would not be abel to explain. It allows to ask \textit{why}. 
 	
@@ -268,8 +274,10 @@ A normal-form Bayesian game consists of:
 \newpage
 \section{Methodology}
 \subsection{Modelling a Decision Problem under Uncertainty as a Game}
+\subsubsection{Fully knowing the causal graphical model}
 \subsubsection{Knowing only the graph structure}
-\subsubsection{General case}
+\subsubsection{General case: Model unknown}
+\subsection{Validation of the proposed methods}
 \subsection{Experimental methodology}
 \subsection{Working plan}
 \subsubsection{Publication plan}
