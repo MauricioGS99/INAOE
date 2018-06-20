@@ -39,6 +39,8 @@ We consider decision problems under uncertainty where the options available to a
 
 Learning by interaction has been extensively studied by computer scientists using the Reinforcement Learning (RL) setting \cite{sutton1998reinforcement}, but the most common used techniques  in this field are purely associative and do not consider any high-level structure of the environment beyond what is expressable in a Markov Decision Process \cite{garnelo2016towards}.
 
+A particular case of a \textit{higher level structure}; i.e., beyond associative patterns, is the case of \textit{causal} structure. A causal structure encondes a series of \textit{cause-effect} relations between events.
+
 Since human beings are known to learn causal models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), and even though this learning is not perfect \cite{rottman2014reasoning}, we propose that an autonomous agent can learn and use causal information while interacting with an uncertain environment which is governed by a fixed \textit{causal mechanism} which is unknown to the agent.  
 
 The proposed way for an agent to learn from repeated interactions is by giving her \textit{beliefs} about the structure of the environment and a way to update them after an outcome has been observed.
@@ -93,7 +95,7 @@ Learning a causal model of the environment allows to extract high-level insights
 	\subsubsection{The identifiability problem}
 	Under what conditions can causal inquiries be answered in terms of purely \textit{observational} data? It is known that if the Markov Causal condition and Causal Faithfulness hold, then it is possible to identify the causal graph up to Markov equivalence (\cite{peters2012identifiability}, \cite{mooij2016distinguishing}).
 	\subsubsection{Do-Calculus}
-	The Do-Calculus (\cite{pearl1995causal}, \cite{pearl2009causality}) is a set of rules for manipulating probabilistic statements that involve interventions. 
+	The Do-Calculus (\cite{pearl1995causal}, \cite{pearl2009causality}) is a set of rules for manipulating probabilistic statements that involve interventions and, under certain conditions, allow them to be transformed into statements that do not involve interventional data. 
 	
 	Some notation is important to be mentioned: Consider a causal graphical model $\mathcal{G}$ and $X,Y,Z$ disjoint sets of nodes of $\mathcal{G}$. We denote by $\mathcal{G}_{\bar{X}}$ the graph that is obtained by deleting from $\mathcal{G}$ all of the edges that enter nodes in $X$. In the same way, $\mathcal{G}_{\underline{X}}$ is the graph obtained by deleting the edges that emerge from $X$. Finally, $\mathcal{G}_{\underline{Z}\bar{X}}$ is the graph obtained by deleting edges incoming into $X$ and outgoing from $Z$.
 	
@@ -108,7 +110,18 @@ Let $\mathcal{G}$ a CGM y $P_{\mathcal{G}}$ the probability measure induced by t
 \[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
 \end{itemize}
 \end{teo}
-	
+\begin{teo}{\cite{peters2017elements}}\\
+The following statements hold:
+\begin{itemize}
+\item The Do-Calculus is complete; this is, sufficient for deriving every identifiable interventional distribution (\cite{huang2006pearl}, \cite{shpitser2006identification}).
+\item There exists an algorithm capable of finding all of the identifiable interventions (\cite{tian2002}, \cite{huang2006pearl}).
+\item A necessary and sufficient criteria exists for the identifiability of interventional distributions (\cite{shpitser2006identification}, \cite{huang2006pearl}).
+\end{itemize}
+\end{teo}
+Las reglas del cálculo do proveen una solución al problema de la identificabilidad:
+\begin{cor} (\cite{pearl2009causality}).\\
+A distribution $q=P(y_1,...,y_k | do(x_1),...,do(x_n))$ is identifiable in a causal graphical model $\mathcal{G}$ if there exists a finite sequence of transformations, where each one of them corresponds to any of the rules of the Do-Calculus, that reduce $q$ to a purely observational expression.
+\end{cor}
 	
 	\subsection{Decision Theory}
 	A Decision Problem under Uncertainty is a situation in which an agent must choose one out of many actions with uncertain consequences. The most common theories for Decision Making under Uncertainty are those from \cite{von1944theory} and \cite{savage1954the}. In the former theory it is assumed that the decision maker knows the stochastic relation between actions and consequences, and in that case the theory guarantees that the decision maker behaves as if he maximizes the expected value of an utility function. On the other hand, if the decision maker doesn't know the probabilities of observing outcomes given a chosen action, then Savage's theory guarantees that the decision maker behaves as if he had in mind a \textit{subjective} probability distribution, a utility function and chooses the action which maximizes the expected utility with respect to that subjective probability distribution and utility function. 
@@ -194,11 +207,13 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	Given a preference relation $\succeq$, we define the (subjective) \textbf{probability} of an event $E \in \mathcal{E}$ as the real number $\mu(S)$ associated with the standard event $S$ such that $E \sim S$.
 	\end{defi}
 	The subjective probability thus defined satisfies all of the Kolmogorov's axioms of probability (\cite{bernardo2000bayesian}). So, we can use all of the mathematical machinery for classic probability measures, including the definition of conditional probability, Bayes' theorem, etc.
+	
+	As a technical requirement we need to consider two extra options, one that is preferred over every other consequence, which will be denoted as $c^\ast$ and other consequence $c_\ast$ which  the agent prefers every other consequence before $c_\ast$. This consequences need not have an interpretation, but they can be thought of as \textit{heaven} and \textit{hell} respectively for obvious (at lest in the Western hemisphery) reasons. Critiques of this extra technical consequences can be found in \cite{binmore2008rational}, \cite{peterson2017introduction}.
 	\begin{defi}
 	Consequences $c^\ast$ and $c_\ast$ are called respectively best and worst (extreme consequences) if for any other consequence $c \in \mathcal{C}$ then $c^\ast \succeq c \succeq c_\ast$. Decision problems in which we add extreme consequences are called bounded decision problems.
 	\end{defi}
 	\begin{defi}
-	Given a preference relation $\succeq$ we define the canonical \textbf{utility} $u(c)=u(c | c_\ast, c^\ast)$ of a consequence $c \in \mathcal{C}$ relative to the extreme consequences $c_\ast$, $c^\ast$, as the real number $\mu(S)$ associated with any standard event $S$ such that $c \sim \{c^\ast | S, c_\ast | S^c\}$.
+	Given a preference relation $\succeq$ in a bounded decision problem we define the canonical \textbf{utility} $u(c)=u(c | c_\ast, c^\ast)$ of a consequence $c \in \mathcal{C}$ relative to the extreme consequences $c_\ast$, $c^\ast$, as the real number $\mu(S)$ associated with any standard event $S$ such that $c \sim \{c^\ast | S, c_\ast | S^c\}$.
 	\end{defi}
 	\subsubsection{Decision Criteria for Decision Problems}
 	\begin{prop}
@@ -233,7 +248,7 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	Game Theory is an area of Mathematics which is used to model games. The basic assumptions of the theory is that each decision maker is rational, and they take into account their knowledge or expectations of other decision makers behavior.
 	
 	In this section we will review the basic models of Game Theory that are required to this thesis proposal, which are the normal-form game, and the extensive-form game. 
-	\subsubsection{Building blocks}
+	\subsubsection{Building blocks}{\label{basic_models}}
 	The normal-form game models a situation in which two or more agents interact and where each one of them will choose an action simultaneously. Also, it is assumed that all of the relevant aspects of the game are known for each player.
 	
 	We follow the exposition from \cite{osborne1994course}, \cite{binmore2007playing}, \cite{shoham2008multiagent}.
@@ -266,6 +281,29 @@ A normal-form Bayesian game consists of:
 \end{itemize}
 \end{defi}
 
+The interpretation of the elements of this model is as follows: the set $\mathcal{S}$ contains the descriptions of the relevant characteristics for all players, each player has \textit{a priori} beliefs over this characteristics, which are stated by the probability measure $P_i$. When a play is to be realized, the world is in some $\omega \in \Omega$ and each player observes his $\tau_i (\omega)$. If a player observes the signal $t_i \in T_i$ then he concludes that the real state of the world is in the set $\tau^{-1}_i (t_i)$. Player $i$ updates his beliefs over $\omega \in \Omega$ to $P_i(\omega) / P_i(\tau^{-1}_i (t_i))$ if $\omega \in \Omega$ and cero otherwise. Bayesian games are also called \textit{incomplete information} games in the literature which is different from the \textit{imperfect information} game which will be soon defined.
+
+The normal-form game models situations where players select their actions simultaneously, or when it does not matter who makes an action first. More realistic and complex situations involve some notion of temporal structure, or order among the players' actions. The extensive-form game attempts to include this notion of order. The standard references for both of this models are \cite{osborne1994course}, \cite{shoham2008multiagent}, \cite{10.1007/978-94-010-0189-2_25}.
+\begin{defi}
+A perfect information extensive game consists of:
+\begin{itemize}
+\item A finite set $N$ of players.
+\item A set $A$ of available action.
+\item A set $H$ of sequences called histories that satisfies:
+	\begin{itemize}
+		\item The epty sequence belongs to $H$.
+		\item If $(a_k)_{k=1}^K \in H$ ($K$ can be infinite) and $L < K$ then $(a_k)_{k=1}^L \in H$.
+		\item If $(a_k)_{k=1}^\infty$ satisfies $(a_k)_{k=1}^L \in H$ for every positive integer $L$, then $(a_k)_{k=1}^\infty \in H$
+	\end{itemize}
+\item If a history $(a_k)_{k=1}^K \in H$ with $K$ finite and if it doesn't exist a $K+1$ such that$(a_k)_{k=1}^{K+1} \in H$ then $(a_k)_{k=1}^K$ is said to be a terminal history. The set of terminal histories is called $Z$
+\item A function $\chi : H \to 2^A$ that assigns a set  $\chi(h)$ of possible actions to be taken after a history $h$ has occurred.
+\item A function $\rho$ that assigns to every non terminal history $h$ a player $\rho(h)$ who will choose an action after history $h$ has occurred.
+\item A function $\sigma : H \times A \to H \cup Z$ that maps history-action pairs into a new  history such that  if $\sigma(h_1 , a_1) = \sigma (h_2,a_2)$ then $h_1 = h_2$ y $a_1 = a_2$
+\item For each player $i \in N$ a preference relation $\succeq_i$.
+\end{itemize}
+\end{defi}
+
+In this model, each player knows how did he get up to certain point (knows what history occured). To allow more generality, we consider cases where each player doesn't know how he got up to certain point; i.e., he does not know which history happen and he can't distinguish in which node is he.
 \subsubsection{Repeated Games}
 \subsubsection{Learning in Games}
 
@@ -288,6 +326,8 @@ A normal-form Bayesian game consists of:
 	
 	Learning a causal model of an environment and using it to act upon the environment allows to \textit{explain} aspects of the model that a purely associative model would not be abel to explain. It allows to ask \textit{why}. 
 	
+	The impact of Causal Inference goes beyond Machine Learning and Computer Science. For example, economists are interested in understanding what did certan public policy caused (\cite{athey2017impact}) or how human decision makers that show \textit{inconsistent} preferences over time could be oriented if the causal consequences of this inconsistent behavior is introduced into a decision-making model (\cite{albers2016motivating}). In complex adaptive systems, causal relations can be used to clarify the complex interactions between agents in the system (\cite{abbott2017complex}) as well as for prediction and planning (\cite{hunt2016ants}, \cite{brock2018causality}).
+	
 	
 	\subsection{Research Question}
 	How a rational decision maker who faces an uncertain environment which is governed by a causal mechanism can learn and make use of this causal structure in order to make good choices? How can causal structure help a decision maker in order to guide his learning process?
@@ -295,15 +335,78 @@ A normal-form Bayesian game consists of:
 	Let $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$, by repeatedly making decisions he can learn causal information and use it to find the optimal actions (in the sense of expected utility theory) in less, or equal, rounds than if he doesn't consider causal information.
 	\subsection{Objectives}
 		\subsubsection{General Objectives}
+			The proposed research has as a general objective to find how a rational autonomous agent who faces an uncertain environment can discover and use causal information in order to make good choices that point towards a concise objective such as the maximization of some function.
 		\subsubsection{Specific Objectives}
+		In order to achieve the General Objective, we need to separate it into smaller problems which are required to be solved first. 
+		
+		
 		\subsubsection{Limitations}
+		The proposed research has some limitations. We are considering a \textit{rational} decision maker whose preferences can be represented as if maximizing an expected utility with respect to a subjective probability distribution and an utility that assigns numbers to possible outcomes. Maximization of expected utility is not the only decision making criteria as other theories exist, such as Prospect Theory (\cite{kahneman1979prospect}) where a decision maker considers a reference point and from there he considers losses more painfull than gains. Other theory is Gilboa's Case-Based Decision Theory, where a decision maker considers how similar is the current decision problem with problems faced in the past. 
+		
+		We consider a particular definition of Causality, which is Spirtes' definition (\cite{spirtes2000causation}) who defines causality as a stochastic relation between events. We take this definition of causality as well as its theoretical requirements as axioms and we do not question if is the definition most suitable for a certain situation.
+		
+		We are not considering that the player called Nature has any intentions nor objectives since we are given her constant payments in every outcome. A scenario where Nature could have objectives to pursue if it is modelling a player such as a Government, who can only act according to current laws but has general social objectives, such as the maximization of people with jobs in a negotiation with Unions.
+		
+		\subsubsection{Extensions}
+		Given the Limitations addressed in the previous section, some possible extensions could be:
+		\begin{itemize}
+		\item Consider longer games.
+		\item Consider more players than an agent and Nature.
+		\item Consider objectives/intentions for Nature.
+		\item Studying game-theoretical properties of the model such as equilibria in terms of the causal structure.
+		\end{itemize}
 
 \newpage
 \section{Related Work}
+Since we are considering decision problems where an agent must choose some available action and then receive a reward from it and after a set of stages the agent is expected to know a good action. It has been shown that the probability of the action selected in the $n$-th round not being optimal has an upper bound (\cite{audibert2010best}) if the optimality criteria is choosen to be the \textit{minimal regret} which is basically the difference of the theoretical mean reward of the optimal action and the chosen action.
+
+On the other hand, if the largest mean reward is desired with a fixed confidence of $\delta$ then an algorithm for finding the optimal action exist in such a way that the number of rounds to find it is within a constant factor of a lower bound (\cite{jamieson2014lil}). 
+
+If one does not consider a fixed confidence but instead a fixed number of learning rounds (known as fixed budget), then we face a \textit{fixed budget} problem where a lower bound for the probability of finding the optimal arm is given by \cite{carpentier2016tight}.
+
+Notice that none of the previous works consider any kind of causal structure. For this kind of problems, causal relations between actions and consequences could be considered, in this way an action could be conceived as an \textit{intervention} over some environment, which is in fact how humans consider actions in the world (\cite{hagmayer2009decision}). Consider a set of variables that are causally related between them and to a \textit{reward} variable whose value has to be maximized by intervening one of the variables. It is shown by \cite{lattimoreNIPS2016} that adding causal information in a fixed budget decision problem allows the decision maker to learn \textit{faster} had he not considered causal information. Their work requires that the causal model is fully known to the decision maker, this requirement is relaxed later by \cite{sen2017identifying} who requires only that some part of the causal model is known and allow interventions over the unknown part.
+
+Discovering the causal model itself while using current knowledge to make choices is left as future work in both \cite{lattimoreNIPS2016} and \cite{sen2017identifying}, but algorithms to discover causal relations in data can be found in \cite{eberhardt2008almost}, \cite{hauser2012two}, \cite{hyttinen2013experiment}, \cite{loh2014high}, \cite{shanmugam2015learning} \cite{mooij2016distinguishing}. Also, an \textit{active learning} approach can be used to learn causal models from data, where one starts with some initial graph and then select the instances in the data that allow to add and orient edges in order to end with a fully oriented graph. Active learning algorithms for causal discovery can be found in \cite{tong2001active},\cite{murphy2001active}, \cite{meganck2006learning}, \cite{he2008active}, \cite{hauser2012two}, \cite{10.1007/978-3-319-56970-3_9}, \cite{rubenstein2017probabilistic}.
+
+Notice that the aforementioned papers consider learning while interacting with some (causal) environment. We propose to model this interaction as a game, which has been previously considered in \cite{werling2015job}, who model an \textit{on-line} classification problem as a game where an oracle is used to classify initial observations.
 
 \newpage
 \section{Methodology}
+In this section we describe the steps that are to be followed in order to answer the Hypothesis.
 \subsection{Modelling a Decision Problem under Uncertainty as a Game}
+Consider a decision problem under uncertainty $(\mathcal{A},\mathcal{E},\mathcal{C},\succeq)$ where the available actions to a decision maker are causally related to outcomes and this causal relations are captured by a Causal Graphical Model $\mathcal{G}$. The Causal model is assumed to remain fixed and unknown to the decision maker, who is assumed to be rational and aware of the causal nature of his problem. 
+
+As stated in the Hypothesis, we propose that the agent learns from the environment by interacting with it. By interaction we mean a number of rounds where the decision maker will act and then observe the outcome of his action. 
+
+Since the observed outcomes, given an action, are guided by the Causal Model, we can think of the environment as a decision maker whose available actions depend on what has been chosen previously by the original decision maker. We have mentioned that Game Theory allows to model situations where two or more decision makers interact. In this way, we propose to model the interaction of the (original) decision maker and his environment as a game between two players: the decision maker, and a player which will be called Nature, whose actions are to be guided by the causal model. Since in decision problems under uncertainty it is assumed that the \textit{state} of the environment is unknown, we will assume that player Nature has the first move and he assigns some state to any of the variable in the causal model $\mathcal{G}$.
+
+After the decision maker makes his play, Nature will \textit{respond} to the action selected according to the causal relations expressed by $\mathcal{G}$. This action-response dynamic forces to consider some notion of order between the players' moves, and because of this reason we must use the \textit{extensive-form} games described in Section \ref{basic_models}.
+
+The extensive-form game considers two possibilities: perfect or imperfect information, where in the latter a player may not know what actions have been played in the past by other players, which is what we need to use because the decision maker does not know what move has Nature selected. 
+\subsubsection{Elements of the Game}
+The game which will be used to model the interaction between a decision maker and his environment is composed by:
+\begin{itemize}
+\item \textbf{Players:} The decision maker and a player called Nature, who will move first in order to assign a state.
+\item \textbf{Actions:} The actions available to the decision maker are the same ones as in the original decision problem. Nature must choose according to the causal model.
+\item \textbf{Preferences:} The preference relation to the decision maker is his same rational preference relation as in the decision problem. Nature is indifferente between outcomes.
+\end{itemize}
+
+\subsection{Belief Formation}
+Once a Game that models agent-environment interaction is defined, we must turn to the question about \textit{learning} about the environment, which includes acquiring causal information and also using current causal knowledge in order to obtain new information.
+
+For the agent to learn and reason about the plays of Nature we assume that he is able to observe the final outcome of the game, which includes knowing about the inicial uncertain state that Nature assigned. The agent, at the beginning of the game is uncertain about the state of the environment which he is facing, but he still must take an action, so in order to allow the decision maker to use his knowledge to act, he will have \textit{beliefs} about any relevant aspects of the environment which he will use as if they were the true model in any given play. These beliefs will be \textit{updated} according to what is observed at the end of each game.
+
+Beliefs represent ignorance about relevant characteristics of certain environment (\cite{bernardo2000bayesian}, \cite{peterson2017introduction}), and thus are encoded as probability distributions, which usually come from a parametric family. 
+
+In our proposed research, beliefs will encode current knowledge about the \textit{causal structure} of the environment, and this beliefs will be updated when information about actions-outcomes becomes available, which will happen at the end of each game. 
+
+Beliefs must also encode any previous knowledge possesed by the decision maker, and this initial assignment must be coherent with the actions prescribed with the rationality axioms for preferences. In \cite{billot2005probabilities} is shown how to build a set of beliefs given a set of past observations in an axiomatic way.
+
+\subsection{Belief updating}
+
+
+\subsection{Solving first simpler cases}
+In order to make a step towards understanding how to acquire and use causal information in a decision problem under uncertainty we will consider three cases in order of ascending difficulty. In all three cases we consider a decision maker who faces an uncertain environment and who must take an action in order to satisfy his preferences. The uncertain environment in which the decision maker (or agent) exist is governed by a causal graphical model $\mathcal{G}$ which relates actions taken by the decision maker with outcomes. We are assuming that one of the variables of the casusal model is of interest for the decision maker in the sense that he seeks to maximize its value. This variable will be known as \textit{target variable} or reward variable.
 \subsubsection{Fully knowing the causal graphical model}
 \subsubsection{Knowing only the graph structure}
 \subsubsection{General case: Model unknown}
@@ -312,7 +415,7 @@ A normal-form Bayesian game consists of:
 \subsection{Working plan}
 \subsubsection{Publication plan}
 \begin{itemize}
-\item Gonzalez-Soto, M., Sucar, L.E., Escalante, H.J., \textbf{Playing against Nature: causal discovery for decision making under uncertainty}. Accepted for a poster presentation at the CausalML 2018 workshop at ICML 2018.
+\item Gonzalez-Soto, M., Sucar, L.E., Escalante, H.J., \textbf{Playing against Nature: causal discovery for decision making under uncertainty}. Accepted for a poster presentation at the CausalML 2018 workshop at ICML / IJCAI / AAMAS 2018.
 \end{itemize}
 
 \newpage
