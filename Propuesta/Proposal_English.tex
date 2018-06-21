@@ -368,17 +368,17 @@ Notice that none of the previous works consider any kind of causal structure. Fo
 
 Discovering the causal model itself while using current knowledge to make choices is left as future work in both \cite{lattimoreNIPS2016} and \cite{sen2017identifying}, but algorithms to discover causal relations in data can be found in \cite{eberhardt2008almost}, \cite{hauser2012two}, \cite{hyttinen2013experiment}, \cite{loh2014high}, \cite{shanmugam2015learning} \cite{mooij2016distinguishing}. Also, an \textit{active learning} approach can be used to learn causal models from data, where one starts with some initial graph and then select the instances in the data that allow to add and orient edges in order to end with a fully oriented graph. Active learning algorithms for causal discovery can be found in \cite{tong2001active},\cite{murphy2001active}, \cite{meganck2006learning}, \cite{he2008active}, \cite{hauser2012two}, \cite{10.1007/978-3-319-56970-3_9}, \cite{rubenstein2017probabilistic}.
 
-Notice that the aforementioned papers consider learning while interacting with some (causal) environment. We propose to model this interaction as a game, which has been previously considered in \cite{werling2015job}, who model an \textit{on-line} classification problem as a game where an oracle is used to classify initial observations.
+Notice that these papers consider learning while interacting with a causal environment. We propose to model this interaction as a game, which has been previously considered in \cite{werling2015job}, who consideres an \textit{on-line} classification problem and modeled it as a game and where an oracle is used to classify initial observations.
 
 \newpage
 \section{Methodology}
 In this section we describe the steps that are to be followed in order to answer the Hypothesis.
 \subsection{Modelling a Decision Problem under Uncertainty as a Game}
-Consider a decision problem under uncertainty $(\mathcal{A},\mathcal{E},\mathcal{C},\succeq)$ where the available actions to a decision maker are causally related to outcomes and this causal relations are captured by a Causal Graphical Model $\mathcal{G}$. The Causal model is assumed to remain fixed and unknown to the decision maker, who is assumed to be rational and aware of the causal nature of his problem. 
+Consider a decision problem under uncertainty $(\mathcal{A},\mathcal{E},\mathcal{C},\succeq)$ where the available actions $\mathcal{A}$ to a decision maker are causally related to the outcomes $\mathcal{C}$ and this causal relations are captured by a Causal Graphical Model $\mathcal{G}$. The Causal model is assumed to remain fixed and unknown to the decision maker, who is assumed to be rational and aware of the causal nature of the decision problem he faces.  
 
 As stated in the Hypothesis, we propose that the agent learns from the environment by interacting with it. By interaction we mean a number of rounds where the decision maker will act and then observe the outcome of his action. 
 
-Since the observed outcomes, given an action, are guided by the Causal Model, we can think of the environment as a decision maker whose available actions depend on what has been chosen previously by the original decision maker. We have mentioned that Game Theory allows to model situations where two or more decision makers interact. In this way, we propose to model the interaction of the (original) decision maker and his environment as a game between two players: the decision maker, and a player which will be called Nature, whose actions are to be guided by the causal model. Since in decision problems under uncertainty it is assumed that the \textit{state} of the environment is unknown, we will assume that player Nature has the first move and he assigns some state to any of the variable in the causal model $\mathcal{G}$.
+Since the observed outcomes, given an action, are guided by the Causal Model, we can think of the environment as a decision maker whose available actions depend on what has been chosen previously by the original decision maker. We have mentioned that Game Theory allows to model situations where two or more decision makers interact. In this way, the first step in order to solve the stated problem is to model the interaction of the (original) decision maker and his environment as a \textbf{game} between two players: the decision maker, and a player which will be called Nature, whose actions are to be guided by the causal model. Since in decision problems under uncertainty it is assumed that the \textit{state} of the environment is unknown, we will assume that player Nature has the first move and he assigns some state to any of the variable in the causal model $\mathcal{G}$.
 
 After the decision maker makes his play, Nature will \textit{respond} to the action selected according to the causal relations expressed by $\mathcal{G}$. This action-response dynamic forces to consider some notion of order between the players' moves, and because of this reason we must use the \textit{extensive-form} games described in Section \ref{basic_models}.
 
@@ -406,13 +406,33 @@ Beliefs must also encode any previous knowledge possesed by the decision maker, 
 
 
 \subsection{Solving first simpler cases}
-In order to make a step towards understanding how to acquire and use causal information in a decision problem under uncertainty we will consider three cases in order of ascending difficulty. In all three cases we consider a decision maker who faces an uncertain environment and who must take an action in order to satisfy his preferences. The uncertain environment in which the decision maker (or agent) exist is governed by a causal graphical model $\mathcal{G}$ which relates actions taken by the decision maker with outcomes. We are assuming that one of the variables of the casusal model is of interest for the decision maker in the sense that he seeks to maximize its value. This variable will be known as \textit{target variable} or reward variable.
+Once that the model has been established, we proceed to further examine the problem of acquiring and using causal information in a decision problem and we notice three important cases, in order of ascending difficulty. In all three cases we consider a decision maker who faces an uncertain environment and who must take an action in order to satisfy his preferences. The uncertain environment in which the decision maker (or agent) exist is governed by a causal graphical model $\mathcal{G}$ which relates actions taken by the decision maker with outcomes. We are assuming that one of the variables of the casusal model is of interest for the decision maker in the sense that he seeks to maximize its value. This variable will be known as \textit{target variable} or reward variable.
+
+The three cases that we notice are:
+\begin{itemize}
+\item The decision maker knows the causal model.
+\item The decision maker knows only the graphical \textit{structure} of the causal model.
+\item The decision maker knows nothing about the causal model. 
+\end{itemize}
+In the following we show how the first two cases, which are particular cases of our general problem, can be solved and we show that the proposed solution for the first two cases sheds light on how the general case could be solved.
 \subsubsection{Fully knowing the causal graphical model}
+If the decision maker knows the causal graphical model, then he could easily calculate the effect on the target variable that any of his actions has and then choose the action that has the highest probability of causing a \textit{desired} value of the target variable. The decision thus made is the one that maximizes the expected utility, by construction. Also, choosing this action is the \textit{best response} action, and therefore a Nash equilibrium for the game. 
 \subsubsection{Knowing only the graph structure}
+
 \subsubsection{General case: Model unknown}
+
 \subsection{Validation of the proposed methods}
+
 \subsection{Experimental methodology}
+\subsubsection{Internal Validation: Reproducibility}
+\subsubsection{External Validation: Different problems}
+
 \subsection{Working plan}
+Concrete steps towards solving the problem:
+\begin{itemize}
+\item Literature review, understanding the problem, considering several models and possible solutions.
+\item Formalize the model. 
+\end{itemize}
 \subsubsection{Publication plan}
 \begin{itemize}
 \item Gonzalez-Soto, M., Sucar, L.E., Escalante, H.J., \textbf{Playing against Nature: causal discovery for decision making under uncertainty}. Accepted for a poster presentation at the CausalML 2018 workshop at ICML / IJCAI / AAMAS 2018.
@@ -460,14 +480,40 @@ and
 \\
 We can also see that the joint distribution for all of the variables can be expressed as
 \[ P(Y | D, Tr, R)P(R | Tr) P(D)P(Tr). \]
-This expression will be useful when specifying beliefs about the model as Dirichlet distributions.
+This expression will be useful when specifying beliefs about the model as probability distributions.
 
 \subsection{Case 1: The causal model is completely known}
 If the causal model is completely known to the decision maker, then in one step she can obtain the probability for her desired value of the target variable, which in this case is the value corresponding to the outcome in which the patient lives at the end. Using this probability, she can choose which treatment to assign. Since this action maximizes the probability of the occurence desired value, it maximizes the expected utility, and it is also a \textit{best response} to the player Nature.
 
 \subsection{Case 2: Only the structure is known}
-From the expression of the joint probability we notice that we need to specify a distribution over each one of these distributions, which will be each one a Dirichlet distribution.
+Since the decision maker knows the graph structure, he can explicitly find a non interventional expression for the interventional distribution and update his beliefs about these unknown quantities. If the decision maker were not allowed to know, at the end of each round, the play of the Nature then this will have to be estimated as a hidden variable using, for example, the EM algorithm \cite{dempster1977maximum}, but meanwhile we are assuming that this information is available at the end of each round.
 
+Given the structure of the model; i.e., the variables in it and the directed edges, the joint distribution of those variables can be expressed as a product of the form $P(X_j | Pa(X_j))$ where $Pa(X_j)$ are the parents of $X_j$ in the underlying DAG in $\mathcal{G}$. Since these distributions fully characterize the model, the decision maker will have beliefs over each one of these parameters. Notice that each of these parameters is itself a distribution of length equal to the number of possible values of the variable which is being conditioned, call the maximum number of possible values $k$ . 
+
+A distribution suitable to modelling discrete probability vectors is the $k$-dimensional Dirichlet distribution, whose support is the set of probability vectors of length $k$ \cite{hjort2010bayesian}. The $k$ dimensional Dirichlet distribution has a density $f$ with respect to the Lebesgue measure given by
+
+\[ f(x_1,...,x_k | \alpha_i,...,\alpha_k)=\frac{1}{B(\alpha)}  \prod_{i=1}^k x_i^{\alpha_i-1},\]
+
+where $(x_1,...,x_k)$ are such that $\sum_{i=1}^k x_i =1$ and $\alpha=(\alpha_1,...,\alpha_k)$. The Dirichlet distribution is useful since it is conjugate for itself \cite{bernardo2000bayesian}.
+
+In this way, the decision maker will have beliefs about the CPT's in the form of parameters of several Dirichlet distributions. Using the agent's current beliefs, a causal graphical model can be specified. Using this fully specified (structure + parameters) as a true model, the decision maker will make her choice as in Case 1. When the decision maker observes the value of the target variable, she will update the parameters that specify her beliefs.
+
+Previously we argued that the agent's beliefs were going to be \textit{distributions} over a suitable space, but what is going to be updated are the parameters of such distributions. Namely, the $\alpha$ corresponding to the Dirichlet random variable assigned to each CPT.
+
+For the belief updating, given a new data point,  two cases must be considered:
+\begin{itemize}
+\item The variable to update has no parents.
+\item The variable to update has parents.
+\end{itemize}
+
+In the first case, if a prior Dirichlet($\alpha$) is used, then the posterior is given by
+\[ \textrm{Dirichlet}(\alpha + c) \]
+where $c$ is a vector of the number of occurrences of that observed data point. 
+
+For the second case, we must consider both the occurrences of that data point as well as the parents for each of the variables. Following \cite{barber2012bayesian} we denote as $\theta_i(X,j)$ the number of times the event $\{X=i | Pa(X)=j\}$ is observed. In this case, if the prior of $X_i$ conditioned on its parents having the value $j$ is given by a a Dirichlet($\alpha$), then the posterior for the variable $X_i$ given an observed data point is given by 
+\[ \prod_j \textrm{Dirichlet}(\alpha + \theta_i(\cdot,j)). \]
+
+\subsubsection{Implementation}
 We begin with a random assignation of the $\alpha$ parameter for each of the distributions considered. We use Dirichlet distribution for each of the conditional probability tables that appear in the factorization of the joint probability for the graph of $\mathcal{G}$. Since each of the variables in the model is binary, then the product of these Dirichlets is Dirichlet.
 
 With this parameters, the decision maker forms a causal model and chooses the action that maximizes the probability of the desired value for target variable as in Case 1.  With this action chosen, we simulate an outcome from the causal graphical model using the chosen action as an intervention. This evidence is used to update the parameters, which then will be used to generate a new causal model, and so on.
@@ -498,7 +544,16 @@ We show the results of two experiments. We compare the performance obtained by t
 \end{minipage}
 \end{center}
 
+\subsection{Case 3 and future work: The model is not known}
+The causal model were fully unknown, the decision maker will have to deal with the problem using only any previous knowledge and her own intuitions. Again, any previous knowledge and considerations will be expressed as \textit{beliefs} about the uncertainties in the environment, which will take the form of a probability distributions over a suitable space. 
 
+As in the previous case, we consider a repeated game where the base game consists of Nature assigning a random state of the environment and responding to the agents choices with the effects that were caused by her decisions. In this game, as well as in the previous one, the decision maker will attempt to learn by updating, and using, beliefs in a suitable way. 
+
+The most notable difference with the previous case is that the \textit{structure} of the model is also to be learned in such a way that both the structure and parameters converge to the true model in the limit. In the previous case the decision maker knew the form of the Conditional Probability Tables (CPT) involved in any calculation. In this case, she doesn't know the structure of the DAG so which CPT's are involved is unknown.
+
+If the decision maker knew which variables appear in the true model that governs the environment, even though she didn't know how they are connected, she could use a \textit{Dirichlet Process} to generate Dirichlet distributions and generate causal graphical models the same way as in Case 2 and updating the parameters of the process using the observed information. The Dirichlet Process\footnote{with parameters $M,G_0$}, which was introduced by \cite{ferguson1973bayesian}, is random measure defined over a space $S$ such that for each partition $B_1,...,B_k$ the vector $(G(B_1),...,G(B_k))$ follows a Dirichlet distribution \cite{hjort2010bayesian}, \cite{muller2016bayesian}, \cite{ghosal2017fundamentals}. 
+
+Belief updating using causal information when the decision maker doesn't know the structure of the model nor its parameters is yet to be studied and left as future work. 
 
 %In Figure \ref{20_rounds} we observe the average rewards for each agent in 20 rounds of decision making. Here we notice that Q-learning outperforms our algorithm, which has a similar performance as the random choosin procedure until round 11.
 %
