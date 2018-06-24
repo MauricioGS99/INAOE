@@ -54,11 +54,15 @@ Learning a causal model of the environment allows to extract high-level insights
 \newpage
 \section{Main Concepts}
 	\subsection{Attempts to define Causality}
-	Causality has been a difficult concept to define and several attempts have been made. In fact, in mainstream statistics  the term \textit{cause} have been nearly banned as documented by \cite{pearl2018why}.
+	Causality has been a difficult concept to define and several attempts have been made. In fact, in mainstream statistics the term \textit{cause} have been nearly banned as documented by \cite{pearl2018why}.
 	
-	In the reference works on Causality (\cite{spirtes2000causation}, \cite{pearl2009causality}) the term \textit{causality} is defined in terms of common language and then the mathematical machinery required to model causality is provided. In this way, causality becomes defined as what is modeled by causal models, which are themselves defined as to model causality. This apparent circularity is deeply studied by \cite{woodward2005making}. For this reason, we will give here a formal working definition of causal relations which allows to be used formally.
+Attempts to understand the meaning of \textit{cause} has troubled philosophers and scientists, from David Hume and John Stuart Mill to modern scientists as \cite{suppes1970probabilistic}, \cite{cartwright1983laws}, \cite{spirtes2000causation}, \cite{pearl2009causality}, \cite{spohn2012laws}, \cite{sep-causation-probabilistic}. In particular, Suppes and Reichenbach tried to define causation as an increase in the probability of occurrence of one event when another event happened, which is stated as $X$ causes $Y$ if $P(Y|X) > P(Y)$, but this definition was flawed because that increase could happen for several reasons, like $Y$ being a cause of $X$, or both having a common cause $Z$ (\cite{pearl2018why}).
+
+Several definitions of Causality exist in diverse contexts with diverse applications in mind, such as the Topological Causality for Dynamical Systems (\cite{harnack2017topological}), Lamport's Causality (\cite{lamport1978time}), Granger's Causality for Time Series (\cite{granger1969investigating}), Suppes' Causality (\cite{suppes1970probabilistic}) each with its own mathematical framework. A review of several of this theories, including Suppes' and Granger's can be found in \cite{holland1985statistics}.
 	
-	Several definitions of Causality exist in diverse contexts with diverse applications in mind, such as the Topological Causality for Dynamical Systems (\cite{harnack2017topological}), Lamport's Causality (\cite{lamport1978time}), Granger's Causality for Time Series (\cite{granger1969investigating}), Suppes' Causality (\cite{suppes1970probabilistic}) each with its own mathematical framework. A review of several of this theories, including Suppes' and Granger's can be found in \cite{holland1985statistics}.
+In some works on Causality (\cite{spirtes2000causation}, \cite{pearl2009causality}) the term \textit{causality} is defined in terms of common language and then the mathematical machinery required to model causality is provided. In this way, causality becomes defined as what is modeled by causal models, which are themselves defined as to model causality. This apparent circularity is deeply studied by \cite{woodward2005making}. In fact, Judea Pearl never gives a formal definition of causality, rather he prefers to build the machinery required to answer \textit{causal queries} (\cite{pearl2009causality}, \cite{pearl2018theoretical}).
+	
+	Even though causality is a difficult concept to grasp, we require a \textit{working} definition of causality that allows a formal language for stating and manipulating causal concepts. 
 	\subsection{Definition of Causality}
 	Causality is understood as a \textit{stochastic} relation between \textit{events}. Some event \textit{causes} another event to occurr. For example, The formal definition of Causality that will be adopted in this work is the definition provided in \cite{spirtes2000causation}.
 	\begin{defi}{\label{causal_relation}}
@@ -90,13 +94,13 @@ Learning a causal model of the environment allows to extract high-level insights
 	Also, an extra condition, known as Causal Sufficiency, about the nature of the model itself is considered: for any variable $X$ in the model $\mathcal{G}$ there are no causes of $X$ outside of the model $\mathcal{G}$ (\cite{spirtes2000causation}, \cite{pearl2009causality}, \cite{sucar2015probabilistic}).
 	This conditions are required in an axiomatic fashion so they will be taken as they are without questioning.
 	\subsection{Causal Graphical Models}
-	A causal graphical model (CGM) consists of a set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, an acyclic directed graph (DAG) whose nodes are in correspondence with the variables in $\mathcal{X}$ and whose edges represent relations of cause-effect. Also, the model, which up to this point is nothing more than a Bayesian Network with causal semantics, is enriched with an operator named $do()$ which is defined over graphs and whose action is described as follows: given $\mathbf{X} \subseteq \mathcal{X}$ and $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$ the action $do(\mathbf{X} = \mathbf{x} )$ corresponds to assign to each $X_j \in \mathbf{X}$ the value $x_{x_{i_j}}$ and to delet every incoming edges into the node corresponding to each $X_j$ in the graph $\mathcal{G}$ (\cite{koller2009probabilistic}, \cite{sucar2015probabilistic}) To apply the $do()$ operator over a variable (or set of variables) is also called as an \textit{intervention} over the variable.
+	A causal graphical model (CGM) consists of a set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, an acyclic directed graph (DAG) whose nodes are in correspondence with the variables in $\mathcal{X}$ and whose edges represent relations of cause-effect. Also, the model, which up to this point is nothing more than a Bayesian Network with causal semantics, is enriched with an operator named $do()$ which is defined over graphs and whose action is described as follows: given $\mathbf{X} \subseteq \mathcal{X}$ and $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$ the action $do(\mathbf{X} = \mathbf{x} )$ corresponds to assign to each $X_j \in \mathbf{X}$ the value $x_{x_{i_j}}$ and to delet every incoming edges into the node corresponding to each $X_j$ in the graph $\mathcal{G}$ (\cite{koller2009probabilistic}, \cite{sucar2015probabilistic}) To apply the $do()$ operator over a variable (or set of variables) is also called as an \textit{intervention} over the variable. It is this interventional operator which separates associative models from causal models, since it provides the solution of the “probability raising” attempts to define causality, since if $X$ is a cause for $Y$ then $P(Y | do(X)) > P(Y)$ (\cite{pearl2018why}).
 	
 	It is required that the probability distribution that results from an intervention over a variable is Markov compatible with the graph; this is, the resulting interventional distribution is equivalent to the product of the conditional probability of every variable given its parents in the intervened graph (\cite{sucar2015probabilistic}).
 	\subsubsection{The identifiability problem}
 	Under what conditions can causal inquiries be answered in terms of purely \textit{observational} data? It is known that if the Markov Causal condition and Causal Faithfulness hold, then it is possible to identify the causal graph up to Markov equivalence (\cite{peters2012identifiability}, \cite{mooij2016distinguishing}).
 	\subsubsection{Do-Calculus}
-	The Do-Calculus (\cite{pearl1995causal}, \cite{pearl2009causality}) is a set of rules for manipulating probabilistic statements that involve interventions and, under certain conditions, allow them to be transformed into statements that do not involve interventional data. 
+The Do-Calculus (\cite{pearl1995causal}, \cite{pearl2009causality}) is a set of rules for manipulating probabilistic statements that involve interventions and, under certain conditions, allow them to be transformed into statements that do not involve interventional data. 
 	
 	Some notation is important to be mentioned: Consider a causal graphical model $\mathcal{G}$ and $X,Y,Z$ disjoint sets of nodes of $\mathcal{G}$. We denote by $\mathcal{G}_{\bar{X}}$ the graph that is obtained by deleting from $\mathcal{G}$ all of the edges that enter nodes in $X$. In the same way, $\mathcal{G}_{\underline{X}}$ is the graph obtained by deleting the edges that emerge from $X$. Finally, $\mathcal{G}_{\underline{Z}\bar{X}}$ is the graph obtained by deleting edges incoming into $X$ and outgoing from $Z$.
 	
@@ -111,6 +115,9 @@ Let $\mathcal{G}$ a CGM y $P_{\mathcal{G}}$ the probability measure induced by t
 \[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
 \end{itemize}
 \end{teo}
+\begin{proof}
+See \cite{pearl2009causality}.
+\end{proof}
 \begin{teo}{\cite{peters2017elements}}\\
 The following statements hold:
 \begin{itemize}
@@ -119,13 +126,16 @@ The following statements hold:
 \item A necessary and sufficient criteria exists for the identifiability of interventional distributions (\cite{shpitser2006identification}, \cite{huang2006pearl}).
 \end{itemize}
 \end{teo}
-Las reglas del cálculo do proveen una solución al problema de la identificabilidad:
+\begin{proof}
+See \cite{peters2017elements}.
+\end{proof}
+The Do-Calculus rules provide a solution for the identifiability problem:
 \begin{cor} (\cite{pearl2009causality}).\\
 A distribution $q=P(y_1,...,y_k | do(x_1),...,do(x_n))$ is identifiable in a causal graphical model $\mathcal{G}$ if there exists a finite sequence of transformations, where each one of them corresponds to any of the rules of the Do-Calculus, that reduce $q$ to a purely observational expression.
 \end{cor}
 	
 	\subsection{Decision Theory}
-	A Decision Problem under Uncertainty is a situation in which an agent must choose one out of many actions with uncertain consequences. The most common theories for Decision Making under Uncertainty are those from \cite{von1944theory} and \cite{savage1954the}. In the former theory it is assumed that the decision maker knows the stochastic relation between actions and consequences, and in that case the theory guarantees that the decision maker behaves as if he maximizes the expected value of an utility function. On the other hand, if the decision maker doesn't know the probabilities of observing outcomes given a chosen action, then Savage's theory guarantees that the decision maker behaves as if he had in mind a \textit{subjective} probability distribution, a utility function and chooses the action which maximizes the expected utility with respect to that subjective probability distribution and utility function. 
+	A Decision Problem under Uncertainty is a situation in which an agent must choose one out of many actions with uncertain consequences. The most common theories for Decision Making under Uncertainty are those from \cite{von1944theory} and \cite{savage1954the}. In the former theory it is assumed that the decision maker knows the stochastic relation between actions and consequences \footnote{Also known as decision under risk (\cite{binmore2008rational}, \cite{peterson2017introduction}).}, and in that case the theory guarantees that the decision maker behaves as if he maximizes the expected value of an utility function. On the other hand, if the decision maker doesn't know the probabilities of observing an outcome given a chosen action, then Savage's theory guarantees that the decision maker behaves as if he had in mind a \textit{subjective}\footnote{Subjective here is a technical term meaning that the function is internal for the agent.} probability distribution, a utility function and chooses the action which maximizes the expected utility with respect to that subjective probability distribution and utility function. 
 	
 Both von Neumann and Savage's Decision Under Uncertainty theories are known as the \textit{classic} theories in other areas, mostly in Economics. It is important to say that other Decision Making theories exist, such as Prospect Theory (\cite{kahneman1979prospect}), Case-Based Decision Theory (\cite{gilboa1995case}) among others that are out of the scope of this work.
 
@@ -304,6 +314,8 @@ A perfect information extensive game consists of:
 \end{itemize}
 \end{defi}
 
+One way of visualizing this type of games is using a \textit{tree}, in which each internal nodes are identified with non-terminal histories and each one of these corresponds to a decision made by a player. Given a history $h$ in the game, which corresponds to a path in the tree, player $\rho(h)$ will choose on action from the set $\chi(h)$
+
 In this model, each player knows how did he get up to certain point (knows what history occured). To allow more generality, we consider cases where each player doesn't know how he got up to certain point; i.e., he does not know which history happen and he can't distinguish in which node is he.
 \subsubsection{Repeated Games}
 \subsubsection{Learning in Games}
@@ -333,7 +345,7 @@ In this model, each player knows how did he get up to certain point (knows what 
 	\subsection{Research Question}
 	How a rational decision maker who faces an uncertain environment which is governed by a causal mechanism can learn and make use of this causal structure in order to make good choices? How can causal structure help a decision maker in order to guide his learning process?
 	\subsection{Hypothesis}
-	Let $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$, by repeatedly making decisions he can learn causal information and use it to find the optimal actions (in the sense of expected utility theory) in less, or equal, rounds than if he doesn't consider causal information.
+	Let $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$, by repeatedly making decisions he can learn causal information and use it to find the optimal action (in the sense of expected utility theory) in less, or equal, rounds than if he doesn't consider causal information.
 	\subsection{Objectives}
 		\subsubsection{General Objectives}
 			The proposed research has as a general objective to find how a rational autonomous agent who faces an uncertain environment can discover and use causal information in order to make good choices that point towards a concise objective such as the maximization of some function.
@@ -363,7 +375,11 @@ In this model, each player knows how did he get up to certain point (knows what 
 
 \newpage
 \section{Related Work}
-Since we are considering decision problems where an agent must choose some available action and then receive a reward from it and after a set of stages the agent is expected to know a good action. It has been shown that the probability of the action selected in the $n$-th round not being optimal has an upper bound (\cite{audibert2010best}) if the optimality criteria is choosen to be the \textit{minimal regret} which is basically the difference of the theoretical mean reward of the optimal action and the chosen action.
+The use of causal information in human beings has been studied by York Hagmayer and his team and they have found that human beings, while facing a sequential decision problem, use and modify causal information (\cite{hagmayer2008causal}, \cite{hagmayer2009decision}, \cite{hagmayer2010spontaneous}, \cite{hagmayer2013repeated}). In their studies, all of the subjects were faced with a one-stage decision problem in which an initial causal model was provided. In several rounds, the subject made a decision and observed a feedback and was later asked to describe the causal model they thought controlled the situation. The subjects knew that they were supposed to learn a causal model, but the case where the final objective is other than directly learning a causal model has not been studied. 
+
+It is also known that human beings focus on \textit{local} aspects while learning causal relations that are later unified into a single structure (\cite{fernbach2009causal}, \cite{waldmann2008causal}, \cite{wellen2012learning}, \cite{danks2014unifying}). Following this idea, \cite{wellen2012learning} propose a model to explain how observations  and interventions are used by human beings to learn causal structure when little prior information is available. 
+
+We are considering decision problems where an agent must choose some available action and then receive a reward from it. After a certain number of learning rounds, the agent is expected to output a good action. Problems of this nature are called \textit{bandit} problems (\cite{sutton1998reinforcement}). It has been shown that the probability of the action selected in the $n$-th round not being optimal has an upper bound (\cite{audibert2010best}) if the optimality criteria is choosen to be the \textit{minimal regret} which is basically the difference of the theoretical mean reward of the optimal action and the chosen action.
 
 On the other hand, if the largest mean reward is desired with a fixed confidence of $\delta$ then an algorithm for finding the optimal action exist in such a way that the number of rounds to find it is within a constant factor of a lower bound (\cite{jamieson2014lil}). 
 
@@ -401,11 +417,11 @@ The game which will be used to model the interaction between a decision maker an
 \subsection{Belief Formation}
 Once a Game that models agent-environment interaction is defined, we must turn to the question about \textit{learning} about the environment, which includes acquiring causal information and also using current causal knowledge in order to obtain new information.
 
-For the agent to learn and reason about the plays of Nature we assume that he is able to observe the final outcome of the game, which includes knowing about the inicial uncertain state that Nature assigned. The agent, at the beginning of the game is uncertain about the state of the environment which he is facing, but he still must take an action, so in order to allow the decision maker to use his knowledge to act, he will have \textit{beliefs} about any relevant aspects of the environment which he will use as if they were the true model in any given play. These beliefs will be \textit{updated} according to what is observed at the end of each game.
+For the agent to learn and reason about the plays of Nature we assume that he is able to observe the final outcome of the game, which includes knowing about the inicial uncertain state that Nature assigned. The agent, at the beginning of the game is uncertain about the state of the environment which he is facing, but he still must take an action, so in order to allow the decision maker to use his knowledge to act, he will have \textit{beliefs} about any relevant aspects of the environment which he will use as if they were the true model in any given play. These beliefs will be \textit{updated} according to what is observed at the end of each game. The second step is to find a way to specify beliefs about causal structure.
 
 Beliefs represent ignorance about relevant characteristics of certain environment (\cite{bernardo2000bayesian}, \cite{peterson2017introduction}), and thus are encoded as probability distributions, which usually come from a parametric family. 
 
-In our proposed research, beliefs will encode current knowledge about the \textit{causal structure} of the environment, and this beliefs will be updated when information about actions-outcomes becomes available, which will happen at the end of each game. 
+In our proposed research, beliefs will encode current knowledge about the \textit{causal structure} of the environment, and this beliefs will be updated when information about actions-outcomes becomes available, which will happen at the end of each game. The representation of the beliefs must allow them to be used in order to make a choice using the causal information they represent in each round.
 
 Beliefs must also encode any previous knowledge possesed by the decision maker, and this initial assignment must be coherent with the actions prescribed with the rationality axioms for preferences. In \cite{billot2005probabilities} is shown how to build a set of beliefs given a set of past observations in an axiomatic way.
 
@@ -416,7 +432,7 @@ If a decision maker encodes his current knowledge, and ignorance, about some rel
 
 Bayesian updating is also of great importance in the theory of Learning in Games (\cite{fudenberg1998theory}) since it is known (\cite{shoham2008multiagent}) that if all the players in a game perfom Bayesian updating, then the plays generated by these measures converge to the plays that would be generated if all players shared their knowledge.
 
-Even though we know that Bayesian updating is the correct \textit{framework} for belief updating, it remains unanswered how to concretely use causal information in order to update the parameters that control the distributions used to express beliefs in a tractable way. 
+Even though we know that Bayesian updating is the correct \textit{framework} for belief updating, it remains unanswered how to concretely use causal information in order to update the parameters that control the distributions used to express beliefs in a tractable way. Therefore, the third step is to find an updating criteria with theoretical properties that guarantee convergence to the true causal model that controls the environment. The updating criteria must explicitly use causal information beyond any associative rules. 
 
 \subsection{Solving first simpler cases}
 Once that the model has been established, we proceed to further examine the problem of acquiring and using causal information in a decision problem and we notice three important cases, in order of ascending difficulty. In all three cases we consider a decision maker who faces an uncertain environment and who must take an action in order to satisfy his preferences. The uncertain environment in which the decision maker (or agent) exist is governed by a causal graphical model $\mathcal{G}$ which relates actions taken by the decision maker with outcomes. We are assuming that one of the variables of the casusal model is of interest for the decision maker in the sense that he seeks to maximize its value. This variable will be known as \textit{target variable} or reward variable.
@@ -435,6 +451,14 @@ If a decision maker knows the structure of the graph, but he does not know the p
 
 In general, what must be specified is a way of encoding current causal knowledge into a probability distribution in such a way that a \textit{local} (i.e. in each round) causal model can be obtained from current beliefs in order to make a decision using current causal knowledge. 
 \subsubsection{General case: Model unknown}
+The previous two cases are per se steps of the methodology, rather simplifications in order to understand what is happening. The real deal is the case where the causal model is unknown. 
+
+When the causal model is unknown, two cases of interest appear, depending if the decision maker knows the (maximum) number of variables in the model or not. 
+
+If the maximum number of variables is assumed to be known by the decision maker, then the situation simplifies since a decision maker could generate distributions that represent causal relations among variables. For example, a Dirichlet Process (\cite{ferguson1973bayesian}, \cite{ghosal2017fundamentals}) could be used to generate Dirichlet distributions that are used generate Conditional Probability Tables in order to specify a causal model.
+
+If the number of variables is unknown, then the beliefs that the decision maker holds must allow unbounded cardinality on the number of variables. In that case, a distribution over a \textit{graph space} could be used in such a way that when sampled a graph structure is obtained and used as in the previous case.  
+
 
 \subsection{Validation of the proposed methods}
 In order to show that an agent has succeeded in acquiring a causal model from his environment via interacting with it and using it in order to make good choices, 
