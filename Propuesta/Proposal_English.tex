@@ -37,11 +37,11 @@ We consider decision problems under uncertainty where the options available to a
 \section{Introduction}
 \indent A fundamental part of intelligent reasoning is being able to make decisions under uncertain conditions (\cite{danks2014unifying}, \cite{lake2017building}, \cite{pearlwhy}). In some cases, a decision maker who faces an uncertain environment has enough information to make choices by maximizing expected utility, which is the classic formal criteria for making decisions if rational preferences are assumed (\cite{bernardo2000bayesian}, \cite{gilboa2009decision}). On the other hand, if enough information is not available, the decision maker could attempt to \textit{learn} from the environment by interacting with it.
 
-Learning by interaction has been extensively studied by computer scientists using the Reinforcement Learning (RL) setting \cite{sutton1998reinforcement}, but the most common used techniques  in this field are purely associative and do not consider any high-level structure of the environment beyond what is expressable in a Markov Decision Process \cite{garnelo2016towards}.
+Learning by interaction has been extensively studied by computer scientists using the Reinforcement Learning (RL) setting (\cite{sutton1998reinforcement}), but the most common used techniques  in this field are purely associative and do not consider any high-level structure of the environment beyond what is expressable in a Markov Decision Process (\cite{garnelo2016towards}).
 
 A particular case of a \textit{higher level structure}; i.e., beyond associative patterns, is the case of \textit{causal} structure. A causal structure encondes a series of \textit{cause-effect} relations between events and knowing such relations allows a decision maker to add extra knowledge into the uncertainty of his environment and also allows to plan ahead his actions since he can predict what a certain action will cause (\cite{spirtes2000causation}, \cite{pearl2018theoretical}).
 
-Since human beings are known to learn causal models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), and even though this learning is not perfect \cite{rottman2014reasoning}, we propose that an autonomous agent can learn and use causal information while interacting with an uncertain environment which is governed by a fixed \textit{causal mechanism} which is unknown to the agent.  
+Since human beings are known to learn causal models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), and even though this learning is not perfect (\cite{rottman2014reasoning}), my hypothesis is that an autonomous agent can learn and use causal information while interacting with an uncertain environment which is governed by a fixed \textit{causal mechanism} which is unknown to the agent.  
 
 The proposed way for an agent to learn from repeated interactions is by giving her \textit{beliefs} about the structure of the environment and a way to update them after an outcome has been observed.
 
@@ -49,7 +49,7 @@ While the standard setting in RL is to model the agent-environment interaction a
 
 The agent, using her current beliefs, will generate a \textit{local} causal model and choose an action from it as if that model was the true one. Then, after she observes the consequences of her actions, her beliefs will be updated according to the observed information in order to make a better choice the next time. The agent, besides learning a policy to choose actions will also learn a causal model from the environment since the causal model she forms will approximate the true model.
 
-Learning a causal model of the environment allows to extract high-level insights of a phenomena beyond associative descriptions of what is observed. A causal model is able to \textit{explain} why a particular decision was made since it allows to extract the causes and effects of an agent's actions.
+Learning a causal model of the environment allows to extract high-level insights of a phenomena beyond associative descriptions of what is observed. A causal model is able to \textit{explain} why a particular decision was made since it allows to extract the causes and effects of an agent's actions. Once a causal model is acquired, an external user is able to reason about \textit{what...if...} statements that associative methods can not answer. When a decision maker chooses an action out of many, a causal model allows to ask what would've happened if another action was taken without actually performing the alternative action.
 
 \newpage
 \section{Main Concepts}
@@ -68,15 +68,15 @@ In some works on Causality (\cite{spirtes2000causation}, \cite{pearl2009causalit
 	\begin{defi}{\label{causal_relation}}
 	Let $(\Omega, \mathcal{F}, \mathbb{P})$ a finite probability space, and consider a binary relation $\to \subseteq \mathcal{F} \times \mathcal{F}$ which is:
 	\begin{itemize}
-	\item Transitivity: If $A \to B$ and $B \to C$ for any $A, B, C \in \mathcal{F}$ then $A \to C$.
+	\item Transitive: If $A \to B$ and $B \to C$ for any $A, B, C \in \mathcal{F}$ then $A \to C$.
 	\item Irreflexive: For all $A \in \mathcal{F}$ it doesn't hold that $A \to A$.
 	\item Antisymmetric: For $A,B \in \mathcal{F}$ such that $A \neq B$ if $A \to B$ then it doesn't hold that $B \to A$.
 	\end{itemize}
 	We will say that $A$ is \textit{a cause} of $B$ (or that $A$ causes $B$, $A$ is the cause and $B$ is the effect) if $A \to B$.
 	\end{defi}
-	We will assume that for any event $A \in \mathcal{F}$ there are no causes lying outside $\mathcal{F}$, and that the relations expressed by $\to$ are the only causal relations in the environment. This assumption can be interpreted as not allowing \textit{intermediate} events between events known to be causally related. For example, if in our space we have that striking a match causes fire, we will not allow into consideration the underlying chemical reactions that cause fire from friction. In this sense, we will say that striking a match is a \textit{direct cause} of fire and this will be the only causes considered (\cite{spirtes2000causation}). 
+	We will assume that for any event $A \in \mathcal{F}$ there are no causes lying outside $\mathcal{F}$, and that the relations expressed by $\to$ are the only causal relations in the environment. This assumption can be interpreted as not allowing \textit{intermediate} events between events known to be causally related. For example, if in our space we have that striking a match causes fire, we will not allow into consideration the underlying chemical reactions that cause fire from friction. In this sense, we will say that striking a match is a \textit{direct cause} of fire and this will be the only causes considered herein (\cite{spirtes2000causation}). 
 	\subsection{Representation into a Directed Acyclic Graph}
-	Making some notation abuse, the causal relations contained in $\to$ can be summarized in a graph $G=(V,E)$ in the following way: If $A \to B$ then the graph must contain a node $A \in V$ representing $A$, a node  $B \in V$ representing $B$ and a directed edge $e \in E$ connecting the respective nodes in the direction of the causal relation.
+	The causal relations contained in $\to$ can be summarized in a graph $G=(V,E)$ in the following way: If $A \to B$ then the graph must contain a node $A \in V$ representing $A$, a node  $B \in V$ representing $B$ and a directed edge $e \in E$ connecting the respective nodes in the direction of the causal relation.
 	\begin{prop}
 	Given a causal relation $\to$ as in Definition \ref{causal_relation} then the graph that is obtained by considering nodes for events and edges for the causal relations as previously described is a Directed Acyclic Graph.
 	\end{prop}
@@ -94,7 +94,7 @@ In some works on Causality (\cite{spirtes2000causation}, \cite{pearl2009causalit
 	Also, an extra condition, known as Causal Sufficiency, about the nature of the model itself is considered: for any variable $X$ in the model $\mathcal{G}$ there are no causes of $X$ outside of the model $\mathcal{G}$ (\cite{spirtes2000causation}, \cite{pearl2009causality}, \cite{sucar2015probabilistic}).
 	This conditions are required in an axiomatic fashion so they will be taken as they are without questioning.
 	\subsection{Causal Graphical Models}
-	A causal graphical model (CGM) consists of a set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, an acyclic directed graph (DAG) whose nodes are in correspondence with the variables in $\mathcal{X}$ and whose edges represent relations of cause-effect. Also, the model, which up to this point is nothing more than a Bayesian Network with causal semantics, is enriched with an operator named $do()$ which is defined over graphs and whose action is described as follows: given $\mathbf{X} \subseteq \mathcal{X}$ and $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$ the action $do(\mathbf{X} = \mathbf{x} )$ corresponds to assign to each $X_j \in \mathbf{X}$ the value $x_{x_{i_j}}$ and to delet every incoming edges into the node corresponding to each $X_j$ in the graph $\mathcal{G}$ (\cite{koller2009probabilistic}, \cite{sucar2015probabilistic}) To apply the $do()$ operator over a variable (or set of variables) is also called as an \textit{intervention} over the variable. It is this interventional operator which separates associative models from causal models, since it provides the solution of the “probability raising” attempts to define causality, since if $X$ is a cause for $Y$ then $P(Y | do(X)) > P(Y)$ (\cite{pearl2018why}).
+	A causal graphical model (CGM) consists of a set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, an acyclic directed graph (DAG) whose nodes are in correspondence with the variables in $\mathcal{X}$ and whose edges represent relations of cause-effect. Also, the model, which up to this point is nothing more than a Bayesian Network with causal semantics, is enriched with an operator named $do()$ which is defined over graphs and whose action is described as follows: given $\mathbf{X} \subseteq \mathcal{X}$ and $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$ the action $do(\mathbf{X} = \mathbf{x} )$ corresponds to assign to each $X_j \in \mathbf{X}$ the value $x_{x_{i_j}}$ and to delete every incoming edges into the node corresponding to each $X_j$ in the graph $\mathcal{G}$ (\cite{koller2009probabilistic}, \cite{sucar2015probabilistic}) To apply the $do()$ operator over a variable (or set of variables) is also called as an \textit{intervention} over the variable. It is this interventional operator which separates associative models from causal models, since it provides the solution of the “probability raising” attempts to define causality, since if $X$ is a cause for $Y$ then $P(Y | do(X)) > P(Y)$ (\cite{pearl2018why}).
 	
 	It is required that the probability distribution that results from an intervention over a variable is Markov compatible with the graph; this is, the resulting interventional distribution is equivalent to the product of the conditional probability of every variable given its parents in the intervened graph (\cite{sucar2015probabilistic}).
 	\subsubsection{The identifiability problem}
@@ -105,13 +105,13 @@ The Do-Calculus (\cite{pearl1995causal}, \cite{pearl2009causality}) is a set of 
 	Some notation is important to be mentioned: Consider a causal graphical model $\mathcal{G}$ and $X,Y,Z$ disjoint sets of nodes of $\mathcal{G}$. We denote by $\mathcal{G}_{\bar{X}}$ the graph that is obtained by deleting from $\mathcal{G}$ all of the edges that enter nodes in $X$. In the same way, $\mathcal{G}_{\underline{X}}$ is the graph obtained by deleting the edges that emerge from $X$. Finally, $\mathcal{G}_{\underline{Z}\bar{X}}$ is the graph obtained by deleting edges incoming into $X$ and outgoing from $Z$.
 	
 	\begin{teo}{\label{docalculus}} (\cite{pearl2009causality})\\
-Let $\mathcal{G}$ a CGM y $P_{\mathcal{G}}$ the probability measure induced by the model; then, for disjoint sets of nodes $X,Y,Z,W$ it holds:
+Let $\mathcal{G}$ a CGM and $P_{\mathcal{G}}$ the probability measure induced by the model; then, for disjoint sets of nodes $X,Y,Z,W$ it holds:
 \begin{itemize}
-\item If for the graph $\mathcal{G}_{\bar{X}}$ it holds that $Y$ is conditionally independent from  $Z$ given $X$ y $W$, then
+\item If for the graph $\mathcal{G}_{\bar{X}}$ it holds that $Y$ is conditionally independent from  $Z$ given $X$ and $W$, then
 \[ P_{\mathcal{G}}(Y=y | do(X=x), Z=z, W=w) = P_{\mathcal{G}}(Y=y | do(X=x), W=w). \]
-\item If for the graph $\mathcal{G}_{\bar{X}\underline{Z}}$ it holds that $Y$ is conditionally independent from $Z$ given $X$ y $W$, then
+\item If for the graph $\mathcal{G}_{\bar{X}\underline{Z}}$ it holds that $Y$ is conditionally independent from $Z$ given $X$ and $W$, then
 \[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), Z = z, W=w). \]
-\item Let $Z(W)$ the set of nodes in  $Z$ that aren't ancestors of any node in  $W$ in the graph $\mathcal{G}_{\bar{X}}$.   If $Y$ is conditionally independent from $Z$ given $X$ y $W$ in the graph $G_{\bar{X}, \bar{Z(W)}}$, then
+\item Let $Z(W)$ the set of nodes in  $Z$ that aren't ancestors of any node in  $W$ in the graph $\mathcal{G}_{\bar{X}}$.  If $Y$ is conditionally independent from $Z$ given $X$ and $W$ in the graph $G_{\bar{X}, \bar{Z(W)}}$, then
 \[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
 \end{itemize}
 \end{teo}
@@ -150,7 +150,7 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\item For each action $a_i$, a set of consequences $C_i = \{ c_j : j \in J \}$. Define $\mathcal{C}=\cup_{i \in I} C_i$
 	\item A preference relation $\succeq$ defined over $\mathcal{A}$ which represent the decision-maker whishes. It is assumed that the decision maker will choose among his options according to his preferences, which are represented by $\succeq$.
 	\end{itemize}
-	Since we are considering that a decision maker chooses an action $a \in \mathcal{A}$, and then an uncertain event $E$ will occur which will then produce the consequence $c$, we will identify actions in $\mathcal{A}$ as $a_i = \{ c_j | E_j : j \in J \}$. As a technical assumption required for all of the math to work, we require that elements of $\mathcal{C}$ belong to $\mathcal{A}$. This is achieved by adding into $A$ elements of the form $\{ c | \Omega \}$ for $c \in \mathcal{C}$. This being said, we can extend the preference relation $\succeq$ to elements of $\mathcal{C}$ and therefore indistinctively write $c_1 \succeq c_2$ for $c_1, c_2 \in \mathcal{C}$ or $a_1 \succeq a_2$ for $a_1,a_2 \in \mathcal{A}$. We require that $\mathcal{E}$ is an \textit{algebra}.	
+	Since we are considering that a decision maker chooses an action $a \in \mathcal{A}$, and then an uncertain event $E$ will occur which will then produce the consequence $c$, we will identify actions in $\mathcal{A}$ as $a_i = \{ c_j | E_j : j \in J \}$. As a technical assumption required for all of the math to work, we require that elements of $\mathcal{C}$ belong to $\mathcal{A}$. This is achieved by adding into $A$ elements of the form $\{ c | \Omega \}$ for $c \in \mathcal{C}$. This being said, we can extend the preference relation $\succeq$ to elements of $\mathcal{C}$ and therefore indistinctively write $c_1 \succeq c_2$ for $c_1, c_2 \in \mathcal{C}$ or $a_1 \succeq a_2$ for $a_1,a_2 \in \mathcal{A}$. We require that $\mathcal{E}$ is an \textit{algebra}\footnote{An algebra of sets over $X$ is a family of sets $\mathcal{F} \subseteq \mathcal{P}(X)$ such that $X \in \mathcal{F}$, $A^c \in \mathcal{F}$ for any $A \in \mathcal{F}$ and for $A,B \in \mathcal{F}$ then $A \cup B \in \mathcal{F}$ (\cite{ash2000probability})}.	
 	\begin{defi}
 	From the prerefence relation $\succeq$ we can derive some other relations between actions:
 	\begin{itemize}
@@ -171,9 +171,10 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\end{itemize}
 	\end{defi}
 	\begin{defi}
-	Two events $E,F \in \mathcal{E}$ are said to be independent if and only if:
+	Two events $E,F \in \mathcal{E}$ are said to be independent if and only if for all $c, c_1, c_2 \in \mathcal{C}$ it holds:
 	\begin{itemize}
-	\item 	
+	\item $c \succ \{ c_2 | E, c_1 | E^c \} \Rightarrow c \succ_F \{ c_2 | E, c_1 | E^c \}	$.
+	\item $c \succ \{ c_2 | F, c_1 | F^c \} \Rightarrow c \succ_E \{ c_2 | F, c_1 | F^c \}	$
 	\end{itemize}
 	\end{defi}
 	\subsubsection{Axioms of Coherence}
@@ -214,10 +215,16 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	
 	For interpretations and critiques of the axioms we refer the reader to \cite{bernardo2000bayesian}, \cite{binmore2008rational}, \cite{gilboa2009decision}, \cite{wakker2010prospect}, \cite{peterson2017introduction}.
 	\subsubsection{Subjective Probability and Utility}
+Subjective probability is a well defined mathematical object that, contrary to the frequentist approach to probability, represents the degree of belief an agent has over the occurrence of some phenomena. Frequentist probability can not answer questions like \textit{what is the probability of a war in the middle east?} since it is not a phenomena that can be repeated infinite times in an independent way (\cite{gilboa2009decision}, \cite{peterson2017introduction}).
+
+Subjective approachs to probability were developed by Bruno De Finetti (\cite{definetti1930}) and Frank Ramsey in 1926, however a more precise formulation was given by Savage in his famous book “The Foundations of Statistics” (\cite{savage1954the}). The formulation shown here is the modern version of Savage's Theory as exposed by \cite{bernardo2000bayesian}.
+
 	\begin{defi}
 	Given a preference relation $\succeq$, we define the (subjective) \textbf{probability} of an event $E \in \mathcal{E}$ as the real number $\mu(S)$ associated with the standard event $S$ such that $E \sim S$.
 	\end{defi}
 	The subjective probability thus defined satisfies all of the Kolmogorov's axioms of probability (\cite{bernardo2000bayesian}). So, we can use all of the mathematical machinery for classic probability measures, including the definition of conditional probability, Bayes' theorem, etc.
+	
+Not every belief about uncertainties can be represented by a probabiity measure, a subjective degree of belief for an agent must be rational as will be shown soon.	
 	
 	As a technical requirement we need to consider two extra options, one that is preferred over every other consequence, which will be denoted as $c^\ast$ and other consequence $c_\ast$ which  the agent prefers every other consequence before $c_\ast$. This consequences need not have an interpretation, but they can be thought of as \textit{heaven} and \textit{hell} respectively for obvious (at lest in the Western hemisphery) reasons. Critiques of this extra technical consequences can be found in \cite{binmore2008rational}, \cite{peterson2017introduction}.
 	\begin{defi}
@@ -250,6 +257,8 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\end{proof}
 	This result means that for any decision maker whose preferences satisfies axioms 1 through 5 the only election criteria that is compatible with the axioms is the maximization of expected utility and thus establishes a \textit{normative} criteria for decision making for rational agents. Of course, this result establishes a complete ordering of the options, but it does not guarantees the existence of an option for which the expected utility is maximum and further mathematical assumptions are required over the utility function $u$ in order to guarantee the existence of the maxmimum utility option (\cite{bernardo2000bayesian}).
 	
+	Notice that the expectations are taken with respect to the subjective probability measure, and in fact Savage's general result as stated in \cite{gilboa2009decision} guarantees the existence of a utility function and a probability measure such that the preference relation is represented by the expected utility of that function with respect to that probability measure. Here we defined the subjective probability directly from the coherence axioms.
+	
 	In the particular case where the algebra $\mathcal{E}$ contains only the set $\Omega$ as its only element we say that it is a decision problem without uncertainty and in this case applying the previous Theorem we obtain the decision criteria which consist in maximizing the utility function.
 	
 	The result extends previous work of \cite{von1944theory} who assumed that the decision maker knows the probabilties of the uncertain events and guarantees the existence of an utility function such that the decision maker chooses by calculating expected value of this utility function.
@@ -272,6 +281,8 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	\item For each player $i \in N$, a preference relation $\succeq_i$ defined over $A$.
 	\end{itemize}
 	\end{defi}
+
+A \textit{strategy} or action profile is an element $a \in A$.
 
 Because of the decision-making criteria shown in the last section we know that each player can replace his preferences $\succeq_i$ for a utility function $u_i$.
 
@@ -310,15 +321,21 @@ A perfect information extensive game consists of:
 \item A function $\chi : H \to 2^A$ that assigns a set  $\chi(h)$ of possible actions to be taken after a history $h$ has occurred.
 \item A function $\rho$ that assigns to every non terminal history $h$ a player $\rho(h)$ who will choose an action after history $h$ has occurred.
 \item A function $\sigma : H \times A \to H \cup Z$ that maps history-action pairs into a new  history such that  if $\sigma(h_1 , a_1) = \sigma (h_2,a_2)$ then $h_1 = h_2$ y $a_1 = a_2$
-\item For each player $i \in N$ a preference relation $\succeq_i$.
+\item For each player $i \in N$ a preference relation $\succeq_i$ defined over $Z$.
 \end{itemize}
 \end{defi}
 
 One way of visualizing this type of games is using a \textit{tree}, in which each internal nodes are identified with non-terminal histories and each one of these corresponds to a decision made by a player. Given a history $h$ in the game, which corresponds to a path in the tree, player $\rho(h)$ will choose on action from the set $\chi(h)$
 
 In this model, each player knows how did he get up to certain point (knows what history occured). To allow more generality, we consider cases where each player doesn't know how he got up to certain point; i.e., he does not know which history happen and he can't distinguish in which node is he.
-\subsubsection{Repeated Games}
-\subsubsection{Learning in Games}
+
+Since this model is about sequential decisions, it is useful for a player to define a plan of action for different scenarios, this is called a \textit{strategy}; i.e., a plan that specifies the action chosen by each player for every history after which it is his turn to act.
+
+\begin{defi}
+\end{defi}
+
+%\subsubsection{Repeated Games}
+%\subsubsection{Learning in Games}
 
 \newpage
 \section{Problem Statement}
@@ -480,7 +497,12 @@ For the proposed method to be tested in different decision problems, it is requi
 Concrete steps towards solving the problem:
 \begin{itemize}
 \item Literature review, understanding the problem, considering several models and possible solutions.
-\item Formalize the model. 
+\item Formalize the model.
+\item Studying implications of the assumption of rationality in decisiom making under uncertainty in causal environments.
+\item Propose a representation of beliefs that allow causal structure to be considered.
+\item Updating criteria for beliefs.
+\item Discovery of causal structure
+
 \end{itemize}
 \subsubsection{Publication plan}
 \begin{itemize}
