@@ -1,0 +1,127 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% a0poster Landscape Poster
+% LaTeX Template
+% Version 1.0 (22/06/13)
+%
+% The a0poster class was created by:
+% Gerlinde Kettl and Matthias Weiser (tex@kettl.de)
+% 
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a0,portrait]{a0poster}
+\usepackage[utf8]{inputenc}
+%\usepackage[spanish, mexico]{babel}
+\usepackage{multicol} % This is so we can have multiple columns of text side-by-side
+\usepackage{natbib}
+\columnsep=100pt % This is the amount of white space between the columns in the poster
+\columnseprule=3pt % This is the thickness of the black line between the columns in the poster
+
+\usepackage[svgnames]{xcolor} % Specify colors by their 'svgnames', for a full list of all colors available see here: http://www.latextemplates.com/svgnames-colors
+\usepackage{pgfgantt}
+\usepackage{times} % Use the times font
+%\usepackage{palatino} % Uncomment to use the Palatino font
+
+\usepackage{graphicx} % Required for including images
+\graphicspath{{figures/}} % Location of the graphics files
+\usepackage{booktabs} % Top and bottom rules for table
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
+\usepackage{wrapfig} % Allows wrapping text around tables and figures
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	POSTER HEADER 
+%----------------------------------------------------------------------------------------
+
+% The header is divided into three boxes:
+% The first is 55% wide and houses the title, subtitle, names and university/organization
+% The second is 25% wide and houses contact information
+% The third is 19% wide and houses a logo for your university/organization or a photo of you
+% The widths of these boxes can be easily edited to accommodate your content as you see fit
+
+\begin{minipage}[b]{0.45\linewidth}
+\begin{flushleft}
+\LARGE \color{NavyBlue} \textbf{ Acquiring causal models via reinforcement learning} \color{Black}\\ % Title
+\Large\textit{From reinforcement learning to computational psychology}\\ % Subtitle
+%\small \textbf{Mauricio Gonzalez Soto}\\ % Author(s)
+%\small \textbf{Asesor: Dr. Hugo Jair Escalante}\\
+%Email: \texttt{mauricio@inaoep.mx}
+\end{flushleft}
+\end{minipage}
+%
+\begin{minipage}[b]{0.20\linewidth}
+\begin{center}
+\includegraphics[scale=0.5]{/Users/MauricioGS1/INAOE/Primer_Semestre/Figures/logos_2.png}
+\end{center}
+\end{minipage}
+%
+\begin{minipage}[b]{0.30\linewidth}
+\begin{center}
+\large \textbf{Mauricio Gonzalez Soto}\\ % Author(s)
+\large \textbf{Asesor: Dr. Hugo Jair Escalante}\\
+Email: \texttt{mauricio@inaoep.mx}
+\end{center}
+%\includegraphics[scale=0.2]{/Users/MauricioGS1/INAOE/Comentarios/Figures/inaoe_logo.jpg}
+\end{minipage}
+
+\vspace{0.3cm} % A bit of extra whitespace between the header and poster content
+
+%----------------------------------------------------------------------------------------
+
+\begin{multicols}{3} % This is how many columns your poster will be broken into, a poster with many figures may benefit from less columns whereas a text-heavy poster benefits from more
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\color{Navy} % Navy color for the abstract
+
+\begin{abstract}
+We consider decision problems under uncertainty where the options available to a decision maker and the resulting outcome are related through a causal mechanism which is unknown to the decision maker, although he is aware of the causal nature of his environment. We study how a decision maker can learn about this causal mechanism through sequential decision making as well as using current causal knowledge inside each round in order to make better choices had he not considered causal knowledge. As proof of concept, we present an implementation of this causal decision making model and apply it in a simple scenario. We show that the model achieves a performance similar to the classic Q-learning while it also acquires a causal model of the environment. 
+\end{abstract}
+
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCCIÓN
+%----------------------------------------------------------------------------------------
+\color{SaddleBrown} % SaddleBrown color for the introduction
+\section*{Introduction}
+
+
+%----------------------------------------------------------------------------------------
+%	TRABAJO RELACIONADO
+%----------------------------------------------------------------------------------------
+
+
+\color{DarkSlateGray} % DarkSlateGray color for the rest of the content
+\section*{Related work}
+
+
+%----------------------------------------------------------------------------------------
+%	 PROBLEM SETUP
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	PROPOSED METHOD
+%----------------------------------------------------------------------------------------
+\section*{Proposed Methodl}
+
+%------------------------------------------------------------------------------------------
+% BIBLIOGRAPHY
+%------------------------------------------------------------------------------------------
+\bibliographystyle{apalike}
+\bibliography{/Users/MauricioGS1/INAOE/Propuesta/Bibliografia.bib}
+\end{multicols}
+ 
+\end{document}
