@@ -52,8 +52,7 @@
 
 \begin{minipage}[b]{0.45\linewidth}
 \begin{flushleft}
-\LARGE \color{NavyBlue} \textbf{ Acquiring causal models via reinforcement learning} \color{Black}\\ % Title
-\Large\textit{From reinforcement learning to computational psychology}\\ % Subtitle
+\LARGE \color{NavyBlue} \textbf{Playing against Nature: causal discovery for decision making under uncertainty} \color{Black}\\ % Title
 %\small \textbf{Mauricio Gonzalez Soto}\\ % Author(s)
 %\small \textbf{Asesor: Dr. Hugo Jair Escalante}\\
 %Email: \texttt{mauricio@inaoep.mx}
@@ -62,15 +61,14 @@
 %
 \begin{minipage}[b]{0.20\linewidth}
 \begin{center}
-\includegraphics[scale=0.5]{/Users/MauricioGS1/INAOE/Primer_Semestre/Figures/logos_2.png}
+\includegraphics[scale=0.2]{/Users/MauricioGS1/INAOE/Primer_Semestre/Figures/inaoe_logo.jpg}
 \end{center}
 \end{minipage}
 %
 \begin{minipage}[b]{0.30\linewidth}
 \begin{center}
-\large \textbf{Mauricio Gonzalez Soto}\\ % Author(s)
-\large \textbf{Asesor: Dr. Hugo Jair Escalante}\\
-Email: \texttt{mauricio@inaoep.mx}
+\large \textbf{M. Gonzalez-Soto, L.E. Sucar, H.J. Escalante}\\ % Author(s)
+Email: \texttt{mauricio@inaoep.mx, esucar@inaoep.mx, hugojair@inaoep.mx}
 \end{center}
 %\includegraphics[scale=0.2]{/Users/MauricioGS1/INAOE/Comentarios/Figures/inaoe_logo.jpg}
 \end{minipage}
@@ -97,7 +95,9 @@ We consider decision problems under uncertainty where the options available to a
 %----------------------------------------------------------------------------------------
 \color{SaddleBrown} % SaddleBrown color for the introduction
 \section*{Introduction}
-
+We consider uncertain environments controlled by a fixed causal mechanism and autonomous rational agents operating within.\\
+\\
+Since human beings are known to learn causal models in sequential decision making processes (\cite{sloman2006causal}, \cite{nichols2007decision}, \cite{meder2010observing}, \cite{hagmayer2013repeated}, \cite{danks2014unifying}), we propose that an autonomous agent can learn and use a causal model while interacting an uncertain environment.\\
 
 %----------------------------------------------------------------------------------------
 %	TRABAJO RELACIONADO
@@ -106,17 +106,126 @@ We consider decision problems under uncertainty where the options available to a
 
 \color{DarkSlateGray} % DarkSlateGray color for the rest of the content
 \section*{Related work}
+We are considering decision problems where after each decision made by a ration agent an outcome is observed and then an action is made over an independent instance of the problem.\\
+\\
+This setting is modelled as a \textit{bandit problem} where one out of many arms of a \textit{slot machine} is pulled, an reward observed and then an agent moves to another machine.\\
+\\
+Several algorithms exists for finding the best arm in a multi-arm bandit, such as those described in \cite{bubeck2009pure}, \cite{audibert2010best}, \cite{gabillon2012best}, \cite{agarwal2014taming} , \cite{jamieson2014lil},  \cite{jamieson2014best}, \cite{chen2015optimal}, \cite{carpentier2016tight}, \cite{russo2016simple},  \cite{kaufmann2016complexity}, but none of these works consider causal-governed environments.\\
+\\
+As far as we know \cite{lattimoreNIPS2016} is the first paper to consider causal relations between the effects of actions.They consider a decision maker who must choose the best among several possible interventions on a given causal model. 
 
+By considering a causal model which is partially known and intervening variables from the unknown part of the model \cite{sen2017identifying} extend the work of \cite{lattimoreNIPS2016}.
 
 %----------------------------------------------------------------------------------------
 %	 PROBLEM SETUP
 %----------------------------------------------------------------------------------------
+\section*{Problem setup}{\label{problem_setup}}
+Let $(\mathcal{A},\mathcal{E},\mathcal{C},\succeq)$ a Decision Problem under Uncertainty in which an agent has to choose one among several options $a \in \mathcal{A}$ which are causally related to the elements of $\mathcal{C}$ according to a Causal Graphical Model $\mathcal{G}$.\\
+\\
+The decision maker seeks to maximize her utility and we assume that she has \textit{rational preferences}, so we can substitute her preferences $\succeq$ for the expected value of a utility function $u$ (\cite{gilboa2009decision}).
 
 %----------------------------------------------------------------------------------------
 %	PROPOSED METHOD
 %----------------------------------------------------------------------------------------
-\section*{Proposed Methodl}
+\section*{Proposed Method}
+The basic idea underlying our method is that ff a decision maker does not know the underlying causal model then she can learn it by interaction.
+\\
+For the sake of explanation we consider three separate cases:
+\begin{itemize}
+\item The decision maker fully knows the causal model.
+\item The decision maker knows only the structure of the causal model.
+\item The decision maker does not know the causal model.
+\end{itemize}
 
+\subsection{The causal model is completely known}{\label{known}}
+From Pearl's do-calculus \cite{pearl2009causality} says that the effect of setting some variable $X_i$ to a value $x_j$ can be expressed as:
+\[ P(X_1,...,X_n | do(X_i = j )) = \prod_{k \neq i} P(X_k | \textrm{Pa}(X_k)). \]
+
+The decision maker can use this expression to find the probabilities for her desired value of the target variable and choose the action which achieves the highest probability.
+
+\subsection{Only the structure is known}
+To model the interaction between the decision maker and the environment, we consider a game between the decision maker and a player called Nature who will select his actions according to the causal model.\\
+\\
+Since the joint distribution of the variables in the causal model can be expressed  
+\[ \prod_j P(X_j | Pa(X_j))\]
+We can use distributions over distributions to characterize beliefs over the model, we use the $k$-dimensional Dirichlet distribution, whose support is the set of probability vectors of length $k$, which is useful since it is conjugate for itself (\cite{hjort2010bayesian}, \cite{bernardo2000bayesian}).\\
+\\
+In this way, the decision maker will have beliefs about the CPT's in the form of parameters of several Dirichlet distributions. Using the agent's current beliefs, a causal graphical model can be specified. Using this fully specified (structure + parameters) as a true model, the decision maker will make her choice as in Case 1. 
+
+
+
+%----------------------------------------------------------------------------------------
+%	Experiment
+%----------------------------------------------------------------------------------------
+
+
+\section{Test Scenario}
+Consider a patient who arrives at a hospital who can either have disease $A$ or disease $B$. The doctor can either give him some pill or send him into surgery.  Both treatments entail risks and whether the treatment cures the patient or not depends on which disease it had originally.\\
+\\
+The Causal Model is shown in Figure \ref{causal_model}.
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/Segundo_Semestre/Seminario/Semana12/codigo/causal_graph.png}}
+\captionof{figure}{Causal graphical model for the test scenario.}
+\label{causal_model}
+\end{center}
+
+The variable \textit{Lives} is the \textit{target variable} and, in this example, the only variable that can be intervened upon is the variable \textit{Treatment}. \\
+\\
+By applying the Pearl's do-calculus that the interventional distribution $P_{do(Tr)}(Y)$ is given by
+\[ P(Y | do(Tr))=P(Y | D, Tr, R)P(R | Tr) P(D). \]
+
+
+\section*{Experiment}
+As proof of concept we implemented  Case 1 and Case 2 for the test scenario and compared it with an agent performing Q-learning \cite{watkins1992q} and an agent choosing her actions at random.\\
+\\
+For the implementation, we defined a \textit{true} causal model as the one shown in Figure \ref{causal_model} using the library Pgmpy \cite{ankan2015pgmpy}.\\
+\\
+This agent will find the action that maximizes her desired value for the target variable using do-calculus. The action thus selected will be used as \textit{evidence} in the true causal model and a MAP inference will be used to simulate the most likely outcome given this action. \\
+\\
+The target variable will output a $1$ value if the patient lives. The value of the target variable will be the reward of each round.
+\subsection{Case 1: The causal model is completely known}
+
+
+\subsection{Case 2: Only the structure is known}
+We compare the performance obtained by the causal agent, a \textit{random agent} who selects his actions at random, and an agent performing Q-learning. We show the average performance over $20, 50, 100$ and $200$ rounds.\\
+\\
+In Figure \ref{20_rounds} we observe the average rewards for each agent in 20 rounds of decision making. Here we notice that Q-learning outperforms our algorithm, which has a similar performance as the random choosing procedure until round 11.
+
+\begin{center}
+\centerline{\includegraphics[scale=0.8]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/20_rounds_format.png}}
+\captionof{figure}{Average reward obtained in each round for each agent}
+\label{20_rounds}
+\end{center}
+
+
+In Figure \ref{50_rounds} we observe the average rewards for each agent in 50 rounds of decision making. Our algorithm follow closely the Q-learning agent and outperform the random agent.
+
+
+\begin{center}
+\centerline{\includegraphics[scale=0.8]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/50_rounds_format.png}}
+\captionof{figure}{Average reward obtained in each round for each agent}
+\label{50_rounds}
+\end{center}
+
+
+In Figure \ref{100_rounds} we observe the average reward obtained by the three agents in 100 rounds, where our algorithm slightly outperforms Q-Learning.
+
+\begin{center}
+\centerline{\includegraphics[scale=0.8]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/100_rounds_format.png}}
+\captionof{figure}{Average reward obtained in each round for each agent}
+\label{100_rounds}
+\end{center}
+
+In Figure \ref{200_rounds} we observe the average reward obtained by the three agents in 200 rounds. The average reward obtained is very similar for Q-learning and our algorithm.
+
+\begin{center}
+\centerline{\includegraphics[scale=0.8]{/Users/MauricioGS1/INAOE/Segundo_Semestre/CausalML_Workshop/figures/200_rounds_format.png}}
+\captionof{figure}{Average reward obtained in each round for each agent}
+\label{200_rounds}
+\end{center}
+
+
+We see that our method obtains a very similar reward as the classic Q-learning algorithm for a larger number of rounds, where the random agent is outperformed, but our model offers something extra because it learns a causal model of the environment. 
 %------------------------------------------------------------------------------------------
 % BIBLIOGRAPHY
 %------------------------------------------------------------------------------------------
