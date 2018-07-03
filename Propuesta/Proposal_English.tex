@@ -9,6 +9,7 @@
 \usepackage{amssymb,amsthm,amsmath,latexsym}
 \usepackage[margin=1.5cm]{geometry}
 \usepackage{natbib}
+\usepackage{enumitem}
 %\bibliographystyle{stylename}
 %\usepackage{fancyhdr}
 %\pagestyle{fancy}
@@ -51,6 +52,9 @@ The agent, using her current beliefs, will generate a \textit{local} causal mode
 
 Learning a causal model of the environment allows to extract high-level insights of a phenomena beyond associative descriptions of what is observed. A causal model is able to \textit{explain} why a particular decision was made since it allows to extract the causes and effects of an agent's actions. Once a causal model is acquired, an external user is able to reason about \textit{what...if...} statements that associative methods can not answer. When a decision maker chooses an action out of many, a causal model allows to ask what would've happened if another action was taken without actually performing the alternative action.
 
+Learning a causal model of a certain environment allows transferability of knowledge into similar domains.
+\subsection{Outline}
+
 \newpage
 \section{Main Concepts}
 	\subsection{Attempts to define Causality}
@@ -64,7 +68,7 @@ In some works on Causality (\cite{spirtes2000causation}, \cite{pearl2009causalit
 	
 	Even though causality is a difficult concept to grasp, we require a \textit{working} definition of causality that allows a formal language for stating and manipulating causal concepts. 
 	\subsection{Definition of Causality}
-	Causality is understood as a \textit{stochastic} relation between \textit{events}. Some event \textit{causes} another event to occurr. For example, The formal definition of Causality that will be adopted in this work is the definition provided in \cite{spirtes2000causation}.
+	Causality is understood as a \textit{stochastic} relation between \textit{events}. Some event \textit{causes} another event to occurr. The formal definition of Causality that will be adopted in this work is the definition provided in \cite{spirtes2000causation}.
 	\begin{defi}{\label{causal_relation}}
 	Let $(\Omega, \mathcal{F}, \mathbb{P})$ a finite probability space, and consider a binary relation $\to \subseteq \mathcal{F} \times \mathcal{F}$ which is:
 	\begin{itemize}
@@ -153,67 +157,74 @@ For what remains of this section, we follow \cite{bernardo2000bayesian} in his e
 	Since we are considering that a decision maker chooses an action $a \in \mathcal{A}$, and then an uncertain event $E$ will occur which will then produce the consequence $c$, we will identify actions in $\mathcal{A}$ as $a_i = \{ c_j | E_j : j \in J \}$. As a technical assumption required for all of the math to work, we require that elements of $\mathcal{C}$ belong to $\mathcal{A}$. This is achieved by adding into $A$ elements of the form $\{ c | \Omega \}$ for $c \in \mathcal{C}$. This being said, we can extend the preference relation $\succeq$ to elements of $\mathcal{C}$ and therefore indistinctively write $c_1 \succeq c_2$ for $c_1, c_2 \in \mathcal{C}$ or $a_1 \succeq a_2$ for $a_1,a_2 \in \mathcal{A}$. We require that $\mathcal{E}$ is an \textit{algebra}\footnote{An algebra of sets over $X$ is a family of sets $\mathcal{F} \subseteq \mathcal{P}(X)$ such that $X \in \mathcal{F}$, $A^c \in \mathcal{F}$ for any $A \in \mathcal{F}$ and for $A,B \in \mathcal{F}$ then $A \cup B \in \mathcal{F}$ (\cite{ash2000probability})}.	
 	\begin{defi}
 	From the prerefence relation $\succeq$ we can derive some other relations between actions:
-	\begin{itemize}
+	\begin{enumerate}[label=(\roman*)]
 	\item $a_1 \sim a_2 \Leftrightarrow a_1 \succeq a_2 \textrm{ and } a_2 \succeq a_1$
 	\item $a_1 \succ a_2 \Leftrightarrow a_1 \succeq a_2 \textrm{ and it does not hold that } a_2 \succeq a_1$.
-	\end{itemize}
+	\end{enumerate}
 	\end{defi}
-	\begin{defi}
+	\begin{defi}{\label{more_likely}}
 	A relation between events can be derived from $\succeq$ in the following way:
 	\[E \succeq F \Leftrightarrow \textrm{ for all } c_1 \succeq c_2 \textrm{ it holds that } \{ c_2 | E, c_1 | E^c \} \succeq \{ c_2 | F, c_1 | F^c \}. \]
 	In this case, we say that $F$ is \textbf{not more likely} than $E$. It can easily be shown that $\Omega \succ \emptyset$, and a relation $\sim$ for events is defined in an analog way than for consequences.
 	\end{defi}
-	\begin{defi}
+	\begin{defi}{\label{cond_pref}}
 	Given some $G \succ \emptyset$ we define a conditional preference relation $\succeq_G$ as follows:
-	\begin{itemize}
-	\item i) $a_1 \succeq_G a_2 \Leftrightarrow \textrm{ for all a } \{ a_1 | G, a | G^c \} \succeq \{ a_2 | G, a | G^c \}$.
-	\item ii) $E \succeq_G F \Leftrightarrow \textrm{ for } c_1 \succeq_G c_2 \{ c_2 | E , c_1 | E^c \} \succeq_G \{c_2 | F , c_1  | F^c \}$ 
-	\end{itemize}
+	\begin{enumerate}[label=(\roman*)]
+	\item $a_1 \succeq_G a_2 \Leftrightarrow \textrm{ for all a } \{ a_1 | G, a | G^c \} \succeq \{ a_2 | G, a | G^c \}$.
+	\item $E \succeq_G F \Leftrightarrow \textrm{ for } c_1 \succeq_G c_2 \{ c_2 | E , c_1 | E^c \} \succeq_G \{c_2 | F , c_1  | F^c \}$ 
+	\end{enumerate}
 	\end{defi}
 	\begin{defi}
 	Two events $E,F \in \mathcal{E}$ are said to be independent if and only if for all $c, c_1, c_2 \in \mathcal{C}$ it holds:
-	\begin{itemize}
+	\begin{enumerate}[label=(\roman*)]
 	\item $c \succ \{ c_2 | E, c_1 | E^c \} \Rightarrow c \succ_F \{ c_2 | E, c_1 | E^c \}	$.
 	\item $c \succ \{ c_2 | F, c_1 | F^c \} \Rightarrow c \succ_E \{ c_2 | F, c_1 | F^c \}	$
-	\end{itemize}
+	\end{enumerate}
 	\end{defi}
 	\subsubsection{Axioms of Coherence}
 	We require the following axioms for the preference relation $\succeq$ which we will call Axioms of Coherence or Rationality, and define a Rational decision maker as a decision maker who will choose according to a preference relation and whose preferences satisfy the axioms (\cite{bernardo2000bayesian}, \cite{gilboa2009decision}).\\
 	\\
-	\indent \textbf{Axiom 1}.
-	\begin{itemize}
-	\item i) There exists consequences $c_1$, $c_2$ such that $c_1 \succ c_2$.
-	\item ii) For all consequences $c_1, c_2$ and events $E,F \in \mathcal{E}$ either $\{  c_2 | E , c_1 | E^c\} \succeq \{ c_2 | F, c_1 | F^c \}$ or $\{ c_2 | F, c_1 | F^c \} \succeq \{  c_2 | E , c_1 | E^c\}$
-	\end{itemize}
+	\indent \textbf{Axiom 1: Comparability}.
+	\begin{enumerate}[label=(\roman*)]
+	\item There exists consequences $c_1$, $c_2$ such that $c_1 \succ c_2$.
+	\item For all consequences $c_1, c_2$ and events $E,F \in \mathcal{E}$ either $\{  c_2 | E , c_1 | E^c\} \succeq \{ c_2 | F, c_1 | F^c \}$ or $\{ c_2 | F, c_1 | F^c \} \succeq \{  c_2 | E , c_1 | E^c\}$
+	\end{enumerate}
+	We require that the decision maker is able to strictly prefer at least one action over another, because if this weren't the case then there would not be a decision problem, since any action would lead to the same consequence. It is also required that the decision maker has preferences over simple options.
 	
-	\textbf{Axiom 2}.
-	\begin{itemize}
-	\item i) $a \succeq a$ for all $a \in \mathcal{A}$.
-	\item ii) If $a \succeq b$ and $b \succeq c$ for $a,b,c \in \mathcal{A}$, then $a \succeq c$.
-	\end{itemize}
+	\textbf{Axiom 2: Transitivity}.
+	\begin{enumerate}[label=(\roman*)]
+	\item $a \succeq a$ for all $a \in \mathcal{A}$.
+	\item If $a \succeq b$ and $b \succeq c$ for $a,b,c \in \mathcal{A}$, then $a \succeq c$.
+	\end{enumerate}
+	Even though transitivity is a very intuitive requirement, its necessity is better explained in terms of \textit{money pumps}: consider $c_1, c_2$ and $c_3$ such that $c_1 \succ c_2$ and $c_2 \succ c_3$ but $c_3 \succ c_1$. In this case, the decision maker would be willing to pay a strictly positive ammount to have $c_3$ over $c_1$, and to pay $y>0$ to have $c_2$ rather than $c_3$, and an amount $z>0$ in order to have $c_1$ rather than $c_2$, and then again to pay to have $c_3$ over $c_1$...
 	
-	\textbf{Axiom 3}
-	\begin{itemize}
-	\item i) If $a_1 \succeq a_2$ then for all $G \succ \emptyset$ $a_1 \succeq_G a_2$.
-	\end{itemize}
+	\textbf{Axiom 3: Consistency.}
+	\begin{enumerate}[label=(\roman*)]
+	\item If $a_1 \succeq a_2$ then for all $G \succ \emptyset$ $a_1 \succeq_G a_2$.
+	\item If for some $c_1 \succ c_2$ it holds that $\{ c_2 | E, c_1 | E^c \} \succeq \{ c_2 | F, c_1 | F^c \}$ then $E \succeq F$.
+	\item If for some $c \in \mathcal{C}$ and $G \succ \emptyset$ it holds that $\{ c_1 | G, c | G^c \} \succeq \{c_2 | G, c | G^c  \}$ then $c_1 \succeq_G c_2$.
+ 	\end{enumerate}
+    The intuition behind condition (i) is that preferences between \textit{pure} consequences should not be affected by information about the uncertain events in $\mathcal{E}$. Conditions (ii) and (iii) make definitions \ref{more_likely} and \ref{cond_pref} well defined concepts. In particular, condition (ii) formalises the idea that preferences should not depend on relative likelihood. Condition (iii) commonly known as the \textit{sure thing principle} (\cite{bernardo2000bayesian}).
 	
-	\textbf{Axiom 4.}\\
+	\textbf{Axiom 4: Existence of Standard Events.}\\
 	There exists a sub-algebra $\mathcal{S}$ of $\mathcal{E}$ and a function $\mu : \mathcal{S} \to [0,1]$ such that:
-	\begin{itemize}
-	\item i) $S_1 \succeq S_2$ if and only if $\mu(S_1) \succeq \mu(S_2)$.
-	\item ii) If $S_1 \cap S_2 = \empty$ then $\mu(S_1 \cup S_2) = \mu(S_1) + \mu(S_2)$.
-	\item iii) For any number $\alpha \in [0,1]$ and independent events $E,F$, there is an event $S$, which is called a standard event, such that $\mu(S)=\alpha$ and $S$ is independent from $E$ and from $F$.
+	\begin{enumerate}[label=(\roman*)]
+	\item $S_1 \succeq S_2$ if and only if $\mu(S_1) \succeq \mu(S_2)$.
+	\item If $S_1 \cap S_2 = \empty$ then $\mu(S_1 \cup S_2) = \mu(S_1) + \mu(S_2)$.
+	\item For any number $\alpha \in [0,1]$ and independent events $E,F$, there is an event $S$, which is called a \textit{standard event}, such that $\mu(S)=\alpha$ and $S$ is independent from $E$ and from $F$.
 	\item iv) If $S_1$ is independent from $S_2$ then $\mu(S_1 \cap S_2)=\mu(S_1)\mu(S_2)$.
 	\item v) If $E$ independent of $S$, $S$ independent from $F$ and $E$ independent from $F$ then $E \sim S$ implies that $E \sim_F S$.
-	\end{itemize}
+	\end{enumerate}
+	This axioms means that the decision maker has a \textit{mental procedure} to generate a probability distribution where one event is more likely than other if and only if it has a higher probability. From the previous axioms, the preferences and uncertainties of a decision maker can be quantified up to small intervals, but in order to assign a unique value the following axiom is required.
 	
-	\textbf{Axiom 5.}
-	\begin{itemize}
-	\item i) If $c_1 \succeq c \succeq c_2$ then there exists a standard event $S$ such that $c \sim \{ c_2 | S, c_1 | S^c \}$.
-	\item ii) For each event $E$ there exists a standard event $S$ such that $E \sim S$.
-	\end{itemize}
+	\textbf{Axiom 5: Precise measurement.}
+	\begin{enumerate}[label=(\roman*)]
+	\item If $c_1 \succeq c \succeq c_2$ then there exists a standard event $S$ such that $c \sim \{ c_2 | S, c_1 | S^c \}$.
+	\item For each event $E$ there exists a standard event $S$ such that $E \sim S$.
+	\end{enumerate}
 	
-	For interpretations and critiques of the axioms we refer the reader to \cite{bernardo2000bayesian}, \cite{binmore2008rational}, \cite{gilboa2009decision}, \cite{wakker2010prospect}, \cite{peterson2017introduction}.
+	
+	For a larger discussion, critiques and extensions of the axioms we refer the reader to \cite{bernardo2000bayesian}, \cite{binmore2008rational}, \cite{gilboa2009decision}, \cite{wakker2010prospect}, \cite{peterson2017introduction}.
 	\subsubsection{Subjective Probability and Utility}
 Subjective probability is a well defined mathematical object that, contrary to the frequentist approach to probability, represents the degree of belief an agent has over the occurrence of some phenomena. Frequentist probability can not answer questions like \textit{what is the probability of a war in the middle east?} since it is not a phenomena that can be repeated infinite times in an independent way (\cite{gilboa2009decision}, \cite{peterson2017introduction}).
 
@@ -226,7 +237,7 @@ Subjective approachs to probability were developed by Bruno De Finetti (\cite{de
 	
 Not every belief about uncertainties can be represented by a probabiity measure, a subjective degree of belief for an agent must be rational as will be shown soon.	
 	
-	As a technical requirement we need to consider two extra options, one that is preferred over every other consequence, which will be denoted as $c^\ast$ and other consequence $c_\ast$ which  the agent prefers every other consequence before $c_\ast$. This consequences need not have an interpretation, but they can be thought of as \textit{heaven} and \textit{hell} respectively for obvious (at lest in the Western hemisphery) reasons. Critiques of this extra technical consequences can be found in \cite{binmore2008rational}, \cite{peterson2017introduction}.
+	As a technical requirement we need to consider two extra options, one that is preferred over every other consequence, which will be denoted as $c^\ast$ and other consequence $c_\ast$ which  the agent prefers every other consequence before $c_\ast$. This consequences need not have an interpretation, but they can be thought of as \textit{heaven} and \textit{hell} respectively for obvious (at lest in the Western hemisphery) reasons. Critiques of these extra technical consequences can be found in \cite{binmore2008rational}, \cite{peterson2017introduction}.
 	\begin{defi}
 	Consequences $c^\ast$ and $c_\ast$ are called respectively best and worst (extreme consequences) if for any other consequence $c \in \mathcal{C}$ then $c^\ast \succeq c \succeq c_\ast$. Decision problems in which we add extreme consequences are called bounded decision problems.
 	\end{defi}
@@ -236,11 +247,11 @@ Not every belief about uncertainties can be represented by a probabiity measure,
 	\subsubsection{Decision Criteria for Decision Problems}
 	\begin{prop}
 	For any bounded decision problem with extreme consequences $c_\ast$ and $c^\ast$ it holds:
-	\begin{itemize}
-	\item i) For all $c \in \mathcal{C}$, $u(c | c_\ast, c^\ast)$ exists and is unique.
-	\item ii) The value of $u(c | c_\ast, c^\ast)$ is unafected by the occurrence of any event $G \succ \emptyset$.
-	\item iii) $0 = u(c_\ast | c_\ast, c^\ast) \leq u(c | c_\ast, c^\ast) \leq u(c^\ast | c_\ast, c^\ast) = 1$.
-	\end{itemize}
+	\begin{enumerate}[label=(\roman*)]
+	\item For all $c \in \mathcal{C}$, $u(c | c_\ast, c^\ast)$ exists and is unique.
+	\item The value of $u(c | c_\ast, c^\ast)$ is unafected by the occurrence of any event $G \succ \emptyset$.
+	\item $0 = u(c_\ast | c_\ast, c^\ast) \leq u(c | c_\ast, c^\ast) \leq u(c^\ast | c_\ast, c^\ast) = 1$.
+	\end{enumerate}
 	\end{prop}
 	\begin{defi}
 	For a bounded decision problem and any event $G \succ \emptyset$ and $a = \{ c_j | E_j : j \in J \}$ we define the conditional expected utility of $a$ as
@@ -255,7 +266,7 @@ Not every belief about uncertainties can be represented by a probabiity measure,
 	\begin{proof}
 	See \cite{bernardo2000bayesian} Chapter 2 “Foundations”, Proposition 2.22.
 	\end{proof}
-	This result means that for any decision maker whose preferences satisfies axioms 1 through 5 the only election criteria that is compatible with the axioms is the maximization of expected utility and thus establishes a \textit{normative} criteria for decision making for rational agents. Of course, this result establishes a complete ordering of the options, but it does not guarantees the existence of an option for which the expected utility is maximum and further mathematical assumptions are required over the utility function $u$ in order to guarantee the existence of the maxmimum utility option (\cite{bernardo2000bayesian}).
+	This result means that for any decision maker whose preferences satisfies axioms 1 through 5 the only election criteria that is compatible with the axioms is the maximization of expected utility and thus establishes a \textit{normative} criteria for decision making for rational agents. This result establishes a complete ordering of the options, but it does not guarantees the existence of an option for which the expected utility is maximum and further mathematical assumptions are required over the utility function $u$ in order to guarantee the existence of the maxmimum utility option (\cite{bernardo2000bayesian}).
 	
 	Notice that the expectations are taken with respect to the subjective probability measure, and in fact Savage's general result as stated in \cite{gilboa2009decision} guarantees the existence of a utility function and a probability measure such that the preference relation is represented by the expected utility of that function with respect to that probability measure. Here we defined the subjective probability directly from the coherence axioms.
 	
@@ -263,9 +274,7 @@ Not every belief about uncertainties can be represented by a probabiity measure,
 	
 	The result extends previous work of \cite{von1944theory} who assumed that the decision maker knows the probabilties of the uncertain events and guarantees the existence of an utility function such that the decision maker chooses by calculating expected value of this utility function.
 	\subsection{Game Theory}
-	A \textit{game} arises when two or more \textit{rational} decision makers, or players, have to make decisions in a situation in which the outcome for each player is partly determined by the choices of other players (\cite{binmore2008rational}).
-	
-	Game Theory is an area of Mathematics which is used to model games. The basic assumptions of the theory is that each decision maker is rational, and they take into account their knowledge or expectations of other decision makers behavior.
+	A \textit{game} arises when two or more \textit{rational} decision makers, or players, have to make decisions in a situation in which the outcome for each player is partly determined by the choices of other players (\cite{binmore2008rational}). Game Theory is an area of Mathematics which is used to model games. The basic assumptions of the theory is that each decision maker is rational, and they take into account their knowledge or expectations of other decision makers behavior.
 	
 	In this section we will review the basic models of Game Theory that are required to this thesis proposal, which are the normal-form game, and the extensive-form game. 
 	\subsubsection{Building blocks}{\label{basic_models}}
@@ -362,12 +371,12 @@ Since this model is about sequential decisions, it is useful for a player to def
 	\subsection{Research Question}
 	How a rational decision maker who faces an uncertain environment which is governed by a causal mechanism can learn and make use of this causal structure in order to make good choices? How can causal structure help a decision maker in order to guide his learning process?
 	\subsection{Hypothesis}
-	Let $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$, by repeatedly making decisions he can learn causal information and use it to find the optimal action (in the sense of expected utility theory) in less, or equal, rounds than if he doesn't consider causal information.
+	Let $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. Then, if a decision maker doesn't know the probabilities of the uncertain events in $E$, by repeatedly making decisions he can learn a causal model of the environment and use it to find the optimal action (in the sense of expected utility theory) in less, or equal, rounds than if he doesn't consider causal information.
 	\subsection{Objectives}
 		\subsubsection{General Objectives}
-			The proposed research has as a general objective to find how a rational autonomous agent who faces an uncertain environment can discover and use causal information in order to make good choices that point towards a concise objective such as the maximization of some function.
+			The proposed research has as a general objective to find how a rational autonomous agent who faces an uncertain environment can discover and use causal information in order to make good choices that maximize the expected utility for the decision maker.
 		\subsubsection{Specific Objectives}
-		In order to achieve the General Objective, we need to separate it into smaller problems which are required to be solved first. In first place, it is required to find a general way of defining a game that captures the interaction between a decision maker and a causal-governed environment.
+		In order to achieve the general objective, we need to separate it into smaller problems which are required to be solved first. In first place, it is required to find a general way of defining a game that captures the interaction between a decision maker and a causal-governed environment.
 		
 		In second place, to find a family of distributions that represent any past knowledge and current beliefs about the causal structure of the environment and a way to use these beliefs in order to make choices according to the decision maker's preferences. 
 		
@@ -506,7 +515,7 @@ Concrete steps towards solving the problem:
 \end{itemize}
 \subsubsection{Publication plan}
 \begin{itemize}
-\item Gonzalez-Soto, M., Sucar, L.E., Escalante, H.J., \textbf{Playing against Nature: causal discovery for decision making under uncertainty}. Accepted for a poster presentation at the CausalML 2018 workshop at ICML / IJCAI / AAMAS 2018. July 15 2018, Stockholm, Sweden.
+\item Gonzalez-Soto, M., Sucar, L.E., Escalante, H.J., \textbf{Playing against Nature: causal discovery for decision making under uncertainty}. Accepted for a poster presentation at the CausalML 2018 workshop at ICML / IJCAI / AAMAS 2018. July 15 2018, Stockholm, Sweden. This can be confirmed at \url{https://sites.google.com/site/faim18wscausalml/program-schedule}
 \end{itemize}
 
 \newpage
