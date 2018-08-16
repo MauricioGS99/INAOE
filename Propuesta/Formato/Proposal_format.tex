@@ -527,6 +527,12 @@ Notice that these papers consider learning while interacting with a causal envir
 \newpage
 \section{Methodology}
 In this section we describe the steps that are to be followed in order to answer the Hypothesis.
+\subsection{A guiding principle for a Causal Decision Problem}
+We propose the following principle as a normative guide for how causal information must be used in order to find a solution to a decision problem that is rational. We consider only the case where the decision maker's utility is given by the outcome of a $\{0,1 \}$-binary variable.
+\begin{prop}
+Let  $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem under uncertainty whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. Let $Y$ a variable in $\mathcal{G}$ the variable whose realizations correspond to the consequences of the decision problem once the agent has chosen an action $a \in \mathcal{A}$ and assume that $Y$ only takes values in the set $\{ 0,1\}$ where $1$ is a more desired outcome for the agent. Then, the $\textit{solution}$ for this decision problem is given by the action $a^\ast \in mathcal{A}$ that satisfies:
+\[ P(Y=1 | do(a^\ast) \geq P(Y=1 | do(a)) \textrm{ for all } a \in \mathcal{A}. \]
+\end{prop}
 \subsection{Modelling a Decision Problem under Uncertainty as a Game}
 Consider a decision problem under uncertainty $(\mathcal{A},\mathcal{E},\mathcal{C},\succeq)$ where the available actions $\mathcal{A}$ to a decision maker are causally related to the outcomes $\mathcal{C}$ and this causal relations are captured by a Causal Graphical Model $\mathcal{G}$. The Causal model is assumed to remain fixed and unknown to the decision maker, who is assumed to be rational and aware of the causal nature of the decision problem he faces.  
 
