@@ -6,6 +6,7 @@
 %\special{papersize=8.5in,11in}% This command prevents the use of other paper size in the dvi2ps conversion
 %------Document properties------------
 \usepackage{setspace}
+\usepackage{pdfpages}
 \usepackage{pgfgantt}
 \usepackage{enumitem}
 %------math packages-------------------
@@ -151,15 +152,17 @@ The proposed way for an agent to learn from repeated interactions is by giving h
 
 %The agent, using her current beliefs, will generate a \textit{local} causal model and choose an action from it as if that model was the true one. Then, after she observes the consequences of her actions, her beliefs will be updated according to the observed information in order to make a better choice the next time. The agent, besides learning a policy to choose actions will also learn a causal model from the environment since the causal model she forms will approximate the true model.
 
-Learning a causal model of the environment allows to extract high-level insights of a phenomena beyond associative descriptions of what is observed. A causal model is able to \textit{explain} why a particular decision was made since it allows to extract the causes and effects of an agent's actions. Once a causal model is acquired, an external user is able to reason about \textit{what...if...} statements that associative methods can not answer. When a decision maker chooses an action out of many, a causal model allows to ask what would've happened if another action was taken without actually performing the alternative action.
+Learning a causal model of the environment allows to extract high-level insights of a phenomena beyond associative descriptions of what is observed. A causal model is able to \textit{explain} why a particular decision was made since it allows to extract the causes and effects of an agent's actions. Once a causal model is acquired, an external user is able to reason about \textit{what...if...} statements that associative methods can not answer. When a decision maker chooses an action out of many, a causal model allows to ask what would've happened if another action was taken without actually performing the alternative action. It is important to be careful when using the word \textit{explanation} since it allows for several uses in language, here we understand \textit{explanation} as used by \cite{woodward2005making} who considers explanations where what is explained depends on other factors via some relationship that holds as a matter of empirical fact rather than \textit{logical} reasons.
 
-Learning a causal model of a certain environment allows transferability of knowledge into similar domains because the underlying cause-effect structure has been captured and could later be used.
+Learning a causal model of a certain environment would allow transferability of knowledge into similar domains because the underlying cause-effect structure has been captured and could later be used.
 \subsection{Outline}
 In the Section \ref{Main_Concepts} the main concepts that serve as a foundation for this work will be described; in particular, we will describe in detail what causality means. Since this research proposal asumes that a causal model governs an environment, a precise definition of causality will be given along with the mathematical machinery to perform causal inference. Also, since the entity that will be facing causal environments is a \textit{rational} decision maker we will precisely define, axiomatically, what does rationality means and which are the main theories of rational decision making. Finally, since interactive learning is considered, we will describe a mathematical theory which is suitable to modelling interaction between rational decision makers.
 
 After the main concepts have been exposed, in Section \ref{Problem_Statement} a more precise statement of the problem that we propose to attack will be given, along with the Hypothesis that we attempt to defend and believe that is the answer to the problem.
 
 Once the main problem has been stated, we proceed in Section \ref{Related_Work} to show previous attempts over this and similar problems. 
+
+Finally, we state the proposed solution for the problem as well as showing results of experiments performed which implement a small toy example. 
 
 \newpage
 \section{Main Concepts}{\label{Main_Concepts}}
@@ -172,7 +175,7 @@ Several definitions of Causality exist in diverse contexts with diverse applicat
 	
 In some works on Causality (\cite{spirtes2000causation}, \cite{pearl2009causality}) the term \textit{causality} is defined in terms of common language and then the mathematical machinery required to model causality is provided. In this way, causality becomes defined as what is modeled by causal models, which are themselves defined as to model causality. This apparent circularity is deeply studied by \cite{woodward2005making}. In fact, Judea Pearl never gives a formal definition of causality, rather he prefers to build the machinery required to answer \textit{causal queries} (\cite{pearl2009causality}, \cite{pearl2018theoretical}). Causality, as probability, can be thought of either as an objective phenomena that \textit{exists} in the environment, or as a mental construct that enables us to handle complex situations.
 	
-Even though causality is a difficult concept to grasp, we require a \textit{working} definition of causality that allows a formal language for stating and manipulating causal concepts. 
+Since causal claims in common language can have different logical form, in this work we give a \textit{working} definition of causality that allows a formal language for stating and manipulating causal concepts and we will take the given definition as axiomatic. 
 	\subsection{Definition of Causality}
 	Causality is understood as a \textit{stochastic} relation between \textit{events}. Some event (or events) \textit{causes} another event to occurr. 
 	The formal definition of Causality that will be adopted in this work is the definition provided in \cite{spirtes2000causation}.
@@ -202,7 +205,7 @@ Even though causality is a difficult concept to grasp, we require a \textit{work
 	\item Causal Minimality: No proper sub-graph of $\mathcal{G}$ satisfies the Markov Causality condition.
 	\item Causal Faithfulness: The Markov Causal condition contains all of the conditional independence statements expressed by the DAG $\mathcal{G}$.
 	\end{itemize}
-	Also, an extra condition, known as Causal Sufficiency, about the nature of the model itself is considered: for any variable $X$ in the model $\mathcal{G}$ there are no causes of $X$ outside of the model $\mathcal{G}$ (\cite{spirtes2000causation}, \cite{pearl2009causality}, \cite{sucar2015probabilistic}).
+	Also, an extra pair of conditions, the first one known as Causal Sufficiency, which is about the nature of the model: for any variable $X$ in the model $\mathcal{G}$ there are no causes of $X$ outside of the model $\mathcal{G}$ (\cite{spirtes2000causation}, \cite{pearl2009causality}, \cite{sucar2015probabilistic}). The second required condition is that the causal mechanism remains unchanged after interventions, this is called in (\cite{woodward2005making}) as \textit{invariantness}, this basically means that an interventor does not \textit{breaks} the causal mechanism when intervening upon it.
 	This conditions are required in an axiomatic fashion so they will be taken as they are without questioning.
 	\subsection{Causal Graphical Models}
 	A causal graphical model (CGM) consists of a set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, an acyclic directed graph (DAG) whose nodes are in correspondence with the variables in $\mathcal{X}$ and whose edges represent relations of cause-effect. Also, the model, which up to this point is nothing more than a Bayesian Network with causal semantics, is enriched with an operator named $do()$ which is defined over graphs and whose action is described as follows: given $\mathbf{X} \subseteq \mathcal{X}$ and $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$ the action $do(\mathbf{X} = \mathbf{x} )$ corresponds to assign to each $X_j \in \mathbf{X}$ the value $x_{x_{i_j}}$ and to delete every incoming edges into the node corresponding to each $X_j$ in the graph $\mathcal{G}$ (\cite{koller2009probabilistic}, \cite{sucar2015probabilistic}) To apply the $do()$ operator over a variable (or set of variables) is also called as an \textit{intervention} over the variable. It is this interventional operator which separates associative models from causal models, since it provides the solution of the “probability raising” attempts to define causality, since if $X$ is a cause for $Y$ then $P(Y | do(X)) > P(Y)$ (\cite{pearl2018why}).
@@ -769,6 +772,8 @@ If the decision maker knew which variables appear in the true model that governs
 
 Belief updating using causal information when the decision maker doesn't know the structure of the model nor its parameters is yet to be studied and left as future work. 
 
+\newpage
+\includepdf[pages=-]{paper_arxiv.pdf}
 
 %------------- References --------------------
 \singlespacing
@@ -776,7 +781,7 @@ Belief updating using causal information when the decision maker doesn't know th
 \bibliographystyle{apalike}
 \bibliography{/Users/MauricioGS1/INAOE/Propuesta/Bibliografia.bib}
 
-%------------- References --------------------
+%------------- Apendice --------------------
 
 
 \end{document}
