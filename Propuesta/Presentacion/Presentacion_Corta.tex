@@ -364,7 +364,9 @@ About my Proposed Research
 	\frametitle{Specific Objectives}
 	In order to reach the General Objective we must:
 	\begin{enumerate}
-	
+	\item Game between agent and Nature in order to modell agent-environment interaction.
+	\item Find an adequate family of probability distributions that encode causal knowledge.
+	\item General belief-updating criteria in terms of causal information.
 	\end{enumerate}
 	\end{frame}
 	
@@ -519,8 +521,57 @@ If the model is completely unknown, two ideas appear:
 \end{frame}
 
 \section{Working and Publications Plan}
+\begin{frame}
+Working and Publications Plan
+\end{frame}
 \subsection{Working Plan}
-\subsection{Publications}
+\begin{frame}
+\frametitle{Working Plan}
+\begin{enumerate}
+\item Literature Review.
+\item Studying implications of the rationality assumption for decision making under uncertainty in causal environments.
+\item Formalization of a Causal Decision Problem.
+\item Propose a representation of beliefs that allow causal structure to be considered.
+\item Propose and evaluate an updating criteria for causal beliefs that can be updated according to new information when involved variables are known.
+\item Study the problem of on-line causal discovery (fully unknown model). Convergence of proposed solution.
+\end{enumerate}
+\end{frame}
+
+\subsection{Publications Plan}
+\begin{frame}
+\frametitle{Publications Plan}
+\begin{itemize}
+\item \textbf{Year 1:} Gonzalez-Soto, M., Sucar, L.E., Escalante, H.J., \textbf{Playing against Nature: causal discovery for decision making under uncertainty}. Presented at \textbf{CausalML 2018 Workshop at ICML 2018}. July 15 2018, Stockholm, Sweden. The paper can be found at \url{https://arxiv.org/abs/1807.01268}.
+\item \textbf{Year 2:} Conference Paper 2 
+		\begin{itemize}
+		\item The implications of Causal Relations for Decision Making: a general principle for Decision under Uncertainty.
+		\item Possible Forum: Beyond Curve Fitting: Causation, Counterfactuals, and Imagination-based AI. AAAI Spring Symposium, March 25-27, 2019, Stanford, CA
+		\end{itemize}
+\item \textbf{Year 2:} Conference Paper 3 and 4
+	\begin{itemize}
+	\item When a causal model is unknown but the involved variables are known, how to encode uncertainties about causal structure in a probabilistic distribution? Bayesian Nonparametric prior that explicitly represents causal structure.
+	\item When variables of the environment are unknown how to encode prior beliefs and how to update them when data is not fully observed.
+	\item Possible Forum: International Conference on Bayesian Nonparametrics, International Conference on Probabilistic Graphical Models.
+	\end{itemize}
+\item \textbf{Year 3:} Journal Paper
+		\begin{itemize}
+			\item Aim: Theoretical paper of results for on-line causal learning.
+		\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Gantt Diagram}
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Propuesta/presentacion/Gantt.png}
+\caption{Causal graphical model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
+\label{causal_model}
+\end{center}
+\vskip -0.2in
+\end{figure}
+\end{frame}
 
 \section{Some Results}
 \begin{frame}
