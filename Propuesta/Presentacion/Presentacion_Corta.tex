@@ -15,7 +15,7 @@
 \usepackage{amssymb,amsthm,amsmath,latexsym}
 \usepackage{natbib}
 \theoremstyle{plain}
-\newtheorem{teo}{Teorema}
+\newtheorem{teo}{Theorem}
 \newtheorem{prop}[teo]{Proposition}
 \newtheorem{defi}[teo]{Definition}
 \newtheorem{obs}[teo]{Observation}
@@ -30,7 +30,7 @@
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
 
-\title[Short title]{Use and acquisition of causal knowledge in a decision making process} % The short title appears at the bottom of every slide, the full title is only on the title page
+\title[Causally Choosing]{Use and acquisition of causal knowledge in a decision making process} % The short title appears at the bottom of every slide, the full title is only on the title page
 
 \author{Mauricio Gonzalez Soto} % Your name
 \institute[INAOE] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
@@ -86,6 +86,7 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 \begin{itemize}
 \item \cite{hagmayer2013repeated} show how human beings use and modify causal information.
 \item Both \cite{hohwy2013predictive}, \cite{clark2015surfing}, assert that the brain itself is a causal hypothesis tester. 
+\item While Danks \cite{danks2014unifying} argues that cognitive processes (including causal reasoning) take place in the mind as graphical models, Tenenbaum's school argues that the mind uses hierarchical bayesian inference (\cite{kemp2010learning}).
 \end{itemize}
 \end{frame}
 
@@ -94,7 +95,8 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 \begin{itemize}
 \item Consider a \textit{rational} decision maker in an uncertain environment.
 \item Consequences of actions can not be predicted.
-\item We add an extra to the environment: causal structure. 
+\item We add an extra to the environment: causal structure.
+\item This means that there exists a fix but unknown causal model that governs the environment where the agent lives.
 \end{itemize}
 \end{frame}
 
@@ -103,7 +105,8 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 \begin{itemize}
 \item Causal models encode cause-effect relations. 
 \item Relations are encoded in a graph.
-\item Can be used to predict \textit{effects} of certain causes.
+\item Can be used to predict \textit{effects} of certain causes without necessarily performing the action.
+\item They allow to \textit{imagine} what would happen if...
 \end{itemize}
 \end{frame}
 
@@ -121,7 +124,7 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 \begin{frame}
 \frametitle{Our Proposal}
 \begin{itemize}
-\item Current decision-making theories do not consider causal structure in the decision making processes
+\item Current decision-making theories do not consider causal structure in decision making processes
 \item We \textbf{propose} an autonomous rational agent who can use and learn causal information while interacting with its environment.
 \end{itemize}
 \end{frame}
@@ -131,12 +134,16 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 \frametitle{Concepts}
 Concepts and Framework:
 \begin{enumerate}
-\item Causal Models
-\item Decision Problems
+\item Causal Models.
+\item Decision Problems.
 \end{enumerate}
 \end{frame}
 
 \subsection{Causal Models}
+		\begin{frame}
+		\frametitle{Causal Models}
+		Causality and Causal Models:
+		\end{frame}
 		\begin{frame}
 		\frametitle{Difference between causal and associative relations}
 		\begin{itemize}
@@ -154,22 +161,22 @@ Concepts and Framework:
 		\begin{itemize}
 		\item Transitive: if $A \to B$ and $B \to C$ for $A,B,C \in \mathcal{F}$ then $A \to C$.
 		\item  Irefflexive: for each $A \in \mathcal{F}$ it is not true that $A \to A$.
-		\item Antisymetric: For $A, B \in \mathcal{F}$, if $A \to B$, then it is not true that $B \to A$.
+		\item Antisymetric: for $A, B \in \mathcal{F}$, if $A \to B$, then it is not true that $B \to A$.
 		\end{itemize}
-		If $A \to B$ we will say that $A$ is a cause of $B$.
+		If $A \to B$ we will say that $A$ is \textbf{a cause} of $B$.
 		\end{defi}
 		\end{frame}
 		
 		\begin{frame}
 		\frametitle{From Graphs to Probability Measures}
-		Given a Directed Acyclic Graph, one can build the probability distribution $P_\mathcal{G}$ that expresses the relations of the graph. We require that this measure satisfies:
+		Given a Directed Acyclic Graph, one can build the probability distribution $P_\mathcal{G}$ that expresses the relations of the graph (\cite{koller2009probabilistic}). \\
+		We require, as axioms, that this measure satisfies:
         \begin{itemize}
         \item Causal Markov Condition.
         \item Causal Minimality.
          \item Causal Faithfulness.
          \item Causal Sufficiency
         \end{itemize}
-         This requirements will be treated in an axiomatic fashion.
 		\end{frame}
 		
 	\begin{frame}
@@ -186,8 +193,11 @@ Concepts and Framework:
 
 \subsection{Decision Problems}
 	\begin{frame}
+	Decision Problems and Rational Thinking.
+	\end{frame}
+	\begin{frame}
 	\frametitle{Decision Problems}
-	A decision problem is composed by (\cite{bernardo2000bayesian}):
+	A decision problem is composed by (\cite{bernardo2000bayesian}, \cite{gilboa2009decision}):
 	\begin{itemize}
 	\item A set of available options $\mathcal{A}$.
 	\item A (rational) decision maker with preference relation $\succeq$ defined over $\mathcal{A} \times \mathcal{A}$.
@@ -207,7 +217,14 @@ Details can be found at \cite{bernardo2000bayesian}, \cite{gilboa2009decision}.
 
 \section{Research Problem}
 \begin{frame}
-About my Proposed Research
+About my Proposed Research:
+\begin{enumerate}
+\item Motivation.
+\item Justification.
+\item Research Questions.
+\item Problem Statement.
+\item Hypothesis.
+\end{enumerate}
 \end{frame}
 	\subsection{Motivation}
 	\begin{frame}
@@ -222,7 +239,7 @@ About my Proposed Research
 	\begin{itemize}
 	\item It is known that human beings conceive their actions on the world as \textit{intervening} in the world (\cite{hagmayer2009decision}).
 	\item Following this idea, \cite{lattimoreNIPS2016} consider decision problems where the action to be chosen is an intervention over a known causal graphical model.
-	\item What about not knowing the causal model? 
+	\item What about \textbf{not knowing} the causal model? 
 	\end{itemize}
 	\end{frame}
 	
@@ -232,12 +249,12 @@ About my Proposed Research
 	\begin{itemize}
 	\item Many real-world applications of decision making are solved by \textit{associative} methods.
 	\item Associative methods capture only statistical patterns that are found in data.
-	\item Methods based in Deep Neural Networks aren't supposed to explain why a certain output was produced since those methods are based in \textit{parallel distributed representations}.
+	\item As an example, methods based in Deep Neural Networks aren't even supposed to explain why a certain output was produced since those methods are based in \textit{parallel distributed representations}.
 	\end{itemize}
 	\end{frame}
 	
 	\begin{frame}
-	\frametitle{Justification: Need for nterpretable decision-making models}
+	\frametitle{Justification: Need for interpretable decision-making models}
 	\begin{itemize}
 	\item Current methods for Decision Making are based in Reinforcement Learning, and specifically in Deep Reinforcement Learning. 
 	\item Although good performance in the task, they can not explain \textit{why} a specific trajectory was chosen by the algorithm.
@@ -248,7 +265,7 @@ About my Proposed Research
 	\begin{frame}
 	\frametitle{Justification: Explaining why}
 	\begin{itemize}
-	\item On the other hand, learning a causal model of an environment and using it to act upon the environment allows to \textit{explain} aspects of the model that a purely associative model would not be abel to explain. 
+	\item On the other hand, learning a causal model of an environment and using it to act upon the environment allows to \textit{explain} aspects of the model that a purely associative model would not be able to explain. 
 	\item It allows to ask \textit{why}.
 	\item Transferability
 	\end{itemize}
@@ -289,16 +306,20 @@ About my Proposed Research
 \section{Approaches and Related Work}
 \begin{frame}
 \frametitle{Approaches and Related Work}
+Approaches and Related Work:
+\end{frame}
+\begin{frame}
+\frametitle{Approaches and Related Work}
 \begin{figure}[ht]
 \vskip 0.2in
 \begin{center}
 \includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Propuesta/presentacion/Related_Work.png}
-\caption{Causal graphical model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
-\label{causal_model}
+\caption{Related Work}
 \end{center}
 \vskip -0.2in
 \end{figure}
 \end{frame} 
+
 \subsection{Approaches and Related Work: Reinforcement Learning}
 \begin{frame}
 \frametitle{Reinforcement Learning (RL)}
@@ -315,14 +336,13 @@ About my Proposed Research
 \begin{itemize}
 \item Human beings, while facing a sequential decision problem, use and modify causal information.
 \item \cite{hagmayer2009decision}, \cite{hagmayer2013repeated} show that human beings can learn causal information in simple decision-making tasks, but remains open to study causal learning while seeking for a specific objective. 
-\item 
 \end{itemize}
 \end{frame}
 \subsection{Approaches and Related Work: Joyce's Causal Decision Theory}
 \begin{frame}
 \frametitle{Joyce's Causal Decision Theory}
 \begin{itemize}
-\item An attempt to formalize Decision Theory in the presence of Causal Information was attempted by Joyce, who stated that a decision maker must choose whatever action is more likely to (causally) produce desired outcomes.
+\item An attempt to formalize Decision Theory in the presence of Causal Information was attempted by Joyce (\cite{joyce1999foundations}), who stated that a decision maker must choose whatever action is more likely to (causally) produce desired outcomes.
 \item  His formulation falls short since he does not consider any kind of formal causal model beyond what is commonly understood by causality
 \end{itemize}
 \end{frame}
@@ -342,14 +362,21 @@ About my Proposed Research
 \item They use and modify causal knowledge during a sequential decision making process.
 \item It is shown by \cite{lattimoreNIPS2016} that adding causal information in a fixed budget decision problem allows the decision maker to learn \textit{faster} had he not considered causal information.
 \item Their work requires that the causal model is fully known to the decision maker.
-\item this requirement is relaxed later by \cite{sen2017identifying} who requires only that some part of the causal model is known and allow interventions over the unknown part. 
+\item Relaxed later by \cite{sen2017identifying} who requires only that some part of the causal model is known and allow interventions over the unknown part. 
 \end{itemize}
 \end{frame}
-
 \section{Proposed Solution and Methodology}
 \begin{frame}
 \frametitle{Proposed Solution and Methodology}
+Proposed Solution and Methodology:
+\begin{enumerate}
+\item General and Specific Objectives.
+\item Methodology.
+\item Validation.
+\item Detailed Methodology.
+\end{enumerate}
 \end{frame}
+
 	\subsection{Objectives}
 	\begin{frame}
 	\frametitle{General Objectives}
@@ -364,12 +391,12 @@ About my Proposed Research
 	\frametitle{Specific Objectives}
 	In order to reach the General Objective we must:
 	\begin{enumerate}
-	\item Game between agent and Nature in order to modell agent-environment interaction.
+	\item Define a Game between agent and Nature in order to model agent-environment interaction.
 	\item Find an adequate family of probability distributions that encode causal knowledge.
-	\item General belief-updating criteria in terms of causal information.
+	\item Develop a general belief-updating criteria in terms of causal information.
 	\end{enumerate}
 	\end{frame}
-	
+
 \subsection{Methodology}
 \begin{frame}
 \frametitle{Proposed Solution: Conceptual step-by-step methodology}
@@ -397,7 +424,7 @@ We will be comparing against standard Reinforcement Learning methods such as Q-L
 \frametitle{A conjecture}
 It needs to be shown that given the rewards obtained by a decision-making procedure that achieves the MEU, then my proposed algorithm must stay close to it.
 \begin{teo}
-Let $(X_1,X_2,...)$ the rewards obtained by a decision-making procedure which is known to converge to the max expected utility (or an optimal policy), then, if $(Y_1, Y_2,...)$ are the rewards obtained by a decision-making procedure that uses causal information, then for all $\varepsilon > 0$ there exists an $N_\varepsilon \in \mathbb{N}$ such that $ | X_t - Y_t | < \varepsilon$ for any $t > N_\varepsilon$. 
+Let $(X_1,X_2,...)$ the rewards obtained by a decision-making procedure which is known to converge to the max expected utility (or an optimal policy), then, if $(Y_1, Y_2,...)$ are the rewards obtained by a decision-making procedure that uses causal information in the way we propose, then for all $\varepsilon > 0$ there exists an $N_\varepsilon \in \mathbb{N}$ such that $ | X_t - Y_t | < \varepsilon$ for any $t > N_\varepsilon$. 
 \end{teo}
 \begin{proof}
 To be proved.
@@ -416,72 +443,77 @@ How to
 \subsection{Proposed Solutuion: A guiding principle}
 \begin{frame}
 \frametitle{A guiding principle for Causal Decision Problems}
-We propose the following principle as a normative guide for how causal information must be used in order to find a solution to a decision problem where the preferences of the decision maker are assumed to be rational. We consider only the case where the decision maker's utility is given by the outcome of a $\{0,1 \}$-binary variable. It remains to be refined and extended for a general case. 
+We propose the following principle as a normative guide for how causal information must be used in order to find a solution to a decision problem where the preferences of the decision maker are assumed to be rational.\\
+We consider only the case where the decision maker's utility is given by the outcome of a $\{0,1 \}$-binary variable.\\
+It remains to be refined and extended for a general case. 
 \end{frame}
 
 \begin{frame}
 \begin{prop}
 Let  $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem under uncertainty whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. Let $Y$ a variable in $\mathcal{G}$ the variable whose realizations correspond to the consequences of the decision problem once the agent has chosen an action $a \in \mathcal{A}$ and assume that $Y$ only takes values in the set $\{ 0,1\}$ where $1$ is a more desired outcome for the agent. Then, the $\textit{solution}$ for this decision problem is given by the action $a^\ast \in \mathcal{A}$ that satisfies:
-\[ P(Y=1 | do(a^\ast) \geq P(Y=1 | do(a)) \textrm{ for all } a \in \mathcal{A}. \]
+\[ P(Y=1 | do(a^\ast)) \geq P(Y=1 | do(a)) \textrm{ for all } a \in \mathcal{A}. \]
 \end{prop}
 \end{frame}
 
 \subsection{First Step: Modelling a Causal Decision Problem as a Game}
 \begin{frame}
-\frametitle{Games}
+\frametitle{First Step: Modelling a Causal Decision Problem as a Game}
 \begin{itemize}
-\item In this way, the first step in order to solve the stated problem is to model the interaction of the (original) decision maker and his environment as a \textbf{game} between two players: 
+\item The next step is to model the interaction of the (original) decision maker and his environment as a \textbf{game} between two players: 
 \begin{enumerate}
-\item the (original) decision maker, 
-\item and a player which will be called Nature, whose actions are to be guided by the causal model.
+\item The (original) decision maker.
+\item A player which will be called \textbf{Nature}, whose actions are to be guided by the causal model.
+\item The game is over when the \textit{outcome} of the original decision problem is realized. This we will call a \textit{round}.
 \end{enumerate}
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \begin{itemize}
-\item  Since in decision problems under uncertainty it is assumed that the \textit{state} of the environment is unknown, we will assume that player Nature has the first move and he assigns some state to any of the variable in the causal model $\mathcal{G}$.
+\item  We assume that player Nature has the first move and she assigns some state to any, or all, of the variable(s) in the causal model $\mathcal{G}$.
 \item After the decision maker makes his \textit{play}, Nature will \textit{respond} to the action selected according to the causal relations expressed by $\mathcal{G}$.
-\item This action-response dynamic forces to consider some notion of order between the players' moves, and because of this reason we must use the \textit{extensive-form} games
+\item This action-response dynamic forces to consider some notion of order between the players' moves, and because of this reason we must use the \textit{extensive-form} games. Details in \cite{osborne1994course}.
 \end{itemize}
 \end{frame}
 
 \subsection{Second Step: Belief formation}
 \begin{frame}
-\frametitle{Belief Formation}
+\frametitle{Second Step: Belief Formation}
 \begin{itemize}
-\item The whole idea is that a decision maker is able to learn from his environment by observing, and reasoning about, the effects of his actions.
-\item The observed information will modify his current knowledge, which is encoded as probabilistic beliefs about the environment in a way that is similar to how human beings modify causal knowledge while intervening in the world
+\item The whole idea is that a decision maker is able to \textbf{learn} and \textbf{reason} about his environment by observing the effects of his actions.
+\item The agent encodes any previous knowledge or uncertainties in a probability distribution.
+\item The observed information will be used to modify his current knowledge in a way that is similar to how human beings modify causal knowledge while intervening in the world
 \end{itemize}
 \end{frame}
 
 \subsection{Third Step: Making choices}
 \begin{frame}
-\frametitle{Making Choices}
+\frametitle{Third Step: Making Good Choices}
 \begin{itemize}
-\item The decision maker will use his current knowledge \textit{as if} it were the truth about the causal relations of his environment.
+\item The decision maker uses his current knowledge \textit{as if} it were the truth about the causal relations of his environment.
 \item With this information he will choose the action that maximize the Expected Utility, according with our guiding principle.
 \end{itemize}
 \end{frame}
 
-\subsection{Third Step: Belief updating}
+\subsection{Fourth Step: Belief updating}
 \begin{frame}
 \frametitle{Belief Updating}
 \begin{itemize}
-\item If a decision maker encodes his current knowledge, and ignorance, about some relevant characteristic of his environment, then it is known that belief updating using Bayes' Theorem is the only way of updating that is coherent with the rational preference axioms.
-\item it remains to be answered how to concretely use causal information in order to update the parameters that control the distributions used to express beliefs in a tractable way
+\item It is known that belief updating using Bayes' Theorem is the only way rational way of updating uncertainty.
+\item It remains to be answered how to concretely use causal information in order to update the parameters that control the distributions used to express beliefs in a tractable way.
 \end{itemize}
 \end{frame}
 
 \section{Methodology divided into simpler cases}
 \begin{frame}
-We will show how the methodology applies in simpler and easier cases where the decision maker has some exta info about his environment.
+We will show how the methodology applies in simpler and easier cases where the decision maker has some extra info about his environment.
 \end{frame}
 \subsection{Fully knowing the causal graphical model}
 \begin{frame}
 \frametitle{Fully knowing the causal graphical model}
 \begin{itemize}
-\item If the decision maker knows the causal graphical model, then following the guiding principle, he could easily calculate the effect on the target variable that any of his actions has and then choose the action that has the highest probability of causing a \textit{desired} value of the target variable.
+\item Following the guiding principle, he could easily calculate the effect on the target variable that any of his actions has.
+\item Choose the action that has the highest probability of causing a \textit{desired} value of the target variable.
 \end{itemize}
 \end{frame}
 
@@ -489,10 +521,10 @@ We will show how the methodology applies in simpler and easier cases where the d
 \begin{frame}
 \frametitle{Knowing only the causal graph structure}
 \begin{itemize}
-\item If a decision maker knows the structure of the graph, but he does not know the parameters,
-\item then he encodes this ignorance, along with any useful previous knowledge, as a probability distribution over a suitable space.
-\item In general, what must be specified is a way of encoding current causal knowledge into a probability distribution in such a way that a \textit{local} (i.e. in each round) causal model can be obtained from current beliefs in order to make a decision using current causal knowledge.
-\item This means that using current beliefs, the agent forms a causal model which is used as if it were the true causal model.
+\item The agent encodes uncertainty over the parameters of the model as a probability distribution over a suitable space.
+\item Done in such way that a \textit{local} (i.e. in each round) causal model can be obtained from current beliefs in order to make a decision using current causal knowledge.
+\item The agent forms a causal model which is used as, according to the guiding principle, as if it were the true causal model.
+\item Belief updating.
 \end{itemize}
 \end{frame}
 
@@ -501,7 +533,7 @@ We will show how the methodology applies in simpler and easier cases where the d
 \frametitle{Model unknown}
 If the model is completely unknown, two ideas appear:
 \begin{enumerate}
-\item If the max number of variables is known.
+\item If the maximum number of variables is known.
 \item If it is not.
 \end{enumerate}
 \end{frame}
@@ -516,7 +548,9 @@ If the model is completely unknown, two ideas appear:
 \begin{frame}
 \frametitle{Idea 2 for the General Case}
 \begin{itemize}
-\item If the number of variables is unknown, then the beliefs that the decision maker holds must allow unbounded cardinality on the number of variables. In that case, a distribution over a \textit{graph space} could be used in such a way that when sampled a graph structure is obtained and used as in the previous case.  
+\item If the number of variables is unknown, then the beliefs that the decision maker holds must allow unbounded cardinality on the number of variables. 
+\item In that case, a distribution over a \textit{graph space} could be used in such a way that when sampled a graph structure is obtained and used as in the previous case.  
+\item The graph generating process must converge to the true model.
 \end{itemize}
 \end{frame}
 
@@ -538,16 +572,16 @@ Working and Publications Plan
 \end{frame}
 
 \subsection{Publications Plan}
-\begin{frame}
+\begin{frame}[allowframebreaks]
 \frametitle{Publications Plan}
 \begin{itemize}
 \item \textbf{Year 1:} Gonzalez-Soto, M., Sucar, L.E., Escalante, H.J., \textbf{Playing against Nature: causal discovery for decision making under uncertainty}. Presented at \textbf{CausalML 2018 Workshop at ICML 2018}. July 15 2018, Stockholm, Sweden. The paper can be found at \url{https://arxiv.org/abs/1807.01268}.
 \item \textbf{Year 2:} Conference Paper 2 
 		\begin{itemize}
 		\item The implications of Causal Relations for Decision Making: a general principle for Decision under Uncertainty.
-		\item Possible Forum: Beyond Curve Fitting: Causation, Counterfactuals, and Imagination-based AI. AAAI Spring Symposium, March 25-27, 2019, Stanford, CA
+		\item Possible Forum: \textbf{Beyond Curve Fitting: Causation, Counterfactuals, and Imagination-based AI. AAAI Spring Symposium}, March 25-27, 2019, Stanford, CA
 		\end{itemize}
-\item \textbf{Year 2:} Conference Paper 3 and 4
+\item \textbf{Year 2:} Conference Paper 3 
 	\begin{itemize}
 	\item When a causal model is unknown but the involved variables are known, how to encode uncertainties about causal structure in a probabilistic distribution? Bayesian Nonparametric prior that explicitly represents causal structure.
 	\item When variables of the environment are unknown how to encode prior beliefs and how to update them when data is not fully observed.
@@ -566,8 +600,6 @@ Working and Publications Plan
 \vskip 0.2in
 \begin{center}
 \includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Propuesta/presentacion/Gantt.png}
-\caption{Causal graphical model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
-\label{causal_model}
 \end{center}
 \vskip -0.2in
 \end{figure}
@@ -576,7 +608,7 @@ Working and Publications Plan
 \section{Some Results}
 \begin{frame}
 \frametitle{Some results}
-To show the factibility of this proposal, we considered a test scenario and two of the previously mentioned cases.
+To show the factibility of this proposal, we considered a simple test scenario and two of the previously mentioned cases.
 \end{frame}
 \subsection{Test scenario}
 \begin{frame}
@@ -679,7 +711,6 @@ We show the results of two experiments. We compare the performance obtained by t
 \begin{center}
 \includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Propuesta/Formato/figures/20_rounds_format.png}
 \caption{Causal graphical model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
-\label{causal_model}
 \end{center}
 \vskip -0.2in
 \end{figure}
@@ -692,7 +723,6 @@ We show the results of two experiments. We compare the performance obtained by t
 \begin{center}
 \includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Propuesta/Formato/figures/50_rounds_format.png}
 \caption{Causal graphical model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
-\label{causal_model}
 \end{center}
 \vskip -0.2in
 \end{figure}
@@ -705,7 +735,6 @@ We show the results of two experiments. We compare the performance obtained by t
 \begin{center}
 \includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Propuesta/Formato/figures/100_rounds_format.png}
 \caption{Causal graphical model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
-\label{causal_model}
 \end{center}
 \vskip -0.2in
 \end{figure}
@@ -718,7 +747,6 @@ We show the results of two experiments. We compare the performance obtained by t
 \begin{center}
 \includegraphics[width=\linewidth]{/Users/MauricioGS1/INAOE/Propuesta/Formato/figures/200_rounds_format.png}
 \caption{Causal graphical model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
-\label{causal_model}
 \end{center}
 \vskip -0.2in
 \end{figure}
@@ -729,12 +757,30 @@ More details in \cite{gonzalez2018playing}
 \end{frame}
 
 \section{Conclusions}
-\begin{frame}
+\begin{frame}[allowframebreaks]
 \frametitle{Conclusions}
-We have proposed that an autonomous, rational agent who faces an uncertain environment which is governed by an unknown causal mechanism can make use of the causal relations that hold in such environment in order to find an action that will take him into the way of a desired result, in terms of his (rational) preferences. Also, causal information can be acquired while interacting with the environment and this newly acquired information will enrich the decision making procedure.
+\begin{itemize}
+\item We have proposed that an autonomous, rational agent who faces an uncertain environment which is governed by an unknown causal mechanism who can make use of the causal relations that hold in such environment in order to find an optmal action. 
+\item Results show that causal information can be acquired while interacting with the environment and this newly acquired information will enrich the decision making procedure.
+\end{itemize}
 \end{frame} 
+\begin{frame}[allowframebreaks]
+\begin{itemize}
+\item We have taken inspiration in how human beings use causal information when interacting with the world, which has a complex causal structure, in order to pursue objectives. 
+\item We proposed a \textit{guiding principle} to exploit causal information that must be followed by a rational agent in order to be coherent with the definition of rationality. 
+\item From the guiding principle we stated a systematic approach into causal decision making and considered three cases to be solved in order. 
+\item In two of the three cases we showed that a performance similar to classical decision-making algorithms can be achieved while also learning a causal model from the environment.
+\item If this research is allowed to continue, we will delve into general settings that resemble realistic situations in which the causal model that controls an environment is barely known.
+\end{itemize}
+\end{frame}
+
+\section{Future Work}
 \begin{frame}
-We have taken inspiration in how human beings use causal information when interacting with the world, which has a complex causal structure, in order to pursue objectives. Following this intuitions we proposed a \textit{guiding principle} to exploit causal information that must be followed by a rational agent in order to be coherent with the definition of rationality. From the guiding principle we stated a systematic approach into causal decision making and considered three cases to be solved in order. In two of the three cases we showed that a performance similar to classical decision-making algorithms can be achieved while also learning a causal model from the environment. We are considering. If this research is allowed to continue, we will delve into general settings that resemble realistic situations in which the causal model that controls an environment is barely known.
+\frametitle{Future Work}
+\begin{itemize}
+\item Our immediate next work is to consider the \textit{2.5} case where the decision maker partially knows the \textit{structure} of the graph.
+\item Study the case 1 for the General Case stated above: where the agent knows the max number of variables. 
+\end{itemize}
 \end{frame}
 
 %------- REFERENCES ----------------------
