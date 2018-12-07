@@ -17,7 +17,8 @@
 
 \title{A Guiding Principle for Causal Decision Problems}
 \author{M. Gonzalez-Soto, L.E. Sucar, H.J. Escalante\\
-Address line
+National Institute of Astrophysics Optics and Electronics (INAOE)\\
+Luis Enrique Erro No. 1, Santa Maria Tonanzintla, Puebla, Mexico.
 }
 
 \begin{document}
@@ -30,15 +31,16 @@ We define a Causal Decision Problem as a Decision Problem where available action
 \noindent
 
 \section{Rationality and Expected Utility}
-
+Rationality in a Decision Making setting is defined axiomatically in a way that the \textit{preferences} of a decision maker are logically consistent. If rational preferences are assumed, then it is known that the coherent criteria for making choices is the maximization of expected utility, either with respect to a known utility function and probability distribution or a pair of \textit{subjective} objects (\cite{bernardo2000bayesian}, \cite{gilboa2009decision}). Rational decision making has been the standard theory in economics both as a \textit{normative} and a \textit{descriptive} theory of human behavior and it has been the subject of multiple debates (\cite{tversky1974judgment}, \cite{kahneman1982judgment}). In this work we pretend to take a \textit{normative} view for a rational decision maker who faces an uncertain environment which is controlled by some unknown causal mechanism.
 \section{Optimal Policies}
-
+Given a Reinforcement Learning Problem defined over a Markov Decision Process, a \textit{policy} is a function from the space of \textit{states} to the space of \textit{actions} which is interpreted as what should an agent do in a given state (\cite{sutton1998reinforcement}). An \textit{optimal policy} is a policy which is optimal in the sense of achieiving the maximum possible reward, which is equivalent to finding the optimal action in the sense of the maximum expected utility (\cite{webb2007game}).
 \section{Causal Decision Problems}
-
+We define a Causal Decision Problem under Uncertainty as a tuple $(\mathcal{A}, \mathcal{E}, \mathcal{C}, \mathcal{G}, \succeq)$ where  $(\mathcal{A}, \mathcal{E}, \mathcal{C}, \succeq)$ is a classical Decision Problem under Uncertainty (\cite{bernardo2000bayesian} and $\mathcal{G}$ is a Causal Graphical Model (\cite{koller2009probabilistic}, \cite{sucar2015probabilistic}) such that the set of available actions $\mathcal{A}$ and the set of outcomes $\mathcal{C}$ are related through the variables of the Causal Model $\mathcal{G}$; i.e., the events in the family $\mathcal{E}$ correspond to variables in $\mathcal{G}$. It is assumed that the agent does not know the Causal Model $\mathcal{G}$, which is equivalent to not knowing the probabilities of the events $E \in \mathcal{E}$. The model $\mathcal{G}$ is also assumed to remain fixed and to be invariant under interventions (\cite{woodward2005making}) and to satisfy the conditions expressed in \cite{spirtes2000causation}.
 \section{Proposed Solution}
+Since rationality is assumed we must seek to maximize the expected utility of 
 
 \section{On-line decision making and causal learning}
-
+In \cite{gonzalez2018playing} a decision-making procedure was proposed using the intuition of the Proposed Solution and a Bayesian \textit{belief updating} procedure in order to learn an optimal action in the simpler case where the decision maker knows the \textit{structure} of the model $\textit{G}$. The actions learned after a series of rounds obtained similar performance as an agent learning using the classical Q-Learning procedure. Experimentally, this
 \bibliography{Bibliografia.bib}
 \bibliographystyle{aaai}
 \end{document}
