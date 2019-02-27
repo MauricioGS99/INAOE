@@ -1,0 +1,96 @@
+% Sample LaTeX file for creating a paper in the Morgan Kaufmannn two
+% column, 8 1/2 by 11 inch proceedings format.
+
+\documentclass[letterpaper]{article}
+\usepackage{uai2019}
+\usepackage[margin=1in]{geometry}
+
+% Set the typeface to Times Roman
+\usepackage{times}
+
+\title{Structure Learning for Causal Decision Making}
+
+\author{Anonymous authors.} % LEAVE BLANK FOR ORIGINAL SUBMISSION.
+          % UAI  reviewing is double-blind.
+
+% The author names and affiliations should appear only in the accepted paper.
+%
+%\author{ {\bf Harry Q.~Bovik\thanks{Footnote for author to give an
+%alternate address.}} \\
+%Computer Science Dept. \\
+%Cranberry University\\
+%Pittsburgh, PA 15213 \\
+%\And
+%{\bf Coauthor}  \\
+%Affiliation          \\
+%Address \\
+%\And
+%{\bf Coauthor}   \\
+%Affiliation \\
+%Address    \\
+%(if needed)\\
+%}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+In a recent paper by \cite{2019arXiv190202279G} Decision Problems under Uncertainty where the uncertain events are causally related where studied. For such problems, a criteria for choosing an optimal action was proposed for rational preferences. It had been shown by such authors in \cite{gonzalez2018playing} that by implicitly considering a distribution over causal structures and using such criteria within each structre then an on-line decision-making algorithm could be obtained, which achieved a similar performance than the classical Q-learning. Their work has a limitation, since they only considered the case where the decision maker knows the structure of the causal model that controls the environment. In this paper, we propose to extend such limitation by proposing a local structure learning procedure in terms of belief updating. 
+\end{abstract}
+
+\section{Introduction}
+Decision making under uncertain conditions is a fundamental task for intelligent reasoning (\cite{danks2014unifying}, \cite{lake2017building}). It is a well known fact that if an agent has \textit{rational preferences} then he must choose according to the Maximum Expected Utility criteria, in which the agent chooses an action by considering both his preferences, which are represented by an utility function, and the probability of occurrence of outcomes, either by knowing the probabilities in the environment, or by considering a \textit{subjective} probability measure (\cite{bernardo2000bayesian}, \cite{gilboa2009decision}). We consider cases where the uncertainty in the environment is controlled by a \textit{causal mechanism}, represented as a Causal Graphical Model which is always unknown by the agent. 
+
+
+\section{On Causality and Learning}
+Several definitions of Causality have been attempted by philosophers and scientists, and we acknowledge that such task is a complex one. We use here the formal definition of Causality given by \cite{spirtes2000causation}, which belongs to the family of \textit{manipulationist} theories as described by \cite{woodward2005making}. We consider Causal Graphical Models (\cite{koller2009probabilistic}) as representations of the causal relations that hold in an environment.
+
+From the human learning perspective, it has been shown that humans acquire and use causal information for decision-making and that humans even consider their actions as interventions in the world (\cite{hagmayer2009decision}, \cite{wellen2012learning} \cite{hagmayer2013repeated}). It has also been argued that humans tend to ignore probabilistic information and assign more importance to causal information (\cite{tversky1980causal}, \cite{pearl2009causality}). Human beings focus on \textit{local} aspects while learning causal relationswhich are later unified into a single structure (\cite{fernbach2009causal}, \cite{waldmann2008causal}, \cite{wellen2012learning}, \cite{danks2014unifying}). Following this idea, \cite{wellen2012learning} propose a model to explain how observations  and interventions are used by human beings to learna causal. 
+
+\section{Rationality, Decision Making and Expected Utility}
+
+\section{Related Work}
+\cite{gonzalez2018playing} propose that by holding \textit{beliefs} about causal relations and using those beliefs \textit{as if} they were the true relations in order to make a choice and then updating those beliefs after observing what the chosen action \textit{caused} good actions can be learned. Such procedure implicitly considers a distribution over causal structures, where each structure is used locally to make a choice. In \cite{2019arXiv190202279G}, such authors propose a formal criteria which has the form:
+\[  a^\ast = \textrm{ argmax }_{a \in \mathcal{A}}\sum_g P(Y=1 | do(a), g)P(g), \]
+where $\mathcal{A}$ is the set of available actions to the decision maker and $1$ is the most desired value of the \textit{objective variable} $Y$, for the decision maker. We notice that since the action chosen is the action with the highest probability of causally producing the most desired action, then $a^\ast$ necesarilly is the action that maximizes the expected utility for the agent
+
+While \cite{pearl2009causality} proposes that a rational agent in the presence of a causal environment should optimize the function $U(x)$ defined as 
+\[ U(x)=\sum_y P(y | do(x)) u(y), \]
+we notice that this function does not consider the agent's beliefs, or current knowledge, about the causal structure that holds in his environment. We note that the criteria proposed by \cite{2019arXiv190202279G} makes use of an implicit probability distribution over causal structures, since the decision maker holds beliefs about the causal nature of his environment and within each realization of those beliefs the maximization for the optimal action is performed, while Pearl's function assumes a single causal structure.
+
+Using a version of the criteria described above, in \cite{gonzalez2018playing} a decision-making procedure is proposed for the case when the agent knows the \textit{structure} of the Causal Model which controls his environment. It remains an open question to tackle the problem of an unknown structure. 
+
+\section{Structure Learning: a local approach}
+We consider the problem of extending the work of \cite{gonzalez2018playing} in the setting of \cite{2019arXiv190202279G}: this is, a $(\mathcal{A}, \mathcal{E}, \mathcal{C}, \mathcal{G}, \succeq)$ where $(\mathcal{A}, \mathcal{E}, \mathcal{C}, \succeq)$ is a classical Decision Problem under Uncertainty as defined in \cite{bernardo2000bayesian} and $\mathcal{G}$ is a Causal Graphical Model (\cite{spirtes2000causation}, \cite{koller2009probabilistic}, \cite{sucar2015probabilistic}) such that the set of available actions $\mathcal{A}$ and the set of outcomes $\mathcal{C}$ are related through the variables of the Causal Model $\mathcal{G}$; i.e., the events in the family $\mathcal{E}$ correspond to variables in $\mathcal{G}$. It is assumed that the agent does not know the Causal Model $\mathcal{G}$, which is equivalent to not knowing the probabilities of the events $E \in \mathcal{E}$. The model $\mathcal{G}$ is also assumed to remain fixed and to be invariant under interventions \cite{woodward2005making} and to satisfy the conditions expressed in \cite{spirtes2000causation}. The variable in $\mathcal{G}$ which encodes the consequence of the action taken by the agent will be referred as \textit{target variable} since it is the variable where the agent whishes to obtain a desired result. 
+
+Causal information use and learning when the underlying model is completely unknown is a difficult task (\cite{lattimoreNIPS2016}). We will consider a series of assumptions in order to simplify the problem. We consider:
+\begin{enumerate}
+\item The decision maker knows the variables in the model, let $V$ be the set of variables.
+\item The decision maker knows which variable can he intervene.
+\item The decision maker knows which variable he wants to affect with his interventions. 
+\item The decision maker can fully observe realizations of the variables from the true causal model $\mathcal{G}$, but such realizations are independent.
+\item Variables are binary-valued $\{0,1 \}$ and interpreted as \textit{acting} on them or not. 
+\end{enumerate}
+
+\subsection{The form of uncertainty}
+Our approach begins by noticing that if the decision maker does not know the relations between the (known) variables, then the his uncertainty has the following \textit{form}: Does $A$ cause $B$? For any pair of variables $A,B$ in V. Since we are following a Bayesian approach, we translate this statement into:
+\[p_{AB}=P(A \textrm{ cause } B). \]
+Now, the idea is to update $p_{AB}$ according to the manipulationist idea stated in \cite{woodward2005making} where a manipulation in $A$ should translate in a change of value in $B$. Since we are assuming that the variables are binary and interpreted as acting on them or not (consider for example giving a certain treatment or not), the agent will increase his probability of $A$ causing $B$ if the pair $(A=1,B=1)$ is observed. Since the probability $p_{AB}$ is considered for any pair $(A,B)$ we must be careful in order not to update also $p_{BA}$ since from \cite{spirtes2000causation} we have that if $A$ causes $B$, then $B$ can not cause $A$. We add an extra assumption: the decision maker has a partial ordering of the variables which corresponds to variables that can not cause each other. This extra assumption, although a strong one, can be thought of expert knowledge in the domain of the decision problem. 
+
+\section{Conclusions}
+
+\section{Future Work}
+
+\newpage
+
+\subsubsection*{Acknowledgements}
+The authors would like to thank \texttt{<Anonymous>} for valuable comments and insights. 
+
+
+\subsubsection*{References}
+%doi=false,isbn=false,url=false
+\bibliographystyle{apalike}
+\bibliography{/Users/MauricioGS1/INAOE/Propuesta/Bibliografia.bib}
+
+\end{document}
