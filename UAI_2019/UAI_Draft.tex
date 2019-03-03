@@ -38,7 +38,7 @@
 \maketitle
 
 \begin{abstract}
-In a recent paper by \cite{2019arXiv190202279G}, Decision Problems under Uncertainty where the uncertain events are causally related where studied. For such problems, a criteria for choosing an optimal action was proposed for rational preferences. It had been shown by such authors in \cite{gonzalez2018playing} that by implicitly considering a distribution over causal structures and using such criteria within each structre then an on-line decision-making algorithm could be obtained, which achieved a similar performance than the classical Q-learning while also acquiring a Causal Model of the environment. Their work has a limitation, since they only considered the case where the decision maker knows the structure of the causal model that controls the environment. In this paper, we propose to extend such limitation by proposing a local structure learning procedure in terms of belief updating, where the beliefs are probabilities over the events of a variable having causal influence over another one.  We show experimentally that such method is capable of finding the causal links that hold in a true causal model after a series of observations are drawn from such true model. 
+We consider a Decision Problem under Uncertainty where the uncertain events and the outcomes causally related. It is a well known fact that under rational preferences the maximization of expected utility is the only criteria to be used. We address the problem where the decision maker knows the variables in his environment but does not know the causal relations between them, which includes the variable to be intervened when making a decision. Previous works that have studied decision making in causally-controled environments have left open the case where the causal mechanism which controls the environment is unknown, thus advancing knowledge in this direction. In this paper, we propose to extend such limitation by proposing a local structure learning procedure in terms of belief updating, where the beliefs are probabilities over the events of a variable having causal influence over another one.  We show experimentally that such method is capable of finding the causal links that hold in a true causal model after a series of observations are drawn from such true model. 
 \end{abstract}
 
 \section{Introduction}
@@ -125,10 +125,11 @@ We test our method by starting with a random initialization of the probabilities
 \vskip -0.2in
 \end{figure}
 
-\section{Conclusions}
-We have proposed a method for finding a causal structure based on the updating of beliefs by a rational agent about the existence of causal relations between variables. The need of a causal ordering is required since it is known that based on mere observations a Directed Graph can not be obtained. Our method allows the use of a previously shown method for decision making based on causal information in the case where the decision maker only knows the variables of the model. In a simple case, we tested our method and it was shown experimentally that the proposed method could find the causal links that hold in the true causal model, while forgettin about non-existing causal links.
+\section{Conclusions and Future Work}
+We have proposed a method for finding a causal structure based on the updating of beliefs by a rational agent about the existence of causal relations between variables. The need of a causal ordering is required since it is known that based on mere observations a Directed Graph can not be obtained. Our method allows the use of a previously shown method for decision making based on causal information in the case where the decision maker only knows the variables of the model. In a simple case, we tested our method and it was shown experimentally that the proposed method could find the causal links that hold in the true causal model, while gradually stop believing in the existence of links not present in the true causal model.
 
-\section{Future Work}
+There are still several issues that must be adressed in the near future, such as the case of multi-valued variables or considering a dynamically changing causal model. Also, the generale case involving variable discovery must be solved in order to solve the problem of causal decision making when an unknown causal mechanism controls the environment. 
+
 \newpage
 \subsubsection*{Acknowledgements}
 The authors would like to thank \texttt{<Anonymous>} for valuable comments and insights. 
