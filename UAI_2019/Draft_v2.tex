@@ -1,0 +1,200 @@
+% Sample LaTeX file for creating a paper in the Morgan Kaufmannn two
+% column, 8 1/2 by 11 inch proceedings format.
+
+\documentclass[letterpaper]{article}
+\usepackage{uai2019}
+\usepackage[margin=1in]{geometry}
+\usepackage{breakcites}
+\usepackage{graphicx}
+\usepackage{subfigure}
+% Set the typeface to Times Roman
+\usepackage{times}
+
+\title{Causal Structure Learning for Decision Making under Uncertainty}
+
+\author{Anonymous authors.} % LEAVE BLANK FOR ORIGINAL SUBMISSION.
+          % UAI  reviewing is double-blind.
+
+% The author names and affiliations should appear only in the accepted paper.
+%
+%\author{ {\bf Harry Q.~Bovik\thanks{Footnote for author to give an
+%alternate address.}} \\
+%Computer Science Dept. \\
+%Cranberry University\\
+%Pittsburgh, PA 15213 \\
+%\And
+%{\bf Coauthor}  \\
+%Affiliation          \\
+%Address \\
+%\And
+%{\bf Coauthor}   \\
+%Affiliation \\
+%Address    \\
+%(if needed)\\
+%}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We define a Causal Decision Problem as a Decision Problem Under Uncertainty where the available actions and the set of outcomes are related stochastically through a Causal Graphical Model $\mathcal{G}$, which is assumed to be unknown by the decision maker. Based on the Expected Utility principle we propose a decision-making criteria which allows a distribution over causal structures which encode what the decision maker believes. Previous works that have studied decision making in causal environments have studied cases where the causal model is known, or parts of it such as the graphical structure. We propose to extend such works by considering the case where the decision maker knows the variables in his environment but not the causal relations between them. We then propose a local structure-learning procedure in terms of belief updating, where such beliefs represent whether the agent believes there is a causal relation between pairs of variables. We show experimentally that our method is capable of finding the causal links that hold in a true causal model after a series of observations are drawn from the true causal model. Our paper contributes to the design of learning algorithm in unknown causal environments in both a theoretical and experimental way.
+\end{abstract}
+
+\section{Introduction}
+Decision making under uncertain conditions is a fundamental task for intelligent reasoning and a common task for human beings and organizations (\cite{savage1954the}, \cite{danks2014unifying}, \cite{lake2017building}). Many real-world applications rely on decisions made by an autonomous agent, such as self-driving cars. Current decision making methods rely on associative methods, which find only statistical patterns in data. On the contrary, causal knowledge allows both for planning and counterfactual reasoning as well as interpretability and explainability \cite{spirtes2000causation}, \cite{pearl2009causality}, \cite{woodward2005making}, \cite{pearl2018why}. We propose in this work a criteria which must be fulfilled while making decisions under uncertain conditions which are causal-controlled.
+
+In Decision Theory it is a well known fact that if an agent has \textit{rational preferences} then he must choose according to the Maximum Expected Utility (MEU) criteria, in which the agent chooses an action by considering both his preferences, which are represented by an utility function, and the probability of occurrence of outcomes: with respect to this point, the agent either knows the probabilities in the environment, or, if he does not, by considering a \textit{subjective} probability measure (\cite{von1944theory}, \cite{savage1954the}, \cite{bernardo2000bayesian}, \cite{gilboa2009decision}). 
+
+Our criteria acknowledges that causal-decision making is a particular case of uncertain decision making, so the MEU criteria must be satisfied, but we will make explicit the causal component in it in terms of Pearl's $do$ operator. The case when the uncertainty component in a decision problem is controlled by a \textit{causal mechanism} has been previously studied, for example in: \cite{joyce1999foundations}, \cite{pearl2009causality}, \cite{bottou2013counterfactual}, \cite{ortega2014generalized}, \cite{bareinboim2015bandits}, \cite{lattimoreNIPS2016}, \cite{sen2017identifying}, \cite{gonzalez2018playing}, \cite{acharya2018learning},. In particular, \cite{joyce1999foundations} provided the intuition that a decision maker should consider what is \textit{caused} by his actions, and \cite{pearl2009causality} proposed decision-making by maximizing a function involving the well known \textit{do} operator.
+
+In this work we consider that the causal mechanism which controls the environment is represented as a Causal Graphical Model $\mathcal{G}$ and that it is unknown by the agent. $\mathcal{G}$ is also assumed to remain fixed and invariant to interventions (\cite{woodward2005making}). In recent papers, such as those by \cite{lattimoreNIPS2016}, \cite{sen2017identifying} and \cite{gonzalez2018playing} it is assumed that the decision maker knows either all of, or a certain aspect such as the structure, of the causal model.
+
+In this paper we propose an optimality criteria for causal decision making based on the Maximization of Expected Utility principle, in Joyce's intuitions and in Pearl's $do$ operator. Our criteria allows the decision maker to have in mind a distribution over causal structures and then maximize as previously proposed in \cite{pearl2009causality} \textit{within} each structure. We also attempt to relax the assumption of the agent knowing the causal model by allowing him to only know the variables in the model, with the help of an \textit{ordering} in the variables in such a way that it is know which variables can not cause each other and we attempt to learn a causal structure by \textit{local} belief updating.
+
+We call our method \textit{local}\footnote{Inspired by the use of the term in \cite{wellen2012learning}} since we use the uncertainty (from the agent's point of view) about the existence of a causal relation between pairs of variables, which are local components of the structure of a graph. Such uncertainty is to be updated in terms of what is \textit{observed} from realizations of the true causal mechanism that controls the environment. Since observations alone do not suffice to uniquely determine a DAG, we make use of a partial ordering between the variables in the model that, at least in principle, can not be a cause of each other. This ordering must be an input product from expert knowledge.
+
+The main contributions of this paper are a decision-making criteria for causal decision making in terms of an agent's beliefs, and a method for discovering a causal structure by considering the beliefs of the decision maker in terms of the possible existence of causal relations between variables.
+
+\section{On Causality and Learning}
+Several definitions of Causality have been proposed by philosophers and scientists, such as those described in \cite{holland1986statistics}. We use here the formal definition of Causality given by \cite{spirtes2000causation}, which belongs to the family of \textit{manipulationist} theories as described by \cite{woodward2005making}. We consider Causal Graphical Models (\cite{koller2009probabilistic}, \cite{sucar2015probabilistic}) as representations of the causal relations that hold in an environment and the resulting interventional distribution since graphs are plausible representations of cognitive processes in human beings; in particular, causal reasoning (\cite{danks2014unifying}).
+
+In fact, it has been shown that humans acquire and use causal information for decision-making and that humans even consider their actions as interventions in the world (\cite{hagmayer2009decision}, \cite{wellen2012learning} \cite{hagmayer2013repeated}). It has also been argued that humans tend to ignore probabilistic information and assign more importance to causal information (\cite{tversky1980causal}, \cite{pearl2009causality}). Human beings focus on \textit{local} aspects while learning causal relations which are later unified into a single structure (\cite{fernbach2009causal}, \cite{waldmann2008causal},  \cite{danks2014unifying}). Following this idea, \cite{wellen2012learning} propose a model to explain how observations  and interventions are used by human beings to learn causal relations in terms of a local prediction-error learning. Following this line of thought, we propose here a local probabilistic encoding of the uncertainty that a decision maker has over the existence or not of causal relations between variables.
+
+\section{Related Work}
+We begin with a Decision Problem under Uncertainty in which an agent, or decision maker, who has rational preferences, faces the problem of choosing one among many available actions with uncertain consequences. From the work of \cite{von1944theory} and \cite{savage1954the}, we know that the only criteria for making choices is the maximization of expected utility with respect to the agent's preferences and a probability distribution which represents either the probabilities of the uncertain events, or the agents own beliefs about such uncertainty. In this work we pretend to take a \textit{normative} view for a rational decision maker who faces an uncertain environment which is controlled by some unknown causal mechanism.
+
+Since \cite{joyce1999foundations} it has been argued that a decision maker should consider all of his beliefs about what will his decisions cause, while \cite{pearl2009causality} proposes that a rational agent in the presence of a causal environment should optimize the function $U(x)$ defined as: 
+\begin{equation}{\label{pearl}} 
+U(x)=\sum_y P(y | do(x)) u(y).
+\end{equation}
+
+Notice that this function does not consider the agent's beliefs about the causal structure that holds in his environment. We will later define formally a Causal Decision Problem and provide a solution that explicitly includes the decision maker belief's about the existence of causal relations in the environment.
+
+On the problem of discovering causal structure it was conjectured in \cite{eberhardt2005number} \cite{eberhardt2008almost} and late proven by \cite{hauser2012two} that the worst case number of interventions required for full causal identifiability is a function of the maximal clique in the true DAG, but in order to apply such result an agent must be able to perform such interventions, while the method we are proposing here attempts to rely only in observations with the help of external expert knowledge. 
+
+In \cite{ortega2014generalized} propose that Thompson Sampling can be adapted to the problem of causal induction; this is, the problem of discovering a causal structure. \cite{bareinboim2015bandits} apply the setting of Bandit problems to decision making, while \cite{lattimoreNIPS2016}, who also use bandits, consider the problem of finding a best intervention over a known causal model for a fixed number of learning trials is considered and it was found that by them that by considering causal information a \textit{faster} optimal-action learning can be achieved. Their assumption of knowing the causal model was relaxed by \cite{sen2017identifying} who considers a partially known causal model and allows interventions over a the unknown part of the model. 
+
+In \cite{gonzalez2018playing} it was proposed that a rational decision maker can find an optimal action by holding \textit{beliefs} about the existence and strength of causal relations and by using those beliefs \textit{as if} they were the true relations in order to make a choice and then updating those beliefs after observing what the chosen action \textit{caused}. Such procedure implicitly considers a distribution over Causal Graphical Models, where each structure is used within each step in otder to make a choice by considering his causal knowledge as it if were true, as proposed by \cite{joyce1999foundations}. Their work assumes that the decision maker knows the structure, but not the associated parameters, of the model. Their work was able to find good actions in a way comparable to that of the classic Q-Learning algorithm for Reinforcement Learning (\cite{watkins1992q}).
+
+It remains an open question to tackle the problem of a fully unknown structure. It is known that from observational data alone, a Causal Graphical Model is identifiable up to Markov equivalence without any the assumption of a specific functional model with given error distributions (\cite{hauser2012characterization}, \cite{hauser2012two}, \cite{peters2011identifiability}). We pretend to relax the mentioned limitations to the case of a rational decision maker who knows the variables that control his environment and he has extra knowledge of variables that, in principle can not be cause of each other. We pretend to find a causal structure after a series of observations. 
+
+Once such a structure is found, then the procedure proposed in \cite{gonzalez2018playing} could be applied in order to learn optimal actions.
+
+\section{Causal Decision Problems and Optimal Actions}{\label{CDPU}}
+We define a Causal Decision Problem under Uncertainty (CDPU) as a tuple $(\mathcal{A}, \mathcal{E}, \mathcal{C}, \mathcal{G}, \succeq)$ where  $(\mathcal{A}, \mathcal{E}, \mathcal{C}, \succeq)$ is a classical Decision Problem under Uncertainty (\cite{bernardo2000bayesian}) and $\mathcal{G}$ is a Causal Graphical Model (\cite{sucar2015probabilistic}) such that the set of available actions $\mathcal{A}$ and the set of outcomes $\mathcal{C}$ are related through the variables of the Causal Model $\mathcal{G}$; i.e., the events in the family $\mathcal{E}$ correspond to variables in $\mathcal{G}$. It is assumed that the agent does not know the Causal Model $\mathcal{G}$, which is equivalent to not knowing the probabilities of the events $E \in \mathcal{E}$. The model $\mathcal{G}$ is also assumed to remain fixed and to be invariant under interventions \cite{woodward2005making} and to satisfy the conditions expressed in \cite{spirtes2000causation}. The variable in $\mathcal{G}$ which encodes the consequence of the action taken by the agent will be referred as \textit{target variable} since it is the variable where the agent wishes to obtain a desired result. 
+
+In this way, in a CDPU we have a rational agent who chooses an action $a$ among the many available in $\mathcal{A}$ and then this action will produce some random effect in the environment which will \textit{cause} a certain consequence, or outcome $c \in \mathcal{C}$. The causal relation between $a \in \mathcal{A}$ and $c \in \mathcal{C}$ is encoded in $\mathcal{G}$.
+
+Since rational preferences are assumed, the agent must choose as if maximizing his expected utility in terms of his current knowledge, or \textit{beliefs}, which is expressed as a probability distribution. Using the awareness of the agent about a causal mechanism governing the environment, intuition encourages to use causal relations to cause some desirable action, as expressed by \cite{joyce1999foundations} and by what Pearl calls \textit{commonsensical decision making}.
+
+Consider a Causal Decision Problem as stated above where the target variable, call it $Y$, takes its values in the set $\{0,1\}$ and without loss of generality assume that $Y=1$ is the desired output for the agent; then, according to the maximum expected utility principle, as well with Joyce intuition (\cite{joyce1999foundations}), he must choose the action $a^\ast \in \mathcal{A}$ such that
+
+\[ P(Y=1 | do(a^\ast)) \geq P(Y=1 | do(a)) \textrm{ for all } a \in \mathcal{A}, \]
+
+where $P$ is a probability distribution which encodes the agent knowledge, or beliefs, about the causal relations that hold in his evironment. This is equivalent to finding $a^\ast$  as
+\begin{equation}{\label{principle}}
+ a^\ast = \textrm{ argmax }_{a \in \mathcal{A}}\sum_g P(Y=1 | do(a), g)P(g).
+\end{equation}
+
+Since the action chosen is the action with the highest probability of producing the most desired action, then it is the action that maximizes the expected utility for the agent. If an action $a_0 \in \mathcal{A}$ yielded a higher expected utility, that would imply that it has higher probability of \textit{causing} the same desired action, but this is not possible because of how $a^\ast$ is obtained.
+
+The procedure for selecting $a^\ast$ connects both the utility for the decision maker (because of the most desired outcome) and his beliefs (the measure $P$) about \textit{causing} a desired result. Since the causal mechanism and the uncertainties in the environment are connected, $a^\ast$ to maximizes expected utility. This procedure allows to choose a \textit{better action} in terms of what is currently known about causal relations. In fact, the distribution in Equation \ref{principle} includes an implicit probability distribution over causal structures as opposed to Equation \ref{pearl} which assumes a single causal structure rather than having a distribution over structures.
+
+Since $a^\ast$ was found by asking the probability of \textit{causing} the most desired action for the agent, it is also a counter-factual distribution since we know that the probability of observing the most desired outcome is lower for any other action $a \in \mathcal{A}$ and the probability of not choosing $a$ can also be easily obtained.
+
+\section{Structure Learning: a local approach}
+\subsection{Setting and assumptions}
+In the context of the CDPU's defined in Section \ref{CDPU} we consider the problem of a decision maker who faces a causal-controlled environment and does not know the causal relations between variables. It is known that learning and using a causal model when the underlying model is completely unknown is a difficult task (\cite{lattimoreNIPS2016}). We will consider a series of assumptions in order to simplify the problem. We consider:
+\begin{enumerate}
+\item The decision maker knows the variables in the model, let $V=\{ X_1,...,X_n \}$ be the set of variables.
+\item The decision maker knows which variable can he intervene and this variable does not depend on others.
+\item The decision maker knows which variable he wants to affect with his interventions. 
+\item The decision maker can fully observe realizations of the variables from the true causal model $\mathcal{G}$, but such realizations are independent.
+\item Variables are binary-valued $\{0,1 \}$ where the value $1$ interpreted as \textit{acting} on them or not, or as being in either in \textit{on} or \textit{off} states.
+\end{enumerate}
+The last assumption appears to be a very strong one, but the multi-valued case can be dealt with by replacing the variable with an artificial one which is binary-valued, where one of the states correspond to the values of the original variable, and the other to doing nothing, as in the binary case. As for the meaning of the states, consider for example giving a patient a drug or not.
+
+\subsection{The form of uncertainty}
+Our approach begins by noticing that if the decision maker does not know the relations between the variables, then, as shown in Figure \ref{form_ofl} his uncertainty about the causal structure has the following \textit{form}: Does $A$ cause $B$? For any pair of variables $A,B$ in $V$ we translate this statement into:
+\begin{equation}
+p_{AB}=P(A \textrm{ cause } B).
+\end{equation}
+Now, the idea is to update $p_{AB}$ according to the manipulationist idea stated in \cite{woodward2005making} where a manipulation in $A$ should translate in a change of value in $B$. Since we are assuming that the variables are binary and interpreted as acting on them or not, or being on an \textit{on} or \textit{off} states, (consider for example giving a certain treatment or not), the agent will increase his probability of $A$ causing $B$ if the pair $(A=1,B=1)$ is observed. It is known from \cite{holland1985statistics} that manipulation is fundamental to the notion of Causality, and although we notice that our decision maker is merely \textit{observing}, we are interpreting the binary-nature of our variables as observing manipulations over them in the form of \textit{acting} or them or not. 
+
+Since the probability $p_{AB}$ is considered for any pair $(A,B)$ we must be careful in order not to update also $p_{BA}$ since from the definition of Causality in \cite{spirtes2000causation} we have that if $A$ causes $B$, then $B$ can not cause $A$. Here we use the partial ordering previously mentioned: the decision maker has a partial ordering $\succeq$ of the variables which corresponds to variables that can not cause each other. This extra assumption, although a strong one, can be thought of expert knowledge in the domain of the decision problem. 
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/uncertainties.png}}
+\caption{The probabilistic form of the uncertainties from the agent's point of view.}
+\label{form_ofl}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+\subsubsection{Uncertainty Updating}
+Given that the decision maker can observe a full realization of $X_t=(X_1=x_1,...,X_n=x_n)$ of the variables from the true causal model, where $x_i \in \{0,1 \}$, then for any pair $X_i,X_j$ with $X_j \succeq X_i$, if $(X_i=1, X_j=1)$ is observed on stage $t$, then the belief $p_{X_i X_j}$ is increased by de decision maker to:
+\begin{equation}
+ p_{X_i X_j}^{(t+1)} = p_{X_i X_j}^{(t)}+\alpha (1-p_{X_i X_j}^{(t)}) \textrm{ for } \alpha \in (0,1). 
+ \end{equation}
+On the other hand, if $(X_i=1, X_j=0)$ is observed on stage $t$, then we decrease $p_{X_i X_j}$ to:
+\begin{equation}
+p_{X_i X_j}^{(t+1)} =   \alpha p_{X_i X_j}^{(t)}  \textrm{ for } \alpha \in (0,1).  \end{equation}
+Once the values  $p_{X_i X_j}$ are updated for every $i,j$ such that $X_j \succeq X_i$, the procedure is once again started with a new observation $X_{t+1}$.
+
+\subsubsection{Obtaining a structure and decision making}
+After a series of rounds of observation and belief updating it is expected that the information provided by the environment, together with the partial ordering, will allow the decision maker to update his beliefs about the existence of a causal relation between variables in such a way that the stronger (bigger than some threshold) values are considered as a relation existing between a pair of variables. Once a causal structure $\bar{\mathcal{G}}$ is obtained, the decision maker this structure \textit{as if} it were the true causal model in order to choose an action by using our proposed criteria and then updating beliefs by observe the causal consequence of the action; this procedure ends with a vector parameters $\alpha$ over the Conditional Probability Tables of the Causal Model which has structure $\bar{\mathcal{G}}$, and such parameters can be used in order to start again the structure-learning procedure, since a low-value parameter points to a possible non-existence of a causal link in $\bar{\mathcal{G}}$ when the outcome of the action is considered.
+
+\section{Experiments and Results}
+In order to test our method, we use the simple example in \cite{gonzalez2018playing}, in which a sick patient arrives to a hospital and a medic who does not know his disease must give him some treatment, which can have or not a reaction, which can kill him. The Causal Graphical Model that controls what happens to the patient is shown in Figure \ref{causal_model}.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/Propuesta/causal_graph.png}}
+\caption{The true Causal Graphical Model for the test scenario: the target variable \textit{Lives} is causally influenced by the disease the patient has, the treatment assigned and the survival to the secondary effects of treatment.}
+\label{causal_model}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+We test our method by starting with a random initialization of the probabilities of a variable causing another and updating as mentioned. As an external input we included a list of pairs of variables in which the first element can not cause the second one. Using this list, a second list of \textit{possible causes} was obtained and to the elements of this list random probabilities were assigned. A value of $\alpha=0.8$ was used, and $\alpha$ was decreased by a factor of $1/k$ where $k$ was the current round. After 10 rounds of observing realizations from the true model we see in Figure \ref{10_rounds} that the beliefs about causal relations that do hold in Figure \ref{causal_model} tend to $1$ while non-existing links go down to $0$. In Figure \ref{25_rounds} the same behavior is observed.
+
+We repeated the experiments of $10$ and $25$ rounds $100$ times
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_10_5marzo.png}}
+\caption{Beliefs about the existence of causal links between variables in 10 rounds.}
+\label{10_rounds}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_25_5marzo.png}}
+\caption{Beliefs about the existence of causal links between variables in 25 rounds.}
+\label{25_rounds}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+\section{Conclusions and Future Work}
+We have proposed an optimality criteria of decision making under causal-controlled uncertainty which makes use of a decision maker belief's about the existence of causal relations in his environment. The proposed method makes use of an implicit distribution over causal structure and applies a simpler, but intuitive, criteria within each structure. We also proposed a method for finding a causal structure based in beliefs about the existence of causal relations between variables and the updating of those beliefs in terms of what was observed from the true model. The need of a causal ordering is required since it is known that based on mere observations a Directed Graph can not be obtained.
+
+Our method allows the use of a previously shown method for decision making based on causal information in the case where the decision maker only knows the variables of the model. In a simple case, we tested our method and it was shown experimentally that the proposed method could find the causal links that hold in the true causal model, while gradually stop believing in the existence of links not present in the true causal model.
+
+There are still several issues that must be adressed in the near future, such as the case of multi-valued variables or considering a dynamically changing causal model. Also, the generale case involving variable discovery must be solved in order to solve the problem of causal decision making when an unknown causal mechanism controls the environment. 
+
+\subsubsection*{Acknowledgements}
+The authors would like to thank \texttt{<Anonymous>} for his valuable comments on certain important issues.
+
+\bibliographystyle{apalike}
+\bibliography{/Users/MauricioGS1/INAOE/Propuesta/Bibliografia.bib}
+
+\end{document}
