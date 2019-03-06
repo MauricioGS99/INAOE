@@ -97,7 +97,7 @@ where $P$ is a probability distribution which encodes the agent knowledge, or be
  a^\ast = \textrm{ argmax }_{a \in \mathcal{A}}\sum_g P(Y=1 | do(a), g)P(g).
 \end{equation}
 
-Since the action chosen is the action with the highest probability of producing the most desired action, then it is the action that maximizes the expected utility for the agent. If an action $a_0 \in \mathcal{A}$ yielded a higher expected utility, that would imply that it has higher probability of \textit{causing} the same desired action, but this is not possible because of how $a^\ast$ is obtained.
+Notice that, by construction, $a^\ast$ is the action with the highest probability of producing the most desired action; therefore, we argue that $a^\ast$ it is in fact the action that maximizes the expected utility for the agent. In order to show this, let $a \in \mathcal{A}$ an action that has higher expected utility; this is, $a$ produces the outcome $Y=1$ with a higher probability than $a^\ast$, which is a contradiction considering how $a^\ast$ is obtained.
 
 The procedure for selecting $a^\ast$ connects both the utility for the decision maker (because of the most desired outcome) and his beliefs (the measure $P$) about \textit{causing} a desired result. Since the causal mechanism and the uncertainties in the environment are connected, $a^\ast$ to maximizes expected utility. This procedure allows to choose a \textit{better action} in terms of what is currently known about causal relations. In fact, the distribution in Equation \ref{principle} includes an implicit probability distribution over causal structures as opposed to Equation \ref{pearl} which assumes a single causal structure rather than having a distribution over structures.
 
@@ -136,7 +136,7 @@ Since the probability $p_{AB}$ is considered for any pair $(A,B)$ we must be car
 
 \subsubsection{Uncertainty Updating}
 Given that the decision maker can observe a full realization of $X_t=(X_1=x_1,...,X_n=x_n)$ of the variables from the true causal model, where $x_i \in \{0,1 \}$, then for any pair $X_i,X_j$ with $X_j \succeq X_i$, if $(X_i=1, X_j=1)$ is observed on stage $t$, then the belief $p_{X_i X_j}$ is increased by de decision maker to:
-\begin{equation}
+\begin{equation}{\label{increase}}
  p_{X_i X_j}^{(t+1)} = p_{X_i X_j}^{(t)}+\alpha (1-p_{X_i X_j}^{(t)}) \textrm{ for } \alpha \in (0,1). 
  \end{equation}
 On the other hand, if $(X_i=1, X_j=0)$ is observed on stage $t$, then we decrease $p_{X_i X_j}$ to:
@@ -144,10 +144,21 @@ On the other hand, if $(X_i=1, X_j=0)$ is observed on stage $t$, then we decreas
 p_{X_i X_j}^{(t+1)} =   \alpha p_{X_i X_j}^{(t)}  \textrm{ for } \alpha \in (0,1).  \end{equation}
 Once the values  $p_{X_i X_j}$ are updated for every $i,j$ such that $X_j \succeq X_i$, the procedure is once again started with a new observation $X_{t+1}$.
 
+\subsubsection{Smoothing}
+Notice that the method proposed in the previous section allows for big jumps to happen when current beliefs are small, since the difference between $1$ and the current quantification of uncertainty $p$ can ve big if $p$ is small, so we slightly modify Equation \ref{increase} to:
+\begin{equation}
+ p_{X_i X_j}^{(t+1)} = p_{X_i X_j}^{(t)}+\alpha (1-p_{X_i X_j}^{(t)}) \textrm{ for } \alpha \in (0,1),
+\end{equation}
+When $p_{X_i X_j}^{(t)} \geq 1/2$ and,
+\begin{equation}
+ p_{X_i X_j}^{(t+1)} = p_{X_i X_j}^{(t)}+\alpha (\frac{1}{2}-p_{X_i X_j}^{(t)}) \textrm{ for } \alpha \in (0,1),
+\end{equation}
+when $p_{X_i X_j}^{(t)} \leq 1/2$. 
 \subsubsection{Obtaining a structure and decision making}
 After a series of rounds of observation and belief updating it is expected that the information provided by the environment, together with the partial ordering, will allow the decision maker to update his beliefs about the existence of a causal relation between variables in such a way that the stronger (bigger than some threshold) values are considered as a relation existing between a pair of variables. Once a causal structure $\bar{\mathcal{G}}$ is obtained, the decision maker this structure \textit{as if} it were the true causal model in order to choose an action by using our proposed criteria and then updating beliefs by observe the causal consequence of the action; this procedure ends with a vector parameters $\alpha$ over the Conditional Probability Tables of the Causal Model which has structure $\bar{\mathcal{G}}$, and such parameters can be used in order to start again the structure-learning procedure, since a low-value parameter points to a possible non-existence of a causal link in $\bar{\mathcal{G}}$ when the outcome of the action is considered.
 
 \section{Experiments and Results}
+\subsection{Sick Patient Problem}
 In order to test our method, we use the simple example in \cite{gonzalez2018playing}, in which a sick patient arrives to a hospital and a medic who does not know his disease must give him some treatment, which can have or not a reaction, which can kill him. The Causal Graphical Model that controls what happens to the patient is shown in Figure \ref{causal_model}.
 
 \begin{figure}[ht]
@@ -160,14 +171,24 @@ In order to test our method, we use the simple example in \cite{gonzalez2018play
 \vskip -0.2in
 \end{figure}
 
-We test our method by starting with a random initialization of the probabilities of a variable causing another and updating as mentioned. As an external input we included a list of pairs of variables in which the first element can not cause the second one. Using this list, a second list of \textit{possible causes} was obtained and to the elements of this list random probabilities were assigned. A value of $\alpha=0.8$ was used, and $\alpha$ was decreased by a factor of $1/k$ where $k$ was the current round. After 10 rounds of observing realizations from the true model we see in Figure \ref{10_rounds} that the beliefs about causal relations that do hold in Figure \ref{causal_model} tend to $1$ while non-existing links go down to $0$. In Figure \ref{25_rounds} the same behavior is observed.
+We test our method by starting with a random initialization of the probabilities of a variable causing another and updating as mentioned. As an external input we included a list of pairs of variables in which the first element can not cause the second one. Using this list, a second list of \textit{possible causes} was obtained and to the elements of this list random probabilities were assigned. A value of $\alpha=0.8$ was used, and $\alpha$ was decreased by a factor of $1/k$ where $k$ was the current round. 
 
-We repeated the experiments of $10$ and $25$ rounds $100$ times
+\subsection{One-trial experiments}
+In order to show how the beliefs are being updated inside the agent's head we show here the results of one-trial realizations; this is, the process of starting with random initial beliefs and update for $k$ rounds of observing, with $k \in \{ 10,25,50 \}$. 
+
+After 10 rounds of observing realizations from the true model we see in Figure \ref{10_rounds} that the beliefs about causal relations that do hold in Figure \ref{causal_model} tend to $1$ while non-existing links go down to $0$. 
+
+In Figure \ref{25_rounds} the same behavior is observed.
+
+In Figure \ref{50_rounds} we observe a similar behavior
+
+\subparagraph{Averages of multiple trials}
+Both of the previous experiments were a single realization of our method; this is, a single structure would be obtained. In order to explore our results in a more general way, we repeated the experiments of $10$ and $25$ and $50$ rounds $500$ times and we observe the averages in the probabilities (beliefs). These results are shown in Figure \ref{500_10_rounds},, Figure \ref{500_25_rounds} and Figure \ref{500_50_rounds}.
 
 \begin{figure}[ht]
 \vskip 0.2in
 \begin{center}
-\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_10_5marzo.png}}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_10.png}}
 \caption{Beliefs about the existence of causal links between variables in 10 rounds.}
 \label{10_rounds}
 \end{center}
@@ -177,19 +198,87 @@ We repeated the experiments of $10$ and $25$ rounds $100$ times
 \begin{figure}[ht]
 \vskip 0.2in
 \begin{center}
-\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_25_5marzo.png}}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_25.png}}
 \caption{Beliefs about the existence of causal links between variables in 25 rounds.}
 \label{25_rounds}
 \end{center}
 \vskip -0.2in
 \end{figure}
 
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_50.png}}
+\caption{Beliefs about the existence of causal links between variables in 50 rounds.}
+\label{50_rounds}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_500_10.png}}
+\caption{Repeating 500 times the 10 round learning.}
+\label{500_10_rounds}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_500_25.png}}
+\caption{Repeating 500 times the 25 round learning.}
+\label{500_25_rounds}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_500_50.png}}
+\caption{Repeating 500 times the 50 round learning.}
+\label{500_50_rounds}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+\subsection{Alarm Problem}
+We tested our method in the well known Alarm problem described in \cite{barber2012bayesian}, where al Alarm can be triggered by a Burglar or by an Earthquake, and we introduced the situation in which the Burglary can be caused by the occurrence of a Recession. The causal model for this example is shown in Figure \ref{alarm_problem}.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/alarm}}
+\caption{Causal model for the Alarm Problem.}
+\label{alarm_problem}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+In this example, the only elements in the ordering were the pairs $(Alarm, Burglary)$ and $(Alarm,Earthquake)$, so there were $10$ possible causes that the method had to consider. We show only the $500$ repetitions of $25$ rounds in Figure \ref{500_25_alarm_problem} where we observe that the method correctly discarded 5 non-existing causal links and correctly captured 4, and we had only 1 false-positive which corresponds to the link Recession causing Alarm, which is not an edge present in the graph, but since Causality is a transitive relation, it is in fact a causal relation.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{/Users/MauricioGS1/INAOE/UAI_2019/Code/results_500_50_alarm.png}}
+\caption{500 repetitions of 25 learning rounds.}
+\label{500_25_alarm_problem}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+
 \section{Conclusions and Future Work}
-We have proposed an optimality criteria of decision making under causal-controlled uncertainty which makes use of a decision maker belief's about the existence of causal relations in his environment. The proposed method makes use of an implicit distribution over causal structure and applies a simpler, but intuitive, criteria within each structure. We also proposed a method for finding a causal structure based in beliefs about the existence of causal relations between variables and the updating of those beliefs in terms of what was observed from the true model. The need of a causal ordering is required since it is known that based on mere observations a Directed Graph can not be obtained.
+We have proposed an optimality criteria for decision making under a causal-controlled uncertain component which makes use of a decision maker belief's about the existence of causal relations in his environment. The proposed method makes use of an implicit distribution over causal structure and applies a simpler, but intuitive, criteria within each structure. Such decision criteria, when implemented, leads to a decision-making algorithm in which a decision maker uses beliefs \textit{as if} they were the true causal model and then updates after observing an outcome. It has been experimentally shown that such algorithm has a similar performance to the classic Q-learning. 
+
+We have also proposed a method for obtaining a causal structure based in a decision maker beliefs about the existence of causal relations between pairs variables and then updating of those beliefs in terms of what was observed from the true model. The need of a causal ordering is required since it is known that based on mere observations a Directed Graph can not be obtained as previously argued.
 
 Our method allows the use of a previously shown method for decision making based on causal information in the case where the decision maker only knows the variables of the model. In a simple case, we tested our method and it was shown experimentally that the proposed method could find the causal links that hold in the true causal model, while gradually stop believing in the existence of links not present in the true causal model.
 
-There are still several issues that must be adressed in the near future, such as the case of multi-valued variables or considering a dynamically changing causal model. Also, the generale case involving variable discovery must be solved in order to solve the problem of causal decision making when an unknown causal mechanism controls the environment. 
+There are still several issues that must be adressed in the near future, such as the case of multi-valued variables or considering a dynamically changing causal model. Also, the general case involving variable discovery must be solved in order to solve the problem of causal decision making when an unknown causal mechanism controls the environment. 
 
 \subsubsection*{Acknowledgements}
 The authors would like to thank \texttt{<Anonymous>} for his valuable comments on certain important issues.
