@@ -1,0 +1,361 @@
+\documentclass{beamer}
+\mode<presentation> {
+
+
+\usetheme{Madrid}
+
+}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+%\usepackage[spanish, mexico]{babel}
+\usepackage{listings}
+\usepackage{breakcites}
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{amssymb,amsthm,amsmath,latexsym}
+\usepackage{natbib}
+\theoremstyle{plain}
+\newtheorem{teo}{Theorem}
+\newtheorem{prop}[teo]{Proposition}
+\newtheorem{defi}[teo]{Definition}
+\newtheorem{obs}[teo]{Observation}
+\newtheorem{lem}[teo]{Lemma}
+\newtheorem{cor}[teo]{Corolary}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usetikzlibrary{calc}
+
+\title{Use and acquisition of causal relations for decision making under uncertainty using imperfect information games} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Mauricio Gonzalez Soto} % Your name
+\institute[INAOE] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution for the title page
+\medskip
+\textit{mauricio@inaoep.mx} % Your email address
+}
+\date{\today} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}
+\tableofcontents
+\end{frame}
+
+\section{Introduction and Problem Statement}
+\begin{frame}
+\begin{center}
+\LARGE{Introduction}
+\end{center}
+\end{frame}
+\subsection{Introduction}
+\begin{frame}
+\frametitle{Main idea}
+How to learn and use causal information in order to make a good choice in an uncertain environment?
+\end{frame}
+
+\begin{frame}
+\frametitle{Two components}
+We notice two components from the main idea:
+\begin{itemize}
+\item Learn.
+\item Use.
+\end{itemize}
+\end{frame}
+
+\subsection{Relevance}
+\begin{frame}
+\frametitle{Why?}
+\begin{itemize}
+\item Decision making under uncertainty is fundamental for Artificial Intelligence (\cite{lake2017building}).
+\item Optimal policies in Reinforcement Learning are the best action for each state.
+\item Reinforcement Learning (RL) is \textit{not} a Causal Problem.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Why?}
+\begin{itemize}
+\item Mainstream ideas in DMU work at the \textit{associative}\footnote{probabilities, correlations...} level of information.
+\item In fact, Optimal Policies in RL satisfy the classical criterion of Maximum Expected Utility.
+\item Given the importance of Causation in science \textbf{we consider decision making theory that relies on causal information.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{What do we know?}
+\begin{itemize}
+\item Rationality $+$ probabilistic information $=$ maximize expected utility.
+\item Rationality $+$ \textbf{known} causal information $=$ maximize expected utility considering what is caused by actions (\cite{pearl2009causality}, \cite{lattimoreNIPS2016})
+\item Rationality $+$ \textbf{unknown} causal information $=$ ¿? 
+\end{itemize}
+\end{frame}
+
+\subsection{Objectives}
+\begin{frame}
+\frametitle{General Objective}
+We recall the General Objective stated in \cite{gonzalez2019causal}:
+\\
+\textit{...to provide the understanding and knowledge about what are the implications of causality for a rational decision maker who faces an uncertain environment and about how causal relations can be discovered and used in order to make good choices that maximize the expected utility for the decision maker...}
+\end{frame}
+
+\subsection{Research Problem}
+\begin{frame}
+\frametitle{Research Problem}
+We recall here the Research Problem described in \cite{gonzalez2019causal}:
+\begin{itemize}
+\item Let  $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem under uncertainty whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. We ask how a decision maker could \textit{learn} about the causal structure that controls his environment in order to \textit{make good choices} with respect to his preferences.
+\end{itemize}
+\end{frame}
+
+\section{First year}
+\begin{frame}
+\begin{center}
+\LARGE{First Year}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{First Year}
+During the 2017-2018 academic year:
+\begin{itemize}
+\item The general objective and research problem to be studied were defined, as well as a mathematical problem which we called a Causal Decision Problem.
+\item We proposed a preliminar solution which allowed for an optimal action to be found by a decision maker under some assumptions:
+\begin{equation}{\label{first_version}}
+P(Y=1 | do(a^\ast)) \geq P(Y=1 | do(a)) \textrm{ for all } a \in \mathcal{A},
+\end{equation}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{First Year}
+\begin{itemize}
+\item Using Equation \ref{first_version}, we devised a learning algorithm which assumed known the causal structure and learned both the parameters of the causal model of the environment, and an optimal action, yielding a performance similar to classic Reinforcement Learning algorithms which do not use causal information, but rather rely on the maximization of expected utility \citep{gonzalez2018playing}.
+\item Poster presented at Causality Workshop ICML 2018.
+\item Proposal Defense (27-Nov-2018)
+\end{itemize}
+\end{frame}
+
+\section{Second Year}
+\begin{frame}
+\begin{center}
+\LARGE{Second Year}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Second Year}
+During the 2018-2019 academic year:
+\begin{itemize}
+\item The solution criterion given in Equation \ref{first_version} for causal decision making was further developed and extended for the case when a decision maker does not know the causal model which controls his environment:
+\begin{equation}{\label{second_version}}
+a \succeq b \textrm{ iff } \sum_{c \in \mathcal{C}} u(c) \left( \sum_{g \in \mathcal{F}} P_g(c | do(a))P_C(g) \right) \geq \sum_{c \in \mathcal{C}}  u(c) \left( \sum_{g \in \mathcal{F}} P_g(c | do(b))P_C(g) \right).
+\end{equation}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Second Year}
+\begin{itemize}
+\item Using \ref{second_version} we were able to define the notion of a Causal Game and the idea of a Nash equilibria within such game. We define a function $u^C_i : A \to \mathbb{R}^{+}$, for each player:
+\begin{equation}{\label{games_causal_ut}}
+u^C_i (a) = \sum_{f \in A}  u_i(a) \left( \sum_g P^g_i (h_i(f) | do(a_i), a_{-i}) P_C(g) \right) \textrm{ for } a \in A=A_1 \times \cdots \times A_N.
+\end{equation}
+\item We define a Nash equilibrium for this \textit{causal strategic game} is an action profile $a^\ast \in A$ if and only if
+\begin{equation}{\label{nash_eq}}
+ u^C_i(a^\ast) \geq u^C_i(a_i, a^\ast_{-i}) \textrm{ for any other } a_i \in A_i. 
+ \end{equation}
+ \item We argued that Reinforcement Learning is not a Causal Problem in itself in \cite{gonzalez2019reinforcement}.
+ \item Technical report CCC-19-002 which we cite here as \cite{gonzalez2019causal}. 
+\end{itemize}
+\end{frame}
+
+\section{Third Year}
+\begin{frame}
+\begin{center}
+\LARGE{Third Year}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Third Year}
+During the 2019-2020 academic year:
+\begin{itemize}
+\item We further refined the concept of a Causal Game and that of a Nash Equilibrium for Causal Games.
+\item We also studied causal-structure learning via interaction with a causally controled environment.
+\end{itemize}
+\end{frame}
+
+\subsection{Causal Games}
+\begin{frame}
+\frametitle{Causal Games: New work}
+We refined the work done in the Second Year by modifying Equation \ref{games_causal_ut} in the following way:
+\begin{itemize}
+\item For each player $i \in N$ in the strategic game, we define the following probability distribution over consequences:
+\begin{equation}{\label{causal_utility}}
+p^a_i (c) =  p^\omega_i (c | do(a_i), a_{-i}) p_i(\omega)\textrm{ for } a \in A=A_1 \times \cdots \times A_N.
+\end{equation}
+\item We now define:
+\begin{equation}
+u^C_i (a) = \sum_{c \in C}  u_i(c) p^a_i (c) \textrm{ for } a \in A=A_1 \times \cdots \times A_N.
+\end{equation}
+\item A Nash equilibrium for this \textit{causal strategic game} is an action profile $a^\ast \in A$ if and only if
+\begin{equation}
+ u^C_i(a^\ast) \geq u^C_i(a_i, a^\ast_{-i}) \textrm{ for any other } a_i \in A_i. 
+ \end{equation}
+\item This work, \cite{gonzalez2019games}, was presented at a MICAI 2019 Workshop.
+\end{itemize}
+\end{frame}
+
+\subsection{Causal-Structure Learning: A Random Graph Approach}{\label{random_graph}}
+\begin{frame}
+\frametitle{Causal-Structure Learning: A Random Graph Approach}
+\begin{itemize}
+\item Human beings focus on \textit{local} aspects while learning causal relations which are later unified into a single structure \citep{fernbach2009causal,waldmann2008causal, danks2014unifying}.
+\item Following this idea, \cite{wellen2012learning} propose a model to explain how observations  and interventions are used by human beings to learn causal relations in terms of a local prediction-error learning.
+\item Following this line of thought, we propose here a local probabilistic encoding of the uncertainty that a decision maker has over the existence or not of causal relations between variables.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Main Idea}
+\begin{itemize}
+\item Let a rational agent consider the following set of variables $\mathcal{X}=\{ X_1,...,X_n \}$ which are causally related, even though the agent does not now how.
+\item the agent knows that she can only intervene one variable, and does so in order to alter the value of some  identified reward variable; without loss of generality assume that the agent can only intervene on $X_1$ wishing to affect $X_n$.
+\item Let $p_{ij}$ be the belief that the agent has over a causal relation (directed link) existing between variable with index $i$ and variable with index $j$.
+\item Let $G$ an initial {\em random} DAG formed as follows: node set is $N=\{1,...,n\}$ and a link exists between $i$ and $j$ with probability $p_{ij}$.
+\item Now, we use the methodology found in \cite{gonzalez2018playing}  as well as our results presented in \cite{gonzalez2019theorems} in order to find the best action $a^\ast$ for the obtained graph $G$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Main Idea}
+\begin{itemize}
+\item The best action is taken, and a full realization $X_1=x_1,...,X_n=x_n$ is observed.
+\item Now, we update the $p_{ij}$'s using Bayes Theorem as follows:
+\item For each pair of indexes $i,j$ we consider the subgraph containing only $1,i,j,n$ as nodes, either connected or not, and we ask for the probability of such graph producing the output $(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n)$, which will be used as the likelihood of data, and as a prior probability we simply use $p_{ij}$
+\item So we have:
+\begin{equation}{\label{bayesian_updating}}
+p_{ij}^{t+1} \propto p(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n | \textrm{subgraph formed by nodes 1,i,j,n})p_{ij}^t.
+\end{equation}
+\end{itemize}
+\end{frame}
+
+\subsection{Implementation}
+\begin{frame}
+\frametitle{Implementation}
+\begin{itemize}
+\item We are using the same setting as in the experiments described in Year 1; this is, a patient sick with an unknown disease and a doctor who must choose between two possible treatments, each one with some risk of causing a life-threatening allergic reaction. Our agent (the doctor) must now learn which variables (disease, treatment, reaction, dying) are causally related.
+\end{itemize}
+\begin{enumerate}
+\item Initialize $p_{ij}$ randomly
+\item Initialize graph $G$ with link from node $i$ to node $j$ with probability $p_{ij}$
+\item Find optimal action $a^\ast$ for graph $G$ and probabilities given by a count of the observations.
+\item Calculate probability of the approximate model $G$ producing the full observation $X_1 = a^\ast, X_2=x_2,...,X_n=x_n$. 
+\item Update $p_{ij}^{t+1} \propto p(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n | \textrm{subgraph formed by nodes 1,i,j,n})p_{ij}^t.$
+\end{enumerate}
+\end{frame}
+
+\subsection{Results}
+\begin{frame}
+\frametitle{Ground Truth}
+We know that the true causal model is a causal graph in which it holds that:
+\begin{itemize}
+\item Disease causes Final
+\item Treatment causes Final
+\item Treatment causes Reaction
+\item Reaction causes Final
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\includegraphics[width=0.7\textwidth]{/Users/MauricioGS1/INAOE/3rd_year_eval/Figures/causal_model_espanol.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+\includegraphics[scale=0.5]{/Users/MauricioGS1/INAOE/3rd_year_eval/Figures/figura.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{What are we seeing?}
+\begin{itemize}
+\item Our method correctly learned three edges.
+\item It did not learned a possible wrong edge. 
+\item Variance needs to be reduced. 
+\end{itemize}
+\end{frame}
+
+\section{Publications}
+\begin{frame}
+\begin{center}
+\LARGE{Publications}
+\end{center}
+\end{frame}
+
+\subsection{First Year}
+\begin{frame}
+\frametitle{First Year}
+\begin{itemize}
+\item The learning procedure described in Section \ref{first_year} was presented at the CausalML Workshop during ICML 2018 in Stockholm, Sweden. Link to Pre-print: \url{https://arxiv.org/abs/1807.01268}
+\end{itemize}
+\end{frame}
+
+\subsection{Second Year}
+\begin{frame}
+\frametitle{Second Year}
+\begin{itemize}
+\item A Technical Report containing the overall details of the research in progress. Cited as \cite{gonzalez2019causal}. \url{https://ccc.inaoep.mx/archivos/CCC-19-002.pdf}
+\item A paper in which via an algebraic argument we state that Reinforcement Learning, in its current mathematical definition, can not be considered as a causal problem. Co-authored with F. Orihuela-Espina. Implied by this result is the need for a Causal version of learning-by-interaction. Cited as \cite{gonzalez2019reinforcement}
+\end{itemize}
+\end{frame}
+
+\subsection{Third Year}
+\begin{frame}
+\frametitle{Third Year}
+\begin{itemize}
+\item A paper including the first version of the Causal Nash Equilibrium was presented at a MICAI 2019 Workshop  \url{https://ccc.inaoep.mx/~bio/2019_MICAI_CausalityWorkshop/}. Cited as \cite{gonzalez2019games}
+\item A paper including the decision-making results was orally presented at a NeurIPS 2019 Workshop  \url{https://nehzux.github.io/NewInML2019/}. Cited as \cite{gonzalez2019theorems}
+\item Journal paper submitted to Theory and Decision  \url{https://www.springer.com/journal/11238/}
+\end{itemize}
+\end{frame}
+
+\section{Future Work}
+\begin{frame}
+\begin{center}
+\LARGE{Future Work}
+\end{center}
+\end{frame}
+
+\subsection{Learning graphical structure}
+\begin{frame}
+\frametitle{Learning graphical structure}
+\begin{itemize}
+\item More complex causal model.
+\item Intervening more than one variable.
+\item Limitations on the learning proposal.
+\item OpenAI Gym scenario.
+\item Theoretical guarantees on our structure-learning proposal.
+\end{itemize} 
+\end{frame}
+
+\subsection{Bayesian Non parametrics}
+\begin{frame}
+\frametitle{Bayesian Nonparametrics}
+Bayesian non parametrics is a field within Bayesian statistics in which priors of infinite dimension are allowed, so models with a greater expressibility can be developed.
+\begin{itemize}
+\item Priors over complex graphs.
+\item Fully Bayesian learning procedure.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apalike}
+\bibliography{/Users/MauricioGS1/INAOE/Propuesta/Bibliografia.bib}
+\end{frame}
+\end{document}
