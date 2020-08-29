@@ -1,0 +1,535 @@
+\RequirePackage{fix-cm}
+
+\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+%\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+%
+%
+\usepackage{mathptmx}      
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex]{color,graphicx}
+\usepackage{listings}
+\usepackage{breakcites}
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{amssymb,amsmath,latexsym}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{enumitem}
+%\bibliographystyle{stylename}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usetikzlibrary{calc}
+\usepackage{color}
+\usepackage{todonotes}
+% etc.
+%
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+%
+% Insert the name of "your journal" with
+% \journalname{myjournal}
+%
+\begin{document}
+
+\title{Von Neumann-Morgenstern and Savage Theorems for Causal Decision Making}
+
+%\titlerunning{Short form of title}        % if too long for running head
+%
+%\author{Mauricio Gonzalez-Soto         \and
+%        Luis E. Sucar \and
+%        Hugo J. Escalante
+%}
+\author{Anonymous}
+%\authorrunning{Short form of author list} % if too long for running head
+
+%\institute{Mauricio Gonzalez-Soto \at
+%              Coordinaci\'on de Ciencias Computacionales, Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica \\
+%              Luis Enrique Erro 1, Santa Maria Tonanzintla, Puebla\\
+%              Mexico\\
+%              \email{mauricio@inaoep.mx}           \\
+%              \url{https://orcid.org/0000-0003-2668-9013}        
+%           \and
+%           Luis E. Sucar \at
+%              Coordinaci\'on de Ciencias Computacionales, Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica \\
+%              Luis Enrique Erro 1, Santa Maria Tonanzintla, Puebla\\
+%              M\'exico\\
+%              \email{esucar@inaoep.mx}\\
+%              \url{https://orcid.org/0000-0002-3685-5567}
+%           \and
+%           Hugo J. Escalante \at
+%           Coordinaci\'on de Ciencias Computacionales, Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica \\
+%              Luis Enrique Erro 1, Santa Maria Tonanzintla, Puebla\\
+%              M\'exico\\
+%              \email{hugojair@inaoep.mx}\\
+%              \url{https://orcid.org/0000-0003-4603-3513}
+%}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
+
+\maketitle
+% modificar abstract para reflejar cambios en el paper
+\begin{abstract} 
+Decision making under uncertainty has been well studied when information is considered at the associative (probabilistic) level. The classical Theorems of von Neumann-Morgenstern and Savage provide a formal criterion for rational choice using purely associative information. In this work, we consider decision problems in which available actions and consequences are causally connected. We define a Causal Decision Problem and state a previous result from J. Pearl, showing that it can be considered as a causal version of the classical von Neumann-Morgenstern Theorem. Furthermore, we consider the case when the causal mechanism that controls the environment is unknown to the decision maker, and propose and prove a causal version of Savage's Theorem. Then, we describe two applications for which these theorems provide theoretical foundations: causal games and optimal action learning in causal environments. These results highlight the importance of causal models in decision making and the variety of potential applications.
+
+\keywords{Causality \and Decision Making \and Game Theory}
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+\tableofcontents
+\newpage
+\section{Introduction}
+\label{intro}
+Causal reasoning is a constant element in our lives as it is in human nature to constantly ask \textit{why} \citep{spirtes2000causation,pearl2018why}. Looking for causes is an everyday task and, in fact, causal reasoning is to be found at the very core of our minds \citep{waldmann2013causal,danks2014unifying,neil2019causality}. It has been argued that the brain is a causal inference machine which uses \textit{effects} to figure out \textit{causes} in order to engage with the world \citep{friston2010free,clark2015surfing}. 
+Furthermore, acting in the world is conceived by human beings as \textit{intervening} the world and in fact humans are able to learn and use causal relations while making choices \citep{tversky1977causal, tversky1980causal, lagnado2007beyond, hagmayer2008causal, hagmayer2009decision, hagmayer2017causality}.
+
+Reinforcement Learning (RL) \citep{sutton1998reinforcement} is the standard framework for automated learning by interaction, in which an agent, located at some time $t$ and some state $s$ has to make a choice in order to maximize her long-run discounted accumulated reward. Optimal policies, which are prescriptions of which action must be taken at some state $s$, satisfy the Bellman Equations \citep{Puterman:1994:MDP:528623} and are the standard solution to the problem. Such solution is equivalent to maximizing \textit{expected utility} \citep{webb2007game}, which is the decision criterion prescribed by the most commonly used decision-making theories: von Neumann-Morgenstern's and Savage's. Such theories rely on \textit{associative} information, which is based on patterns found in data, rather than stronger causal relations. 
+
+On the other hand, an important aspect of acting in the world is being able to make decisions under uncertain conditions \citep{bernardo2000bayesian,kahneman2000choices,gilboa2009decision,lake2017building}. \cite{von1944theory} gave an answer for how to make choices if rational preferences are assumed and if the decision maker knows the stochastic relation between actions and outcomes: maximize expected utility. If no such relation is known, then \cite{savage1954the} showed that a rational decision maker must choose \textit{as if} she is maximizing expected utility using a \textit{subjective} probability distribution. Such theorems provide formal criteria for decision making if rationality is assumed. 
+
+These criteria are the basis for many techniques used in Artificial Intelligence; as previously mentioned, RL algorithms learn \textit{optimal policies} in such a way that any action prescribed by such optimal policy achieves the maximum expected utility \citep{sutton1998reinforcement,webb2007game}. In general, any algorithm which relies on the von Neumann-Morgenstern or Savage Theorems, such as the optimal policies from Reinforcement Learning, is based on associative relations which are expressed using correlations or probability distributions. 
+
+It is a natural question how to formalize rational decision making when causal information is present; answering such question is relevant given the importance of causal relations in everyday life. Given that human beings actually use causal information while making choices and the importance of the associative decision making results, it is desirable to have an explicit, computationally implementable criterion for decision making analogous to those by von Neumann-Morgenstern and Savage.
+
+The previous question has been already considered by \cite{nozick1969newcomb}, \cite{lewis1981causal} and by \cite{joyce1999foundations} without an explicit optimality criterion for decision making and also by \cite{pearl2009causality}, who provides an optimality criterion for decision making under causal-controlled uncertainty when the causal mechanism which controls the environment is known by the decision maker. 
+
+\subsection{Motivation}
+Intelligent agents often face situations in which an action must be chosen in the presence of uncertain conditions; this means that an outcome will be observed according to some probability distribution given the action chosen by the agent. In many real-world applications, the agent doesn't have access to all of the parameters required to calculate the maximum utility, but if the agent knew that his actions and the possible consequences were \textit{causally related}, then she could attempt to discover this relations and \textit{use them} in order to predict consequences of actions better than if he only observes multiple action-outcome pairs as done in Reinforcement Learning \citep{sutton1998reinforcement}. 
+	
+Many real-world applications of decision making are solved by \textit{associative} methods which capture only statistical patterns that are found in data. For example, current methods in Reinforcement Learning, and specifically in Deep Reinforcement Learning, although they have good performance in the task that were supposed to solve, they cannot explain \textit{why} a specific trajectory was chosen by the algorithm. This is highly relevant in real-world applications, e.g. self-driving cars, where it is very important to understand why an accident happened. 
+	
+%For example, as told by \cite{bornstein2016artificial}, at the University of Pittsburgh Medical Center a team of researchers tried to use Machine Learning to predict whether pneumonia patients might develop severe complications. For this purpose they trained Neural Networks and Decision Trees using the hospital's own data. Neural Networks outperformed Decision Trees, but only by studying the decisions made by the latter the doctors did find out that the algorithms instructed doctors to send home pneumonia patients who already had asthma, despite the fact that asthma sufferers are known to be extremely vulnerable to complications. The problem relied in the training data, because the hospital policy was to automatically send asthma sufferers with pneumonia to intensive care, and this policy worked so well that asthma sufferers almost never developed severe complications. It was only through the interpretability of the Decision Trees that the doctors didn't send asthma patients with pneumonia home to a certain death. 
+	
+%Methods based in Deep Neural Networks aren't supposed to explain why a certain output was produced since those methods are based in \textit{parallel distributed representations} and the same goes for any other learning algorithm that uses Deep Neural Networks, like Deep Reinforcement learning; when AlphaGo \citep{silver2017mastering} defeated the world-champion, humanity didn't learn anything new about the game of Go, because the algorithm was not designed to explain its moves, although it was a very sophisticated method for achieving it. Using only associations between variables it is not possible to infer which one is the cause and which one the effect, something extra is required. The fundamental difference between causal and associative models is that causal models consider \textit{doing} over \textit{observing} \citep{pearl2018why}. Once a causal relation has been established between two events, performing, or intervening, over a cause allows one to predict the outcome in a more robust way than if using only correlations between observations. 
+	
+Learning a causal model of an environment and using it to act upon the environment allows us to \textit{explain} aspects of the model that a purely associative model would not be able to explain. It allows one to ask \textit{why}. Since a causal model, once it is learned, does not depend neither on the agent nor its preferences, the gained knowledge could be easily transferred for problems of similar domain where the use of the acquired causal relations is useful.  Our work provides the foundations of decision making algorithms which are based on causal relations and, as will be shown, are able to learn causal models of the environment.
+	
+%The impact of Causal Inference goes beyond Machine Learning and Computer Science. For example, economists are interested in understanding what did certain public policy caused \citep{athey2017impact} or how human decision makers that show \textit{inconsistent} preferences over time could be oriented if the causal consequences of this inconsistent behavior is introduced into a decision-making model \citep{albers2016motivating}. In complex adaptive systems, causal relations can be used to clarify the complex interactions between agents in the system \citep{abbott2017complex} as well as for prediction and planning \citep{hunt2016ants,brock2018causality}.
+
+%cerrar esta sección sobre cómo mi trabajo impacta en la motivación
+
+\subsection{Aim}
+Our goal is to establish the foundations for decision making algorithms that rely on the existence of causal relations even though such relations are not previously known or fully observable to a decision maker such as the algorithms found, for example, in \citep{bareinboim2015bandits,lattimoreNIPS2016,sen2017identifying}. We provide here an implementable decision making criterion which we build over known results from von Neumman and Morgenstern, Savage and Pearl. With our result we expect to highlight the importance and applicability of causal relations in decision making and the wide variety of possible applications.
+
+\subsection{Main Result}
+In this work we extend Pearl's result to the case where a decision maker \textit{does not know the causal mechanism} that controls her environment, so she holds \textit{beliefs} about possible causal models and uses such beliefs \textit{as if} they were true, as prescribed by \cite{joyce1999foundations}, in order to attempt to make a good choice given her beliefs. We provide an explicit way of choosing an optimal decision given what the decision maker believes about the causal structure of her environment, thus providing a causal version of Savage's Theorem. We take a normative point of view to study how causal relations should be used by a \textit{rational} agent when making decisions with uncertain consequences. 
+
+In Section \ref{on_causality} we define Causality and state the differences between causal and associative information; having shown this, we state two of the most important decision making results, the von Neumann-Morgenstern and Savage Theorems, which rely on purely associative information; then, our objective is to present two analogous theorems: J. Pearl's result, Theorem \ref{causal_ut} which relies on a known causal model, and our main contribution: Theorem \ref{causal_savage}, which is able to use a set of \textit{beliefs} about possible causal models (i.e., a distribution) instead of a known one.
+
+\subsection{Applications}
+Game Theory deals with situations in which several rational decision makers, or players, \textit{interact} while pursuing some well-defined objective \citep{osborne1994course}; the case in which decision makers make a choice simultaneously without knowing the choice made by the other players is called a \textit{strategic game}; a well-known strategic game is the famous \textit{prisoners' dilemma} in which two detainees must choose between confessing or remaining silent and both know the consequences of any combination of actions, what is ignored by each player is the decision made by the other. When players ignore both the actions made by other players as well as the knowledge that made them choose a certain action, is called a game with incomplete information, or a \textit{Bayesian Game} which was introduced by \cite{harsanyi1967games1,harsanyi1968games2,harsanyi1968games3}. 
+
+In this work we use the Bayesian Game model in order to study what happens when several decision makers have certain knowledge about an environment which is controlled by some, unknown but fixed, causal mechanism. We study games in which the players actions \textit{cause} some consequence according to some unknown causal model. We apply our a rational choice criterion to formulate a Nash equilibrium for Causal Games by defining a probability updating for Bayesian Causal Games.
+
+Furthermore, we consider the problem of learning optimal actions in a causal environment. A decision maker is given the task of learning an optimal action in a causal environment in which a causal model controls the relation between actions and outcomes. We consider the case in which the causal model is unknown or partially known to the decision maker, so she has to use beliefs about possible causal models. From the decision maker point of view, having in mind a causal model allows one to ask what would have happened if another action was taken without actually performing the alternative action; therefore, being able of choosing the best action in terms of the probabilities of causing a good outcome.  Also, learning a causal model of a certain environment will facilitate knowledge transfer to similar domains, as the underlying cause-effect structure has been captured and could later be used.
+
+
+% añadir motivación del paper y de las teorías
+
+
+\subsection{Organization of the paper}
+\label{organization}
+This paper is organized as follows: first, in Section \ref{classical_theorems} we present the classical decision making theorems which use only associative information in their formulation; then, in Section \ref{causal_decision_problems} a brief introduction to Causation and Causal Graphical Models is given. In  Section \ref{related_work}  we present previous approaches both to Causal Decision Making as well as its applications to interactive optimal action learning: causal reinforcement learning. In Section \ref{causal_results} we state a von Neumann-Morgenstern Theorem for Causal Decision Making that is due to Pearl, which assumes a known causal structure, as well as our main result, Theorem \ref{causal_savage} which extends Pearl's result to the case of an unknown causal structure. Finally two applications of Theorem \ref{causal_savage} are described. First, a causal analogue of Nash Equilibrium for games in which actions and consequences are causally connected is defined. Then, in Section \ref{optimal_action} we describe some optimal-action learning methods for causal environments which are able to learn an \textit{optimal intervention} under different assumptions and conditions; in particular, we describe and provide an extension for one of such works. Finally, in Section \ref{limitations} we comment on the limitations of the assumptions we consider;  and in Section \ref{conclusion} we summarize the main contributions of our work.
+
+\section{The Classical Decision Making Theorems: von Neumann-Morgenstern and Savage}
+\label{classical_theorems}
+A decision problem under uncertainty is the mathematical model of a situation in which an agent must choose one out of many available actions with uncertain consequences which depend on different, possibly unknown, factors. Such consequences are ordered in terms of the \textit{satisfaction} that they produce in the decision maker, and such ordering is represented by a \textit{preference relation} denoted by $\succeq$, where $a \succeq b$ is read as $a$ being preferred to $b$.
+
+The most well-known theories for Decision Making are those from \cite{von1944theory} and \cite{savage1954the}. In the former theory it is assumed that the decision maker knows the stochastic relation between actions and consequences, which is also known as \textit{decision under risk}, and in that case the theory guarantees that the decision maker behaves \textit{as if} she maximizes the expected value of a utility function. If the decision maker doesn't know the probabilities of observing an outcome given a chosen action, then Savage's theory guarantees that the decision maker behaves as if she has in mind a \textit{subjective} probability distribution and a utility function and chooses the action which maximizes the expected utility with respect to that subjective probability distribution and the utility function, this is known in the literature as \textit{decision under uncertainty}.
+
+Other Decision Making theories exist, such as Kahneman and Tversky's Prospect Theory \citep{kahneman1979prospect}, Gilboa's Case-Based Decision Theory \citep{gilboa1995case}, among others that are out of the scope of this work. In Section \ref{joyce_theory} we make reference to another theory, Joyce's Causal Decision Making \citep{joyce1999foundations}.
+%We will later talk about another theory: Joyce's Causal Decision Making \citep{joyce1999foundations}. 
+For further details on classical (non-causal) decision making, see \cite{bernardo2000bayesian} and \cite{gilboa2009decision}.
+
+\subsection{Von Neumann-Morgenstern Theorem}
+\label{vNM-M}
+\cite{von1944theory} had the objective of justifying strategies in which players in a game maximized their expected utility. This theorem considers a scenario of \textit{decision under risk} and rational preferences; this is, choosing between uncertain outcomes with known probabilities. 
+
+Formally, using the notation from \cite{gilboa2009decision}, we consider a set $X$ of alternatives. Let $L$ be the set of lotteries with finite support over $X$. The object of choice are the elements $l \in L$ that are known to the decision maker; we represent the decision maker's preferences by a preference relation $\succeq \subseteq L \times L$ that  satisfies being complete, transitive, continuous and a technical condition called \textit{independence}. This family of conditions is called \textit{von Neumann-Morgenstern rationality axioms} as described in \cite{gilboa2009decision}.
+\begin{theorem}[von Neumann-Morgenstern]{\label{vNM}}
+A preference relation $\succeq \subseteq L \times L$ where $L$ is a set of lotteries with finite support over a set $X$ satisfies the von Neumann-Morgenstern rationality axioms if and only if there exists a function $u: X \to \mathbb{R}$ such that for every $P, Q \in L$ we have that
+\begin{equation}
+P \succeq Q \textrm{ if and only if } \sum_{x \in X} P(x) u(x) \geq \sum_{x \in X} Q(x) u(x). 
+\end{equation}
+\end{theorem}
+The theorem states that if a rational decision maker knows the probabilities of obtaining a certain outcome, then she must choose \textit{as if} maximizing the expected value of some function $u$ whose existence is guaranteed by Theorem \ref{vNM}. See \cite{gilboa2009decision} for details on the proof.
+
+\subsection{Savage's Theorem}
+\label{savage_theorem}
+If a rational decision maker does not know the probabilities of obtaining certain outcomes and does not have a precise, objective quantification of her preferences (utility function), then it is Savage's Theorem \citep{savage1954the}, which gives a formal choosing criterion. Savage's result extends von Neumann-Morgenstern Theorem since it considers the case in which a rational decision maker does not know neither her utility function nor the probabilities to be used in order to obtain the expected values required for making choices according to the von Neumann-Morgenstern Theorem. The notation and setting we use here is the one used by \cite{bernardo2000bayesian}. Consider a set $\Omega$. Consider a countable set $\mathcal{A}$ of available actions; for each action $a_i \in \mathcal{A}$, a partition $E_i$ of $\Omega$ and a set of consequences $C_i$. Let $\mathcal{E}$ the union of every $E_i$, we assume $\mathcal{E}$ to be a $\sigma$-algebra of events, and $\mathcal{C}$ the union of all $C_i$.
+
+\begin{definition}
+An uncertain environment is the tuple $(\Omega, \mathcal{A},\mathcal{C},\mathcal{E})$. Where $\mathcal{A}$ is a non-empty set of available actions, $\mathcal{C}$ a set of consequences and $\mathcal{E}$ an algebra of events over $\Omega$. 
+\end{definition}
+
+When we consider the preferences of some decision maker over the set of consequences of some uncertain environment we have a Decision Problem under Uncertainty, \cite{bernardo2000bayesian}:
+
+\begin{definition}
+A Decision Problem under Uncertainty is an uncertain environment $(\Omega, \mathcal{A},\mathcal{C},\mathcal{E})$ plus a preference relation $\succeq$ defined over $\mathcal{C}$ 
+\end{definition}
+
+\begin{definition}
+A Decision Problem under Uncertainty is said to be bounded if there exists a pair of consequences $c_\ast$ and $c^\ast$ such that for every $c \in \mathcal{C}$, $c^{\ast} \succeq c \succeq c_\ast$
+\end{definition}
+
+\begin{definition}
+A Decision Problem under Uncertainty is said to be finite if the set $\mathcal{A}$ of available actions is finite.
+\end{definition}
+
+\cite{bernardo2000bayesian} derive the existence of a subjective probability measure from a set of \textit{rationality axioms}, where a decision maker has some mechanism of quantifying uncertainty in terms of real numbers within the $[0,1]$ interval, and then the classical Kolmogorov axioms are derived from such construction, and therefore all of the known machinery of Probability Theory. We now state Savage's Theorem. Details can be found in \citep{kreps1988choice,bernardo2000bayesian,gilboa2009decision}.
+
+\begin{theorem}[Savage]{\label{savage}}
+In a finite, bounded Decision Problem under Uncertainty $(\mathcal{A}, \mathcal{C}, \mathcal{E}, \succeq)$, the preference relation $\succeq$ satisfies the Savage rationality axioms if and only if there exists: 
+\begin{itemize}
+\item A \textit{probability measure} $P$, called a \textit{subjective probability}, that associates with each uncertain event $E \in \mathcal{E}$ a real number $P(E)$. 
+\item A utility function $u : \mathcal{C} \to \mathbb{R}$ such that it associates each consequence with a real number $u(c)$. 
+\end{itemize}
+Such that for $a_1$ and $a_2$ actions in $\mathcal{A}$,
+\begin{eqnarray*}
+ &a_1 \succeq a_2&\\
+ & \textrm{ if and only if }&\\
+ &\mathbb{E}_P[u(a_1)] \geq  \mathbb{E}_P[u(a_2)],&
+\end{eqnarray*}
+where $\mathbb{E}_P[u(a)]$ is given by $\sum_{j \in J} u(c_j) P(E_j)$ since any action $a$ can be identified as $\{ c_j | E_j ; j \in J \}.$ Details in Section 2.5.2 from \cite{bernardo2000bayesian}.
+\end{theorem}
+\begin{proof}
+Proposition 2.22 in \cite{bernardo2000bayesian}.
+\end{proof}
+This theorem states that if a rational decision maker does not know the precise probabilities of outcomes given that an action is taken, then she chooses \textit{as if} having in mind a probability assignment to the uncertainties in her environment and using such probabilities to calculate the expected utility with respect to a subjective utility function that represents her preferences. This result also gives a precise definition of \textit{subjective probability} as a quantification of uncertainty which is used to make good decisions. See \cite{hens1992note} and \cite{gilboa2009decision} for further details. See \cite{ellsberg1961risk} and \cite{binmore2008rational} for critiques of the Savage axioms. 
+
+\subsection{Limitations of the Theorems}
+\label{theorems_limitations}
+The mentioned theorems have the limitations of relying only on associative information; this is, on correlations and patterns found in data rather than strong causal relations. For example, as mentioned by \cite{pearl2009causality}, using only associative information one would be tempted to stop going to the doctor in order to stop being diagnosed as sick. On the other hand, our results provide an easy to implement way of making choices using causal relations and beliefs about such relations as used by humans. Human beings \textit{know} (this is, use causal relations) that going to the physician does not \textit{cause} being sick and this is what Pearl calls \textit{commonsensical} decision making. Also, as we will mention later in the paper, associative information lacks an \textit{ordering} thus failing to determine \textit{if $X$ is performed, then $Y$ will be caused}.
+
+Formally, in this paper we consider the actions chosen by a decision maker as an \textit{interventions} over a causal graphical model; this is, in the classical von Neumann-Morgenstern and Savage Theorems, once a decision maker chooses an action $a$, the observed consequence has a probability $P(c|a)$; if causal information is considered, then the probability of a certain consequence is $P(c|do(a))$. In the next section we state some basic facts on causality and why $P(\cdot |x)$ is different from $P(\cdot | do(x))$ for some value $x$.
+
+\section{Causal Decision Problems}
+\label{causal_decision_problems}
+\subsection{On causality}
+\label{on_causality}
+The concept of Causality deals with regularities found in a given environment which are stronger than probabilistic (or associative) relations in the sense that a causal relation allows for evaluating a change in the \textit{consequence} given that a change in the \textit{cause} is performed. The \textit{manipulationist} interpretation of Causality (details in \cite{woodward2005making}) is adopted here. The main paradigm is clearly expressed by \cite{campbell1979quasi} as \textit{manipulation of a cause will result in a manipulation of the effect}. Consider the following example from \cite{woodward2005making}: manually forcing a barometer to go down won't cause a storm, whereas the occurrence of a storm will cause the barometer to go down. 
+
+We know from \cite{granger1969investigating} and \cite{lamport1978time} that there are two sufficient and necessary conditions for causality: a context and an order. We will adopt here the formal definition of Causality given by \cite{spirtes2000causation}; i.e., a stochastic relation between events which is \textit{irreflexive, antisymmetric} and \textit{transitive}. Similar descriptions of the manipulationist approach can be found in \cite{holland1986statistics}. Causal inference tools, such as Pearl's do-calculus \citep{pearl2009causality} allow to find the effect of an intervention in terms of probabilistic information when certain conditions are met. For what remains, we assume the \textit{causal axioms} found in \citep{spirtes2000causation} as well as the condition known as \textit{causal sufficiency} \citep{pearl2009causality}.
+
+\subsection{A definition of Causality}
+The formal definition of Causality that will be adopted in this work is the definition provided by \cite{spirtes2000causation} which states that causation is a \textit{stochastic} relation between \textit{events} in a probability space; this is, some event (or events) \textit{causes} another event to occurr.
+\begin{definition}{\label{causal_relation}}
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ a finite probability space, and consider a binary relation $\to \subseteq \mathcal{F} \times \mathcal{F}$ which is:
+\begin{itemize}
+\item Transitive: If $A \to B$ and $B \to C$ for any $A, B, C \in \mathcal{F}$ then $A \to C$.
+\item Irreflexive: For all $A \in \mathcal{F}$ it doesn't hold that $A \to A$.
+\item Antisymmetric: For $A,B \in \mathcal{F}$ such that $A \neq B$ if $A \to B$ then it doesn't hold that $B \to A$.
+\end{itemize}
+We say that $A$ is \textit{a cause} of $B$ (or that $A$ causes $B$, $A$ is the cause and $B$ is the effect) if $A \to B$. It is important to note that an event may have more than one cause, and that not necessarily each one of this causes is sufficient to produce the effect. 
+\end{definition}
+
+We assume that for any event $A \in \mathcal{F}$ there are no causes lying outside $\mathcal{F}$ (causal sufficiency). It is also be assumed that the relations expressed by $\to$ are the only causal relations in the environment. This assumption can be interpreted as not allowing \textit{intermediate} events between events known to be causally related. For example, if in our space we have that striking a match causes fire, we do not allow into consideration the underlying chemical reactions that cause fire from friction. In this sense, we say that striking a match is a \textit{direct cause} of fire and this are the only causes considered herein \citep{spirtes2000causation}. 
+
+\subsection{Representation into a Directed Acyclic Graph}
+The causal relations contained in $\to$ can be summarized in a graph $G=(V,E)$ in the following way: If $A \to B$ then the graph must contain a node $A \in V$ representing $A$, a node  $B \in V$ representing $B$ and a directed edge $e \in E$ connecting the respective nodes in the direction of the causal relation.
+
+\begin{proposition}
+Given a causal relation $\to$ as in Definition \ref{causal_relation} then the graph that is obtained by considering nodes for events and edges for the causal relations as previously described is a Directed Acyclic Graph.
+\end{proposition}
+
+\begin{proof}
+The graph is directed since the definition of causality imposes a direction between events; namely, a direction between the cause and the effect. To see that the graph is acyclic, suppose that a cycle $A \to B \to C \to A$ exists, this would imply, because of transitivity, that $A \to A$, which cannot be since the relation is irreflexive.
+\end{proof}
+
+Notice that since the graph is finite, there exist some nodes that do not have causes, which are called \textit{exogenous}. If an event $A$ is caused by some other event, then we say it is \textit{endogenous} and we denote the set of its causes as $Pa(A)$. It is proven in \cite{kiiveri1984recursive} that at least one exogenous node exists in a causal graph.
+
+\subsubsection{Relations between a causal graph and probabilities}
+Given a Directed Acyclic Graph (DAG) it is possible to obtain a probability measure that expresses the conditional independence relations that are expressed in the graph \citep{koller2009probabilistic}, which we will call $P_\mathcal{G}$. For the DAG built from the causal relations, we require that its correspondent $P_\mathcal{G}$ satisfies the following conditions \citep{spirtes2000causation}:
+\begin{itemize}
+\item Markov Causality: an event $V$ (or node in $\mathcal{G}$) is independent of every other event $A$ such that $A$ isn't either a cause nor an effect of $V$ given the causes of $V$.
+\item Causal Minimality: No proper sub-graph of $\mathcal{G}$ satisfies the Markov Causality condition.
+\item Causal Faithfulness: The Markov Causal condition contains all of the conditional independence statements expressed by the DAG $\mathcal{G}$.
+\end{itemize}
+
+Also, we consider an extra pair of conditions. The first one, known as Causal Sufficiency, is about the \textit{nature} of the model: for any variable $X$ in the model $\mathcal{G}$ there are no causes of $X$ \textit{outside} of the model $\mathcal{G}$\citep{spirtes2000causation,pearl2009causality,sucar2015probabilistic}. The second required condition is that the causal mechanism remains unchanged after interventions, this is called in \citep{woodward2005making} as \textit{invariantness}, this basically means that an intervention does not \textit{break} the causal mechanism when intervening upon it. These conditions are required in an axiomatic fashion so they will be taken as they are without questioning.
+
+\subsection{Causal Graphical Models}
+A Causal Graphical Model (CGM) consists of a set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, and a Directed Acyclic Graph (DAG) whose nodes are in correspondence with the variables in $\mathcal{X}$ and whose edges represent relations of cause-effect. Also, the model, which up to this point is nothing more than a Bayesian Network with causal semantics, is enriched with an operator named $do()$ which is defined over graphs and whose action is described as follows: given $\mathbf{X} \subseteq \mathcal{X}$ and $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$ the action $do(\mathbf{X} = \mathbf{x} )$ corresponds to assign to each $X_j \in \mathbf{X}$ the value $x_{x_{i_j}}$ and to delete every incoming edges into the node corresponding to each $X_j$ in the graph $\mathcal{G}$ \citep{pearl2009causality,koller2009probabilistic,sucar2015probabilistic}. To apply the $do()$ operator over a variable (or set of variables) is also called as an \textit{intervention} over the variable. It is this interventional operator which separates associative models from causal models, since it provides the solution of the “probability raising” attempts to define causality, since if $X$ is a cause for $Y$ then $P(Y | do(X)) > P(Y)$ \citep{pearl2018why}. In fact, using the \textit{Do} operator we give a definition of a variable $X$ causing $Y$.
+\begin{definition}
+Let $\mathcal{G}$ a Causal Graphical Model and $P_\mathcal{G}$ its corresponding distribution and let $X$ and $Y$ variables in the model. We say that $X$ \textit{causes} $Y$ if 
+\[ P_\mathcal{G}(Y | do(X=x) \neq P_\mathcal{G}(Y | do(X=x'). \]
+\end{definition}
+It is required that the probability distribution that results from an intervention over a variable is Markov compatible with the graph; this is, the resulting interventional distribution is equivalent to the product of the conditional probability of every variable given its parents in the intervened graph \citep{sucar2015probabilistic}.
+\subsubsection{The identifiability problem}
+Under what conditions can causal inquiries be answered in terms of purely \textit{observational} data? It is known that if the Markov Causal condition and Causal Faithfulness hold, then it is possible to identify the causal graph up to related variables without direction (Markov equivalence) \citep{peters2012identifiability,mooij2016distinguishing}.
+
+\subsubsection{Do-Calculus}
+The Do-Calculus is a set of rules for manipulating probabilistic statements that involve interventions and, under certain conditions, allow them to be transformed into statements that do not involve interventional data \citep{pearl1995causal,pearl2009causality}. 
+	
+It is important to introduce some notation. Consider a causal graphical model $\mathcal{G}$ and $X,Y,Z$ disjoint sets of nodes of $\mathcal{G}$. We denote by $\mathcal{G}_{\bar{X}}$ the graph that is obtained by deleting from $\mathcal{G}$ all of the edges that enter nodes in $X$. In the same way, $\mathcal{G}_{\underline{X}}$ is the graph obtained by deleting the edges that emerge from $X$. Finally, $\mathcal{G}_{\underline{Z}\bar{X}}$ is the graph obtained by deleting edges incoming into $X$ and outgoing from $Z$.
+	
+\begin{theorem}[Do-Calculus, \cite{pearl2009causality}]{\label{docalculus}}
+Let $\mathcal{G}$ a CGM and $P_{\mathcal{G}}$ the probability measure induced by the model; then, for disjoint sets of nodes $X,Y,Z,W$ it holds:
+\begin{itemize}
+\item If for the graph $\mathcal{G}_{\bar{X}}$ it holds that $Y$ is conditionally independent from  $Z$ given $X$ and $W$, then
+\[ P_{\mathcal{G}}(Y=y | do(X=x), Z=z, W=w) = P_{\mathcal{G}}(Y=y | do(X=x), W=w). \]
+\item If for the graph $\mathcal{G}_{\bar{X}\underline{Z}}$ it holds that $Y$ is conditionally independent from $Z$ given $X$ and $W$, then
+\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), Z = z, W=w). \]
+\item Let $Z(W)$ the set of nodes in  $Z$ that aren't ancestors of any node in  $W$ in the graph $\mathcal{G}_{\bar{X}}$.  If $Y$ is conditionally independent from $Z$ given $X$ and $W$ in the graph $G_{\bar{X}, \bar{Z(W)}}$, then
+\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
+\end{itemize}
+\end{theorem}
+\begin{proof}
+See \cite{pearl2009causality}.
+\end{proof}
+\begin{theorem}[Properties of Do-calculus]{\cite{peters2017elements}}\\
+The following statements hold:
+\begin{itemize}
+\item The Do-Calculus is complete; this is, sufficient for deriving every identifiable interventional distribution \citep{huang2006pearl,shpitser2006identification}.
+\item There exists an algorithm capable of finding all of the identifiable interventions \citep{tian2002,huang2006pearl}.
+\item A necessary and sufficient criteria exists for the identifiability of interventional distributions \citep{shpitser2006identification,huang2006pearl}.
+\end{itemize}
+\end{theorem}
+\begin{proof}
+See \cite{peters2017elements}.
+\end{proof}
+The Do-Calculus rules provide a solution for the identifiability problem:
+\begin{corollary} \cite{pearl2009causality}.\\
+A distribution $q=P(y_1,...,y_k | do(x_1),...,do(x_n))$ is identifiable in a causal graphical model $\mathcal{G}$ if there exists a finite sequence of transformations, where each one of them corresponds to any of the rules of the Do-Calculus, that reduce $q$ to a purely observational expression.
+\end{corollary}
+
+\subsection{Further limitations of associative information}
+As we have said, one of the fundamental aspects of Causality is the presence of an order and a context; the latter of such elements not being present in associative information; this is, consider a distribution $p(a,t)$, which we can factorize in the two following ways:
+\begin{equation}
+    p(a,t)=p(a|t)p(t)
+\end{equation}
+and
+\begin{equation}
+    p(a,t)=p(t|a)p(a)
+\end{equation}
+which can be represented indistinguishably as Bayesian Networks as $a \to t$ or as $t \to a$. This situation does not happen while considering causal relations.
+
+Also, we recall the difference between an observation and an intervention: $p(x|y) \neq p(x | do(y))$. If this was not the case, then correlation would equal causation which can be shown in a variety of examples to be false.
+\subsection{Causal Environments and Causal Decision Problems}{\label{causal_problems}}
+We consider decision making with causal information. We define a Causal Environment to be an \textit{uncertain environment} such that there exists a Causal Graphical Model (CGM) $\mathcal{G}$ \citep{koller2009probabilistic} which controls the environment; this is, there exists a causal relation between available actions and consequences in the sense that any chosen action will stochastically \textit{cause} a consequence. The role of the CGM is to encode all of the causal relations present in the environment, not only between actions and consequences but also between any other variables in the environment. 
+\begin{definition}
+A Causal Environment is a tuple $(\Omega, \mathcal{A},\mathcal{G},\mathcal{C},\mathcal{E})$ where $(\Omega, \mathcal{A},\mathcal{C},\mathcal{E})$ is an uncertain environment and $\mathcal{G}$ is a CGM such that the set of variables of $\mathcal{G}$ correspond to the uncertain events in $\mathcal{E}$.
+\end{definition}
+\begin{definition}
+We define a Causal Decision Problem (CDP) as a tuple $(\Omega, \mathcal{A}, \mathcal{G},\mathcal{E},\mathcal{C},\succeq)$ where $(\Omega, \mathcal{A}, \mathcal{G},\mathcal{E},\mathcal{C})$ is a Causal Environment and $\succeq$ is a preference relation. 
+\end{definition}
+
+For the CGM in a CDP we distinguish two particular variables: one corresponding to the available actions, and one corresponding to the produced (caused) outcome. We are considering that only one variable can be intervened upon and that the values of such variable represent the actions available to the decision maker; i.e., the value forced upon such variable under an intervention represents the action taken by the decision maker. The intuition behind the definition of a Causal Decision Problem is this: a decision maker chooses an action $a \in \mathcal{A}$, which is automatically inputed into the model $\mathcal{G}$, which outputs the \textit{causal outcome} $c \in \mathcal{C}$. We say a CDP is \textit{finite} if the set $\mathcal{A}$ is finite.
+
+\section{Related Work}
+\label{related_work}
+\subsection{Causal Decision Making and Decision-Theoretic foundations of Causal Inference}
+\label{joyce_theory}
+A previous attempt to formalize Decision Theory in the presence of Causal Information was given by \cite{lewis1981causal,joyce1999foundations}. According to such formulation, a decision maker must choose whatever action is more likely to (causally) produce a desired outcome while keeping any beliefs about causal relations fixed. This is stated by the Stalnaker equation \citep{stalnaker1968})
+\begin{equation}
+u(a)=\sum_{x} P(a \square \to x)u(x),
+\end{equation}
+\noindent
+where $a \square \to x$ is to be read as \textit{if the decision maker does} $a$ \textit{then} $x$ \textit{would be the case} \citep{gibbard1978counterfactuals,kleinberg2013causality}. Lewis' and Joyce's work captured the intuition that causal relations may be used to control the environment and to predict what is caused by the actions of a decision maker. In Section \ref{section_savage} we will refine the $\square \to$ operator by an explicit way of calculating the probability of causing an outcome by doing a certain action in terms of Pearl's do-calculus.
+
+\cite{heckerman1995decision} provide a framework for defining the notions of cause and effect in terms of decision theoretical concepts, such as states and outcomes and gives a theoretical basis for graphical description of causes and effects, such as the causal influence diagrams from \citep{dawid2002influence}. Heckerman gave an elegant definition of causality, but did not address how to actually make choices using causal information.
+
+\cite{dawid2012decision} presented a decision-theoretic approach to causal inference in which a decision maker must take into account how alternatives compare against the other in terms of the \textit{average causal effect}, such approach uses the well-known influence diagrams \citep{dawid2002influence,dawid2003causal} in order to derive formulas that allow an explicit calculation of the average causal effect. Influence diagrams have the ability of expressing both intervention variables and chance variables into a single graphical structure in such a way that the standard techniques for probabilistic DAG's still apply. An optimality criterion for sequential interventions is obtained by \cite{dawid2008identifying} by maximizing the expectation of outcomes.
+
+\subsection{Causal Reinforcement Learning and Bandit Problems}
+It is known that human beings conceive their actions on the world as \textit{intervening} in the world \citep{hagmayer2009decision}. Following this idea, \cite{lattimoreNIPS2016} consider decision problems in which the action to be chosen is an intervention over a known causal graphical model. The agent must choose the intervention that maximizes the value of a \textit{target variable} after a series of learning rounds. They model their problem by considering that choosing an intervention is choosing an arm of a \textit{slot machine}, usually known as Bandit Problems, in which a gambler chooses an arm and gets some reward. From the rewards they estimate probabilities and output an optimal action in the sense of obtaining minimal regret. Their work considers that the causal model is fully known, restriction which is partially relaxed by \cite{sen2017identifying}, and mention that the case in which the causal model is unknown is left as an open question, and this is precisely what we are proposing to answer. 
+
+In general, in a classic Bandit Problem an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine which is of the same kind and whose initial settings are independent of the previous machine and action \citep{sutton1998reinforcement}. Several algorithms exists for finding the best arm in a multi-arm bandit, such as those described in \cite{bubeck2009pure,audibert2010best,gabillon2012best,agarwal2014taming,jamieson2014lil,jamieson2014best,chen2015optimal,carpentier2016tight,russo2016simple,kaufmann2016complexity}, but none of these works consider causal-governed environments. \cite{ortega2014generalized} gives results on sequential decision-making using Generalized Thompson Sampling that could be extended into causal inference problems. The aforementioned papers assume the causal model is known to the decision makers so their work focuses on \textit{using} causal information to make good choices, but the problem of \textit{acquiring} this causal knowledge is left unattacked.
+
+Bandit Problems are a particular case of a Reinforcement Learning problem, which as mentioned in the introduction, is a general framework for interactive learning in which an agent performs an action and receives some feedback from his environment. The classical setting for an agent to learn by interaction is that of a Markov Decision Process, in which at time $t$ an agent is situated in state $s_t$ and takes an action $a_t$, he then observes a new state $s_{t+1}$ and a reward signal $r_{t+1}$. The objective is to find the \textit{policy} which maximizes the long-run reward. It can be shown that this is equivalent to solving the Bellman Equations \citep{sutton1998reinforcement}, and that the actions prescribed by such optimal policy maximize the expected utility. This shows the connection between the modern field of Reinforcement Learning and classical results in Decision Theory which justify choosing actions that maximize expected utility when certain \textit{rationality} assumptions are made. 
+
+It has been recently studied the connection between Reinforcement Learning and Causation in a series of papers by \cite{gershman2015reinforcement}, \cite{lattimoreNIPS2016}, \cite{bareinboim2015bandits} among others such as \citep{zhang2016markov, zhang2017transfer, lee2019structural, correa2019statistical, zhang2019near}. Even though the connection between Reinforcement Learning and causal reasoning is intuitive, a proper  framework for Reinforcement Learning based on Causal Decision Making (see \cite{joyce1999foundations} for an introduction to Causal Decision Making and \cite{pearl2009causality} for a more recent computational version) has not been explored. 
+
+In this paper we present a causal decision making criterion useful when the probabilities that hold in an environment are not previously known to the decision maker, which is usually the case in Reinforcement Learning. Therefore, the findings of this paper can have an important impact into decision making because of both, the importance of causal relations in artificial intelligence and the realistic assumption of an agent not having full information of her environment. 
+
+\section{Main Result: Causal Decision Making}
+\label{causal_results}
+\subsection{A von Neumann-Morgenstern type theorem for causal environments}
+Consider a rational decision maker who faces a causal environment in which she knows the causal model controlling the relation between actions and outcomes. She can use the known causal model in order to find the probabilities of \textit{causing} a desired outcome given she takes a certain action. The following theorem is found in Section 4.1 of \cite{pearl2009causality}, but the intuitions that lie behind can be traced back to \cite{lewis1981causal} and \cite{joyce1999foundations}.
+
+Consider a Causal Model $G$ and its associated distribution $P_G$ and let $C$ be the set of consequences of interest for a decision maker. Then,
+\begin{theorem}[Causal von Neumann-Morgenstern Theorem, \cite{pearl2009causality}]{\label{causal_ut}}
+If a rational decision maker faces a Causal Environment and if the causal model is known, then the preference relation $\succeq$ satisfies the von Neumann-Morgenstern rationality axioms if and only if:
+\begin{eqnarray*}
+&a \succeq b&\\
+& \textrm{ if and only if }&\\
+ &\sum_{c \in C} P(c | do(a))u(c) \geq \sum_{c \in C} P(c | do(b))u(c).&
+\end{eqnarray*} 
+\end{theorem}
+Equivalently, the action that must be chosen is 
+\begin{equation}
+a^\ast = \textrm{argmax}_{a \in \mathcal{A}} \sum_{c \in C} P(c | do(a))u(c).
+\end{equation}
+\begin{proof}
+This Theorem assumes the existence of a Causal Graphical Model known by the decision maker; then, by Theorem \ref{vNM}, we know that the action that must be chosen is the one that maximizes the expected utility; we must now ask the expected utility of what? The answer lies on the Causal Graphical Model which controls the relation between actions and consequences; if this is the case, then the probability of a consequence given an action $a$ is in fact $P(c|do(a))$. The rest follows by Theorem \ref{vNM}. Details in Section 4.1 of \cite{pearl2009causality}.
+\end{proof}
+
+As shown in the proof of Theorem \ref{causal_ut}, we claim that Pearl's result can be considered as a causal version of the von Neumann-Morgenstern result since it assumes that a causal model is known. If the causal model that controls an environment is known to a decision maker, then this is equivalent of being able to know the probabilities of outcomes given actions. As stated in Section 4.1 of \cite{pearl2009causality}, the utility function $u$ is considered as given, even though the Theorem \ref{vNM} guarantees its existence. Pearl argues that decision making by maximizing such function is \textit{commonsensical} without appealing to the original results in rational decision making. We avoid entering in the long-standing debate between \textit{causal} and \textit{evidential} decision making. We only note that both von Neumann-Morgenstern's and Savage's Theorems have no {\em a priori} causal interpretation and therefore rely on associative information.
+
+\subsection{A Savage Theorem for causal environments}
+\label{section_savage}
+When the decision maker does not know the causal model which controls her environment we argue that the decision maker is facing a particular case of Savage's Theorem. The difference here being that the subjective probability must make use of the causal nature of the environment. The idea we will follow is that Savage's Theorem gives the decision maker a subjective quantification of her uncertainty about the environment and the associated probabilities which must be used \textit{as if} they were true. 
+
+In this case, where a Causal Graphical Model controls the relation between actions and outcomes, such subjective information about the environment must consider such causal structures. For this reason, we assert that the probability distribution that the decision maker has in mind is in fact a distribution over causal structures where the decision maker uses each structure as if it were the true one in order to choose the best action within each structure by using Pearl's result. We assume a finite set of actions and outcomes. Formally:
+
+\begin{theorem}[Causal Savage Theorem]
+\label{causal_savage}
+In a finite, bounded Causal Decision Problem  $(\mathcal{A}, \mathcal{G},\mathcal{E},\mathcal{C},\succeq)$, where $\mathcal{G}$ is a Causal Graphical Model, we have that the preferences $\succeq$ of a decision maker are Savage-rational if and only if there exists a probability distribution $P_C$ over a family $\mathcal{F}$ of causal structures such that for $a,b \in \mathcal{A}$:
+\begin{eqnarray*}
+&a \succeq b&\\ 
+&\textrm{ if and only if }&\\
+&\sum_{c \in \mathcal{C}} u(c) \left( \sum_{g \in \mathcal{F}} P_g(c | do(a))P_C(g) \right)&\\
+&\geq& \\
+&\sum_{c \in \mathcal{C}}  u(c) \left( \sum_{g \in \mathcal{F}} P_g(c | do(b))P_C(g) \right)&
+\end{eqnarray*}
+where $P_g$ is the probability distribution associated with the causal structure $g$. 
+\end{theorem}
+
+\begin{proof}
+The decision maker is facing an environment in which any action she takes will stochastically cause an outcome $c \in \mathcal{C}$. For this reason, the decision making is facing a very particular case of decision making under uncertainty. Assuming Savage-rationality, by Theorem \ref{savage} we obtain a utility function $u^S$ and a probability measure $P^S$ which satisfy that the preference relation is represented by the expectation of $u^S$ with respect to $P^S$. 
+
+In such a causal environment, the CGM $\mathcal{G}$ contains all of the information which connects actions, uncertain events and outcomes, and noting that we can identify any action $a$ with $\{ c_j | E_j : j \in J  \}$ where $J$ a countable set of indexes (\cite{bernardo2000bayesian}) we have that:
+\[\mathbb{E}_{P^S}[u(c)] = \sum_{j \in J} u(c_j)P^S(E_j).\]
+For each action $a=\{ c_j | E_j : j \in J \}$, $P^S(E_j)$ is the probability of \textit{causing} consequence $c_j$ by choosing action $a$. In order for the decision maker to find the probability of a certain consequence $c_j$ given that an action $a$ is performed then she must have in mind a single causal model $g$ and a way to assign probabilities over a family of causal models; i.e., the uncertainty component $P^S(E_j)$ is formed by two parts: a distribution $P_C$ which represents the degree of belief of the decision maker about a specific model $g$ being the true one, and within $g$, a distribution $P_g$ used to calculate the probability of causing some consequence $c_j$ given that action $a$ is chosen. Using the Caratheodory Extension Theorem \citep{ash2000probability}, a probability measure  $P_C$ whose support is a sufficiently general family of causal models $\mathcal{F}$ can be shown to exist. For $g \in \mathcal{F}$, the decision maker considers $g$ to be the true causal model with probability $P_C(g)$ and will use Theorem \ref{causal_ut} in order to find the best action \textit{within} the causal graphical model $g$ as if it were the true one. Let $P_g$ the probability distribution associated with $g$. 
+
+Then:
+\begin{eqnarray*}
+\mathbb{E}_{P^S}[u(c)] &=& \sum_{j \in J} u(c_j)P^S(E_j)\\
+                                      &=& \sum_{j \in J} u(c_j) \left( \sum_{g \in \mathcal{F}} P_g(c_j | do(a))P_C(g) \right).
+\end{eqnarray*}
+We have shown what is the expected utility for some action $a \in \mathcal{A}$, and again by Theorem \ref{savage} the result follows. 
+\end{proof}
+
+\subsection{Interpretation}
+Theorem \ref{causal_savage} says that a decision maker who faces a Causal Decision Problem is considering a probability distribution $P_C$ over a family $\mathcal{F}$ and, within each structure, using the term $P_g(c|do(a))$ in order to find the probability of obtaining a certain consequence given that the intervention $do(a)$ is performed; in this way, the optimal action $a^\ast$ is given by:
+\begin{equation}
+a^\ast = \textrm{ argmax }_{a \in \mathcal{A}}  \sum_{c \in \mathcal{C}} u(c) \left( \sum_{g \in \mathcal{F}} P_g(c | do(a))P_C(g) \right). 
+\end{equation}
+We note that $a^\ast$ is obtained by taking into account the utility obtained by every possible consequences weighted using both the probability of causing such action within a specific causal model $g$ and the probability that the decision maker assign to such $g \in \mathcal{F}$.
+
+We are considering a \textit{normative} interpretation for Theorem \ref{causal_savage} according to which a decision maker must use any causal information in order to obtain the best possible action. Such action must be obtained by considering the \textit{beliefs} of the decision maker about the causal relations that hold in her environment (the distribution $P_C$), how such relations could produce the best action when considered \textit{as if} they were true (distribution $P_g$), and the satisfaction (utility $u$) produced by the consequences of actions.
+
+Humans tend to ignore pure probabilistic information over causal information \citep{tversky1980causal}, and in fact are able to learn, and use, causal models in sequential decision making processes \citep{lagnado2007beyond,sloman2006causal,nichols2007decision,meder2010observing,hagmayer2013repeated,wellen2012learning}, even though such learning is not perfect \citep{rottman2014reasoning}. Therefore, this theorem provides the basis for a much stronger, and computationally implementable, framework for decision making in which causal information is preferred over associative information, even though complete causal information may not be available to the decision maker.
+
+\section{Application: Causal Games and Nash Equilibrium}
+\label{causal_games}
+In this section we know consider an application in the domain of game theory: we consider a \textit{strategic game} between $N$ rational players who are situated in a causal environment. We explore the implications of causal decision making in game theory given the importance of multi-agent systems for computational intelligence. With this contribution we expect to show that standard notions of game theory such as Nash Equilibrium can be extended to the case in which causal information is considered over associative information. Therefore, provide motivation to further extend classical results, which have been shown useful, to use causal information as a basis.
+
+A game is a model of a situation in which several players must take an action and afterwards they will be affected both by the outcome of their own action as well as the actions of the other players \citep{osborne1994course}. In a strategic game it is assumed that no player knows the action taken by any other players; we also assume that the causal mechanism, which represented by a Causal Graphical Model $\mathcal{G}$, remains fixed and it is unknown for each player. 
+
+In this game, players ignore the actions taken by any other player, and since the causal model which controls the environment is unknown by every player, the players also ignore the information that players will use in order to take their respective actions: strategic games of this type are called \textit{Bayesian Games}, introduced by Harsanyi \citep{harsanyi1967games1,harsanyi1968games2,harsanyi1968games3}. In the games we will consider, the uncertainty of every player consists of two levels: on a first level, the true causal model $\mathcal{G}$; on a second level, what an action $do(a)$ causes if a certain Causal Graphical Model $\omega$ is considered to be the causal model. 
+\begin{definition}
+A Bayesian strategic game(\cite{osborne1994course}), consists of:
+\begin{itemize}
+\item A finite set $N$ of players.
+\item A finite set $\Omega$ of \textit{states of nature}.
+\item For each player, a nonempty set $A_i$ of actions.
+\item For each player, a finite set $T_i$ and a function $\tau_i : \Omega \mapsto T_i$ the signal function of the player
+\item For each player, a probability measure $p_i$ over $\Omega$ such that $p_i (\tau^{-1}_i (t_i))>0$ for all $t_i \in T_i$.
+\item A preference relation $\succeq_i$ defined over the set of probability measures over $A \times \Omega$ where $A= A_1 \times \cdots A_n$
+\end{itemize}
+\end{definition}
+
+We will consider $\Omega$ to be a family of admissible causal models; in this way,  $\omega \in \Omega$ being the true state of nature fixes a causal model which controls the environment in which the players make their choices. In classical Bayesian games, once $\omega \in \Omega$ is realized as the true state, then each player receives a signal $t_i=\tau_i (\omega)$ and the posterior belief $p_i(\omega | \tau^{-1}_i (t_i) )$ given by $p_i(\omega) / p_i (\tau^{-1}_i (t_i))$ if $\omega \in \tau^{-1}_i (t_i)$. In the case for causal bayesian games, we must consider both the probability $p_i$ of $\omega$ being the true state as well as the probability $p^\omega_i$ of observing a certain consequence when doing some action $a_i$ if $\omega$ is the true model.
+
+Following \cite{osborne1994course}, we define a new game $G^\ast$ in which its players are all of the possible combinations $(i, t_i) \in N \times T_i$, where the possible actions for $(i,T_i)$ is $A_i$. We see that fixing a player $i \in N$, the posterior probability $p(\omega | \tau^{-1}_i (t_i))$ induces a lottery over the pairs $(a^\ast(j,\tau_j(\omega)))_j,\omega)$ for some other $j \in N$. This lottery assigns to $(a^\ast(j,\tau_j(\omega)))_j,\omega)$ the probability $p_i(\omega) / p_i (\tau^{-1}_i (t_i))$ if $\omega \in \tau^{-1}_i (t_i)$. The classical Bayesian game will simply call a Nash equilibrium for the game $G^\ast$ a Nash equilibrium of the original game; but we have the second level of uncertainty: the consequences caused by some action $a$ through a causal model $\omega$. We notice that the posterior probability itself induces a probability distribution defined over \textit{actions} for each player once a \textit{desired consequence} is fixed, this distribution, according to Theorem \ref{causal_savage} is given by $p^\omega_i (c | do(a^\ast_i), a^\ast_{-i}) p_i(\omega | \tau^{-1}_i (t_i))$. This motivates the following definition of a \textit{Causal Nash equilibrium}.
+\subsection{Causal Nash Equilibrium}
+For each player $i \in N$ in the strategic game, we define the following probability distribution over consequences:
+\begin{equation}{\label{causal_utility}}
+p^a_i (c) =  p^\omega_i (c | do(a_i), a_{-i}) p_i(\omega)\textrm{ for } a \in A=A_1 \times \cdots \times A_N.
+\end{equation}
+where $p^\omega_i$ is the probability of causing a certain consequence within a causal structure $\omega$ and $p_i$ are the player's \textit{posterior beliefs} about the causal structure that controls the environment, and $do()$ is the well known intervention operator from \cite{pearl2009causality}. We now define:
+\begin{equation}
+u^C_i (a) = \sum_{c \in C}  u_i(c) p^a_i (c) \textrm{ for } a \in A=A_1 \times \cdots \times A_N.
+\end{equation}
+Notice that $u^C_i$ evaluates an action profile $a \in A$ in terms of: The knowledge about the causal structure of each player represented by $p_i$, which allows each player to evaluate the probability of causing outcomes in terms of actions by using the $do$ operator as well as the other actions taken by the other players, given by $a_{-i}$ and the preferences of each player $u_i$. Using this new function, we define the equilibria for a strategic game with causal information and Bayesian players as:
+\begin{definition}
+A Nash equilibrium for this \textit{causal strategic game} is an action profile $a^\ast \in A$ if and only if
+\begin{equation}
+ u^C_i(a^\ast) \geq u^C_i(a_i, a^\ast_{-i}) \textrm{ for any other } a_i \in A_i. 
+ \end{equation}
+\end{definition}
+This is, an action profile is a Nash equilibrium if and only if each player uses her current knowledge about the causal structure of the environment in order to (causally) produce the best possible outcome given the actions taken by the other players. The existence of the Causal Nash Equilibrium is guaranteed if every $A_i$ is a nonempty compact convex set in some $\mathbb{R}^n$ and if the preference relation induced by $u^C_i$ is continuous and quasi-concave.
+
+\section{Application: Formalizing an optimal action learning method for causal environments}
+\label{optimal_action}
+%lo que estoy planteando complementa estos trabajos que se hicieron de manera empirica
+In recent papers by \cite{lattimoreNIPS2016,sen2017identifying} and \cite{gonzalez2018playing}, a decision maker is given the task to learn an optimal action from a series of learning rounds in a causal environment when the true causal model which controls the environment is unknown for the decision maker. \cite{lattimoreNIPS2016} assume that the conditional distributions for each variable given its parents is known, while \cite{sen2017identifying} assume as known only a part of the causal graphical model and allows for interventions in the unknown part of the model. \cite{gonzalez2018playing}  assume that the \textit{graphical structure} of such model is known. In their method, the decision maker holds beliefs about the parameters of the model, which are used in order to build a causal model that is used \textit{as if} it were the true one in order to obtain the \textit{best action} in each round.
+
+\cite{gonzalez2018playing}, assume that the graphical structure of the causal model is known and use a Dirichlet distribution in order to sample the Conditional Probability Tables required to fully specify a Causal Graphical Model; once such model is specified the authors use an expression derived from Pearl's do-calculus in order to find a best action; the best action is defined in terms of the maximum expected utility as required by both the von Neumann-Morgenstern and Savage Theorems. Their method fits within our Theorem \ref{causal_savage} because in this paper the distribution $P_C(g)$ is a \textit{distribution over causal models with the same structure}, and when a model is specified from $P_C$, it is then used as if it were the true one in order to find the best action for such causal model. In the above mentioned paper, the possible outcomes are only $1$ and $0$, so once a model $g$ is sampled, the product $u(c)P_g(c|do(a))$ simply becomes $P(C=1 | do(a))$ which is stated only as an intuitive solution in the mentioned paper. 
+
+Such learning method, which has been shown to fit in our causal decision making theorem achieves a similar performance than the classical Q-Learning algorithm with the extra of learning a causal model of a very simple environment. Learning a causal model of the environment allows to extract high-level insights of a phenomena beyond associative descriptions of what is observed. A causal model is able to \textit{explain} why a particular decision was made since it allows to extract the causes and effects of an agent's actions. Once a causal model is acquired, an external user is able to reason about \textit{what...if...} statements that associative methods cannot answer.  
+
+When a decision maker chooses an action out of many, a causal model allows to ask what would've happened if another action was taken without actually performing the alternative action. It is important to be careful when using the word \textit{explanation} since it allows for several uses in language, here we understand \textit{explanation} as used by \cite{woodward2005making} who considers explanations where what is explained depends on other factors via some relationship that holds as a matter of empirical fact rather than \textit{logical} reasons. Also, learning a causal model of a certain environment would allow transferability of knowledge into similar domains because the underlying cause-effect structure has been captured and could later be used. We have provided the extension to the causal case of the formal criteria (expected utility) to be used when a causal model is present in the environment, and therefore we hope that our result will be of interest to anyone using decision making under uncertainty. 
+
+%Queda la duda de si se necesita especificar un orden previo
+\subsection{A random graph approach to causal structure learning}
+\label{random_graphs}
+
+For the sake of completeness, we now provide a relaxation of the restriction found in \cite{gonzalez2018playing}; in such work, it is required that the graphical structure of the causal model is known, which is a strong assumption. 
+
+Human beings focus on \textit{local} aspects while learning causal relations which are later unified into a single structure (\cite{fernbach2009causal}, \cite{waldmann2008causal},  \cite{danks2014unifying}). Following this idea, \cite{wellen2012learning} propose a model to explain how observations  and interventions are used by human beings to learn causal relations in terms of a local prediction-error learning. Following this line of thought, we propose here a local probabilistic encoding of the uncertainty that a decision maker has over the existence or not of causal relations between variables.
+
+Such assumption is to be relaxed to the case in which the graphical structure of the causal model is unknown, but the variables of the model are known; also, we assume the decision maker has an ordering $\gg$ according to which if $A \gg B$, then $B$ can not cause $A$. Our extension will make use both of Theorem \ref{causal_savage}, random graphs and the \textit{as if} intuition present in this paper.
+
+We call our method \textit{local} since we use the uncertainty (from the agent's point of view) about the existence of a causal relation between pairs of variables, which are local components of the structure of a graph. Such uncertainty is to be updated in terms of what is \textit{observed} from realizations of the true causal mechanism that controls the environment. Since observations alone do not suffice to uniquely determine a DAG, we make use of a partial ordering between the variables in the model that, at least in principle, can not be a cause of each other. This ordering must be an input product from expert knowledge.
+
+Let a rational agent consider the following set of variables $\mathcal{X}=\{ X_1,...,X_n \}$ which are causally related, even though the agent does not now how; the agent knows that she can only intervene one variable, and does so in order to alter the value of some  identified reward variable; without loss of generality assume that the agent can only intervene on $X_1$ wishing to affect $X_n$. Let $p_{ij}$ be the belief that the agent has over a causal relation (directed link) existing between variable with index $i$ and variable with index $j$. Let $G$ an initial {\em random} DAG formed as follows: node set is $N=\{1,...,n\}$ and a link exists between $i$ and $j$ with probability $p_{ij}$. Now, we use the methodology found in \cite{gonzalez2018playing}  as well as our Theorem \ref{causal_savage} in order to find the best action $a^\ast$ for the obtained graph $G$. The best action is taken, and a full realization $X_1=x_1,...,X_n=x_n$ is observed.
+
+Now, we update the $p_{ij}$'s using Bayes Theorem as follows: for each pair of indexes $i,j$ we consider the subgraph containing only $1,i,j,n$ as nodes, either connected or not, and we ask for the probability of such graph producing the output $(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n)$, which will be used as the likelihood of data, and as a prior probability we simply use $p_{ij}$, so we have
+\begin{equation}{\label{bayesian_updating}}
+p_{ij}^{t+1} \propto p(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n | \textrm{subgraph formed by nodes 1,i,j,n})p_{ij}^t.
+\end{equation}
+Then, we update the model generating a new graph according to $p_{ij}$. We do not provide an implementation of Equation \ref{bayesian_updating} as it is not in the scope of this paper.
+
+\section{Limitations}
+\label{limitations}
+We are working within the classical rationality assumption. Rationality can be ultimately thought of as a \textit{consistent} or coherent way of making choices, but the precise definition has been a subject of debate. See \cite{ellsberg1961risk}, \cite{gilboa2009decision} and \cite{machina2014ambiguity} for critiques of the Savage Rationality Axioms. Another line of decision making, from a descriptive point of view, has been developed by psychologists and economists; see \cite{TverskyKahneman74,kahneman1979prospect,kahneman2000choices}.
+
+We are considering Causal Graphical Models as the representation of causal relations in the environment, and we are considering stochastic causal relations according to the manipulationist interpretation, which is one of many. We have favoured the Causal Graphical Models over other alternatives since it has been argued that several cognitive processes, such as causal reasoning, can be best represented as graphical models \cite{danks2014unifying,sloman2015causality,hagmayer2016causal}.
+
+\section{Conclusion}
+\label{conclusion}
+We have defined a Causal Decision Problem in terms of a classical Decision Problem under Uncertainty provided of a Causal Mechanism which controls the relation between actions and outcomes, which is represented by a Causal Graphical Model in this work. In the case in which a rational decision maker knows such causal relations, \cite{pearl2009causality} provides a causal version of the von Neumann-Morgenstern Theorem for decision making. 
+
+On the other hand, when a decision maker does not know the causal mechanism, in Theorem \ref{causal_savage} we have provided a causal version of the Savage Theorem; our result explicitly states how a rational decision maker should use subjective beliefs, encoded as a probability distribution over causal models, as well as the causal inference machinery within the considered causal structures in order to find an optimal action.
+
+Using Theorem \ref{causal_savage} and taking as a basis Harsanyi's model of a Bayesian Game in which every player has incomplete information about both the actions taken by other players as well as the information that made each player take his action we have been able to provide a definition of a Causal Nash Equilibrium in which every player is aware that there exists a Causal Mechanism that will produce some consequence once he takes an action. Our decision making result (i.e., Theorem \ref{causal_savage}), besides motivating the Causal Nash Equilibrium, also provides an optimality criterion for learning algorithms in causal settings such as those presented in~\cite{lattimoreNIPS2016,sen2017identifying}. Our definition of Causal Equilibrium takes into account classical game theory through the incorporation of the classical von Neumann-Morgenstern utility function as well as the fundamental notion in Causation of Pearl's $do$ operator. 
+
+We consider optimal action selection in a causal environment, providing an extension of the formal criteria (expected utility) to be used when a causal model is present in the environment. Our results provide a theoretical foundation for previous works that address this problem, considering a known or partially known causal model. Additionally, we consider the case in which the structure of the causal model is not known, proposing a novel approach based on Theorem \ref{causal_savage}, random graphs and the \textit{as if} intuition.
+
+We are confident that further developments based on our results will show that Causality is a fundamental concept for decision making under uncertainty.
+
+
+\section*{Declarations}
+
+\section*{Funding}
+The present research has been funded by the Consejo Nacional de Ciencia y Tecnolog\'ia (CONACyT).
+
+\section*{Availability of data and material}
+Not applicable
+
+\section*{Code availability}
+Not applicable
+
+\section*{Conflict of interest} 
+The authors declare that they have no conflict of interest.
+
+\section*{Authors' contributions}
+Equal contribution
+
+% BibTeX users please use one of
+\bibliographystyle{apalike}      % basic style, author-year citations
+%\bibliographystyle{spmpsci}      % mathematics and physical sciences
+%\bibliographystyle{spphys}       % APS-like style for physics
+%\bibliographystyle{spbasic}
+\bibliography{Bibliografia.bib}
+\end{document}
+% end of file template.tex
+
