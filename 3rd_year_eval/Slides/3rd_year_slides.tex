@@ -67,12 +67,17 @@ We notice two components from the main idea:
 \end{itemize}
 \end{frame}
 
+\begin{frame}
+Previously we focused on the \textit{use} part.
+\end{frame}
+
 \subsection{Relevance}
 \begin{frame}
 \frametitle{Why?}
 \begin{itemize}
-\item Decision making under uncertainty is fundamental for Artificial Intelligence (\cite{lake2017building}).
-\item Optimal policies in Reinforcement Learning are the best action for each state.
+\item Decision Making Under uncertainty (DMU) is fundamental for Artificial Intelligence (\cite{lake2017building}).
+\item Any Bayesian procedure is based on Decision Making
+\item Optimal policies in Reinforcement Learning are the \textit{best} action for each state.
 \item Reinforcement Learning (RL) is \textit{not} a Causal Problem.
 \end{itemize}
 \end{frame}
@@ -90,7 +95,7 @@ We notice two components from the main idea:
 \frametitle{What do we know?}
 \begin{itemize}
 \item Rationality $+$ probabilistic information $=$ maximize expected utility.
-\item Rationality $+$ \textbf{known} causal information $=$ maximize expected utility considering what is caused by actions (\cite{pearl2009causality}, \cite{lattimoreNIPS2016})
+\item Rationality $+$ \textbf{known} causal information $=$ maximize expected utility considering what is caused by actions \citep{pearl2009causality,lattimoreNIPS2016}
 \item Rationality $+$ \textbf{unknown} causal information $=$ ¿? 
 \end{itemize}
 \end{frame}
@@ -103,12 +108,34 @@ We recall the General Objective stated in \cite{gonzalez2019causal}:
 \textit{...to provide the understanding and knowledge about what are the implications of causality for a rational decision maker who faces an uncertain environment and about how causal relations can be discovered and used in order to make good choices that maximize the expected utility for the decision maker...}
 \end{frame}
 
+\subsection{Research Questions}
+\begin{frame}
+\frametitle{Research Questions}
+We recall the Research Questions stated in \cite{gonzalez2019causal}:\\
+The proposed research is ultimately trying to answer a series of questions about the nature of causal relations and about their possible use.
+\begin{enumerate}
+\item How a rational decision maker who faces an uncertain environment which is governed by a causal mechanism can learn and make use of this causal structure in order to make good choices? \item How can a causal structure help a decision maker in order to guide his learning process? 
+\item What does the rationality assumption implies about how to choose when considering causal information? 
+\item How to trade off exploration and exploitation when trying to learn about the causal structure of an environment while also trying to make good choices?
+\end{enumerate}
+\end{frame}
+
 \subsection{Research Problem}
 \begin{frame}
 \frametitle{Research Problem}
 We recall here the Research Problem described in \cite{gonzalez2019causal}:
 \begin{itemize}
 \item Let  $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem under uncertainty whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. We ask how a decision maker could \textit{learn} about the causal structure that controls his environment in order to \textit{make good choices} with respect to his preferences.
+\end{itemize}
+\end{frame}
+
+\subsection{Some Background}
+\begin{frame}
+\frametitle{Some Background}
+\begin{itemize}
+\item Rationality.
+\item Decision Theory: rational decision making if and only if utility maximization
+\item Causality: Context and direction. Interventions. 
 \end{itemize}
 \end{frame}
 
@@ -123,7 +150,7 @@ We recall here the Research Problem described in \cite{gonzalez2019causal}:
 \frametitle{First Year}
 During the 2017-2018 academic year:
 \begin{itemize}
-\item The general objective and research problem to be studied were defined, as well as a mathematical problem which we called a Causal Decision Problem.
+\item The general objective, research problem and research questions to be studied were stated, as well as a mathematical problem which we called a Causal Decision Problem.
 \item We proposed a preliminar solution which allowed for an optimal action to be found by a decision maker under some assumptions:
 \begin{equation}{\label{first_version}}
 P(Y=1 | do(a^\ast)) \geq P(Y=1 | do(a)) \textrm{ for all } a \in \mathcal{A},
@@ -135,8 +162,8 @@ P(Y=1 | do(a^\ast)) \geq P(Y=1 | do(a)) \textrm{ for all } a \in \mathcal{A},
 \frametitle{First Year}
 \begin{itemize}
 \item Using Equation \ref{first_version}, we devised a learning algorithm which assumed known the causal structure and learned both the parameters of the causal model of the environment, and an optimal action, yielding a performance similar to classic Reinforcement Learning algorithms which do not use causal information, but rather rely on the maximization of expected utility \citep{gonzalez2018playing}.
-\item Poster presented at Causality Workshop ICML 2018.
-\item Proposal Defense (27-Nov-2018)
+\item Poster presented at Causality Workshop ICML 2018 at Stockholm, Sweden.
+\item Proposal Defense (27-Nov-2018).
 \end{itemize}
 \end{frame}
 
@@ -152,18 +179,21 @@ P(Y=1 | do(a^\ast)) \geq P(Y=1 | do(a)) \textrm{ for all } a \in \mathcal{A},
 During the 2018-2019 academic year:
 \begin{itemize}
 \item The solution criterion given in Equation \ref{first_version} for causal decision making was further developed and extended for the case when a decision maker does not know the causal model which controls his environment:
-\begin{equation}{\label{second_version}}
-a \succeq b \textrm{ iff } \sum_{c \in \mathcal{C}} u(c) \left( \sum_{g \in \mathcal{F}} P_g(c | do(a))P_C(g) \right) \geq \sum_{c \in \mathcal{C}}  u(c) \left( \sum_{g \in \mathcal{F}} P_g(c | do(b))P_C(g) \right).
-\end{equation}
+\begin{eqnarray*}{\label{second_version}}
+a &\succeq & b\\ 
+   &\textrm{ iff }&\\ 
+\sum_{c \in \mathcal{C}} u(c) \left( \sum_{g \in \mathcal{F}} P_g(c | do(a))P_C(g) \right) \\
+&\geq & \\ \sum_{c \in \mathcal{C}}  u(c) \left( \sum_{g \in \mathcal{F}} P_g(c | do(b))P_C(g) \right).
+\end{eqnarray*}
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Second Year}
 \begin{itemize}
-\item Using \ref{second_version} we were able to define the notion of a Causal Game and the idea of a Nash equilibria within such game. We define a function $u^C_i : A \to \mathbb{R}^{+}$, for each player:
+\item Using the previous inequality we were able to define the notion of a Causal Game and the idea of a Nash equilibria within such game. We define a function $u^C_i : A \to \mathbb{R}^{+}$, for each player:
 \begin{equation}{\label{games_causal_ut}}
-u^C_i (a) = \sum_{f \in A}  u_i(a) \left( \sum_g P^g_i (h_i(f) | do(a_i), a_{-i}) P_C(g) \right) \textrm{ for } a \in A=A_1 \times \cdots \times A_N.
+u^C_i (a) = \sum_{f \in A}  u_i(a) \left( \sum_g P^g_i (h_i(f) | do(a_i), a_{-i}) P_C(g) \right).
 \end{equation}
 \item We define a Nash equilibrium for this \textit{causal strategic game} is an action profile $a^\ast \in A$ if and only if
 \begin{equation}{\label{nash_eq}}
@@ -185,15 +215,15 @@ u^C_i (a) = \sum_{f \in A}  u_i(a) \left( \sum_g P^g_i (h_i(f) | do(a_i), a_{-i}
 \frametitle{Third Year}
 During the 2019-2020 academic year:
 \begin{itemize}
-\item We further refined the concept of a Causal Game and that of a Nash Equilibrium for Causal Games.
-\item We also studied causal-structure learning via interaction with a causally controled environment.
+\item We further developed the machinery required for the Causal Game and that of a Nash Equilibrium for Causal Games.
+\item We also studied causal-structure learning via interaction with a causally controled environment using a purely Bayesian approach based on random graphs.
 \end{itemize}
 \end{frame}
 
 \subsection{Causal Games}
 \begin{frame}
 \frametitle{Causal Games: New work}
-We refined the work done in the Second Year by modifying Equation \ref{games_causal_ut} in the following way:
+We improved the work done in the Second Year by modifying Equation \ref{games_causal_ut} in the following way:
 \begin{itemize}
 \item For each player $i \in N$ in the strategic game, we define the following probability distribution over consequences:
 \begin{equation}{\label{causal_utility}}
@@ -222,13 +252,52 @@ u^C_i (a) = \sum_{c \in C}  u_i(c) p^a_i (c) \textrm{ for } a \in A=A_1 \times \
 \end{frame}
 
 \begin{frame}
+\frametitle{Random Graphs}
+\begin{itemize}
+\item What is a Random Graph? 
+\item Were invented by Erdös and Renyi. 
+\item They are random objects which take its values in the space of graphs (or adjacency matrices).
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Random Graphs: most common models}
+\begin{itemize}
+\item We will be using the following model:
+\item Among $N$ vertices, draw an edge between vertices $i$ and $j$ with probability $p_{ij}$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Assumptions}
+\begin{itemize}
+\item Rational agent.
+\item Causal sufficiency
+\item Knowledge of the \textit{variables} of the model.
+\item Convergence to true parameter of Bayesian estimators \cite{autzen2018bayesian}.
+\item Existence of a causal ordering of the variables.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
 \frametitle{Main Idea}
 \begin{itemize}
+\item In Bayesian inference, one starts by focusing in the source of uncertainty and defining a model over it.
+\item Since we are trying to learn causal structure between known variables, our problem reduces to find causal relations between pairs of variables.
+\item The source of our uncertainty is the existence or not of a link (causal relation) between nodes in a graph. 
+\item We will model such uncertainty using random graphs.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Main Idea: How}
+\begin{itemize}
 \item Let a rational agent consider the following set of variables $\mathcal{X}=\{ X_1,...,X_n \}$ which are causally related, even though the agent does not now how.
-\item the agent knows that she can only intervene one variable, and does so in order to alter the value of some  identified reward variable; without loss of generality assume that the agent can only intervene on $X_1$ wishing to affect $X_n$.
+\item The agent knows that she can only intervene one variable, and does so in order to alter the value of some  identified reward variable; without loss of generality assume that the agent can only intervene on $X_1$ wishing to affect $X_n$.
 \item Let $p_{ij}$ be the belief that the agent has over a causal relation (directed link) existing between variable with index $i$ and variable with index $j$.
 \item Let $G$ an initial {\em random} DAG formed as follows: node set is $N=\{1,...,n\}$ and a link exists between $i$ and $j$ with probability $p_{ij}$.
 \item Now, we use the methodology found in \cite{gonzalez2018playing}  as well as our results presented in \cite{gonzalez2019theorems} in order to find the best action $a^\ast$ for the obtained graph $G$
+\item Update $p_{ij}$.
 \end{itemize}
 \end{frame}
 
@@ -237,11 +306,8 @@ u^C_i (a) = \sum_{c \in C}  u_i(c) p^a_i (c) \textrm{ for } a \in A=A_1 \times \
 \begin{itemize}
 \item The best action is taken, and a full realization $X_1=x_1,...,X_n=x_n$ is observed.
 \item Now, we update the $p_{ij}$'s using Bayes Theorem as follows:
-\item For each pair of indexes $i,j$ we consider the subgraph containing only $1,i,j,n$ as nodes, either connected or not, and we ask for the probability of such graph producing the output $(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n)$, which will be used as the likelihood of data, and as a prior probability we simply use $p_{ij}$
-\item So we have:
-\begin{equation}{\label{bayesian_updating}}
-p_{ij}^{t+1} \propto p(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n | \textrm{subgraph formed by nodes 1,i,j,n})p_{ij}^t.
-\end{equation}
+\item For each pair of indexes $i,j$ we consider the subgraph containing only $1,i,j,n$ as nodes, either connected or not, and we ask for the probability of such graph producing the output $(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n)$, which will be used as the likelihood of data, and as a prior probability we simply use $p_{ij}$.
+\item Update accordingly.
 \end{itemize}
 \end{frame}
 
@@ -290,6 +356,16 @@ We know that the true causal model is a causal graph in which it holds that:
 \end{itemize}
 \end{frame}
 
+\begin{frame}
+\frametitle{Reproducibility}
+In order to guarantee reproducibility, we declare that:
+\begin{itemize}
+\item $p_{ij}$ are initialized randomly
+\item The probability tables for the \textit{local} causal models are initialized randomly
+\item The probabilities of the \textit{true} causal model are stated. 
+\end{itemize}
+\end{frame}
+
 \section{Publications}
 \begin{frame}
 \begin{center}
@@ -320,7 +396,7 @@ We know that the true causal model is a causal graph in which it holds that:
 \begin{itemize}
 \item A paper including the first version of the Causal Nash Equilibrium was presented at a MICAI 2019 Workshop  \url{https://ccc.inaoep.mx/~bio/2019_MICAI_CausalityWorkshop/}. Cited as \cite{gonzalez2019games}
 \item A paper including the decision-making results was orally presented at a NeurIPS 2019 Workshop  \url{https://nehzux.github.io/NewInML2019/}. Cited as \cite{gonzalez2019theorems}
-\item Journal paper submitted to Theory and Decision  \url{https://www.springer.com/journal/11238/}
+\item Journal paper \textbf{submitted} to Theory and Decision  \url{https://www.springer.com/journal/11238/}
 \end{itemize}
 \end{frame}
 
@@ -333,7 +409,7 @@ We know that the true causal model is a causal graph in which it holds that:
 
 \subsection{Learning graphical structure}
 \begin{frame}
-\frametitle{Learning graphical structure}
+\frametitle{Future Work: Learning graphical structure}
 \begin{itemize}
 \item More complex causal model.
 \item Intervening more than one variable.
@@ -345,11 +421,20 @@ We know that the true causal model is a causal graph in which it holds that:
 
 \subsection{Bayesian Non parametrics}
 \begin{frame}
-\frametitle{Bayesian Nonparametrics}
+\frametitle{Future Work: Bayesian Nonparametrics}
 Bayesian non parametrics is a field within Bayesian statistics in which priors of infinite dimension are allowed, so models with a greater expressibility can be developed.
 \begin{itemize}
 \item Priors over complex graphs.
 \item Fully Bayesian learning procedure.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusions}
+\begin{itemize}
+\item This year we have focused on learning an unknown \textit{causal structure} by interacting with a causally controlled environment.
+\item Previously, we had addressed the question on how to \textit{use} causal information in order to make good choices. 
+\item Together, this two tasks answer questions 1, 2 and 3 of the mentioned Research Questions.
 \end{itemize}
 \end{frame}
 
