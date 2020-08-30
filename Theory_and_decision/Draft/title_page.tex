@@ -1,0 +1,70 @@
+\RequirePackage{fix-cm}
+%
+\documentclass{svjour3} 
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+%\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+%
+\usepackage{graphicx}
+\usepackage{hyperref}
+%
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+%
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+%
+% Insert the name of "your journal" with
+% \journalname{myjournal}
+%
+\begin{document}
+
+\title{Von Neumann-Morgenstern and Savage Theorems for Causal Decision Making}
+
+%\titlerunning{Short form of title}        % if too long for running head
+
+\author{Mauricio Gonzalez-Soto         \and
+        Luis E. Sucar \and
+        Hugo J. Escalante
+}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{Mauricio Gonzalez-Soto \at
+              Coordinaci\'on de Ciencias Computacionales, Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica \\
+              Luis Enrique Erro 1, Santa Maria Tonanzintla, Puebla\\
+              Mexico\\
+              \email{mauricio@inaoep.mx}           \\
+              \url{https://orcid.org/0000-0003-2668-9013}        
+           \and
+           Luis E. Sucar \at
+              Coordinaci\'on de Ciencias Computacionales, Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica \\
+              Luis Enrique Erro 1, Santa Maria Tonanzintla, Puebla\\
+              M\'exico\\
+              \email{esucar@inaoep.mx}\\
+              \url{https://orcid.org/0000-0002-3685-5567}
+           \and
+           Hugo J. Escalante \at
+           Coordinaci\'on de Ciencias Computacionales, Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica \\
+              Luis Enrique Erro 1, Santa Maria Tonanzintla, Puebla\\
+              M\'exico\\
+              \email{hugojair@inaoep.mx}\\
+              \url{https://orcid.org/0000-0003-4603-3513}
+}
+
+\maketitle
+
+\begin{abstract} 
+Decision making under uncertainty has been well studied when information is considered at the associative (probabilistic) level. The classical Theorems of von Neumann-Morgenstern and Savage provide a formal criterion for rational choice using purely associative information, which form the basis of many learning algorithms such as those used in Reinforcement Learning. In this work, we consider decision problems in which available actions and consequences are causally connected. We define a Causal Decision Problem and within this framework we state a previous result from J. Pearl, which relies on a known causal model and thus showing that it can be considered as a causal version of the classical von Neumann-Morgenstern Theorem. Furthermore, we consider the case when the causal mechanism that controls the environment is unknown to the decision maker, and propose and prove a causal version of Savage's Theorem. Then, we describe two applications for which these theorems provide theoretical foundations: causal games and optimal action learning in causal environments. These results highlight the importance of causal models in decision making and the variety of potential applications.
+
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+
+\end{document}
+% end of file template.tex
