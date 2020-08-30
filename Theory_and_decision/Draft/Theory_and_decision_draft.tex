@@ -131,7 +131,7 @@ Furthermore, we consider the problem of learning optimal actions in a causal env
 
 \subsection{Organization of the paper}
 \label{organization}
-This paper is organized as follows: first, in Section \ref{classical_theorems} we present the classical decision making theorems which rely on associative information in their formulation; then, in Section \ref{causal_decision_problems} we present a brief introduction to Causation and Causal Graphical Models. In Section \ref{related_work} we present previous approaches both to Causal Decision Making as well as its applications to interactive optimal action learning: causal reinforcement learning. In Section \ref{causal_results} we state a von Neumann-Morgenstern Theorem for Causal Decision Making that is due to Pearl, which assumes a known causal structure. Our main result is Theorem \ref{causal_savage} which extends Pearl's result to the case of an unknown causal structure. Finally two applications of Theorem \ref{causal_savage} are described. First, a causal analogue of Nash Equilibrium for games in which actions and consequences are causally connected is defined. Then, in Section \ref{optimal_action} we describe some optimal-action learning methods for causal environments which are able to learn an \textit{optimal intervention} under different assumptions and conditions; in particular, we describe and provide an extension for one of such works. Finally, in Section \ref{limitations} we comment on the limitations of the assumptions we consider. Finally, in Section \ref{conclusion} we summarize the main contributions of our work.
+This paper is organized as follows: first, in Section \ref{classical_theorems} we present the classical decision making theorems which rely on associative information in their formulation: Theorems \ref{vNM} and \ref{savage}; then, in Section \ref{causal_decision_problems} we present a brief introduction to Causation and Causal Graphical Models. In Section \ref{related_work} we present previous approaches both to Causal Decision Making as well as its applications to interactive optimal action learning: causal reinforcement learning. In Section \ref{causal_results} we state a von Neumann-Morgenstern Theorem for Causal Decision Making that is due to Pearl, which assumes a known causal structure. Our main result is Theorem \ref{causal_savage} which extends Pearl's result to the case of an unknown causal structure. Finally two applications of Theorem \ref{causal_savage} are described. First, a causal analogue of Nash Equilibrium for games in which actions and consequences are causally connected is defined. Then, in Section \ref{optimal_action} we describe some optimal-action learning methods for causal environments which are able to learn an \textit{optimal intervention} under different assumptions and conditions; in particular, we describe and provide an extension for one of such works. Finally, in Section \ref{limitations} we comment on the limitations of the assumptions we consider. Finally, in Section \ref{conclusion} we summarize the main contributions of our work.
 
 \section{The Classical Decision Making Theorems: von Neumann-Morgenstern and Savage}
 \label{classical_theorems}
@@ -147,7 +147,7 @@ Other Decision Making theories exist, such as Kahneman and Tversky's Prospect Th
 An uncertain environment is the tuple $(\Omega, \mathcal{A},\mathcal{C},\mathcal{E})$. Where $\mathcal{A}$ is a non-empty set of available actions, $\mathcal{C}$ a set of consequences and $\mathcal{E}$ an algebra of events over $\Omega$. 
 \end{definition}
 
-When we consider the preferences of some decision maker over the set of consequences of some uncertain environment we have a Decision Problem under Uncertainty, \cite{bernardo2000bayesian}:
+When we consider the preferences of some decision maker over the set of consequences of some uncertain environment we have a Decision Problem under Uncertainty \citep{bernardo2000bayesian}:
 
 \begin{definition}
 A Decision Problem under Uncertainty is an uncertain environment $(\Omega, \mathcal{A},\mathcal{C},\mathcal{E})$ plus a preference relation $\succeq$ defined over $\mathcal{C}$ 
@@ -166,6 +166,7 @@ A Decision Problem under Uncertainty is said to be finite if the set $\mathcal{A
 \cite{von1944theory} had the objective of justifying strategies in which players in a game maximized their expected utility. This theorem considers a scenario of \textit{decision under risk} and rational preferences; this is, choosing between uncertain outcomes with known probabilities. 
 
 Formally, using the notation from \cite{gilboa2009decision}, we consider a set $X$ of alternatives. Let $L$ be the set of lotteries with finite support over $X$. The object of choice are the elements $l \in L$ that are known to the decision maker; we represent the decision maker's preferences by a preference relation $\succeq \subseteq L \times L$ that  satisfies being complete, transitive, continuous and a technical condition called \textit{independence}. This family of conditions is called \textit{von Neumann-Morgenstern rationality axioms} as described in \cite{gilboa2009decision}.
+
 \begin{theorem}[von Neumann-Morgenstern]{\label{vNM}}
 A preference relation $\succeq \subseteq L \times L$ where $L$ is a set of lotteries with finite support over a set $X$ satisfies the von Neumann-Morgenstern rationality axioms if and only if there exists a function $u: X \to \mathbb{R}$ such that for every $P, Q \in L$ we have that
 \begin{equation}
@@ -176,7 +177,9 @@ The theorem states that if a rational decision maker knows the probabilities of 
 
 \subsection{Savage's Theorem}
 \label{savage_theorem}
-If a rational decision maker does not know the probabilities of obtaining certain outcomes and does not have a precise, objective quantification of her preferences (utility function), then it is Savage's Theorem \citep{savage1954the}, which gives a formal choosing criterion. Savage's result extends von Neumann-Morgenstern Theorem since it considers the case in which a rational decision maker does not know neither her utility function nor the probabilities to be used in order to obtain the expected values required for making choices according to the von Neumann-Morgenstern Theorem. The notation and setting we use here is the one used by \cite{bernardo2000bayesian}. Consider a set $\Omega$. Consider a countable set $\mathcal{A}$ of available actions; for each action $a_i \in \mathcal{A}$, a partition $E_i$ of $\Omega$ and a set of consequences $C_i$. Let $\mathcal{E}$ the union of every $E_i$, we assume $\mathcal{E}$ to be a $\sigma$-algebra of events, and $\mathcal{C}$ the union of all $C_i$. \cite{bernardo2000bayesian} derives the existence of a subjective probability measure from a set of \textit{rationality axioms}, where a decision maker has some mechanism of quantifying uncertainty in terms of real numbers within the $[0,1]$ interval, and then the classical Kolmogorov axioms are derived from such construction, and therefore all of the known machinery of Probability Theory. We now state Savage's Theorem. Details can be found in \citep{kreps1988choice,bernardo2000bayesian,gilboa2009decision}.
+If a rational decision maker does not know the probabilities of obtaining certain outcomes and does not have a precise, objective quantification of her preferences (utility function), then it is Savage's Theorem \citep{savage1954the}, which gives a formal choosing criterion. Savage's result extends von Neumann-Morgenstern Theorem since it considers the case in which a rational decision maker does not know neither her utility function nor the probabilities to be used in order to obtain the expected values required for making choices according to the von Neumann-Morgenstern Theorem. 
+
+The notation and setting we use here is the one used by \cite{bernardo2000bayesian}. Consider a set $\Omega$. Consider a countable set $\mathcal{A}$ of available actions; for each action $a_i \in \mathcal{A}$, a partition $E_i$ of $\Omega$ and a set of consequences $C_i$. Let $\mathcal{E}$ the union of every $E_i$, we assume $\mathcal{E}$ to be a $\sigma$-algebra of events, and $\mathcal{C}$ the union of all $C_i$. \cite{bernardo2000bayesian} derives the existence of a subjective probability measure from a set of \textit{rationality axioms}, where a decision maker has some mechanism of quantifying uncertainty in terms of real numbers within the $[0,1]$ interval, and then the classical Kolmogorov axioms are derived from such construction, and therefore all of the known machinery of Probability Theory. We now state Savage's Theorem. Details can be found in \citep{savage1954the,kreps1988choice,bernardo2000bayesian,gilboa2009decision}.
 
 \begin{theorem}[Savage]{\label{savage}}
 In a finite, bounded Decision Problem under Uncertainty $(\mathcal{A}, \mathcal{C}, \mathcal{E}, \succeq)$, the preference relation $\succeq$ satisfies the Savage rationality axioms if and only if there exists: 
@@ -195,13 +198,26 @@ where $\mathbb{E}_P[u(a)]$ is given by $\sum_{j \in J} u(c_j) P(E_j)$ since any 
 \begin{proof}
 Proposition 2.22 in \cite{bernardo2000bayesian}.
 \end{proof}
-This theorem states that if a rational decision maker does not know the precise probabilities of outcomes given that an action is taken, then she chooses \textit{as if} having in mind a probability assignment to the uncertainties in her environment and using such probabilities to calculate the expected utility with respect to a subjective utility function that represents her preferences. This result also gives a precise definition of \textit{subjective probability} as a quantification of uncertainty which is used to make good decisions. See \cite{hens1992note} and \cite{gilboa2009decision} for further details. See \cite{ellsberg1961risk} and \cite{binmore2008rational} for critiques of the Savage axioms. 
+This theorem states that if a rational decision maker does not know the precise probabilities of outcomes given that an action is taken, then she must choose \textit{as if} having in mind a probability assignment to the uncertainties in her environment and use such probabilities to calculate the expected utility with respect to a subjective utility function that represents her preferences. This result also gives a precise definition of \textit{subjective probability} as a quantification of uncertainty which is used to make good decisions. See \cite{hens1992note} and \cite{gilboa2009decision} for further details. See \cite{ellsberg1961risk} and \cite{binmore2008rational} for critiques of the Savage axioms. 
 
 \subsection{Limitations of the Theorems}
 \label{theorems_limitations}
 The mentioned theorems have the limitations of relying only on associative information; this is, on correlations and patterns found in data rather than strong causal relations. For example, as mentioned by \cite{pearl2009causality}, using only associative information one would be tempted to stop going to the doctor in order to stop being diagnosed as sick. On the other hand, our results provide an easy to implement way of making choices using causal relations and beliefs about such relations as used by humans. Human beings \textit{know} (this is, use causal relations) that going to the physician does not \textit{cause} being sick and this is what Pearl calls \textit{commonsensical} decision making. Also, as we will mention later in the paper, associative information lacks an \textit{ordering} thus failing to determine \textit{if $X$ is performed, then $Y$ will be caused}.
 
 Formally, in this paper we consider the actions chosen by a decision maker as an \textit{interventions} over a causal graphical model; this is, in the classical von Neumann-Morgenstern and Savage Theorems, once a decision maker chooses an action $a$, the observed consequence has a probability $P(c|a)$; if causal information is considered, then the probability of a certain consequence is $P(c|do(a))$. In the next section we state some basic facts on causality and why $P(\cdot |x)$ is different from $P(\cdot | do(x))$ for some value $x$.
+
+One of the fundamental aspects of Causality is the presence of an order and a context; the latter of such elements not being present in associative information; this is, consider a distribution $p(a,t)$, which we can factorize in the two following ways:
+\begin{equation}
+    p(a,t)=p(a|t)p(t)
+\end{equation}
+and
+\begin{equation}
+    p(a,t)=p(t|a)p(a)
+\end{equation}
+which can be represented indistinguishably as Bayesian Networks as $a \to t$ or as $t \to a$. This situation does not happen while considering causal relations.
+
+Also, we recall the difference between an observation and an intervention: $p(x|y) \neq p(x | do(y))$. If this was not the case, then correlation would equal causation which can be shown in a variety of examples to be false, see \cite{pearl2009causality}.
+
 
 \section{Causal Decision Problems}
 \label{causal_decision_problems}
@@ -293,18 +309,6 @@ The Do-Calculus rules provide a solution for the identifiability problem:
 A distribution $q=P(y_1,...,y_k | do(x_1),...,do(x_n))$ is identifiable in a causal graphical model $\mathcal{G}$ if there exists a finite sequence of transformations, where each one of them corresponds to any of the rules of the Do-Calculus, that reduce $q$ to a purely observational expression.
 \end{corollary}
 
-\subsection{Further limitations of associative information}
-As we have said, one of the fundamental aspects of Causality is the presence of an order and a context; the latter of such elements not being present in associative information; this is, consider a distribution $p(a,t)$, which we can factorize in the two following ways:
-\begin{equation}
-    p(a,t)=p(a|t)p(t)
-\end{equation}
-and
-\begin{equation}
-    p(a,t)=p(t|a)p(a)
-\end{equation}
-which can be represented indistinguishably as Bayesian Networks as $a \to t$ or as $t \to a$. This situation does not happen while considering causal relations.
-
-Also, we recall the difference between an observation and an intervention: $p(x|y) \neq p(x | do(y))$. If this was not the case, then correlation would equal causation which can be shown in a variety of examples to be false.
 \subsection{Causal Environments and Causal Decision Problems}{\label{causal_problems}}
 We consider decision making with causal information. We define a Causal Environment to be an \textit{uncertain environment} such that there exists a Causal Graphical Model (CGM) $\mathcal{G}$ \citep{koller2009probabilistic} which controls the environment; this is, there exists a causal relation between available actions and consequences in the sense that any chosen action will stochastically \textit{cause} a consequence. The role of the CGM is to encode all of the causal relations present in the environment, not only between actions and consequences but also between any other variables in the environment. 
 \begin{definition}
