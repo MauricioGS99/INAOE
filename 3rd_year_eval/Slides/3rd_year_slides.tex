@@ -42,7 +42,7 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 \titlepage % Print the title page as the first slide
 \end{frame}
 
-\begin{frame}
+\begin{frame}[allowframebreaks]
 \tableofcontents
 \end{frame}
 
@@ -55,19 +55,14 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 \subsection{Introduction}
 \begin{frame}
 \frametitle{Main idea}
-How to learn and use causal information in order to make a good choice in an uncertain environment?
-\end{frame}
-
-\begin{frame}
-\frametitle{Two components}
-We notice two components from the main idea:
 \begin{itemize}
-\item Learn.
-\item Use.
+\item How to learn and use causal information in order to make a good choice in an uncertain environment?
+\item We notice two components from the main idea:
+	\begin{enumerate}
+		\item Learn
+		\item Use
+	\end{enumerate}
 \end{itemize}
-\end{frame}
-
-\begin{frame}
 Previously we focused on the \textit{use} part.
 \end{frame}
 
@@ -78,15 +73,15 @@ Previously we focused on the \textit{use} part.
 \item Decision Making Under uncertainty (DMU) is fundamental for Artificial Intelligence (\cite{lake2017building}).
 \item Any Bayesian procedure is based on Decision Making
 \item Optimal policies in Reinforcement Learning are the \textit{best} action for each state.
-\item Reinforcement Learning (RL) is \textit{not} a Causal Problem.
+\item Reinforcement Learning (RL) is \textit{not} a Causal Problem \citep{gonzalez2019reinforcement}.
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Why?}
 \begin{itemize}
-\item Mainstream ideas in DMU work at the \textit{associative}\footnote{probabilities, correlations...} level of information.
-\item In fact, Optimal Policies in RL satisfy the classical criterion of Maximum Expected Utility.
+\item Mainstream ideas in DMU work at the \textit{associative} level of information.
+\item In fact, Optimal Policies in RL satisfy the classical criterion of Maximum Expected Utility \citep{webb2007game}.
 \item Given the importance of Causation in science \textbf{we consider decision making theory that relies on causal information.}
 \end{itemize}
 \end{frame}
@@ -427,6 +422,7 @@ Bayesian non parametrics is a field within Bayesian statistics in which priors o
 \item Priors over complex graphs.
 \item Fully Bayesian learning procedure.
 \end{itemize}
+Using a Bayesian Nonparametric prior we could define probabilities over a space of \textit{graphs} and automate what we have done here.
 \end{frame}
 
 \begin{frame}
@@ -434,6 +430,7 @@ Bayesian non parametrics is a field within Bayesian statistics in which priors o
 \begin{itemize}
 \item This year we have focused on learning an unknown \textit{causal structure} by interacting with a causally controlled environment.
 \item Previously, we had addressed the question on how to \textit{use} causal information in order to make good choices. 
+\item We extended the \textit{use} part to a multi-agent setting; Causal Games.
 \item Together, this two tasks answer questions 1, 2 and 3 of the mentioned Research Questions.
 \end{itemize}
 \end{frame}
