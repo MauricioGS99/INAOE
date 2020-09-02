@@ -52,9 +52,10 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 \LARGE{Introduction}
 \end{center}
 \end{frame}
+
 \subsection{Introduction}
 \begin{frame}
-\frametitle{Main idea}
+\frametitle{Introduction: Main idea}
 \begin{itemize}
 \item How to learn and use causal information in order to make a good choice in an uncertain environment?
 \item We notice two components from the main idea:
@@ -63,12 +64,12 @@ Instituto Nacional de Astrofísica Óptica y Electrónica \\ % Your institution 
 		\item Use
 	\end{enumerate}
 \end{itemize}
-Previously we focused on the \textit{use} part.
+Previously we had focused on the \textit{use} part.
 \end{frame}
 
 \subsection{Relevance}
 \begin{frame}
-\frametitle{Why?}
+\frametitle{Introduction: Relevance}
 \begin{itemize}
 \item Decision Making Under uncertainty (DMU) is fundamental for Artificial Intelligence (\cite{lake2017building}).
 \item Any Bayesian procedure is based on Decision Making
@@ -78,21 +79,42 @@ Previously we focused on the \textit{use} part.
 \end{frame}
 
 \begin{frame}
-\frametitle{Why?}
+\frametitle{Introduction: Relevance}
 \begin{itemize}
 \item Mainstream ideas in DMU work at the \textit{associative} level of information.
-\item In fact, Optimal Policies in RL satisfy the classical criterion of Maximum Expected Utility \citep{webb2007game}.
+\item In fact, Optimal Policies in RL satisfy the classical (associative) criterion of Maximum Expected Utility \citep{webb2007game}.
 \item Given the importance of Causation in science \textbf{we consider decision making theory that relies on causal information.}
+\end{itemize}
+\end{frame}
+
+\subsection{Some Background}
+\begin{frame}
+\frametitle{Some Background}
+\begin{itemize}
+\item Rationality.
+\item Decision Theory: rational decision making if and only if utility maximization
+\item Causality: Interventions. Context and order.
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{What do we know?}
 \begin{itemize}
-\item Rationality $+$ probabilistic information $=$ maximize expected utility.
+\item Rationality $+$ probabilistic information either known or unknown $=$ maximize expected utility.
 \item Rationality $+$ \textbf{known} causal information $=$ maximize expected utility considering what is caused by actions \citep{pearl2009causality,lattimoreNIPS2016}
-\item Rationality $+$ \textbf{unknown} causal information $=$ ¿? 
+\item Rationality $+$ \textbf{unknown} causal information $=$ \cite{gonzalez2019theorems} 
 \end{itemize}
+\end{frame}
+
+\subsection{Research Questions}
+\begin{frame}
+\frametitle{Research Questions}
+We recall the Research Questions stated in \cite{gonzalez2019causal}:
+\begin{enumerate}
+\item How a rational decision maker who faces an uncertain environment which is governed by a causal mechanism can learn and make use of this causal structure in order to make good choices? \item How can a causal structure help a decision maker in order to guide his learning process? 
+\item What does the rationality assumption implies about how to choose when considering causal information? 
+\item How to trade off exploration and exploitation when trying to learn about the causal structure of an environment while also trying to make good choices?
+\end{enumerate}
 \end{frame}
 
 \subsection{Objectives}
@@ -103,18 +125,6 @@ We recall the General Objective stated in \cite{gonzalez2019causal}:
 \textit{...to provide the understanding and knowledge about what are the implications of causality for a rational decision maker who faces an uncertain environment and about how causal relations can be discovered and used in order to make good choices that maximize the expected utility for the decision maker...}
 \end{frame}
 
-\subsection{Research Questions}
-\begin{frame}
-\frametitle{Research Questions}
-We recall the Research Questions stated in \cite{gonzalez2019causal}:\\
-The proposed research is ultimately trying to answer a series of questions about the nature of causal relations and about their possible use.
-\begin{enumerate}
-\item How a rational decision maker who faces an uncertain environment which is governed by a causal mechanism can learn and make use of this causal structure in order to make good choices? \item How can a causal structure help a decision maker in order to guide his learning process? 
-\item What does the rationality assumption implies about how to choose when considering causal information? 
-\item How to trade off exploration and exploitation when trying to learn about the causal structure of an environment while also trying to make good choices?
-\end{enumerate}
-\end{frame}
-
 %\subsection{Research Problem}
 %\begin{frame}
 %\frametitle{Research Problem}
@@ -123,16 +133,6 @@ The proposed research is ultimately trying to answer a series of questions about
 %\item Let  $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem under uncertainty whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. We ask how a decision maker could \textit{learn} about the causal structure that controls his environment in order to \textit{make good choices} with respect to his preferences.
 %\end{itemize}
 %\end{frame}
-
-\subsection{Some Background}
-\begin{frame}
-\frametitle{Some Background}
-\begin{itemize}
-\item Rationality.
-\item Decision Theory: rational decision making if and only if utility maximization
-\item Causality: Context and direction. Interventions. 
-\end{itemize}
-\end{frame}
 
 \section{First year}
 \begin{frame}
@@ -156,8 +156,8 @@ P(Y=1 | do(a^\ast)) \geq P(Y=1 | do(a)) \textrm{ for all } a \in \mathcal{A},
 \begin{frame}
 \frametitle{First Year}
 \begin{itemize}
-\item Using Equation \ref{first_version}, we devised a learning algorithm which assumed known the causal structure and learned both the parameters of the causal model of the environment, and an optimal action, yielding a performance similar to classic Reinforcement Learning algorithms which do not use causal information, but rather rely on the maximization of expected utility \citep{gonzalez2018playing}.
-\item Poster presented at Causality Workshop ICML 2018 at Stockholm, Sweden.
+\item Using Equation \ref{first_version}, we devised a learning algorithm which assumed known the causal structure and learned both the parameters of the causal model of the environment, and an optimal action, yielding a performance similar to classic Reinforcement Learning algorithms which do not use causal information, but rather rely on the maximization of expected utility.
+\item \cite{gonzalez2018playing} Presented as a poster at Causality Workshop ICML 2018 at Stockholm, Sweden.
 \item Proposal Defense (27-Nov-2018).
 \end{itemize}
 \end{frame}
@@ -212,6 +212,7 @@ During the 2019-2020 academic year:
 \begin{itemize}
 \item We further developed the machinery required for the Causal Game and that of a Nash Equilibrium for Causal Games.
 \item We also studied causal-structure learning via interaction with a causally controled environment using a purely Bayesian approach based on random graphs.
+\item Experiments
 \end{itemize}
 \end{frame}
 
@@ -232,7 +233,7 @@ u^C_i (a) = \sum_{c \in C}  u_i(c) p^a_i (c) \textrm{ for } a \in A=A_1 \times \
 \begin{equation}
  u^C_i(a^\ast) \geq u^C_i(a_i, a^\ast_{-i}) \textrm{ for any other } a_i \in A_i. 
  \end{equation}
-\item This work, \cite{gonzalez2019games}, was presented at a MICAI 2019 Workshop.
+\item This work, \cite{gonzalez2019games}, was orally presented at a MICAI 2019 Workshop.
 \end{itemize}
 \end{frame}
 
