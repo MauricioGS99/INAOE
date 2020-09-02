@@ -115,14 +115,14 @@ The proposed research is ultimately trying to answer a series of questions about
 \end{enumerate}
 \end{frame}
 
-\subsection{Research Problem}
-\begin{frame}
-\frametitle{Research Problem}
-We recall here the Research Problem described in \cite{gonzalez2019causal}:
-\begin{itemize}
-\item Let  $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem under uncertainty whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. We ask how a decision maker could \textit{learn} about the causal structure that controls his environment in order to \textit{make good choices} with respect to his preferences.
-\end{itemize}
-\end{frame}
+%\subsection{Research Problem}
+%\begin{frame}
+%\frametitle{Research Problem}
+%We recall here the Research Problem described in \cite{gonzalez2019causal}:
+%\begin{itemize}
+%\item Let  $\mathcal{G}$ a causal graphical model and let $(\mathcal{A},\mathcal{E},\mathcal{C})$ a decision problem under uncertainty whose actions $a_i = \{ c_j | E_j : j \in J \}$  are causally related to consequences $c \in \mathcal{C}$ through the uncertain events $E \in \mathcal{E}$ which correspond to variables in $\mathcal{G}$. We ask how a decision maker could \textit{learn} about the causal structure that controls his environment in order to \textit{make good choices} with respect to his preferences.
+%\end{itemize}
+%\end{frame}
 
 \subsection{Some Background}
 \begin{frame}
@@ -186,7 +186,7 @@ a &\succeq & b\\
 \begin{frame}
 \frametitle{Second Year}
 \begin{itemize}
-\item Using the previous inequality we were able to define the notion of a Causal Game and the idea of a Nash equilibria within such game. We define a function $u^C_i : A \to \mathbb{R}^{+}$, for each player:
+\item Using the previous inequality we were able to define the notion of a Causal Game and propose a first version of a Nash equilibria within such game. We define a function $u^C_i : A \to \mathbb{R}^{+}$, for each player:
 \begin{equation}{\label{games_causal_ut}}
 u^C_i (a) = \sum_{f \in A}  u_i(a) \left( \sum_g P^g_i (h_i(f) | do(a_i), a_{-i}) P_C(g) \right).
 \end{equation}
@@ -218,7 +218,7 @@ During the 2019-2020 academic year:
 \subsection{Causal Games}
 \begin{frame}
 \frametitle{Causal Games: New work}
-We improved the work done in the Second Year by modifying Equation \ref{games_causal_ut} in the following way:
+We continued the work done in the Second Year by modifying Equation \ref{games_causal_ut} in the following way:
 \begin{itemize}
 \item For each player $i \in N$ in the strategic game, we define the following probability distribution over consequences:
 \begin{equation}{\label{causal_utility}}
@@ -242,7 +242,7 @@ u^C_i (a) = \sum_{c \in C}  u_i(c) p^a_i (c) \textrm{ for } a \in A=A_1 \times \
 \begin{itemize}
 \item Human beings focus on \textit{local} aspects while learning causal relations which are later unified into a single structure \citep{fernbach2009causal,waldmann2008causal, danks2014unifying}.
 \item Following this idea, \cite{wellen2012learning} propose a model to explain how observations  and interventions are used by human beings to learn causal relations in terms of a local prediction-error learning.
-\item Following this line of thought, we propose here a local probabilistic encoding of the uncertainty that a decision maker has over the existence or not of causal relations between variables.
+\item We propose here a local probabilistic encoding of the uncertainty that a decision maker has over \textit{the existence or not of causal relations} between variables.
 \end{itemize}
 \end{frame}
 
@@ -252,14 +252,7 @@ u^C_i (a) = \sum_{c \in C}  u_i(c) p^a_i (c) \textrm{ for } a \in A=A_1 \times \
 \item What is a Random Graph? 
 \item Were invented by Erdös and Renyi. 
 \item They are random objects which take its values in the space of graphs (or adjacency matrices).
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Random Graphs: most common models}
-\begin{itemize}
-\item We will be using the following model:
-\item Among $N$ vertices, draw an edge between vertices $i$ and $j$ with probability $p_{ij}$.
+\item For example, fix a set of nodes, and connect two nodes with some probability $p$.
 \end{itemize}
 \end{frame}
 
@@ -267,7 +260,7 @@ u^C_i (a) = \sum_{c \in C}  u_i(c) p^a_i (c) \textrm{ for } a \in A=A_1 \times \
 \frametitle{Assumptions}
 \begin{itemize}
 \item Rational agent.
-\item Causal sufficiency
+\item Causal sufficiency.
 \item Knowledge of the \textit{variables} of the model.
 \item Convergence to true parameter of Bayesian estimators \cite{autzen2018bayesian}.
 \item Existence of a causal ordering of the variables.
@@ -316,8 +309,8 @@ u^C_i (a) = \sum_{c \in C}  u_i(c) p^a_i (c) \textrm{ for } a \in A=A_1 \times \
 \item Initialize $p_{ij}$ randomly
 \item Initialize graph $G$ with link from node $i$ to node $j$ with probability $p_{ij}$
 \item Find optimal action $a^\ast$ for graph $G$ and probabilities given by a count of the observations.
-\item Calculate probability of the approximate model $G$ producing the full observation $X_1 = a^\ast, X_2=x_2,...,X_n=x_n$. 
-\item Update $p_{ij}^{t+1} \propto p(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n | \textrm{subgraph formed by nodes 1,i,j,n})p_{ij}^t.$
+\item Observe the full observation $X_1 = a^\ast, X_2=x_2,...,X_n=x_n$. 
+\item Using current $G$, update $p_{ij}^{t+1} \propto p(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n | \textrm{subgraph formed by nodes 1,i,j,n})p_{ij}^t.$
 \end{enumerate}
 \end{frame}
 
