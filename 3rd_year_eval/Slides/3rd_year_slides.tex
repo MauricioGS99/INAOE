@@ -83,7 +83,7 @@ Previously we had focused on the \textit{use} part.
 \begin{itemize}
 \item Mainstream ideas in DMU work at the \textit{associative} level of information.
 \item In fact, Optimal Policies in RL satisfy the classical (associative) criterion of Maximum Expected Utility \citep{webb2007game}.
-\item Given the importance of Causation in science \textbf{we consider decision making theory that relies on causal information.}
+\item Given the importance of Causation in science\footnote{\cite{lake2017building,pearl2018why}} \textbf{we consider decision making theory that relies on causal information.}
 \end{itemize}
 \end{frame}
 
@@ -92,7 +92,7 @@ Previously we had focused on the \textit{use} part.
 \frametitle{Some Background}
 \begin{itemize}
 \item Rationality.
-\item Decision Theory: rational decision making if and only if utility maximization
+\item Decision Theory: rational decision making if and only if expected utility maximization
 \item Causality: Interventions. Context and order.
 \end{itemize}
 \end{frame}
@@ -156,7 +156,7 @@ P(Y=1 | do(a^\ast)) \geq P(Y=1 | do(a)) \textrm{ for all } a \in \mathcal{A},
 \begin{frame}
 \frametitle{First Year}
 \begin{itemize}
-\item Using Equation \ref{first_version}, we devised a learning algorithm which assumed known the causal structure and learned both the parameters of the causal model of the environment, and an optimal action, yielding a performance similar to classic Reinforcement Learning algorithms which do not use causal information, but rather rely on the maximization of expected utility.
+\item Using Equation \ref{first_version}, we devised a learning algorithm which assumed known the causal structure and learned both the parameters of the causal model of the environment, and an optimal action, yielding a performance similar to classic Reinforcement Learning algorithms which do not use causal information, but rather rely on the maximization of expected utility based on associative information.
 \item \cite{gonzalez2018playing} Presented as a poster at Causality Workshop ICML 2018 at Stockholm, Sweden.
 \item Proposal Defense (27-Nov-2018).
 \end{itemize}
@@ -239,7 +239,7 @@ u^C_i (a) = \sum_{c \in C}  u_i(c) p^a_i (c) \textrm{ for } a \in A=A_1 \times \
 
 \subsection{Causal-Structure Learning: A Random Graph Approach}{\label{random_graph}}
 \begin{frame}
-\frametitle{Causal-Structure Learning: A Random Graph Approach}
+\frametitle{Causal-Structure Learning: A purely Bayesian + Random Graphs Approach}
 \begin{itemize}
 \item Human beings focus on \textit{local} aspects while learning causal relations which are later unified into a single structure \citep{fernbach2009causal,waldmann2008causal, danks2014unifying}.
 \item Following this idea, \cite{wellen2012learning} propose a model to explain how observations  and interventions are used by human beings to learn causal relations in terms of a local prediction-error learning.
