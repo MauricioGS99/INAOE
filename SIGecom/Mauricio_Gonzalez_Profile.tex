@@ -1,0 +1,113 @@
+\documentclass[acmsigecom]{acmtrans2m_nocategories}
+
+
+\usepackage{enumitem,amsmath,amsfonts,setspace}
+\usepackage{graphicx}
+\usepackage{makeidx}
+\makeindex
+
+\usepackage{savesym}
+\savesymbol{pdfbookmark}
+\usepackage[colorlinks = true,
+            linkcolor = blue,
+            urlcolor  = blue,
+            citecolor = blue,
+            anchorcolor = blue]{hyperref}
+\restoresymbol{HR}{pdfbookmark}
+
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\l@section}
+  {\hfil}
+  {\leaders\hbox{\normalfont$\m@th\mkern \@dotsep mu\hbox{.}\mkern \@dotsep mu$}\hfill}
+  {}{}
+\makeatother
+
+
+\makeatletter
+\def\paragraph{\@startsection{paragraph}{4}%
+  \z@\z@{-\fontdimen2\font}%
+  {\normalfont\itshape}}
+\makeatother
+
+
+\markboth{}{Job Market Candidate Profiles 2021}
+
+\title[Job Market Candidate Profiles 2021]{SIGecom Job Market Candidate Profiles 2021}
+
+\begin{abstract} 
+This is the sixth annual collection of profiles of the junior faculty job market candidates 
+of the SIGecom community. The (number TBA) candidates for 2021 are listed alphabetically and 
+indexed by research areas that define the interests of the community. The candidates can be 
+contacted individually or via the moderated mailing list ecom-candidates2021@acm.org.\\
+
+--Vasilis Gkatzelis and Jason Hartline
+\vspace{-15pt}
+\end{abstract}
+            
+\category{}{}{}
+\setcounter{secnumdepth}{0}
+         					
+\begin{document}
+            
+\maketitle
+ 
+\tableofcontents
+\newpage
+
+% Replace CandidateFirstName and CandidateLastName with your first and last name.
+% Choose some keywords (as many as you like, as long as it all fits in one line
+% under the table of contents (which is, roughly, up to 70 characters).
+% Replace the CandidateHomepage_URL and the CandidateCV_URL with the URL to your
+% homepage and CV respectively. You can also add links to your Google scholar
+% profile using the commented-out link. This is recommended, but not required.
+\section[Mauricio Gonzalez-Soto\\ 
+{\small keyword1, keyword2, keyword3, keyword4}]
+{Mauricio Gonzalez-Soto 
+(\href{https://www.researchgate.net/profile/Mauricio_Gonzalez-Soto}{Homepage},
+\href{CandidateCV_URL}{CV}
+%\href{CandidateGoogleScholar_URL}{Google Scholar}
+)}
+
+% Replace ThesisTitleCapitalized with the title of your thesis (if this is not finalized yet,
+% then just choose some tentative one) and add the information of your advisor(s).
+\textbf{Thesis:} ThesisTitleCapitalized
+
+\vspace{3pt}
+\noindent\textbf{Advisor:} Luis Enrique Sucar and Hugo J. Escalante, Instituto Nacional de Astrofísica Óptica y Electrónica.
+
+% Distribute the remaining space however you like, but make sure that your whole profile fits
+% within a page once you compile.
+\vspace{3pt}
+\noindent\textbf{Brief Biography:}
+Mauricio received an Applied Mathematics Bachelors Degree from the Instituto Tecnológico Autónomo de México (ITAM) as well as a Masters Degree in Data Science from the same university, where he got awarded a Special Mention for each of his theses, he is currently studying a PhD in Computer Science under the supervision of Luis Enrique Sucar and Hugo J. Escalante. 
+
+% In your research summary, you can cite papers that are listed in the itemized environment below
+% using static references: [1], [2],... Make sure that you cite the right paper if you later change
+% the order in which your papers appear.
+\vspace{3pt}
+\noindent\textbf{Research Summary:}
+Mauricio is mainly interested in Causality and its implications for Decision Making under Uncertainty 
+
+
+% In the itemized section below, you can list however many paper you like, but please use
+% the same format that we have used in previous years for each publication. If you are not
+% sure, just send an email to gkatz@drexel.edu
+\vspace{3pt}
+\noindent\textbf{Representative Papers:}
+\begin{enumerate}[label={[\arabic*]}]
+\item Causal Structure Learning using Random Graphs (Work in Progress: to be submitted to The 2020 NeurIPS Workshop on Causal Discovery and Causality-Inspired Machine Learning)\\
+with Ivan Feliciano Avelino, L. Enrique Sucar and Hugo J. Escalante 
+\item Von Neumann-Morgenstern and Savage Theorems for Causal Decision Making (Submitted to Artificial Intelligence Journal and oral presentation at New in ML Forum co-located with NeurIPS 2019) \href{https://arxiv.org/abs/1907.11752}{Link to Pre-print}\\
+with L. Enrique Sucar and Hugo J. Escalante 
+\item Causal Games and Causal Nash Equilibrium (1st Causal Reasoning Workshop at the Mexican International Conference on Artificial Intelligence 2019) \href{https://arxiv.org/abs/1910.06729}{Link to Pre-print}\\
+with L. Enrique Sucar and Hugo J. Escalante 
+\item Playing against Nature: causal discovery for decision making under uncertainty (Machine Learning for Causal Inference, Counterfactual Prediction and Autonomous Action (CausalML) Workshop at ICML 2018) \href{https://arxiv.org/abs/1807.01268}{Link to Pre-print}\\
+with L. Enrique Sucar and Hugo J. Escalante 
+
+\end{enumerate}
+
+
+\printindex
+
+\end{document}
