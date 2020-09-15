@@ -55,10 +55,16 @@
 
 
 %% Group authors per affiliation:
-\author{Mauricio Gonzalez Soto}
-\author{L. Enrique Sucar Succar}
-\author{Hugo J. Escalante Balderas}
-\address{Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica, Luis Enrique Erro 1, Santa Maria Tonanzintla, Mexico}
+\author[1]{Mauricio Gonzalez-Soto}
+\ead{mauricio@inaoep.mx}
+
+\author[1]{L. Enrique Sucar}
+\ead{esucar@inaoep.mx}
+
+\author[1]{Hugo J. Escalante}
+\ead{hugojair@inaoep.mx}
+
+\address[1]{Coordinaci\'on de Ciencias Computacionales, Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica ,Luis Enrique Erro 1, Santa Maria Tonanzintla, M\'exico.}
 
 \begin{abstract}
 Causal reasoning is a fundamental aspect of intelligent reasoning since it allows to consider interventions and counterfactuals. Decision making under uncertainty has been well studied when information is considered at the associative (probabilistic) level. The classical Theorems of von Neumann-Morgenstern and Savage provide a formal criterion for rational choice using purely associative information, which form the basis of many learning algorithms such as those used in Reinforcement Learning. In this work, we consider decision problems in which available actions and consequences are causally connected. We define a Causal Decision Problem and within this framework we state a previous result from J. Pearl, which relies on a known causal model and thus showing that it can be considered as a causal version of the classical von Neumann-Morgenstern Theorem. Furthermore, we consider the case when the causal mechanism that controls the environment is unknown to the decision maker, and propose and prove a causal version of Savage's Theorem. Then, we describe two applications for which these theorems provide theoretical foundations: causal games and optimal action learning in causal environments. These results highlight the importance of causal models in decision making and the variety of potential applications.
@@ -76,9 +82,9 @@ Causality \sep Decision Making \sep Game Theory
 \section{Introduction}
 \label{intro}
 Causal reasoning is a constant element in our lives as it is in human nature to constantly ask \textit{why} \citep{spirtes2000causation,pearl2018why}. Looking for causes is an everyday task and, in fact, causal reasoning is to be found at the very core of our minds \citep{tversky1977causal,waldmann2013causal,danks2014unifying,neil2019causality}. It has been argued that the brain is a causal inference machine which uses \textit{effects} to figure out \textit{causes} in order to engage with the world \citep{friston2010free,clark2015surfing}. 
-Furthermore, acting in the world is conceived by human beings as \textit{intervening} the world and in fact humans are able to learn and use causal relations while making choices \citep{ tversky1980causal, lagnado2007beyond, hagmayer2008causal, hagmayer2009decision, hagmayer2017causality}.
+Furthermore, acting in the world is conceived by human beings as \textit{intervening} the world and in fact humans are able to learn and use causal relations while making choices \citep{ tversky1980causal,lagnado2007beyond,hagmayer2008causal,hagmayer2009decision,hagmayer2017causality}.
 
-Reinforcement Learning (RL) \citep{sutton1998reinforcement} is the standard framework for automated learning by interaction, in which an agent, located at some time $t$ and some state $s$ has to make a choice in order to maximize her long-run discounted accumulated reward. Optimal policies, which are prescriptions of which action must be taken at some state $s$, satisfy the Bellman Equations \citep{Puterman:1994:MDP:528623} and are the standard solution to the problem. Such solution is equivalent to maximizing \textit{expected utility} \citep{webb2007game}, which is the decision criterion prescribed by the most commonly used decision-making theories: von Neumann-Morgenstern's and Savage's. Such theories rely on \textit{associative} information, which is based on patterns found in data, rather than stronger causal relations. In fact, it can be argued that RL is not a causal problem in itself \cite{gonzalezsoto2019reinforcement}.
+Reinforcement Learning (RL) \citep{sutton1998reinforcement} is the standard framework for automated learning by interaction, in which an agent located at some time $t$ and some state $s$ has to make a choice in order to maximize her long-run discounted accumulated reward. Optimal policies are prescriptions of which action must be taken at some state $s$ that satisfy the Bellman Equations \citep{Puterman:1994:MDP:528623} and are the standard solution to the problem. Such solution is equivalent to maximizing the \textit{expected utility} \citep{shoham2008multiagent,webb2007game}. Maximization of expected utility is the criterion prescribed by the most common used decision-making theories: von Neumann-Morgenstern's and Savage's. Such theories rely on \textit{associative} information, which is based on patterns found in data, rather than stronger causal relations. In fact, it can be argued that RL is not a causal problem in itself \cite{gonzalezsoto2019reinforcement}.
 
 On the other hand, an important aspect of acting in the world is being able to make decisions under uncertain conditions \citep{bernardo2000bayesian,kahneman2000choices,gilboa2009decision,lake2017building}. \cite{von1944theory} gave an answer for how to make choices if rational preferences are assumed, utilities are known, and if the decision maker knows the stochastic relation (i.e., probabilities of events) between actions and outcomes: maximize expected utility. If no such relation is known, then \cite{savage1954the} showed that a rational decision maker must choose \textit{as if} she is maximizing expected utility using a \textit{subjective} probability distribution. Such theorems provide formal criteria for decision making if rationality is assumed. 
 
