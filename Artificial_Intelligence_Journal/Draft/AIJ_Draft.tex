@@ -455,7 +455,7 @@ When a decision maker chooses an action out of many, a causal model allows to as
 %Queda la duda de si se necesita especificar un orden previo
 \subsection{A random graph approach to causal structure learning}
 \label{random_graphs}
-For the sake of completeness, we now provide a relaxation of the restriction found in \cite{lattimoreNIPS2016}, \cite{sen2017identifying} and \cite{gonzalez2018playing}: knowing the causal model; in particular, in \cite{gonzalez2018playing} it is required that the graphical structure of the causal model is known, which is a strong assumption. Such assumption is to be relaxed to the case in which the graphical structure of the causal model is unknown, but the variables of the model are known; also, we assume the decision maker has an ordering $\gg$ according to which if $A \gg B$, then $B$ can not cause $A$. Our extension will take on a purely Bayesian approach and make use both of Theorem \ref{causal_savage}, random graphs and the \textit{as if} intuition present in this paper.
+For the sake of completeness, we now provide a relaxation of the restrictions found in \cite{lattimoreNIPS2016,sen2017identifying,gonzalez2018playing}: knowing the causal model, or some parts of it; in particular, we have mentione that in \cite{gonzalez2018playing} it is required that the graphical structure of the causal model is known, which is a strong assumption. Such assumption is now to be relaxed to the case in which the graphical structure of the causal model is unknown, but the variables of the model are known; also, we assume the decision maker has an ordering $\gg$ according to which if $A \gg B$, then $B$ can not cause $A$. Our extension will take on a purely Bayesian approach and make use both of Theorem \ref{causal_savage}, random graphs and the \textit{as if} intuition present in this paper.
 
 Human beings focus on \textit{local} aspects while learning causal relations which are later unified into a single structure (\cite{fernbach2009causal}, \cite{waldmann2008causal},  \cite{danks2014unifying}). Following this idea, \cite{wellen2012learning} propose a model to explain how observations  and interventions are used by human beings to learn causal relations in terms of a local prediction-error learning. Following this line of thought, we propose here a local probabilistic encoding of the uncertainty that a decision maker has over the existence or not of causal relations between variables.
 
@@ -465,7 +465,7 @@ Let a rational agent consider the following set of variables $\mathcal{X}=\{ X_1
 
 Now, we update the $p_{ij}$'s using Bayes Theorem as follows: for each pair of indexes $i,j$ we consider the subgraph containing only $1,i,j,n$ as nodes, either connected or not, and we ask for the probability of such graph producing the output $(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n)$, which will be used as the likelihood of data, and as a prior probability we simply use $p_{ij}$, so we have
 \begin{equation}{\label{bayesian_updating}}
-p_{ij}^{t+1} \propto p(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n | \textrm{subgraph formed by nodes 1,i,j,n})p_{ij}^t.
+p_{ij}^{t+1} \propto p(X_1 = a^\ast, X_i = x_i, X_j=x_j, X_n=x_n | \textrm{current graph})p_{ij}^t.
 \end{equation}
 Then, we update the model generating a new graph according to $p_{ij}$. We do not provide an implementation of Equation \ref{bayesian_updating} as it is not in the scope of this paper.
 
@@ -474,6 +474,9 @@ Then, we update the model generating a new graph according to $p_{ij}$. We do no
 We are working within the classical rationality assumption. Rationality can be ultimately thought of as a \textit{consistent} or coherent way of making choices, but the precise definition has been a subject of debate. See \cite{ellsberg1961risk}, \cite{gilboa2009decision} and \cite{machina2014ambiguity} for critiques of the Savage Rationality Axioms. Another line of decision making, from a descriptive point of view, has been developed by psychologists and economists; see \cite{TverskyKahneman74,kahneman1979prospect,kahneman2000choices}.
 
 We are considering Causal Graphical Models as the representation of causal relations in the environment, and we are considering stochastic causal relations according to the manipulationist interpretation, which is one of many. We have favoured the Causal Graphical Models over other alternatives since it has been argued that several cognitive processes, such as causal reasoning, can be best represented as graphical models \cite{danks2014unifying,sloman2015causality,hagmayer2016causal}.
+
+\section{Future Work}
+In Section \ref{random_graphs} we considered the problem of a decision maker situated in a causal environment who does not fully knows the causal model which controls her environment; previous works have considered different levels of uncertainty over the causal model: knowing conditional distributions, knowing a part of the model, knowing the structure of the model or the variables involved. We leave as future work the case in which the variables of the model are not known and we consider that this scenario could be attacked using tools from Bayesian Nonparametrics \citep{hjort2010bayesian,phadia2013prior} in the form of a prior over causal models, which generates causal graphs of distinct sizes and complexity.
 
 \section{Conclusion}
 \label{conclusion}
