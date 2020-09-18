@@ -64,7 +64,7 @@
 \author[1]{Hugo J. Escalante}
 \ead{hugojair@inaoep.mx}
 
-\address[1]{Coordinaci\'on de Ciencias Computacionales, Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica ,Luis Enrique Erro 1, Santa Maria Tonanzintla, M\'exico.}
+\address[1]{Coordinaci\'on de Ciencias Computacionales, Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica, Luis Enrique Erro 1, Santa Maria Tonanzintla, M\'exico.}
 
 \begin{abstract}
 Causal reasoning is a fundamental aspect of intelligent reasoning since it allows to consider interventions and counterfactuals. Decision making under uncertainty has been well studied when information is considered at the associative (probabilistic) level. The classical Theorems of von Neumann-Morgenstern and Savage provide a formal criterion for rational choice using purely associative information, which form the basis of many learning algorithms such as those used in Reinforcement Learning. In this work, we consider decision problems in which available actions and consequences are causally connected. We define a Causal Decision Problem and within this framework we state a previous result from J. Pearl, which relies on a known causal model and thus showing that it can be considered as a causal version of the classical von Neumann-Morgenstern Theorem. Furthermore, we consider the case when the causal mechanism that controls the environment is unknown to the decision maker, and propose and prove a causal version of Savage's Theorem. Then, we describe two applications for which these theorems provide theoretical foundations: causal games and optimal action learning in causal environments. These results highlight the importance of causal models in decision making and the variety of potential applications.
@@ -238,7 +238,7 @@ Given a causal relation $\to$ as in Definition \ref{causal_relation} then the gr
 The graph is directed since the definition of causality imposes a direction between events; namely, a direction between the cause and the effect. To see that the graph is acyclic, suppose that a cycle $A \to B \to C \to A$ exists, this would imply, because of transitivity, that $A \to A$, which cannot be since the relation is irreflexive.
 \end{proof}
 
-Notice that since the graph is finite, there exist some nodes that do not have causes, which are called \textit{exogenous}. If an event $A$ is caused by some other event, then we say it is \textit{endogenous} and we denote the set of its causes as $Pa(A)$. It is proven in \cite{kiiveri1984recursive} that at least one exogenous node exists in a causal graph.
+Notice that since the graph is finite, there exist some nodes that do not have causes, which are called \textit{exogenous}. If an event $A$ is caused by some other event, then we say it is \textit{endogenous} and we denote the set of its causes as $Pa(A)$. It is proven by \cite{kiiveri1984recursive} that at least one exogenous node exists in a causal graph.
 
 \subsubsection{Relations between a causal graph and probabilities}
 Given a Directed Acyclic Graph (DAG) it is possible to obtain a probability measure that expresses the conditional independence relations that are expressed in the graph \citep{koller2009probabilistic}, which we will call $P_\mathcal{G}$. For the DAG built from the causal relations, we require that its correspondent $P_\mathcal{G}$ satisfies the following conditions \citep{spirtes2000causation}:
@@ -248,7 +248,7 @@ Given a Directed Acyclic Graph (DAG) it is possible to obtain a probability meas
 \item Causal Faithfulness: The Markov Causal condition contains all of the conditional independence statements expressed by the DAG $\mathcal{G}$.
 \end{itemize}
 
-Also, we consider an extra pair of conditions. The first one, known as Causal Sufficiency, is about the \textit{nature} of the model: for any variable $X$ in the model $\mathcal{G}$ there are no causes of $X$ \textit{outside} of the model $\mathcal{G}$\citep{spirtes2000causation,pearl2009causality,sucar2015probabilistic}. The second required condition is that the causal mechanism remains unchanged after interventions, this is called in \citep{woodward2005making} as \textit{invariantness}, this basically means that an intervention does not \textit{break} the causal mechanism when intervening upon it. These conditions are required in an axiomatic fashion so they will be taken as they are without questioning.
+Also, we consider an extra pair of conditions. The first one, known as Causal Sufficiency, is about the \textit{nature} of the model: for any variable $X$ in the model $\mathcal{G}$ there are no causes of $X$ \textit{outside} of the model $\mathcal{G}$ \citep{spirtes2000causation,pearl2009causality,sucar2015probabilistic}. The second required condition is that the causal mechanism remains unchanged after interventions, this is called in \citep{woodward2005making} as \textit{invariantness}, this basically means that an intervention does not \textit{break} the causal mechanism when intervening upon it. These conditions are required in an axiomatic fashion so they will be taken as they are without questioning.
 
 \subsection{Causal Graphical Models}
 A Causal Graphical Model (CGM) \citep{koller2009probabilistic,sucar2015probabilistic} consists of a set of random variables $\mathcal{X}=\{ X_1,...,X_n \}$, and a Directed Acyclic Graph (DAG) whose nodes are in correspondence with the variables in $\mathcal{X}$ and whose edges represent relations of cause-effect. Also, the model, which up to this point is nothing more than a Bayesian Network with causal semantics, is enriched with an operator named $do()$ which is defined over graphs and whose action is described as follows: given $\mathbf{X} \subseteq \mathcal{X}$ and $\mathbf{x} = \{ x_{i_1}, x_{i_2}, ... , x_{i_j} \} \in Val(\mathcal{X})$ the action $do(\mathbf{X} = \mathbf{x} )$ corresponds to assign to each $X_j \in \mathbf{X}$ the value $x_{x_{i_j}}$ and to delete every incoming edges into the node corresponding to each $X_j$ in the graph $\mathcal{G}$ \citep{pearl2009causality,koller2009probabilistic,sucar2015probabilistic}. To apply the $do()$ operator over a variable (or set of variables) is also called as an \textit{intervention} over the variable. It is this interventional operator which separates associative models from causal models, since it provides the solution of the “probability raising” attempts to define causality, since if $X$ is a cause for $Y$ then $P(Y | do(X)) > P(Y)$ \citep{pearl2018why}. In fact, using the \textit{Do} operator we give a definition of a variable $X$ causing $Y$.
@@ -257,43 +257,43 @@ Let $\mathcal{G}$ a Causal Graphical Model and $P_\mathcal{G}$ its corresponding
 \[ P_\mathcal{G}(Y | do(X=x)) \neq P_\mathcal{G}(Y | do(X=x')). \]
 \end{definition}
 It is required that the probability distribution that results from an intervention over a variable is Markov compatible with the graph; this is, the resulting interventional distribution is equivalent to the product of the conditional probability of every variable given its parents in the intervened graph \citep{sucar2015probabilistic}.
-\subsubsection{The identifiability problem}
-Under what conditions can causal inquiries be answered in terms of purely \textit{observational} data? It is known that if the Markov Causal condition and Causal Faithfulness hold, then it is possible to identify the causal graph up to related variables without direction (Markov equivalence) \citep{peters2012identifiability,mooij2016distinguishing}.
-
-\subsubsection{Do-Calculus}
-The Do-Calculus is a set of rules for manipulating probabilistic statements that involve interventions and, under certain conditions, allow them to be transformed into statements that do not involve interventional data \citep{pearl1995causal,pearl2009causality}. 
-	
-It is important to introduce some notation. Consider a causal graphical model $\mathcal{G}$ and $X,Y,Z$ disjoint sets of nodes of $\mathcal{G}$. We denote by $\mathcal{G}_{\bar{X}}$ the graph that is obtained by deleting from $\mathcal{G}$ all of the edges that enter nodes in $X$. In the same way, $\mathcal{G}_{\underline{X}}$ is the graph obtained by deleting the edges that emerge from $X$. Finally, $\mathcal{G}_{\underline{Z}\bar{X}}$ is the graph obtained by deleting edges incoming into $X$ and outgoing from $Z$.
-	
-\begin{theorem}[Do-Calculus, \cite{pearl2009causality}]{\label{docalculus}}
-Let $\mathcal{G}$ a CGM and $P_{\mathcal{G}}$ the probability measure induced by the model; then, for disjoint sets of nodes $X,Y,Z,W$ it holds:
-\begin{itemize}
-\item If for the graph $\mathcal{G}_{\bar{X}}$ it holds that $Y$ is conditionally independent from  $Z$ given $X$ and $W$, then
-\[ P_{\mathcal{G}}(Y=y | do(X=x), Z=z, W=w) = P_{\mathcal{G}}(Y=y | do(X=x), W=w). \]
-\item If for the graph $\mathcal{G}_{\bar{X}\underline{Z}}$ it holds that $Y$ is conditionally independent from $Z$ given $X$ and $W$, then
-\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), Z = z, W=w). \]
-\item Let $Z(W)$ the set of nodes in  $Z$ that aren't ancestors of any node in  $W$ in the graph $\mathcal{G}_{\bar{X}}$.  If $Y$ is conditionally independent from $Z$ given $X$ and $W$ in the graph $G_{\bar{X}, \bar{Z(W)}}$, then
-\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
-\end{itemize}
-\end{theorem}
-\begin{proof}
-See \cite{pearl2009causality}.
-\end{proof}
-\begin{theorem}[Properties of Do-calculus]{\cite{peters2017elements}}\\
-The following statements hold:
-\begin{itemize}
-\item The Do-Calculus is complete; this is, sufficient for deriving every identifiable interventional distribution \citep{huang2006pearl,shpitser2006identification}.
-\item There exists an algorithm capable of finding all of the identifiable interventions \citep{tian2002,huang2006pearl}.
-\item A necessary and sufficient criteria exists for the identifiability of interventional distributions \citep{shpitser2006identification,huang2006pearl}.
-\end{itemize}
-\end{theorem}
-\begin{proof}
-See \cite{peters2017elements}.
-\end{proof}
-The Do-Calculus rules provide a solution for the identifiability problem:
-\begin{corollary} \cite{pearl2009causality}.\\
-A distribution $q=P(y_1,...,y_k | do(x_1),...,do(x_n))$ is identifiable in a causal graphical model $\mathcal{G}$ if there exists a finite sequence of transformations, where each one of them corresponds to any of the rules of the Do-Calculus, that reduce $q$ to a purely observational expression.
-\end{corollary}
+%\subsubsection{The identifiability problem}
+%Under what conditions can causal inquiries be answered in terms of purely \textit{observational} data? It is known that if the Markov Causal condition and Causal Faithfulness hold, then it is possible to identify the causal graph up to related variables without direction (Markov equivalence) \citep{peters2012identifiability,mooij2016distinguishing}.
+%
+%\subsubsection{Do-Calculus}
+%The Do-Calculus is a set of rules for manipulating probabilistic statements that involve interventions and, under certain conditions, allow them to be transformed into statements that do not involve interventional data \citep{pearl1995causal,pearl2009causality}. 
+%	
+%It is important to introduce some notation. Consider a causal graphical model $\mathcal{G}$ and $X,Y,Z$ disjoint sets of nodes of $\mathcal{G}$. We denote by $\mathcal{G}_{\bar{X}}$ the graph that is obtained by deleting from $\mathcal{G}$ all of the edges that enter nodes in $X$. In the same way, $\mathcal{G}_{\underline{X}}$ is the graph obtained by deleting the edges that emerge from $X$. Finally, $\mathcal{G}_{\underline{Z}\bar{X}}$ is the graph obtained by deleting edges incoming into $X$ and outgoing from $Z$.
+%	
+%\begin{theorem}[Do-Calculus, \cite{pearl2009causality}]{\label{docalculus}}
+%Let $\mathcal{G}$ a CGM and $P_{\mathcal{G}}$ the probability measure induced by the model; then, for disjoint sets of nodes $X,Y,Z,W$ it holds:
+%\begin{itemize}
+%\item If for the graph $\mathcal{G}_{\bar{X}}$ it holds that $Y$ is conditionally independent from  $Z$ given $X$ and $W$, then
+%\[ P_{\mathcal{G}}(Y=y | do(X=x), Z=z, W=w) = P_{\mathcal{G}}(Y=y | do(X=x), W=w). \]
+%\item If for the graph $\mathcal{G}_{\bar{X}\underline{Z}}$ it holds that $Y$ is conditionally independent from $Z$ given $X$ and $W$, then
+%\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), Z = z, W=w). \]
+%\item Let $Z(W)$ the set of nodes in  $Z$ that aren't ancestors of any node in  $W$ in the graph $\mathcal{G}_{\bar{X}}$.  If $Y$ is conditionally independent from $Z$ given $X$ and $W$ in the graph $G_{\bar{X}, \bar{Z(W)}}$, then
+%\[ P(Y=y | do(X=x), do(Z=z), W=w) = P(Y=y | do(X=x), W=w). \]
+%\end{itemize}
+%\end{theorem}
+%\begin{proof}
+%See \cite{pearl2009causality}.
+%\end{proof}
+%\begin{theorem}[Properties of Do-calculus]{\cite{peters2017elements}}\\
+%The following statements hold:
+%\begin{itemize}
+%\item The Do-Calculus is complete; this is, sufficient for deriving every identifiable interventional distribution \citep{huang2006pearl,shpitser2006identification}.
+%\item There exists an algorithm capable of finding all of the identifiable interventions \citep{tian2002,huang2006pearl}.
+%\item A necessary and sufficient criteria exists for the identifiability of interventional distributions \citep{shpitser2006identification,huang2006pearl}.
+%\end{itemize}
+%\end{theorem}
+%\begin{proof}
+%See \cite{peters2017elements}.
+%\end{proof}
+%The Do-Calculus rules provide a solution for the identifiability problem:
+%\begin{corollary} \cite{pearl2009causality}.\\
+%A distribution $q=P(y_1,...,y_k | do(x_1),...,do(x_n))$ is identifiable in a causal graphical model $\mathcal{G}$ if there exists a finite sequence of transformations, where each one of them corresponds to any of the rules of the Do-Calculus, that reduce $q$ to a purely observational expression.
+%\end{corollary}
 
 \subsection{Causal Environments and Causal Decision Problems}{\label{causal_problems}}
 We consider decision making with causal information. In this section we define a Causal Environment to be an \textit{uncertain environment}, as defined in Section \ref{definitions}, with the extra condition that there exists a CGM $\mathcal{G}$ which controls in the following sense: there exists a causal relation between available actions and consequences in the sense that any chosen action will stochastically \textit{cause} a consequence. The role of the CGM is to encode all of the causal relations present in the environment, not only between actions and consequences but also between any other variables in the environment. 
@@ -303,7 +303,7 @@ A Causal Environment is a tuple $(\Omega, \mathcal{A},\mathcal{G},\mathcal{C},\m
 \end{definition}
 
 \begin{definition}
-We define a Causal Decision Problem (CDP) as a tuple $(\Omega, \mathcal{A}, \mathcal{G},\mathcal{E},\mathcal{C},\succeq)$ where $(\Omega, \mathcal{A}, \mathcal{G},\mathcal{E},\mathcal{C})$ is a Causal Environment and $\succeq$ is a preference relation. 
+We define a Causal Decision Problem (CDP) as a tuple\\ $(\Omega, \mathcal{A}, \mathcal{G},\mathcal{E},\mathcal{C},\succeq)$ where $(\Omega, \mathcal{A}, \mathcal{G},\mathcal{E},\mathcal{C})$ is a Causal Environment and $\succeq$ is a preference relation. 
 \end{definition}
 
 For the CGM in a CDP we distinguish two particular variables: one corresponding to the available actions, and one corresponding to the produced (caused) outcome. We are considering that only one variable can be intervened upon and that the values of such variable represent the actions available to the decision maker; i.e., the value forced upon such variable under an intervention represents the action taken by the decision maker. The intuition behind the definition of a Causal Decision Problem is this: a decision maker chooses an action $a \in \mathcal{A}$, which is automatically inputed into the model $\mathcal{G}$, which outputs the \textit{causal outcome} $c \in \mathcal{C}$. We say a CDP is \textit{finite} if the set $\mathcal{A}$ is finite.
@@ -324,7 +324,7 @@ where $a \square \to x$ is to be read as \textit{if the decision maker does} $a$
 \cite{dawid2012decision} presents a decision-theoretic approach to causal inference in which a decision maker must take into account how alternatives compare against the other in terms of the \textit{average causal effect}, such approach uses the well-known influence diagrams \citep{dawid2002influence,dawid2003causal} in order to derive formulas that allow an explicit calculation of the average causal effect. Influence diagrams have the ability of expressing both intervention variables and chance variables into a single graphical structure in such a way that the standard techniques for probabilistic DAG's still apply. An optimality criterion for sequential interventions is obtained by \cite{dawid2008identifying} by maximizing the expectation of outcomes.
 
 \subsection{Causal Reinforcement Learning and Bandit Problems}
-It is known that human beings conceive their actions on the world as \textit{intervening} in the world \citep{hagmayer2009decision}. Following this idea, \cite{lattimoreNIPS2016} consider decision problems in which the action to be chosen is an intervention over a known causal graphical model. The agent must choose the intervention that maximizes the value of a \textit{target variable} after a series of learning rounds. They model their problem by considering that choosing an intervention is choosing an arm of a \textit{slot machine}, usually known as Bandit Problems, in which a gambler chooses an arm and gets some reward. From the rewards they estimate probabilities and output an optimal action in the sense of obtaining minimal regret. Their work considers that the causal model is fully known, restriction which is partially relaxed by \cite{sen2017identifying}, and mention that the case in which the causal model is unknown is left as an open question, and this is precisely what we are proposing to answer. 
+It is known that human beings conceive their actions on the world as \textit{intervening} in the world \citep{hagmayer2009decision}. Following this idea, \cite{lattimoreNIPS2016} consider decision problems in which the action to be chosen is an intervention over a causal graphical model in which the conditional probabilities are assumed to be known. The agent must choose the intervention that maximizes the value of a \textit{target variable} after a series of learning rounds. They model their problem by considering that choosing an intervention is choosing an arm of a \textit{slot machine}, usually known as Bandit Problems, in which a gambler chooses an arm and gets some reward. From the rewards they estimate probabilities and output an optimal action in the sense of obtaining minimal regret. The assumption by \cite{lattimoreNIPS2016} of the causal model being known, is later partially relaxed by \cite{sen2017identifying}. In the former, it is mentioned that the case in which the causal model is unknown is left as future work. In our work, we study decision making over unknown causal information. 
 
 In general, in a classic Bandit Problem an agent chooses an \textit{arm} from a slot machine, observes a reward and then moves on to the next machine which is of the same kind and whose initial settings are independent of the previous machine and action \citep{sutton1998reinforcement}. Several algorithms exists for finding the best arm in a multi-arm bandit, such as those described in \cite{bubeck2009pure,audibert2010best,gabillon2012best,agarwal2014taming,jamieson2014lil,jamieson2014best,chen2015optimal,carpentier2016tight,russo2016simple,kaufmann2016complexity}, but none of these works consider causal-governed environments. \cite{ortega2014generalized} gives results on sequential decision-making using Generalized Thompson Sampling that could be extended into causal inference problems. The aforementioned papers assume the causal model is known to the decision makers so their work focuses on \textit{using} causal information to make good choices, but the problem of \textit{acquiring} this causal knowledge is left unattacked.
 
@@ -345,15 +345,15 @@ If a rational decision maker faces a Causal Environment and if the causal model 
 \begin{eqnarray*}
 &a \succeq b&\\
 & \textrm{ if and only if }&\\
- &\sum_{c \in C} P(c | do(a))u(c) \geq \sum_{c \in C} P(c | do(b))u(c).&
+ &\sum_{c \in C} P_G(c | do(a))u(c) \geq \sum_{c \in C} P_G(c | do(b))u(c).&
 \end{eqnarray*} 
 \end{theorem}
 Equivalently, the action that must be chosen is 
 \begin{equation}
-a^\ast = \textrm{argmax}_{a \in \mathcal{A}} \sum_{c \in C} P(c | do(a))u(c).
+a^\ast = \textrm{argmax}_{a \in \mathcal{A}} \sum_{c \in C} P_G(c | do(a))u(c).
 \end{equation}
 \begin{proof}
-This Theorem assumes the existence of a Causal Graphical Model known by the decision maker; then, by Theorem \ref{vNM}, we know that the action that must be chosen is the one that maximizes the expected utility; we must now ask the expected utility of what? The answer lies on the Causal Graphical Model which controls the relation between actions and consequences; if this is the case, then the probability of a consequence given an action $a$ is in fact $P(c|do(a))$. The rest follows by Theorem \ref{vNM}. Details in Section 4.1 of \cite{pearl2009causality}.
+This Theorem assumes the existence of a Causal Graphical Model known by the decision maker; then, by Theorem \ref{vNM}, we know that the action that must be chosen is the one that maximizes the expected utility; we must now ask the expected utility of what? The answer lies on the Causal Graphical Model which controls the relation between actions and consequences; if this is the case, then the probability of a consequence given an action $a$ is in fact $P_G(c|do(a))$. The rest follows by Theorem \ref{vNM}. Details and discussion in Section 4.1 of \cite{pearl2009causality}.
 \end{proof}
 
 As shown in the proof of Theorem \ref{causal_ut}, we claim that Pearl's result can be considered as a causal version of the von Neumann-Morgenstern result since it assumes that a causal model is known. If the causal model that controls an environment is known to a decision maker, then this is equivalent of being able to know the probabilities of outcomes given actions. As stated in Section 4.1 of \cite{pearl2009causality}, the utility function $u$ is considered as given, even though the Theorem \ref{vNM} guarantees its existence. Pearl argues that decision making by maximizing such function is \textit{commonsensical} without appealing to the original results in rational decision making. We avoid entering in the long-standing debate between \textit{causal} and \textit{evidential} decision making. We only note that both von Neumann-Morgenstern's and Savage's Theorems have no {\em a priori} causal interpretation and therefore rely on associative information.
@@ -477,7 +477,7 @@ We are working within the classical rationality assumption. Rationality can be u
 We are considering Causal Graphical Models as the representation of causal relations in the environment, and we are considering stochastic causal relations according to the manipulationist interpretation, which is one of many. We have favoured the Causal Graphical Models over other alternatives since it has been argued that several cognitive processes, such as causal reasoning, can be best represented as graphical models \cite{danks2014unifying,sloman2015causality,hagmayer2016causal}.
 
 \section{Future Work}
-We have left out the implementation of the algorithm stated in Section \ref{random_graphs} we considered the problem of a decision maker situated in a causal environment who does not fully knows the causal model which controls her environment; previous works have considered different levels of uncertainty over the causal model: knowing conditional distributions, knowing a part of the model, knowing the structure of the model or the variables involved. We leave as future work the case in which the variables of the model are not known and we consider that this scenario could be attacked using tools from Bayesian Nonparametrics \citep{hjort2010bayesian,phadia2013prior} in the form of a prior over causal models. If only a part of the set of variables is known, then a Bayesian Nonparametric prior, which generates causal graphs of distinct sizes and complexity, could capture the patterns of causal interaction between known and possible but unknown variables.
+We have left out the implementation of the algorithm stated in Section \ref{random_graphs} we considered the problem of a decision maker situated in a causal environment who does not fully knows the causal model which controls her environment; previous works have considered different levels of uncertainty over the causal model: knowing conditional distributions, knowing a part of the model, knowing the structure of the model or the variables involved. We leave as future work the case in which the variables of the model are not known and we consider that this scenario could be attacked using tools from Bayesian Nonparametrics \citep{hjort2010bayesian,phadia2013prior} in the form of a prior over causal models. If only a part of the set of variables is known, then a Bayesian Nonparametric prior, which generates causal graphs of distinct sizes and complexity, could capture the patterns of causal interaction between known and possible but unknown variables. This would allow to relax the requirement of causal sufficiency.
 
 \section{Conclusion}
 \label{conclusion}
